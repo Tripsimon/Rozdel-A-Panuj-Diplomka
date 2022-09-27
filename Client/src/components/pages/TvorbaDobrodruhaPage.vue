@@ -13,17 +13,30 @@
 
     <v-text-field label="Jméno dobrodruha"></v-text-field>
 
+
     <v-select :items="races" label="Rasa"></v-select>
+    <v-select :items="classes" label="Povolání"></v-select>
+    <v-select :items="['LMAO','Yeet']" label="Přesvědčení"></v-select>
+    <v-btn-group>
+      <v-btn> Jou</v-btn>
+      <v-btn> Hou</v-btn>
+    </v-btn-group>
+
     </v-form>
   </v-container>
 </template>
 
+
+
 <script>
+
     export default {
         data: () => ({
           valid: true,
-          races: ['Anhilarský člověk', 'Grobr',  'Hruurský člově', 'Ork', 'Inu-im'], //TODO: Backend
+          races: ['Anhilarský člověk', 'Grobr',  'Hruurský člověk', 'Ork', 'Inu-im'],  //TODO: Backend
+          classes: ['Kolos','Harcovník','Hraničář','Lupič','Čaroděj','Vizír'],        //TODO: Backend
           checkbox: false,
+          posts: []
         }),
     
         methods: {
@@ -36,6 +49,7 @@
           resetValidation () {
             this.$refs.form.resetValidation()
           },
+        
         },
       }
 </script>
