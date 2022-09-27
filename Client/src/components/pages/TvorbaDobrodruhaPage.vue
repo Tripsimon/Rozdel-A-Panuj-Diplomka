@@ -16,7 +16,7 @@
 
     <v-select :items="races" label="Rasa"></v-select>
     <v-select :items="classes" label="Povolání"></v-select>
-    <v-select :items="['LMAO','Yeet']" label="Přesvědčení"></v-select>
+    <v-select :items="['LMAO','YeetA']" label="Přesvědčení"></v-select>
     <v-btn-group>
       <v-btn> Jou</v-btn>
       <v-btn> Hou</v-btn>

@@ -6,7 +6,7 @@ router.get("/characterCreation", (req,res) =>{
 })
 
 router.get("/characterCreation/classes", (req,res) =>{
-    res.json({"LMAO":123})
+    res.json({"LMAO":1234})
     //res.send(['Kolos','Harcovník','Hraničář','Lupič','Čaroděj','Vizír']);
 })
 

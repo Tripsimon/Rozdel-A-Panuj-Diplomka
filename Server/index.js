@@ -11,7 +11,7 @@ app.get('/character',(req,res) =>{
 })
 
 app.get("/",(req,res) => {
-    res.send("Server je aktivní");
+    res.send("Server je aktivnía");
 })
 
 
