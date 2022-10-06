@@ -10,7 +10,7 @@
       v-model="valid"
       lazy-validation
     >
-
+    <h2>Základní informace</h2>
     <v-text-field label="Jméno dobrodruha"></v-text-field>
 
 
@@ -22,6 +22,10 @@
       <v-btn> Hou</v-btn>
     </v-btn-group>
 
+    <h2>Atributy</h2>
+
+
+
     </v-form>
   </v-container>
 </template>
@@ -29,6 +33,19 @@
 
 
 <script>
+
+    let penis = async() =>{
+      let xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:3000/character/characterCreation/classes");
+
+    xhr.send();
+
+    xhr.onload = () => console.log(xhr.responseText);
+
+      
+    }
+
+    penis();
 
     export default {
         data: () => ({

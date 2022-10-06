@@ -1,14 +1,22 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer
+      dark
         v-model="drawer"
         app
+
     >
-      <v-list>
+      <v-list dark>
+
         <v-list-item
-            title="Rozděl a Panuj"
-            subtitle="Dashboard"
-        ></v-list-item>
+        dark
+            title="Nepřihlášený uživatel"
+        >
+      </v-list-item>
+        <v-row align="center" justify="space-around">
+          <v-btn to="/prihlaseni" >Login</v-btn>
+          <v-btn to="/registrace" >Registrace</v-btn>
+        </v-row>
       </v-list>
 
       <v-divider></v-divider>
