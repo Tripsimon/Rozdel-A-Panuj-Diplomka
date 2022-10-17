@@ -1,9 +1,14 @@
 const express = require('express')
 const cors = require('cors');
+const bp = require('body-parser')
 const mongoose = require('mongoose');
 
 const app = express()
-app.use(cors())
+app.use(cors());
+
+//Body Parser
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
 mongoose.connect('mongodb://localhost:3500/RozdelAPanuj_Develop')
