@@ -1,6 +1,5 @@
 
 <template>
-
   <v-container>
     <h1>Tvorba dobrodruha</h1>
     <v-divider></v-divider>
@@ -18,6 +17,7 @@
       <v-select :items="classes" label="Povolání"></v-select>
       <v-select :items="['LMAO','YeetA']" label="Přesvědčení"></v-select>
       <v-text-field label="Věk"></v-text-field>
+     
       <v-btn-group>
         <v-btn> Jou</v-btn>
         <v-btn> Hou</v-btn>
@@ -64,6 +64,7 @@
   
       xhr.onload = () => console.log(xhr.responseText);
   
+
         
       }
   
