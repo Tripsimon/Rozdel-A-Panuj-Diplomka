@@ -36,7 +36,7 @@
     ></v-text-field>
 
     <v-text-field
-      v-model="password"
+      v-model="reHeslo"
       :items="items"
       label="Heslo znovu"
       required
@@ -64,23 +64,26 @@
     
         export default {
             data: () => ({
-              email: 1
+              email:"",
+              prezdivka:"",
+              heslo:"",
+              reHeslo:"",
+
             }),
         
             methods: {
 
               register(email,prezdivka,heslo){
 
-
                 let obsah = JSON.stringify({
                     "email":email,
-                    "heslo":prezdivka,
-                    "prezdivka":heslo
+                    "heslo":heslo,
+                    "prezdivka":prezdivka
                 })
 
                 
                 let xhr = new XMLHttpRequest();
-                //xhr.open("POST", "https://reqbin.com/echo/post/json");
+
                 xhr.open("POST", "http://localhost:3000/uzivatel/registrace");
 
                 xhr.setRequestHeader("Accept", "application/json");
@@ -89,23 +92,7 @@
                 xhr.onload = () => console.log(xhr.responseText);
 
                 xhr.send(obsah);  
-                
 
-                /*
-                try{
-                  const res = await fetch("http://localhost:3000/uzivatel",
-                  {method: "GET",
-                  headers: {"Content-Type":"application/json"},
-                  body: JSON.stringify({
-                    "email":'loggedUser',
-                    "heslo":'gameName',
-                    "prezdivka":'collectors',
-                })
-                })
-                }catch{
-                  console.log("vytkytla se chyba");
-                }
-                */
               }
             }
           }

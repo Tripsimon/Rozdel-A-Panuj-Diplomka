@@ -1,7 +1,7 @@
 
 <template>
 
-  <v-container>
+  <v-container >
     <h1>Tvorba dobrodruha</h1>
     <v-divider></v-divider>
   
@@ -11,7 +11,7 @@
         lazy-validation
       >
       <h2>Základní informace</h2>
-      <v-text-field label="Jméno dobrodruha"></v-text-field>
+      <v-text-field  label="Jméno dobrodruha"></v-text-field>
   
   
       <v-select :items="races" label="Rasa"></v-select>

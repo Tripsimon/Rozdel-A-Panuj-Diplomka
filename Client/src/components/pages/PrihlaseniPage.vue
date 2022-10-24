@@ -1,21 +1,12 @@
 <template>
-
+{{uzivatelStore.prihlasen}}
 <v-container>
 <v-card>
   <v-card-text>
 <v-form
     ref="form"
-    v-model="valid"
     lazy-validation
   >
-    <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Jméno"
-      required
-    ></v-text-field>
-
     <v-text-field
       v-model="email"
       label="E-mail"
@@ -23,8 +14,7 @@
     ></v-text-field>
 
     <v-text-field
-      v-model="password"
-      :items="items"
+      v-model="heslo"
       :rules="[v => !!v || 'Item is required']"
       label="Heslo"
       required
@@ -35,7 +25,7 @@
       
       color="success"
       class="mr-4"
-      @click="prihlaseni"
+      @click="prihlaseni(email,heslo)"
     >
       Přihlášení
     </v-btn>
@@ -45,23 +35,42 @@
 </v-container>
 </template>
     
-    
-    
-    <script>
+<script setup>
+import {useUzivatelStore} from "../../stores/uzivatelStore.js"
+const uzivatelStore = useUzivatelStore();
+</script>
 
-    
-        export default {
-            data: () => ({
-              valid: true,
-              races: ['Anhilarský člověk', 'Grobr',  'Hruurský člověk', 'Ork', 'Inu-im'],  //TODO: Backend
-              classes: ['Kolos','Harcovník','Hraničář','Lupič','Čaroděj','Vizír'],        //TODO: Backend
-              checkbox: false,
-              posts: []
-            }),
+<script>
+export default {
+  data: () => ({
+    email:"",
+    heslo:""
+  }),
         
             methods: {
-              prihlaseni () {
-                console.log("Login");
+              prihlaseni (email,heslo) {
+
+                
+                let obsah = JSON.stringify({
+                    "email":email,
+                    "heslo":heslo,
+                })
+
+                console.log(obsah);
+
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://localhost:3000/uzivatel/prihlaseni");
+
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                
+
+                xhr.send(obsah);  
+                xhr.onload = () => console.log(xhr.status);
+                xhr.onload = () => console.log(xhr.response);
+                
+
               }
             
             },
