@@ -19,6 +19,7 @@
       <v-select :items="classes" label="Povolání"></v-select>
       <v-select :items="['LMAO','YeetA']" label="Přesvědčení"></v-select>
       <v-text-field label="Věk"></v-text-field>
+     
       <v-btn-group>
         <v-btn> Jou</v-btn>
         <v-btn> Hou</v-btn>
