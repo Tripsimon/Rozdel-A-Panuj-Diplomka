@@ -1,5 +1,5 @@
 <template>
-{{uzivatelStore.prihlasen}}
+{{uzivatelStore.prezdivka}}
 <v-container>
 <v-card>
   <v-card-text>
@@ -49,26 +49,22 @@ export default {
         
             methods: {
               prihlaseni (email,heslo) {
-
-                
                 let obsah = JSON.stringify({
                     "email":email,
                     "heslo":heslo,
                 })
-
-                console.log(obsah);
-
                 let xhr = new XMLHttpRequest();
                 xhr.open("POST", "http://localhost:3000/uzivatel/prihlaseni");
 
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-Type", "application/json");
 
-                
-
                 xhr.send(obsah);  
-                xhr.onload = () => console.log(xhr.status);
-                xhr.onload = () => console.log(xhr.response);
+                xhr.onload = () => {
+                  console.log(xhr.status);
+                  console.log(xhr.response);
+                  console.log(uzivatelStore);
+                };
                 
 
               }

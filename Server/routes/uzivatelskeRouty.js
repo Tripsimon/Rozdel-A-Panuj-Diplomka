@@ -46,8 +46,8 @@ router.post("/prihlaseni", async(req,res)=>{
                     res.status(200);
                     res.send(User._id)
                 }else{
-                    res.statusCode(400);
-                    res.send()
+                    res.status(400);
+                    res.send(false)
                 }
             })
 

@@ -5,11 +5,11 @@ export const useUzivatelStore = defineStore('uzivatelStore',{
     state: () => {
         return {
         prihlasen: false,
-        prezdivka: "",
+        prezdivka: "A",
         _id: "",
         }
     },
-
+    getters:{ doubleCount: "YEET",},
     actions:{
         zapisUzivatele(prezdivka,_id){
             this.prihlasen = true;
