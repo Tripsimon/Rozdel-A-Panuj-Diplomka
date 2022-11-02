@@ -5,7 +5,7 @@ export const useUzivatelStore = defineStore('uzivatelStore',{
     state: () => {
         return {
         prihlasen: false,
-        prezdivka: "A",
+        prezdivka: "",
         _id: "",
         }
     },

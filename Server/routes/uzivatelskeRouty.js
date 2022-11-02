@@ -44,7 +44,10 @@ router.post("/prihlaseni", async(req,res)=>{
                 
                 if(porovnej){
                     res.status(200);
-                    res.send(User._id)
+                    res.json({
+                        prezdivka : User.prezdivka,
+                        _id : User._id
+                    });
                 }else{
                     res.status(400);
                     res.send(false)

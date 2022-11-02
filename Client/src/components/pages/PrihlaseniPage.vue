@@ -1,6 +1,10 @@
 <template>
-{{uzivatelStore.prezdivka}}
 <v-container>
+
+  <v-alert
+  type="success"
+></v-alert>
+
 <v-card>
   <v-card-text>
 <v-form
@@ -25,7 +29,7 @@
       
       color="success"
       class="mr-4"
-      @click="prihlaseni(email,heslo)"
+      @click="prihlaseni(email,heslo,uzivatelStore)"
     >
       Přihlášení
     </v-btn>
@@ -48,7 +52,7 @@ export default {
   }),
         
             methods: {
-              prihlaseni (email,heslo) {
+              prihlaseni (email,heslo,store) {
                 let obsah = JSON.stringify({
                     "email":email,
                     "heslo":heslo,
@@ -59,11 +63,20 @@ export default {
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-Type", "application/json");
 
-                xhr.send(obsah);  
+                xhr.send(obsah);
+                
                 xhr.onload = () => {
-                  console.log(xhr.status);
-                  console.log(xhr.response);
-                  console.log(uzivatelStore);
+
+                  if (xhr.status == 200) {
+                    let json = JSON.parse(xhr.response);
+                    store.$patch({
+                      prihlasen:true,
+                      prezdivka:json.prezdivka,
+                      _id:json._id,
+                    });
+                  }else{
+
+                  }
                 };
                 
 
