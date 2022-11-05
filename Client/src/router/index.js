@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import CharacterCreationPage from '../components/pages/TvorbaDobrodruhaPage.vue';
 import RegistracePage from '../components/pages/RegistracePage.vue'
 import PrihlaseniPage from '../components/pages/PrihlaseniPage.vue'
+import LandingPage from '../components/pages/LandingPage.vue'
 
 
 const router = createRouter({
@@ -10,8 +11,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: 'Landing Page',
+      component: LandingPage
     },
     {
       path: '/registrace',
