@@ -5,7 +5,7 @@
     <h1>Tvorba dobrodruha</h1>
     <v-divider color="secondary"></v-divider>
 
-    <v-form ref="form" v-model="valid" lazy-validation >
+    <v-form ref="form" v-model="valid" lazy-validation>
       <h2>Pilíře Dobrodruha</h2>
       <v-text-field label="Jméno dobrodruha"></v-text-field>
 
@@ -14,19 +14,27 @@
 
 
       <h2>Atributy dobrodruha</h2>
+
+      <v-alert
+    >
+      I'm an alert with a top border and red color
+    </v-alert>
+
       <v-row>
         <v-col ols="12" sm="6">
-          <v-card title="Síla" align="center"  color="primary">
+          <v-card title="Síla" align="center" color="primary">
             <v-divider color="secondary"></v-divider>
-            <v-container class="grey lighten-5" >
+            <v-container class="grey lighten-5">
               <v-row>
-                <v-col  cols="12" sm="4">
-                  <v-btn  mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
+                <v-col cols="12" sm="4">
+                  <v-btn mb="4" color="secondary" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement('S')">
+                  </v-btn>
                 </v-col>
                 <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                    class="text-h2 font-weight-light mb-4" v-text="atributy"></span></v-col>
+                    class="text-h2 font-weight-light mb-4" v-text="atributy.sila"></span></v-col>
                 <v-col align="center" justify="center" cols="12" sm="4">
-                  <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" :color="color" @click="decrement"></v-btn>
+                  <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" :color="color" @click="increment('sila')">
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -34,15 +42,15 @@
         </v-col>
 
         <v-col ols="12" sm="6">
-          <v-card title="Houževnatost" align="center"  color="primary">
+          <v-card title="Houževnatost" align="center" color="primary">
             <v-divider color="secondary"></v-divider>
-            <v-container class="grey lighten-5" >
+            <v-container class="grey lighten-5">
               <v-row>
-                <v-col  cols="12" sm="4">
-                  <v-btn  mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
+                <v-col cols="12" sm="4">
+                  <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
                 </v-col>
                 <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                    class="text-h2 font-weight-light mb-4" v-text="atributy"></span></v-col>
+                    class="text-h2 font-weight-light mb-4" v-text="atributy.houzevnatost"></span></v-col>
                 <v-col align="center" justify="center" cols="12" sm="4">
                   <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" :color="color" @click="decrement"></v-btn>
                 </v-col>
@@ -54,15 +62,15 @@
 
       <v-row>
         <v-col ols="12" sm="6">
-          <v-card title="Obratnost" align="center"  color="primary">
+          <v-card title="Obratnost" align="center" color="primary">
             <v-divider color="secondary"></v-divider>
-            <v-container class="grey lighten-5" >
+            <v-container class="grey lighten-5">
               <v-row>
-                <v-col  cols="12" sm="4">
-                  <v-btn  mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
+                <v-col cols="12" sm="4">
+                  <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
                 </v-col>
                 <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                    class="text-h2 font-weight-light mb-4" v-text="atributy"></span></v-col>
+                    class="text-h2 font-weight-light mb-4" v-text="atributy.obratnost"></span></v-col>
                 <v-col align="center" justify="center" cols="12" sm="4">
                   <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" :color="color" @click="decrement"></v-btn>
                 </v-col>
@@ -72,15 +80,15 @@
         </v-col>
 
         <v-col ols="12" sm="6">
-          <v-card title="Charisma" align="center"  color="primary">
+          <v-card title="Charisma" align="center" color="primary">
             <v-divider color="secondary"></v-divider>
-            <v-container class="grey lighten-5" >
+            <v-container class="grey lighten-5">
               <v-row>
-                <v-col  cols="12" sm="4">
-                  <v-btn  mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
+                <v-col cols="12" sm="4">
+                  <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
                 </v-col>
                 <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                    class="text-h2 font-weight-light mb-4" v-text="atributy"></span></v-col>
+                    class="text-h2 font-weight-light mb-4" v-text="atributy.charisma"></span></v-col>
                 <v-col align="center" justify="center" cols="12" sm="4">
                   <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" :color="color" @click="decrement"></v-btn>
                 </v-col>
@@ -92,15 +100,15 @@
 
       <v-row>
         <v-col ols="12" sm="6">
-          <v-card title="Inteligence" align="center"  color="primary">
+          <v-card title="Inteligence" align="center" color="primary">
             <v-divider color="secondary"></v-divider>
-            <v-container class="grey lighten-5" >
+            <v-container class="grey lighten-5">
               <v-row>
-                <v-col  cols="12" sm="4">
-                  <v-btn  mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
+                <v-col cols="12" sm="4">
+                  <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
                 </v-col>
                 <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                    class="text-h2 font-weight-light mb-4" v-text="atributy"></span></v-col>
+                    class="text-h2 font-weight-light mb-4" v-text="atributy.inteligence"></span></v-col>
                 <v-col align="center" justify="center" cols="12" sm="4">
                   <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" :color="color" @click="decrement"></v-btn>
                 </v-col>
@@ -110,15 +118,15 @@
         </v-col>
 
         <v-col ols="12" sm="6">
-          <v-card title="Vědění" align="center"  color="primary">
+          <v-card title="Vědění" align="center" color="primary">
             <v-divider color="secondary"></v-divider>
-            <v-container class="grey lighten-5" >
+            <v-container class="grey lighten-5">
               <v-row>
-                <v-col  cols="12" sm="4">
-                  <v-btn  mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
+                <v-col cols="12" sm="4">
+                  <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement"></v-btn>
                 </v-col>
                 <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                    class="text-h2 font-weight-light mb-4" v-text="atributy"></span></v-col>
+                    class="text-h2 font-weight-light mb-4" v-text="atributy.vedeni"></span></v-col>
                 <v-col align="center" justify="center" cols="12" sm="4">
                   <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" :color="color" @click="decrement"></v-btn>
                 </v-col>
@@ -131,7 +139,7 @@
 
 
 
-      <h2>Výbava //TODO</h2>
+      <h2>Výbava</h2>
 
       <h2>Role dobrodruha</h2>
 
@@ -161,11 +169,52 @@ export default {
     races: ['Anhilarský člověk', 'Maanský člověk', 'Grobr', 'Inu-im'],
     classes: ['Bojovník', 'Kněz', 'Lupič', 'Čaroděj'],
     //classes: ['Kolos', 'Harcovník', 'Hraničář', 'Lupič', 'Čaroděj', 'Vizír'],
-    atributy: 10
+    atributy: {
+      'sila': 8,
+      'houzevnatost': 8,
+      'obratnost': 8,
+      'charisma': 8,
+      'inteligence': 8,
+      'vedeni': 8,
+
+    }
 
   }),
 
   methods: {
+
+    decrement(stat) {
+
+      switch (stat) {
+        case "sila":
+          this.atributy.sila--;
+          break;
+
+        case "houzevnatost":
+          this.atributy.sila--;
+          break;
+
+        default:
+          break;
+      }
+
+    },
+
+    increment(stat) {
+      switch (stat) {
+        case "sila":
+          this.atributy.sila++;
+          break;
+
+        case "houzevnatost":
+          this.atributy.sila++;
+          break;
+
+        default:
+          break;
+      }
+
+    },
     validate() {
       this.$refs.form.validate()
     },
