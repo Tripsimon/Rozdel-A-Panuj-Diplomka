@@ -15,10 +15,15 @@
 
       <h2>Atributy dobrodruha</h2>
 
-      <v-alert
-    >
-      I'm an alert with a top border and red color
-    </v-alert>
+
+      <v-banner
+  color="secondary"
+  outlined
+  rounded
+  single-line
+  sticky
+> Volně dostupnéatributy: {{this.volneAtributy}}</v-banner>
+
 
       <v-row>
         <v-col ols="12" sm="6">
@@ -27,7 +32,7 @@
             <v-container class="grey lighten-5">
               <v-row>
                 <v-col cols="12" sm="4">
-                  <v-btn mb="4" color="secondary" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement('S')">
+                  <v-btn mb="4" color="secondary" size="medium" variant="text" icon="mdi-minus" :color="color" @click="decrement('sila')">
                   </v-btn>
                 </v-col>
                 <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
@@ -177,7 +182,8 @@ export default {
       'inteligence': 8,
       'vedeni': 8,
 
-    }
+    },
+    volneAtributy: 10
 
   }),
 
@@ -187,11 +193,16 @@ export default {
 
       switch (stat) {
         case "sila":
-          this.atributy.sila--;
+          if (this.atributy.sila > 8) {
+            this.atributy.sila--;
+            this.volneAtributy++;
+          }
+
           break;
 
         case "houzevnatost":
           this.atributy.sila--;
+
           break;
 
         default:
@@ -204,6 +215,7 @@ export default {
       switch (stat) {
         case "sila":
           this.atributy.sila++;
+          this.volneAtributy--;
           break;
 
         case "houzevnatost":
