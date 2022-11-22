@@ -3,8 +3,6 @@ import NavigacniSloupecPart from './components/parts/NavigacniSloupecPart.vue';
 import {useUzivatelStore} from "./stores/uzivatelStore.js"
 
 const uzivatelStore = useUzivatelStore();
-
-console.log(uzivatelStore._id)
 </script>
 
 <template>

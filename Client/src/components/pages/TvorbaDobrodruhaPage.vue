@@ -1,16 +1,33 @@
 
-<template>
+<script setup>
+import {inject} from 'vue'
+const gvClasses = inject('gvClasses')
+const gvRaces = inject('gvRaces')
+console.log(gvClasses);
+</script>
 
+<template>
   <v-container>
     <h1>Tvorba dobrodruha</h1>
     <v-divider color="secondary"></v-divider>
 
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" v-model="valid" lazy-validation >
       <h2>Pilíře Dobrodruha</h2>
       <v-text-field label="Jméno dobrodruha"></v-text-field>
+      <v-select label="Rasa" :items="gvRaces" v-model="chosenRace" ></v-select>
+      <v-card
+        class="mx-auto"
+        v-if="chosenRace != null"
+      >
+      
+      <v-card-title>Card title</v-card-title>
+        <v-card-text>
+          Phasellus magna. Quisque rutrum. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Aliquam lobortis. Quisque libero metus, condimentum nec, tempor a, commodo mollis, magna.
+          In turpis. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut varius tincidunt libero.
+        </v-card-text>
+      </v-card>
 
-      <v-select color="primary" :items="races" label="Rasa"></v-select>
-      <v-select :items="classes" label="Povolání"></v-select>
+      <v-select :items="gvClasses['names']" label="Povolání"></v-select>
 
 
       <h2>Atributy dobrodruha</h2>
@@ -25,7 +42,7 @@
 > Volně dostupnéatributy: {{this.volneAtributy}}</v-banner>
 
 
-      <v-row>
+      <v-row disabled>
         <v-col ols="12" sm="6">
           <v-card title="Síla" align="center" color="primary">
             <v-divider color="secondary"></v-divider>
@@ -123,7 +140,7 @@
         </v-col>
 
         <v-col ols="12" sm="6">
-          <v-card title="Vědění" align="center" color="primary">
+          <v-card title="Znalost" align="center" color="primary">
             <v-divider color="secondary"></v-divider>
             <v-container class="grey lighten-5">
               <v-row>
@@ -145,7 +162,7 @@
 
 
       <h2>Výbava</h2>
-
+      //TODO
       <h2>Role dobrodruha</h2>
 
       <v-select :items="['LMAO', 'YeetA']" label="Přesvědčení"></v-select>
@@ -163,47 +180,34 @@
 </template>
   
   
-  
 <script>
-
-
-
 export default {
   data: () => ({
     valid: true,
-    races: ['Anhilarský člověk', 'Maanský člověk', 'Grobr', 'Inu-im'],
-    classes: ['Bojovník', 'Kněz', 'Lupič', 'Čaroděj'],
-    //classes: ['Kolos', 'Harcovník', 'Hraničář', 'Lupič', 'Čaroděj', 'Vizír'],
     atributy: {
       'sila': 8,
       'houzevnatost': 8,
       'obratnost': 8,
       'charisma': 8,
       'inteligence': 8,
-      'vedeni': 8,
+      'znalost': 8,
 
     },
-    volneAtributy: 10
-
+    volneAtributy: 10,
+    chosenRace: null,
   }),
-
   methods: {
 
     decrement(stat) {
-
       switch (stat) {
         case "sila":
-          if (this.atributy.sila > 8) {
+          if (this.atributy.sila > 1) {
             this.atributy.sila--;
             this.volneAtributy++;
           }
+        break;
 
-          break;
 
-        case "houzevnatost":
-          this.atributy.sila--;
-
-          break;
 
         default:
           break;

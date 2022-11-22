@@ -28,7 +28,17 @@ const router = createRouter({
       path:'/tvorba-dobrodruha',
       name:'Character Creation Page',
       component: CharacterCreationPage
-    }
+    },
+    {
+      path:'/sprava-uctu',
+      name:'Sprava Uctu',
+      component: CharacterCreationPage
+    },
+    {
+      path:'/vypis-dobrodruhu',
+      name:'Vypis dobrodruha',
+      component: CharacterCreationPage
+    },
   ]
 })
 

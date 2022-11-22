@@ -5,12 +5,21 @@ import vuetify from './plugins/vuetify'
 import { createPinia } from 'pinia'
 import { loadFonts } from './plugins/webfontloader'
 
+let app=createApp(App)
+
 const pinia = createPinia()
 loadFonts()
 
+//Konstanty
 
-createApp(App)
-  .use(router)
+app.provide('gvRaces',['Anhilarský člověk', 'Maanský člověk', 'Grobr', 'Inu-im']);
+app.provide('gvClasses',{
+  names:['Kolos', 'Harcovník', 'Hraničář', 'Lupič', 'Čaroděj', 'Vizír'],
+  kolos:{
+    name:'Kolos',
+    
+  }
+});
+  app.use(router)
   .use(vuetify)
-  .use(pinia)
-  .mount('#app')
+  .use(pinia).mount('#app')
