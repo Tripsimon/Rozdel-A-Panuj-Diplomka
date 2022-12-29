@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 
 
-//Vytvoření schéma pro práci s artefatky
+//Vytvoření schéma pro práci s uživateli
 const UserSchema = new Schema({
     email: String,
     heslo: String,

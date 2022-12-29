@@ -2,8 +2,11 @@
 <v-container>
 
   <v-alert
-  type="success"
-></v-alert>
+  border="bottom"
+  color="red"
+  elevation="10"
+  type="error"
+>Učet nenalezen</v-alert>
 
 <v-card>
   <v-card-text>
@@ -74,8 +77,8 @@ export default {
                       prezdivka:json.prezdivka,
                       _id:json._id,
                     });
-                  }else{
-
+                  }else if( xhr.status == 404){
+                    console.log("Uživatel neexistuje");
                   }
                 };
                 

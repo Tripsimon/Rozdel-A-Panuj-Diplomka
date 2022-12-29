@@ -38,7 +38,13 @@ router.post("/prihlaseni", async(req,res)=>{
     UserModel.findOne({email:req.body.email})
         .then(async User  =>
             {
-                
+                if(User == null){
+                    console.log("Rip Ucet");
+                    res.status(404);
+                    res.send(null);
+                    
+                }else{
+
                 console.log(User.heslo);
                 const porovnej = await bcrypt.compare(heslo,User.heslo)
                 
@@ -52,6 +58,7 @@ router.post("/prihlaseni", async(req,res)=>{
                     res.status(400);
                     res.send(false)
                 }
+            }
             })
 
 

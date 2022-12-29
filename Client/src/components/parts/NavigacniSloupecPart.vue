@@ -20,6 +20,13 @@ const uzivatelStore = useUzivatelStore();
       <v-list-item to="/sprava-uctu" prepend-icon="mdi-account" title="Uživatelský učet"
         value="yeet"></v-list-item>
 
+      <v-list-item-title>Hrát</v-list-item-title>
+      <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-newspaper-variant" title="Připojit se do hry"
+        value="myfiles"></v-list-item>
+      <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-newspaper-variant" title="Založit hru"
+        value="myfiles"></v-list-item>
+      <v-divider></v-divider>
+
       <v-list-item-title>Správa dobrodruhů</v-list-item-title>
       <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-account-hard-hat" title="Tvorba nového dobrodruha"
         value="myfiles" theme="secondary"></v-list-item>
@@ -27,12 +34,7 @@ const uzivatelStore = useUzivatelStore();
       </v-list-item>
       <v-divider></v-divider>
 
-      <v-list-item-title>Slovotepec</v-list-item-title>
-      <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-newspaper-variant" title="Tvorba nového dobrodruha"
-        value="myfiles"></v-list-item>
-      <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-newspaper-variant" title="Tvorba nového dobrodruha"
-        value="myfiles"></v-list-item>
-      <v-divider></v-divider>
+
     </v-list>
   </v-navigation-drawer>
 

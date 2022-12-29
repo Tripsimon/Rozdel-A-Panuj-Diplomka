@@ -8,8 +8,7 @@ router.get("/", (req,res) =>{
 })
 
 
-
-router.get("/characterCreation", (req,res) =>{
+router.post("/characterCreation", (req,res) =>{
     res.send("Character Cretion")
 })
 
