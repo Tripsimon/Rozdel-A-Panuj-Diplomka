@@ -26,7 +26,7 @@ router.post("/registrace", async (req,res) =>{
     
     console.log(newUser);
     res.status(201);
-    newUser.save().then(user => res.json(user))
+    newUser.save()
     
 })
 

@@ -11,4 +11,4 @@ const UserSchema = new Schema({
     {collection: "UzivateleKolekce"}
     )
 
-module.exports = Artefact = mongoose.model("RozdelAPanuj_Develop",UserSchema,"UzivateleKolekce");
+module.exports = User = mongoose.model("RozdelAPanuj_Develop",UserSchema,"UzivateleKolekce");

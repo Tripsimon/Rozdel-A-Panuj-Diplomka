@@ -74,10 +74,7 @@ app.provide('gvClasses',{
     ],
     mainGear:["Jednoruční meč", "Jednoruční sekera", "Kopí"],
     secondaryGear:["Jednoduchí dřevěný štít", "Malá díka"],
-    bonusGearOne:["Lucerna","Provaz"],
-    bonusGearTwo:["Lucerna","Provaz"],
-    bonusGearThree:["Lucerna","Provaz"],
-
+    bonusGear:["Lucerna","Provaz"],
   },
   'Kněz':{
     name:'Kněz'

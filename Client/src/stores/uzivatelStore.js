@@ -1,4 +1,4 @@
-
+import {watch} from 'vue'
 import {defineStore} from 'pinia'
 
 export const useUzivatelStore = defineStore('uzivatelStore',{
@@ -16,6 +16,7 @@ export const useUzivatelStore = defineStore('uzivatelStore',{
             this.prezdivka = prezdivka;
             this.id = "454"
         }
-    }
+    },
+    persist:{enabled:true}
 
 })

@@ -1,9 +1,12 @@
 
 <script setup>
 import { inject } from 'vue'
+import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+
 const gvClasses = inject('gvClasses')
 const gvRaces = inject('gvRaces')
-console.log(gvRaces);
+
+const uzivatelStore = useUzivatelStore();
 </script>
 
 <template>
@@ -242,12 +245,9 @@ console.log(gvRaces);
 
             <v-select label="Sekundární výzbroj" :items="gvClasses[newAdventurer.class]['secondaryGear']" v-model="newAdventurer.secondaryGear"></v-select>
 
-            <v-select label="Bonusová výbava" :items="gvClasses[newAdventurer.class]['bonusGearOne']"
-              v-model="newAdventurer.bonusGearOne"></v-select>
+            <v-select label="Bonusová výbava" :items="gvClasses[newAdventurer.class]['bonusGear']"
+              v-model="newAdventurer.bonusGear"></v-select>
 
-            <v-select label="Bonusová výbava" :items="gvClasses[newAdventurer.class]['bonusGearTwo']" v-model="newAdventurer.bonusGearTwo"></v-select>
-
-            <v-select label="Bonusová výbava" :items="gvClasses[newAdventurer.class]['bonusGearThree']" v-model="newAdventurer.bonusGearThree"></v-select>
 
 
           </v-window-item>
@@ -311,7 +311,7 @@ console.log(gvRaces);
                 <template v-slot:text>
                 <h4>Hlavní výbava: {{ newAdventurer.mainGear }}</h4>
                 <h4>sekundární výbava: {{ newAdventurer.secondaryGear }}</h4>
-                <p>Bonusové věci: {{ newAdventurer.bonusGearOne }},{{ newAdventurer.bonusGearTwo }},{{ newAdventurer.bonusGearThree }}</p>
+                <p>Bonusová výbava: {{ newAdventurer.bonusGear }}</p>
               </template>
               </v-card>
             </v-container>
@@ -339,7 +339,7 @@ console.log(gvRaces);
           Shrnutí
         </v-btn>
 
-        <v-btn v-if="step == 4" color="primary" variant="flat" @click="nextFormPage()">
+        <v-btn v-if="step == 4" color="primary" variant="flat" @click="sendtoDB()">
           Uložit dobrodruha
         </v-btn>
       </v-card-actions>
@@ -363,9 +363,7 @@ export default {
       class: null,
       mainGear: null,
       secondaryGear: null,
-      bonusGearOne: null,
-      bonusGearTwo: null,
-      bonusGearThree: null,
+      bonusGear: null,
       aligment: null,
 
     },
@@ -505,7 +503,7 @@ export default {
           break;
 
         case 2:
-          if(this.newAdventurer.mainGear == null || this.newAdventurer.secondaryGear == null || this.newAdventurer.bonusGearOne == null || this.newAdventurer.bonusGearTwo == null || this.newAdventurer.bonusGearThree == null){
+          if(this.newAdventurer.mainGear == null || this.newAdventurer.secondaryGear == null || this.newAdventurer.bonusGear == null){
 
           }else{
             this.alert2 = false;
@@ -537,16 +535,18 @@ export default {
     // Odeslat do DB
     //TODO: Odeslání
     sendtoDB(){
+      console.log('Ukladam dobrodruha')
       let obsah = JSON.stringify({
-                    "email":email,
-                    "heslo":heslo,
-                    "prezdivka":prezdivka
+                    "newAdventurer":this.newAdventurer,
+                    "owner": this.uzivatelStore._id,
+                    "atributes":this.atributes,
+                    "bonusAtributes":this.gvRaces[this.newAdventurer.race]['bonusStats']
                 })
 
                 
                 let xhr = new XMLHttpRequest();
 
-                xhr.open("POST", "http://localhost:3000/uzivatel/registrace");
+                xhr.open("POST", "http://localhost:3000/character/characterCreation");
 
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-Type", "application/json");
