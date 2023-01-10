@@ -9,12 +9,16 @@ export const useUzivatelStore = defineStore('uzivatelStore',{
         _id: "",
         }
     },
-    getters:{ doubleCount: "YEET",},
     actions:{
-        zapisUzivatele(prezdivka,_id){
+        zapisUzivatele(prezdivka,id){
             this.prihlasen = true;
             this.prezdivka = prezdivka;
-            this.id = "454"
+            this._id = id;
+        },
+        odhlasUzivatele(){
+            this.prihlasen = false;
+            this.prezdivka = "",
+            this._id = ""
         }
     },
     persist:{enabled:true}

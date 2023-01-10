@@ -1,5 +1,5 @@
 const express = require('express')
-
+const bodyParser = require('body-parser')
 
 const router = express.Router()
 
@@ -14,11 +14,13 @@ router.get("/", (req,res) =>{
 router.post("/characterCreation", (req,res) =>{
     console.log('připojeno')
     console.log(req.body.newAdventurer)
+    console.log(req.body)
     data = req.body.newAdventurer
-
+    atributesInput = req.body.atributes
     const newAdventurer = new AdventurerModel({
+        owner: req.body.owner,
         name: data.name,
-        health: atributes.houzevnatost/2 ,
+        health: atributesInput.houzevnatost ,
         secondName: data.secondName,
         nickname: data.nickname,
         race: data.race,
@@ -28,12 +30,12 @@ router.post("/characterCreation", (req,res) =>{
         bonusGear: data.bonusGear,
         aligment: data.aligment,
         atributes: {
-            sila: atributes.sila,
-            houzevnatost: atributes.houzevnatost,
-            obratnost: atributes.obratnost,
-            charisma: atributes.charisma,
-            inteligence: atributes.inteligence,
-            vedeni: atributes.vedeni
+            sila: atributesInput.sila,
+            houzevnatost: atributesInput.houzevnatost,
+            obratnost: atributesInput.obratnost,
+            charisma: atributesInput.charisma,
+            inteligence: atributesInput.inteligence,
+            znalost: atributesInput.znalost
         },
         level:1,
         experience:0,
@@ -43,6 +45,8 @@ router.post("/characterCreation", (req,res) =>{
     
 })
 
-
+router.get("/getCharacters", async (req,res) =>{
+    res.send(await AdventurerModel.find({owner: req.query.owner }))
+})
 
 module.exports = router

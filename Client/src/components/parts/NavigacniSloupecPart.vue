@@ -21,19 +21,23 @@ const uzivatelStore = useUzivatelStore();
         value="yeet"></v-list-item>
 
       <v-list-item-title>Hrát</v-list-item-title>
-      <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-newspaper-variant" title="Připojit se do hry"
-        value="myfiles"></v-list-item>
-      <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-newspaper-variant" title="Založit hru"
-        value="myfiles"></v-list-item>
+      <v-list-item to="/pripojeni-do-hry" prepend-icon="mdi-newspaper-variant" title="Připojit se do hry"
+        value="pripojeniHry"></v-list-item>
+      <v-list-item to="/zalozeni-hry" prepend-icon="mdi-newspaper-variant" title="Založit hru"
+        value="zalozeniHry"></v-list-item>
       <v-divider></v-divider>
 
       <v-list-item-title>Správa dobrodruhů</v-list-item-title>
       <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-account-hard-hat" title="Tvorba nového dobrodruha"
-        value="myfiles" theme="secondary"></v-list-item>
+        value="tvorbaDobrodruha" theme="secondary"></v-list-item>
       <v-list-item to="/vypis-dobrodruhu" prepend-icon="mdi-newspaper-variant" title="Výpis dobrodruhů" value="myfiles">
       </v-list-item>
       <v-divider></v-divider>
 
+      <v-list-item-title>Správa herních dat</v-list-item-title>
+      <v-list-item to="/sprava-pozadi" prepend-icon="mdi-account-hard-hat" title="Spravová pozadí"
+        value="spravaPozadi" theme="secondary"></v-list-item>
+      <v-divider></v-divider>
 
     </v-list>
   </v-navigation-drawer>

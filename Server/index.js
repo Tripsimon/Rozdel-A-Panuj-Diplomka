@@ -2,10 +2,15 @@ const express = require('express')
 const cors = require('cors');
 const bp = require('body-parser')
 const mongoose = require('mongoose');
+const path = require('path')
+const io = require('socket.io')(3001,{
+    cors:{
+        origin: 'http://127.0.0.1:5173'
+    }
+});
 
 const app = express()
 app.use(cors());
-
 //Body Parser
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
@@ -19,18 +24,34 @@ mongoose.connect('mongodb://localhost:3500/RozdelAPanuj_Develop')
 const PORT = process.env.PORT || 3000;
 
 app.get("/",(req,res) => {
-    res.send("Server je aktivnía");
+    res.send("Server je aktivní");
 })
 
-
-app.get('/getClasses',(req,res) =>{
-    res.send(['Kolos','Harcovník','Hraničář','Lupič','Čaroděj','Vizír']);
-})
-
-const charakterRouter = require('./routes/routeCharacterCreation.js')
+const charakterRouter = require('./routes/adventurerRouty.js')
 app.use('/character',charakterRouter);
 
 const uzivatelRouter = require('./routes/uzivatelskeRouty.js')
 app.use('/uzivatel',uzivatelRouter)
+
+const sessionsRouty = require('./routes/sessionsRouty.js');
+app.use('/sessions',sessionsRouty)
+
+const pozadiRouter = require('./routes/pozadiRoute.js')
+app.use('/pozadi',pozadiRouter);
+
+app.use(express.static(path.join(__dirname,'/uploads')))
+//img
+app.get('/obr',(req,res) =>{
+    
+})
+
+//Websockets
+io.on('connection',socket =>{
+    //console.log(socket.id)
+    socket.on('customEvent',(number, tring) =>{
+        console.log(number,tring)
+    })
+})
+
 
 app.listen(PORT)

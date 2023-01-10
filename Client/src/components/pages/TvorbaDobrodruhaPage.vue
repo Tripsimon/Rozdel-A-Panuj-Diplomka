@@ -278,7 +278,7 @@ const uzivatelStore = useUzivatelStore();
                 </template>
               </v-card>
               
-              <v-card title="Statistiky" color="success" >
+              <v-card title="Statistiky" class="mt-5" color="success" >
                 <template v-slot:text>
                   <h4>Síla:</h4>
                   <p>{{this.atributes.sila }} </p>
@@ -307,7 +307,7 @@ const uzivatelStore = useUzivatelStore();
                 </template>
               </v-card>
 
-              <v-card title="Výbava" color="success"  text="...">
+              <v-card title="Výbava" color="success" class="mt-5"  text="...">
                 <template v-slot:text>
                 <h4>Hlavní výbava: {{ newAdventurer.mainGear }}</h4>
                 <h4>sekundární výbava: {{ newAdventurer.secondaryGear }}</h4>
