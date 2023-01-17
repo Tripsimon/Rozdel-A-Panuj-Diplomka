@@ -10,7 +10,6 @@ const uzivatelStore = useUzivatelStore();
     <navigacni-sloupec-part></navigacni-sloupec-part>
 
     <v-main>
-
       <router-view></router-view>
     </v-main>
   </v-app>

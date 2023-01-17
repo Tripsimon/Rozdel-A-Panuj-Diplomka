@@ -9,7 +9,7 @@ import ZalozeniHryPage from '../components/pages/ZalozeniHryPage.vue'
 import PripojeniDoHryPage from '../components/pages/PripojeniDoHryPage.vue'
 import GamePage from '../components/pages/GamePage.vue'
 import SpravaPozadiPage from '../components/pages/SpravaPozadiPage.vue'
-
+import spravaVybavy from '../components/pages/SpravaVybavyPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +63,11 @@ const router = createRouter({
       path:'/sprava-pozadi',
       name:'spravaPozadi',
       component: SpravaPozadiPage
+    },
+    {
+      path:'/sprava-vybavy',
+      name:'spravaVybavy',
+      component: spravaVybavy
     },
   ]
 })

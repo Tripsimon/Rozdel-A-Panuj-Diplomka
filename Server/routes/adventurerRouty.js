@@ -49,4 +49,12 @@ router.get("/getCharacters", async (req,res) =>{
     res.send(await AdventurerModel.find({owner: req.query.owner }))
 })
 
+
+router.get('/SessionAdventurers', (req,res) =>{
+    console.log(req.query.sid)
+    AdventurerModel.find({_id: req.query.adventurer1})
+        .then(queryData => res.send(queryData))
+
+})
+
 module.exports = router

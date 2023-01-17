@@ -3,8 +3,8 @@
 
 
 <v-container>
-<v-card>
-  <h1>Registrace</h1>
+<v-card color="primary">
+  <h1 class="d-flex justify-center">Registrace</h1>
   <v-card-text>
 
 <v-form

@@ -17,8 +17,7 @@ const uzivatelStore = useUzivatelStore();
 
 
       <v-list-item-title>Správa účtu</v-list-item-title>
-      <v-list-item to="/sprava-uctu" prepend-icon="mdi-account" title="Uživatelský učet"
-        value="yeet"></v-list-item>
+      <v-list-item to="/sprava-uctu" prepend-icon="mdi-account" title="Uživatelský učet" value="yeet"></v-list-item>
 
       <v-list-item-title>Hrát</v-list-item-title>
       <v-list-item to="/pripojeni-do-hry" prepend-icon="mdi-newspaper-variant" title="Připojit se do hry"
@@ -35,8 +34,10 @@ const uzivatelStore = useUzivatelStore();
       <v-divider></v-divider>
 
       <v-list-item-title>Správa herních dat</v-list-item-title>
-      <v-list-item to="/sprava-pozadi" prepend-icon="mdi-account-hard-hat" title="Spravová pozadí"
-        value="spravaPozadi" theme="secondary"></v-list-item>
+      <v-list-item to="/sprava-pozadi" prepend-icon="mdi-account-hard-hat" title="Spravová pozadí" value="spravaPozadi"
+        theme="secondary"></v-list-item>
+        <v-list-item to="/sprava-vybavy" prepend-icon="mdi-account-hard-hat" title="Spravová výbavy" value="spravaPozadi"
+        theme="secondary"></v-list-item>
       <v-divider></v-divider>
 
     </v-list>
@@ -49,7 +50,9 @@ const uzivatelStore = useUzivatelStore();
 
     <v-spacer></v-spacer>
 
+    <v-btn v-if="!uzivatelStore.prihlasen" variant="text" to="/registrace"> Registrace</v-btn>
     <v-btn v-if="!uzivatelStore.prihlasen" variant="text" to="/prihlaseni"> Přihlásit se</v-btn>
+
   </v-app-bar>
 </template>
   

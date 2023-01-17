@@ -1,6 +1,7 @@
 <script setup>
 import axios from "axios";
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+import { isProxy, toRaw } from 'vue';
 const uzivatelStore = useUzivatelStore();
 </script>
 
@@ -9,16 +10,37 @@ const uzivatelStore = useUzivatelStore();
       <v-card color="primary">
         <v-card-text>
             <h3> Výber herní postavy</h3>
-        </v-card-text>
-        <v-card-actions>
             <v-select
-              label="Výběr"
+
               :items="adventurerChoices"
               variant="underlined"
-              v-model="vybranyDobrodruh"
+              v-model="chosenAdventurer"
             ></v-select>
+        </v-card-text>
+
+      </v-card>
+
+      <v-card color="primary" class="mt-4">
+        <v-card-text>
+            <h3> Výber serveru</h3>
+            <v-select
+              label="Výběr"
+              :items="this.openSessions"
+              variant="underlined"
+              v-model="chosenSession"
+              @update:modelValue="sessionSelect"
+            ></v-select>
+            <v-text-field
+              v-if="chosenSession != null"
+              v-model="sessionPassword"
+              label="Heslo hry"
+            ></v-text-field>
+        </v-card-text>
+        <v-card-actions v-if="sessionPassword != null">
+            <v-btn :onclick="joinSession">Připojit</v-btn>
           </v-card-actions>
       </v-card>
+
     </v-container>
   </template>
       
@@ -28,21 +50,76 @@ const uzivatelStore = useUzivatelStore();
   export default {
     data: () => ({
       adventurerChoices: [],
-      vybranyDobrodruh: null
+      avaliableAdventurers: [],
+      chosenAdventurer: null,
+      openSessions: [],
+      chosenSession: null,
+      sessionData: null,
+      sessionPassword: null
     }),
   
     mounted(){
 
+      // Sehnání dobrodruhů
       axios.get("http://localhost:3000/character/getCharacters",{params: {owner: this.uzivatelStore._id}})
         .then((response) => {
-          console.log(response.data[0])
-          this.adventurerChoices.push(response.data[0].name +" '"+ response.data[0].nickname +"' "+response.data[0].secondName)
+          this.avaliableAdventurers = response.data
+          console.log(this.avaliableAdventurers)
+        
+          response.data.forEach(element => {
+            this.adventurerChoices.push(element.name +" '"+ element.nickname +"' "+element.secondName)
+          });
+          
+
+      })
+
+      // Sehnání sessionů
+      axios.get("http://localhost:3000/sessions/openSessions")
+        .then((response) =>{
+
+        response.data.forEach(ses => {
+          this.openSessions.push(toRaw(ses.sessionName))
+        });
+        
+        
         })
     },
 
     methods: {
-      getAdventurers(){
 
+      sessionSelect(){
+        axios.get('http://localhost:3000/sessions/returnSession',{params:{sessionName: this.chosenSession}})
+          .then(data => {
+            this.sessionData = data.data
+          })
+      },
+
+      //Připojení do hry
+      joinSession(){
+
+        let adventurer = this.adventurerChoices.indexOf(this.chosenAdventurer,0)
+
+        console.log(this.uzivatelStore._id)
+        
+        let body = {
+          "sessionID":this.chosenSession,
+          "password":this.sessionPassword,
+          "adventurer":this.avaliableAdventurers[adventurer]._id,
+          "player": this.uzivatelStore._id
+        }
+        axios.post("http://localhost:3000/sessions/joinSession",body)
+          .then(data =>{
+            if(data.data != false){
+              this.$router.push({path: '/RaPSession', query: {sid: data.data}})
+          }else{
+            console.log("špatné heslo")
+          }
+
+          })
+      },
+
+      test(){
+        console.log(this.openSessions)
       }
   
     },

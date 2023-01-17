@@ -1,3 +1,8 @@
+<script setup>
+import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+const uzivatelStore = useUzivatelStore();
+</script>
+
 <template>
   <v-container>
     <v-card color="primary">
@@ -15,10 +20,7 @@
   </v-container>
 </template>
     
-<script setup>
-import { useUzivatelStore } from "../../stores/uzivatelStore.js"
-const uzivatelStore = useUzivatelStore();
-</script>
+
 
 <script>
 export default {

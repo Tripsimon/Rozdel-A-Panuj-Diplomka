@@ -16,7 +16,7 @@ loadFonts()
 //Konstanty
 
 app.provide('gvRaces',{
-  names:['Anhilarský člověk', 'Grobr', 'Hruurský člověk','Ork','Inu-im'],
+  names:['Anhilarský člověk', 'Grobr', 'Hruurský člověk','Ork','Inu-Im'],
     'Anhilarský člověk':{
     name:'Anhilarský člověk',
     description: "Lidé zrozeni v říši pojmenované podle východního Anhilar. Zdejší obyvatelé jsou vynalézavý lidé, kteří se jen tak nezaleknou jakékoliv překážky.",
@@ -73,19 +73,62 @@ app.provide('gvRaces',{
     bonusAbilities:[
       {
         name:'Dary země',
-        description:'Pradávná tradice a tajemství předků umožnuje Grobrům využívat jejich prestižní runovou výbavu',
-        effect: 'Tato postava' ,
+        description:' Díky své bujné historii a spojení s přírodou jsou Hruurští lidé schopni využíat lépe biliny a rostliny',
+        effect: 'Tato postava lépe pracuje s rostlinamy bilinamy a výrobkami z nich ' ,
         abilityId: 69
       },{
-        name:'železná krev',
-        description:'Po letech v podzemí zhoustla Grobrská krev stejně jako jejich nátura',
-        effect:'Dovolí dobrodruhovy přehodit kostku záchrany',
+        name:'Nedoplneno',
+        description:'Nedoplneno',
+        effect:'Nedoplneno',
+        abilityId: 70,
+      }
+    ],
+    avaliableClasses:["Bojovník",'Kněz','Kolos']
+  },
+  'Ork':{
+    name:'Ork',
+    description:'Ostatními nazívaní barbaři, Hruurové jsou tradicionalistický lid bohatý ve svých tradicích, pověrách a kodu cti',
+    bonusStats:{
+      znalost: +2,
+      sila: +1,
+    },
+    bonusAbilities:[
+      {
+        name:'Dary země',
+        description:' Díky své bujné historii a spojení s přírodou jsou Hruurští lidé schopni využíat lépe biliny a rostliny',
+        effect: 'Tato postava lépe pracuje s rostlinamy bilinamy a výrobkami z nich ' ,
+        abilityId: 69
+      },{
+        name:'Nedoplneno',
+        description:'Nedoplneno',
+        effect:'Nedoplneno',
+        abilityId: 70,
+      }
+    ],
+    avaliableClasses:["Bojovník",'Kněz','Kolos']
+  },
+  'Inu-Im':{
+    name:'Inu-Im',
+    description:'Ostatními nazívaní barbaři, Hruurové jsou tradicionalistický lid bohatý ve svých tradicích, pověrách a kodu cti',
+    bonusStats:{
+      znalost: +2,
+      sila: +1,
+    },
+    bonusAbilities:[
+      {
+        name:'Dary země',
+        description:' Díky své bujné historii a spojení s přírodou jsou Hruurští lidé schopni využíat lépe biliny a rostliny',
+        effect: 'Tato postava lépe pracuje s rostlinamy bilinamy a výrobkami z nich ' ,
+        abilityId: 69
+      },{
+        name:'Nedoplneno',
+        description:'Nedoplneno',
+        effect:'Nedoplneno',
         abilityId: 70,
       }
     ],
     avaliableClasses:["Bojovník",'Kněz','Kolos']
   }
-  
 });
 
 app.provide('gvClasses',{
@@ -104,25 +147,25 @@ app.provide('gvClasses',{
   'Kněz':{
     name:'Kněz'
   },
-  lupic:{
+  'lupic':{
     name:'Lupič'
   },
-  kolos:{
+  'kolos':{
     name:'Kolos',
   },
-  saman:{
+  'saman':{
     name:'šaman'
   },
-  hranicar:{
+  'hranicar':{
     name:'Hraničář'
   },
-  berzerk:{
+  'berzerk':{
     name:"Berzerk"
   },
-  mag:{
+  'mag':{
     name:'Mág'
   },
-  vizir:{
+  'vizir':{
     name:'Vizír'
   }
 
