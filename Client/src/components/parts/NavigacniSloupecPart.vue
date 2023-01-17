@@ -38,6 +38,8 @@ const uzivatelStore = useUzivatelStore();
         theme="secondary"></v-list-item>
         <v-list-item to="/sprava-vybavy" prepend-icon="mdi-account-hard-hat" title="Spravová výbavy" value="spravaPozadi"
         theme="secondary"></v-list-item>
+        <v-list-item to="/sprava-nepratel" prepend-icon="mdi-account-hard-hat" title="Spravová nepřátel" value="spravaNepratel"
+        theme="secondary"></v-list-item>
       <v-divider></v-divider>
 
     </v-list>

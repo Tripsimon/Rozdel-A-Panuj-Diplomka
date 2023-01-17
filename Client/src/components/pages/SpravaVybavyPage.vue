@@ -11,7 +11,7 @@ import FormData from 'form-data'
         <v-card color="primary">
             <h1 class="d-flex justify-center">Správa výbavy</h1>
             <v-card-text>
-                <v-select label="Typ" :items="['Zbran', 'Zbroj', 'Předmět']" v-model="chosenType"></v-select>
+                <v-select label="Typ" :items="['Zbran', 'Zbroj', 'Předmět']" v-model="chosenType" @update:modelValue="updateData()"></v-select>
             </v-card-text>
         </v-card>
 
@@ -99,6 +99,12 @@ import FormData from 'form-data'
 
 
 
+        <v-card v-for="item in this.loadedData">
+            <v-card-text>
+                {{ item }}
+            </v-card-text>
+        </v-card>
+
 
 
     </v-container>
@@ -119,7 +125,7 @@ export default {
         chosenArmor: null,
         chosenWeight: null,
 
-
+        loadedData: [],
     }),
 
 
@@ -159,6 +165,17 @@ export default {
                     'weight': this.chosenWeight
                 })
                 .then(response => console.log(response))
+        },
+
+        updateData(){
+            console.log("AAA")
+            axios.get('http://localhost:3000/vybava/allType',{params:{type: this.chosenType}})
+                .then(response =>{
+
+                    console.log(response)
+                    this.loadedData = response.data
+                
+                })
         }
 
     }

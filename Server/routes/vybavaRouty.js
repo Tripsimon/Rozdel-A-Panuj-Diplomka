@@ -72,8 +72,8 @@ router.post('/createItem',(req,res) =>{
         .then( res.send("Uspesne zapsano"))
 })
 
-router.get('/all', (req,res) =>{
-    EquipmentModel.find()
+router.get('/allType', (req,res) =>{
+    EquipmentModel.find({typ: req.query.type})
         .then(queryResult => res.send(queryResult))
 })
 
