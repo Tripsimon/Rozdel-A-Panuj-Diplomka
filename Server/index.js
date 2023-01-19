@@ -41,14 +41,14 @@ app.use('/pozadi',pozadiRouter);
 
 const vybavaRouter = require('./routes/vybavaRouty.js')
 app.use('/vybava',vybavaRouter);
-/*
-Mozna potřeba pro obrazky ?
+
+
 app.use(express.static(path.join(__dirname,'/uploads')))
 //img
 app.get('/obr',(req,res) =>{
     
 })
-*/
+
 
 //Websockets
 io.on('connection',socket =>{

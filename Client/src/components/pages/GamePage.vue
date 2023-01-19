@@ -11,18 +11,15 @@ const uzivatelStore = useUzivatelStore();
   <v-row justify="center">
     <v-dialog v-model="inventoryModal" scrollable>
 
-      <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props">
-          Open Dialog
-        </v-btn>
-      </template>
+
+
       <v-card>
         <v-card-title>Select Country</v-card-title>
         <v-divider></v-divider>
         <v-card-text style="height: 300px;">
           <v-expansion-panels variant="accordion">
 
-            <v-expansion-panel  title="Item"
+            <v-expansion-panel title="Item"
               text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."></v-expansion-panel>
 
 
@@ -32,10 +29,10 @@ const uzivatelStore = useUzivatelStore();
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+          <v-btn color="blue-darken-1" variant="text" @click="inventoryModal = false">
             Close
           </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+          <v-btn color="blue-darken-1" variant="text" @click="inventoryModal = false">
             Save
           </v-btn>
         </v-card-actions>
@@ -46,9 +43,21 @@ const uzivatelStore = useUzivatelStore();
 
   <v-container>
     <v-row>
-      <v-col cols="8">
+      <v-col v-if="battleModeSwitch == false" cols="8">
         <v-img :src="'http://localhost:3000/' + vybranePozadi + '.jpg'" max-width="100%">
         </v-img>
+      </v-col>
+
+      <v-col v-if="battleModeSwitch == true" cols="8">
+        <v-card color="secondary" title="Nepřátelé">
+          AA
+        </v-card>
+        <v-card  title="Hod kostkou">
+          AA
+        </v-card>
+        <v-card color="primary" title="Dobrodruzi">
+          AA
+        </v-card>
       </v-col>
 
       <v-col cols="4">
@@ -58,9 +67,13 @@ const uzivatelStore = useUzivatelStore();
               v-model="vybranePozadi"></v-select>
           </v-card-text>
 
+          <v-switch v-model="battleModeSwitch"></v-switch>
+
         </v-card>
 
-        <v-btn @click="updateAdventurers()">
+
+
+        <v-btn @click="inventoryModal = !inventoryModal">
           Button
         </v-btn>
       </v-col>
@@ -74,13 +87,13 @@ const uzivatelStore = useUzivatelStore();
       -->
 
 
-      <v-col cols="4">
-        <v-card v-if="this.player1.adventurer != null">
+      <v-col  cols="4">
+        <v-card color="primary" v-if="this.player1.adventurer != null">
           <v-card-title>{{ this.player1.adventurer.name + ' ' + this.player1.adventurer.secondName }}</v-card-title>
           <v-card-subtitle>{{ this.player1.owner }}</v-card-subtitle>
           <v-card-text>dsads</v-card-text>
           <v-card-actions>
-            <v-btn>Inventář</v-btn>
+            <v-btn @click="{inventoryPlayer = 1; inventoryModal = !inventoryModal; }">Inventář</v-btn>
             <v-btn>Status</v-btn>
           </v-card-actions>
         </v-card>
@@ -115,14 +128,15 @@ export default {
 
     dostupnePozadi: null,
     vybranePozadi: null,
+    battleModeSwitch: false,
 
     player1: { owner: "Nepřipojen", adventurerID: null, adventurer: null },
     player2: { owner: "Nepřipojen", adventurerID: null },
     player3: { owner: "Nepřipojen", adventurerID: null },
 
     dialogm1: '',
-    inventoryModal: true,
-
+    inventoryModal: false,
+    inventoryPlayer: null
   }),
 
   mounted() {
