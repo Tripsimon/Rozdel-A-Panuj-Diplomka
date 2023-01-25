@@ -64,10 +64,10 @@ const uzivatelStore = useUzivatelStore();
       axios.get("http://localhost:3000/character/getCharacters",{params: {owner: this.uzivatelStore._id}})
         .then((response) => {
           this.avaliableAdventurers = response.data
-          console.log(this.avaliableAdventurers)
         
           response.data.forEach(element => {
-            this.adventurerChoices.push(element.name +" '"+ element.nickname +"' "+element.secondName)
+            console.log(element)
+            this.adventurerChoices.push(element.krestniJmeno +" '"+ element.prezdivka +"' "+element.prijmeni)
           });
           
 

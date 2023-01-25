@@ -42,6 +42,12 @@ app.use('/pozadi',pozadiRouter);
 const vybavaRouter = require('./routes/vybavaRouty.js')
 app.use('/vybava',vybavaRouter);
 
+const monsterRouter = require('./routes/monsterRouty.js')
+app.use('/monster',monsterRouter);
+
+const schopnostiRouter = require('./routes/schopnostiRouty')
+app.use('/schopnosti',schopnostiRouter);
+
 
 app.use(express.static(path.join(__dirname,'/uploads')))
 //img

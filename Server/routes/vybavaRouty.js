@@ -77,4 +77,11 @@ router.get('/allType', (req,res) =>{
         .then(queryResult => res.send(queryResult))
 })
 
+router.get('/multipleID', (req,res) =>{
+
+    console.log(req.query)
+    EquipmentModel.find({_id: {$in: req.query.items}})
+        .then(queryResult => res.send(queryResult))
+})
+
 module.exports = router

@@ -25,19 +25,7 @@ app.provide('gvRaces',{
       charisma: +1,
       intelifence: +1,
     },
-    bonusAbilities:[
-      {
-        name:'Hlas císaře',
-        description:'Anhilarští lidé jsou rození vůdci a jsou schopni svojí odhodlanost převést na své spolubojovníky podobou ocelového hlasu a nezlomného vůdcovství.',
-        effect: 'Jednou za krátký odpočinek můžeš okolnímu dobrodruhy rozkázat přehození jedné kostky.' ,
-        abilityId: 69
-      },{
-        name:'Imperiální konexe',
-        description:'Jedině díky semnuté mentalitě a komunální práci se podařilo Anhilarské říši obstát příliv zla který pohltil celí kontinent. V jednotě síla.',
-        effect:'Ostatní Anhilarští jsou ti více nápomocni',
-        abilityId: 70,
-      }
-    ],
+    bonusAbilities:['63cc4bdf61646806b6b8fae8','63cc4caa61646806b6b8fae9'],
     avaliableClasses:['Bojovník','Kněz','Lupič']
   },
   'Grobr':{
@@ -133,16 +121,16 @@ app.provide('gvRaces',{
 
 app.provide('gvClasses',{
   names:['Bojovník','Kněz','Lupič','Kolos','šaman','Hraničář',"Berzerk",'Mág','Vizír'],
+  
   'Bojovník':{
     name:'Bojovník',
     description: 'Hrdý válečník',
     passive: "Tohle neco dela",
     abilities: [
-      "odkaz na ability"
     ],
-    mainGear:["Jednoruční meč", "Jednoruční sekera", "Kopí"],
-    secondaryGear:["Jednoduchí dřevěný štít", "Malá díka"],
-    bonusGear:["Lucerna","Provaz"],
+    mainGear:['63c723d7b1f3a96286014792','63c723d7b1f3a96286014792'],
+    secondaryGear:["63cd4164590a36f414778487"],
+    bonusGear:['63cd418a590a36f41477848b'],
   },
   'Kněz':{
     name:'Kněz'
