@@ -85,4 +85,11 @@ router.post('/removeFromInventory', async (req,res) =>{
         .then(res.send(true))
 })
 
+router.post('/changeMoney',async (req,res) =>{
+
+   AdventurerModel.updateOne({_id: req.body.adventurer}, {penize: req.body.money})
+    .then(res.send(true))
+
+})
+
 module.exports = router

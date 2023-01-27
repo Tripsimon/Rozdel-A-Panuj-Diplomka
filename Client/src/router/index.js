@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import CharacterCreationPage from '../components/pages/TvorbaDobrodruhaPage.vue';
 import SpravaUzivatelePage from '../components/pages/SpravaUzivatelePage.vue'
 import RegistracePage from '../components/pages/RegistracePage.vue'

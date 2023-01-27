@@ -2,7 +2,7 @@
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import { io } from 'socket.io-client'
 import axios from 'axios'
-const uzivatelStore = useUzivatelStore();
+
 </script>
 
 <template>
@@ -11,10 +11,21 @@ const uzivatelStore = useUzivatelStore();
   <v-row justify="center">
     <v-dialog v-model="inventoryModal" scrollable>
       <v-card color="primary">
-        <v-card-title>Select Country</v-card-title>
+        <v-card-title>Inventář</v-card-title>
         <v-divider></v-divider>
         <v-card-text style="height: 80%;">
-          <v-expansion-panels variant="accordion">
+          <v-card class="mt-3">
+            <v-card-title>
+
+              <h3>Peníze: {{ this.inventoryLoadedMoney }}</h3>
+              <v-text-field v-model="inventoryChangeMoneyInput" type="number" single-line
+                label="Nové množství"></v-text-field>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn @click="inventoryChangeMoney">dsa</v-btn>
+            </v-card-actions>
+          </v-card>
+          <v-expansion-panels class="mt-3" variant="accordion">
             <v-expansion-panel v-for="item in this.inventoryLoadedArray" :key="i">
               <v-expansion-panel-title>{{ item.jmeno + " - " + item.typ }}</v-expansion-panel-title>
 
@@ -99,7 +110,7 @@ const uzivatelStore = useUzivatelStore();
       <v-col v-if="battleModeSwitch == true" cols="8">
 
         <!-- Nepřátelé -->
-        <v-card color="primary" title="Nepřátelé" class="mt-3">
+        <v-card color="primary" title="Nepřátelé">
           <v-container>
             <v-expansion-panels>
               <v-expansion-panel v-for=" (enemy, index, key) in this.aktivniNepratele">
@@ -127,8 +138,8 @@ const uzivatelStore = useUzivatelStore();
         <v-card color="primary" title="Hod kostkou" class="mt-3">
           <v-container>
             <v-select label="Porovnávaný atribut"
-              :items="['Volný hod', 'Atributy', 'Zásah', 'Průraz', 'Steč', 'Uhyb', 'Blokace']" variant="underlined"
-              v-model="bojPorovnanyAtribut"></v-select>
+              :items="['Volný hod', 'Atributy', 'Zásah', 'Průraz', 'Steč', 'Uhyb', 'Blokace', 'Výdrž']"
+              variant="underlined" v-model="bojPorovnanyAtribut"></v-select>
 
             <v-row v-if="this.bojPorovnanyAtribut == 'Volný hod'">
               <v-col>
@@ -152,6 +163,9 @@ const uzivatelStore = useUzivatelStore();
             <v-row v-if="this.bojPorovnanyAtribut == 'Atributy'">
 
               <v-col>
+                <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card-title>Vyberte dobrodruha</v-card-title>
+                </v-card>
                 <v-card color="success" v-if="this.bojujiciDobrodruh != null">
                   <v-card-title>
                     {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
@@ -186,13 +200,16 @@ const uzivatelStore = useUzivatelStore();
                     </v-btn>
 
                     <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                      Vynulovat
+                      Vyčistit
                     </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-col>
 
               <v-col>
+                <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
                 <v-card v-if="this.bojujiciNepritel != null">
                   <v-card-title>
                     {{ this.bojujiciNepritel.jmeno }}
@@ -216,13 +233,18 @@ const uzivatelStore = useUzivatelStore();
             </v-row>
             <v-row v-if="this.bojPorovnanyAtribut == 'Zásah'">
               <v-col>
+                <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card-title>Vyberte dobrodruha</v-card-title>
+                </v-card>
                 <v-card color="success" v-if="this.bojujiciDobrodruh != null">
                   <v-card-title>
                     {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
                   </v-card-title>
                   <v-card-text>
 
-                      <v-col>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</v-col>
+                    <v-col>
+                      <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                    </v-col>
 
                   </v-card-text>
                 </v-card>
@@ -248,6 +270,297 @@ const uzivatelStore = useUzivatelStore();
               </v-col>
 
               <v-col>
+                <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
+                <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card-title>
+                    {{ this.bojujiciNepritel.jmeno }}
+                  </v-card-title>
+                  <v-card-text>
+
+                    <v-col>
+                      <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                    </v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row v-if="this.bojPorovnanyAtribut == 'Průraz'">
+              <v-col>
+                <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card-title color="error">Vyberte dobrodruha</v-card-title>
+                </v-card>
+                <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card-title>
+                    {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                  </v-card-title>
+                  <v-card-text>
+                    <v-select :items="this.bojujiciDobrodruhVybava" v-model="this.bojujiciDobrodruhPredmet"
+                      item-title="jmeno" return-object label="Vyberte předmět"></v-select>
+                    <v-col v-if="!!this.bojujiciDobrodruhPredmet">
+                      <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbran'">Průraz: {{
+                        this.bojujiciDobrodruhPredmet.pruraznost
+                      }}</h3>
+                      <h3 v-else>Předmět nemá zadanou hodnotu pruraznosti</h3>
+                    </v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+
+
+              <v-col>
+                <v-card color="accent" align="center" justify="center">
+                  <v-card-title>Hození kostkou</v-card-title>
+                  <v-card-text>
+                    <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Hodit kostkou
+                    </v-btn>
+
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Vynulovat
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+
+              <v-col>
+                <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
+                <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card-title>
+                    {{ this.bojujiciNepritel.jmeno }}
+                  </v-card-title>
+                  <v-card-text>
+
+                    <v-col>
+                      <h3>Zbroj: {{ this.bojujiciNepritel.zbroj }}</h3>
+                    </v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row v-if="this.bojPorovnanyAtribut == 'Steč'">
+              <v-col>
+                <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card-title>
+                    {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                  </v-card-title>
+                  <v-card-text>
+                    <v-select :items="this.bojujiciDobrodruhVybava" v-model="this.bojujiciDobrodruhPredmet"
+                      item-title="jmeno" return-object label="Vyberte předmět"></v-select>
+                    <v-col v-if="!!this.bojujiciDobrodruhPredmet">
+                      <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbran'">Poškození: {{
+                        this.bojujiciDobrodruhPredmet.poskozeni
+                      }}</h3>
+                      <h3 v-else>Předmět nemá zadanou hodnotu poškození</h3>
+                    </v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+
+
+              <v-col>
+                <v-card color="accent" align="center" justify="center">
+                  <v-card-title>Hození kostkou</v-card-title>
+                  <v-card-text>
+                    <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Hodit kostkou
+                    </v-btn>
+
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Vynulovat
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+
+              <v-col>
+                <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
+                <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card-title>
+                    {{ this.bojujiciNepritel.jmeno }}
+                  </v-card-title>
+                  <v-card-text>
+
+                    <v-col>
+                      <h3>Zdraví: {{ this.bojujiciNepritel.realneZivoty + '/' + this.bojujiciNepritel.zivoty }}</h3>
+                    </v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+
+
+            <v-row v-if="this.bojPorovnanyAtribut == 'Uhyb'">
+              <v-col>
+                <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
+                <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card-title>
+                    {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                  </v-card-title>
+                  <v-card-text>
+
+                    <v-col>
+                      <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                    </v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+
+
+              <v-col>
+                <v-card color="accent" align="center" justify="center">
+                  <v-card-title>Hození kostkou</v-card-title>
+                  <v-card-text>
+                    <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Hodit kostkou
+                    </v-btn>
+
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Vynulovat
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+
+              <v-col>
+                <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
+                <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card-title>
+                    {{ this.bojujiciNepritel.jmeno }}
+                  </v-card-title>
+                  <v-card-text>
+
+                    <v-col>
+                      <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                    </v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row v-if="this.bojPorovnanyAtribut == 'Blokace'">
+
+              <v-col>
+                <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
+                <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card-title>
+                    {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                  </v-card-title>
+                  <v-card-text>
+                    <v-select :items="this.bojujiciDobrodruhVybava" v-model="this.bojujiciDobrodruhPredmet"
+                      item-title="jmeno" return-object label="Vyberte předmět"></v-select>
+                    <v-col v-if="!!this.bojujiciDobrodruhPredmet">
+                      <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbroj'">Obrana: {{
+                        this.bojujiciDobrodruhPredmet.obrana
+                      }}</h3>
+                      <h3 v-else>Předmět nemá zadanou hodnotu obrany</h3>
+                    </v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+
+
+              <v-col>
+                <v-card color="accent" align="center" justify="center">
+                  <v-card-title>Hození kostkou</v-card-title>
+                  <v-card-text>
+                    <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Hodit kostkou
+                    </v-btn>
+
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Vynulovat
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+
+              <v-col>
+                <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
+                <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card-title>
+                    {{ this.bojujiciNepritel.jmeno }}
+                  </v-card-title>
+                  <v-card-text>
+
+                    <v-col><h3>Průraznost: {{ this.bojujiciNepritel.pruraz }}</h3></v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row v-if="this.bojPorovnanyAtribut == 'Výdrž'">
+              <v-col>
+                <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card-title>Vyberte dobrodruha</v-card-title>
+                </v-card>
+                <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card-title>
+                    {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                  </v-card-title>
+                  <v-card-text>
+
+                    <v-col>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</v-col>
+
+                  </v-card-text>
+                </v-card>
+              </v-col>
+
+
+              <v-col>
+                <v-card color="accent" align="center" justify="center">
+                  <v-card-title>Hození kostkou</v-card-title>
+                  <v-card-text>
+                    <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Hodit kostkou
+                    </v-btn>
+
+                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      Vynulovat
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+
+              <v-col>
+                <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card-title>Vyberte nepřítele</v-card-title>
+                </v-card>
                 <v-card v-if="this.bojujiciNepritel != null">
                   <v-card-title>
                     {{ this.bojujiciNepritel.jmeno }}
@@ -260,6 +573,11 @@ const uzivatelStore = useUzivatelStore();
                 </v-card>
               </v-col>
             </v-row>
+
+            <v-divider class="mt-3"></v-divider>
+
+            <param>1 = Vždy selže. 2 = Je zapotřebí 2x větší atribut. 3 = Je zapotřebí větší atribut. 4 = Je zapotřebí
+            alespon stejný atribut 5 = Je zapotřebí atribut větší než 2x nepřátelského atributu 6 = Kritický uspěch
 
           </v-container>
         </v-card>
@@ -306,7 +624,7 @@ const uzivatelStore = useUzivatelStore();
         </v-card>
 
         <!-- Nastavení v boji -->
-        <v-card v-if="battleModeSwitch == true" color="primary" title="Nepřátelé" class="mt-3" >
+        <v-card v-if="battleModeSwitch == true" color="primary" title="Nepřátelé" class="mt-3">
           <v-card-text>
             <row>
               <col>
@@ -383,6 +701,7 @@ const uzivatelStore = useUzivatelStore();
 export default {
   data: () => ({
     //Duležité konstanty pro session
+    uzivatelStore: useUzivatelStore(),
     jmenoSessionu: null,
     sid: null,
     isOwner: false,
@@ -508,6 +827,9 @@ export default {
     inventoryLoadedAdventurerID: null,
     inventoryLoadedArray: null,
 
+    inventoryLoadedMoney: null,
+    inventoryChangeMoneyInput: null,
+
     inventoryAddType: null,
     invntoryAddChoices: null,
 
@@ -516,6 +838,8 @@ export default {
     hozennaKostka: 0,
     bojujiciNepritel: null,
     bojujiciDobrodruh: null,
+    bojujiciDobrodruhVybava: [],
+    bojujiciDobrodruhPredmet: null,
 
     // Nepřátelé
     dostupniNepratele: null,
@@ -599,10 +923,9 @@ export default {
     openInventory(hrac) {
       switch (hrac) {
         case 1:
-
+          this.inventoryLoadedMoney = this.player1.adventurer.penize
           axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.player1.adventurer.inventar } })
             .then(queryResponse => {
-              console.log(queryResponse)
               this.inventoryLoadedArray = queryResponse.data
               this.inventoryLoadedAdventurerID = this.player1.adventurer._id
               this.inventoryModal = true;
@@ -614,6 +937,10 @@ export default {
           break;
       }
     },
+    inventoryChangeMoney() {
+      console.log(this.inventoryChangeMoneyInput)
+      axios.post('http://localhost:3000/character/changeMoney', { money: this.inventoryChangeMoneyInput, adventurer: this.inventoryLoadedAdventurerID })
+    },
 
     inventoryAddTypeChange() {
       axios.get('http://localhost:3000/vybava/allType', { params: { type: this.inventoryAddType } })
@@ -623,6 +950,7 @@ export default {
         )
     },
 
+    //Přidá předmět dobroduhovy do inventáře a resynkne dobrodruhy
     inventoryAddPush(item) {
       console.log(this.inventoryLoadedAdventurerID)
       axios.post('http://localhost:3000/character/putIntoInventory', { "item": item, 'adventurer': this.inventoryLoadedAdventurerID })
@@ -633,6 +961,7 @@ export default {
         })
     },
 
+    //Odebere předmět z inventáře dobrodruha a resynkne dobrodruhy
     invetoryRemove(item) {
       console.log(this.inventoryLoadedAdventurerID)
 
@@ -689,7 +1018,12 @@ export default {
       switch (adventurer) {
         case 1:
           this.bojujiciDobrodruh = this.player1.adventurer
-          console.log(this.bojujiciDobrodruh)
+          axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.player1.adventurer.inventar } })
+            .then(queryResponse => {
+              console.log(" Výbava", queryResponse)
+              this.bojujiciDobrodruhVybava = queryResponse.data
+            })
+
           break;
 
         default:

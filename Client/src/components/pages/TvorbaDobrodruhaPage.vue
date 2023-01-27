@@ -242,7 +242,7 @@ const uzivatelStore = useUzivatelStore();
 
 
 
-            <h2 class="d-flex justify-center">Výbava</h2>
+            <h2 class="d-flex justify-center mt-3">Výbava</h2>
 
             <v-select label="Hlavní výzbroj" v-model="newAdventurer.mainGear" :items="this.classGear.mainGearNames">
             </v-select>
@@ -411,7 +411,7 @@ export default {
 
     onClassSelect(main, secondary, bonus) {
 
-      axios.get('http://localhost:3000/vybava/multipleID', { params: { maingear: main } })
+      axios.get('http://localhost:3000/vybava/multipleID', { params: { items: main } })
         .then(queryResponse => {
           queryResponse.data.forEach(item => {
             this.classGear.mainGearNames.push(item.jmeno)
@@ -419,7 +419,7 @@ export default {
           });
         })
 
-      axios.get('http://localhost:3000/vybava/multipleID', { params: { maingear: secondary } })
+      axios.get('http://localhost:3000/vybava/multipleID', { params: { items: secondary } })
         .then(queryResponse => {
           queryResponse.data.forEach(item => {
             this.classGear.secondaryGearNames.push(item.jmeno)
@@ -428,7 +428,7 @@ export default {
         })
 
 
-      axios.get('http://localhost:3000/vybava/multipleID', { params: { maingear: bonus } })
+      axios.get('http://localhost:3000/vybava/multipleID', { params: { items: bonus } })
         .then(queryResponse => {
           queryResponse.data.forEach(item => {
             this.classGear.bonusGearNames.push(item.jmeno)

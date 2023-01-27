@@ -2,7 +2,6 @@
 import axios from "axios";
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import { isProxy, toRaw } from 'vue';
-const uzivatelStore = useUzivatelStore();
 </script>
 
 <template>
@@ -55,7 +54,9 @@ const uzivatelStore = useUzivatelStore();
       openSessions: [],
       chosenSession: null,
       sessionData: null,
-      sessionPassword: null
+      sessionPassword: null,
+
+      uzivatelStore: useUzivatelStore
     }),
   
     mounted(){
