@@ -3,15 +3,17 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import { io } from 'socket.io-client'
 import axios from 'axios'
 
+
+
 </script>
 
 <template>
-  <v-btn @click="updateAdventurers()">TEST</v-btn>
+<div>
   <!-- Modal pro inventář -->
   <v-row justify="center">
     <v-dialog v-model="inventoryModal" scrollable>
       <v-card color="primary">
-        <v-card-title>Inventář</v-card-title>
+        <v-card-title>Inventář: {{ this.inventarVaha + " / " + (this.invetarDobrodruh.atributy.sila*5)}}</v-card-title>
         <v-divider></v-divider>
         <v-card-text style="height: 80%;">
           <v-card class="mt-3">
@@ -26,8 +28,8 @@ import axios from 'axios'
             </v-card-actions>
           </v-card>
           <v-expansion-panels class="mt-3" variant="accordion">
-            <v-expansion-panel v-for="item in this.inventoryLoadedArray" :key="i">
-              <v-expansion-panel-title>{{ item.jmeno + " - " + item.typ }}</v-expansion-panel-title>
+            <v-expansion-panel v-for="item in this.inventoryLoadedArray" :key="i" >
+              <v-expansion-panel-title >{{ item.jmeno + " - " + item.typ }}</v-expansion-panel-title>
 
               <v-expansion-panel-text v-if="item.typ == 'Zbran'">
                 <v-row>
@@ -63,7 +65,7 @@ import axios from 'axios'
               </v-expansion-panel-text>
 
               <v-expansion-panel-text>
-                <v-btn color="warning" @click="invetoryRemove(item._id)">Smazat předmět</v-btn>
+                <v-btn color="warning" @click="invetoryRemove(item._id)">Zahodit předmět</v-btn>
               </v-expansion-panel-text>
 
             </v-expansion-panel>
@@ -97,38 +99,158 @@ import axios from 'axios'
   </v-row>
   <!-- /Modal pro inventář -->
 
+  <!-- Modal pro detail dobrodruha -->
+  <v-row justify="center">
+    <v-dialog v-model="detailModal" scrollable>
+      <v-card color="primary">
+        <v-card-title>Detail dobrodruha</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 80%;">
+
+          <v-card class="mt-3" title="Zkušenosti">
+            <v-card-text>
+              <v-row>
+                <v-col cols="6"> <v-text-field v-model="detailLevelInput" type="number" single-line label="Level"
+                    :placeholder="this.detailDobrodruh.level"></v-text-field></v-col>
+                <v-col cols="6"> <v-text-field v-model="detailExperienceInput" type="number" single-line
+                    label="Zkušenosti" :placeholder="this.detailDobrodruh.zkusenosti"></v-text-field></v-col>
+              </v-row>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn @click="detailChangeLevelExperience">Změnit</v-btn>
+            </v-card-actions>
+          </v-card>
+
+          <v-card class="mt-3" title="Atributy">
+            <v-card-text>
+              <v-row>
+                <v-col>
+                  <h3> Síla: {{ this.detailDobrodruh.atributy.sila }}</h3>
+                </v-col>
+                <v-col>
+                  <h3> Houževnatost: {{ this.detailDobrodruh.atributy.houzevnatost }}</h3>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <h3> Obratnost: {{ this.detailDobrodruh.atributy.obratnost }}</h3>
+                </v-col>
+                <v-col>
+                  <h3> Charisma: {{ this.detailDobrodruh.atributy.charisma }}</h3>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <h3> Inteligence: {{ this.detailDobrodruh.atributy.inteligence }}</h3>
+                </v-col>
+                <v-col>
+                  <h3> Znalost: {{ this.detailDobrodruh.atributy.znalost }}</h3>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+
+          <v-card class="mt-3" title="Schopnosti rasy" v-if="this.detailRasaSchopnosti != null">
+            <AbilityCard  v-for="ability in this.detailTridaShopnosti" :ability="ability" />
+          </v-card>
+
+          <v-card class="mt-3" title="Schopnosti třídy" v-if="this.detailTridaShopnosti != null">
+            <AbilityCard  v-for="ability in this.detailTridaShopnosti" :ability="ability" />
+          </v-card>
+
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn color="blue-darken-1" variant="text" @click="detailModal = false">
+            Zavřít
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
+  <!-- /Modal pro detail dobrodruha -->
+
   <v-container>
     <v-row>
       <!-- Mod pruzkumu -->
-      <v-col v-if="battleModeSwitch == false" cols="8">
+      <v-col v-if="battleModeSwitch == false" cols="9">
         <v-img :src="'http://localhost:3000/' + vybranePozadi + '.jpg'" max-width="100%">
         </v-img>
       </v-col>
       <!-- /Mod pruzkumu -->
 
       <!-- Mod boje -->
-      <v-col v-if="battleModeSwitch == true" cols="8">
+      <v-col v-if="battleModeSwitch == true" cols="9">
 
         <!-- Nepřátelé -->
         <v-card color="primary" title="Nepřátelé">
           <v-container>
-            <v-expansion-panels>
+            <v-expansion-panels v-if="this.aktivniNepratele.length != 0">
               <v-expansion-panel v-for=" (enemy, index, key) in this.aktivniNepratele">
                 <v-expansion-panel-title>{{ enemy.jmeno + " " + enemy.realneZivoty + " / " + enemy.zivoty }}
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
-                  {{ enemy }}
-                </v-expansion-panel-text>
-                <v-expansion-panel-text>
 
-                  <v-btn @click="fightChoseEnemy(index)">Vybrat pro boj</v-btn>
-                  <v-btn color="success" @click="fightAddLifeToEnemy(index)">Přidat život</v-btn>
-                  <v-btn color="error" @click="fightRemoveLifeToEnemy(index)">Odebrat život</v-btn>
-                  <v-btn @click="fightRemoveEnemy(index)">Odebrat život</v-btn>
+                  <v-card-subtitle>{{ enemy.popis }}</v-card-subtitle>
+                  <br>
+
+
+                  <v-row>
+                    <v-col>
+                      <h3> Síla: {{ enemy.sila }}</h3>
+                    </v-col>
+                    <v-col>
+                      <h3> Houževnatost: {{ enemy.houzevnatost }}</h3>
+                    </v-col>
+                    <v-col>
+                      <h3> Obratnost: {{ enemy.obratnost }}</h3>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider></v-divider>
+
+                  <v-row>
+                    <v-col>
+                      <h3> Charisma: {{ enemy.charisma }}</h3>
+                    </v-col>
+                    <v-col>
+                      <h3> Inteligence: {{ enemy.inteligence }}</h3>
+                    </v-col>
+                    <v-col>
+                      <h3> Znalost: {{ enemy.znalost }}</h3>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider></v-divider>
+
+                  <v-row>
+                    <v-col>
+                      <h3> Zbroj: {{ enemy.zbroj }}</h3>
+                    </v-col>
+                    <v-col>
+                      <h3> Pruraz: {{ enemy.pruraz }}</h3>
+                    </v-col>
+                    <v-col>
+                      <h3> Požkození: {{ enemy.poskozeni }}</h3>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-text>
+
+
+                <v-expansion-panel-text>
+                  <v-row align="center" justify="space-around">
+
+                    <v-btn @click="fightChoseEnemy(index)">Vybrat pro boj</v-btn>
+                    <v-btn color="success" @click="fightAddLifeToEnemy(index)">Přidat život</v-btn>
+                    <v-btn color="error" @click="fightRemoveLifeToEnemy(index)">Odebrat život</v-btn>
+                    <v-btn color="error" @click="fightRemoveEnemy(index)">Odebrat z bojiště</v-btn>
+                  </v-row>
                 </v-expansion-panel-text>
 
               </v-expansion-panel>
             </v-expansion-panels>
+            <h4 v-if="this.aktivniNepratele.length == 0">Nepřátelé nejsou vybráni pro boj</h4>
           </v-container>
 
         </v-card>
@@ -262,7 +384,7 @@ import axios from 'axios'
                       Hodit kostkou
                     </v-btn>
 
-                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                    <v-btn color="blue-darken-1" variant="text" @click="clearDice">
                       Vynulovat
                     </v-btn>
                   </v-card-actions>
@@ -322,7 +444,7 @@ import axios from 'axios'
                       Hodit kostkou
                     </v-btn>
 
-                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                    <v-btn color="blue-darken-1" variant="text" @click="clearDice">
                       Vynulovat
                     </v-btn>
                   </v-card-actions>
@@ -349,6 +471,9 @@ import axios from 'axios'
             </v-row>
             <v-row v-if="this.bojPorovnanyAtribut == 'Steč'">
               <v-col>
+                <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card-title color="error">Vyberte dobrodruha</v-card-title>
+                </v-card>
                 <v-card color="success" v-if="this.bojujiciDobrodruh != null">
                   <v-card-title>
                     {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
@@ -379,7 +504,7 @@ import axios from 'axios'
                       Hodit kostkou
                     </v-btn>
 
-                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                    <v-btn color="blue-darken-1" variant="text" @click="clearDice">
                       Vynulovat
                     </v-btn>
                   </v-card-actions>
@@ -404,12 +529,10 @@ import axios from 'axios'
                 </v-card>
               </v-col>
             </v-row>
-
-
             <v-row v-if="this.bojPorovnanyAtribut == 'Uhyb'">
               <v-col>
-                <v-card v-if="this.bojujiciNepritel == null">
-                  <v-card-title>Vyberte nepřítele</v-card-title>
+                <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card-title>Vyberte dobrodruha</v-card-title>
                 </v-card>
                 <v-card color="success" v-if="this.bojujiciDobrodruh != null">
                   <v-card-title>
@@ -437,7 +560,7 @@ import axios from 'axios'
                       Hodit kostkou
                     </v-btn>
 
-                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                    <v-btn color="blue-darken-1" variant="text" @click="clearDice">
                       Vynulovat
                     </v-btn>
                   </v-card-actions>
@@ -466,7 +589,7 @@ import axios from 'axios'
 
               <v-col>
                 <v-card v-if="this.bojujiciDobrodruh == null">
-                  <v-card-title>Vyberte nepřítele</v-card-title>
+                  <v-card-title>Vyberte dobrodruha</v-card-title>
                 </v-card>
                 <v-card color="success" v-if="this.bojujiciDobrodruh != null">
                   <v-card-title>
@@ -498,7 +621,7 @@ import axios from 'axios'
                       Hodit kostkou
                     </v-btn>
 
-                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                    <v-btn color="blue-darken-1" variant="text" @click="clearDice">
                       Vynulovat
                     </v-btn>
                   </v-card-actions>
@@ -515,7 +638,9 @@ import axios from 'axios'
                   </v-card-title>
                   <v-card-text>
 
-                    <v-col><h3>Průraznost: {{ this.bojujiciNepritel.pruraz }}</h3></v-col>
+                    <v-col>
+                      <h3>Průraznost: {{ this.bojujiciNepritel.pruraz }}</h3>
+                    </v-col>
 
                   </v-card-text>
                 </v-card>
@@ -532,7 +657,9 @@ import axios from 'axios'
                   </v-card-title>
                   <v-card-text>
 
-                    <v-col>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</v-col>
+                    <v-col>
+                      <h3>Obratnost: {{ this.bojujiciDobrodruh.zivoty }}</h3>
+                    </v-col>
 
                   </v-card-text>
                 </v-card>
@@ -550,7 +677,7 @@ import axios from 'axios'
                       Hodit kostkou
                     </v-btn>
 
-                    <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                    <v-btn color="blue-darken-1" variant="text" @click="clearDice">
                       Vynulovat
                     </v-btn>
                   </v-card-actions>
@@ -567,7 +694,9 @@ import axios from 'axios'
                   </v-card-title>
                   <v-card-text>
 
-                    <v-col>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</v-col>
+                    <v-col>
+                      <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                    </v-col>
 
                   </v-card-text>
                 </v-card>
@@ -576,15 +705,27 @@ import axios from 'axios'
 
             <v-divider class="mt-3"></v-divider>
 
-            <param>1 = Vždy selže. 2 = Je zapotřebí 2x větší atribut. 3 = Je zapotřebí větší atribut. 4 = Je zapotřebí
-            alespon stejný atribut 5 = Je zapotřebí atribut větší než 2x nepřátelského atributu 6 = Kritický uspěch
+            <v-card-subtitle>
+              <br>
+              1 = Vždy selže.
+              <br>
+              2 = Je zapotřebí 2x větší atribut.
+              <br>
+              3 = Je zapotřebí větší atribut.
+              <br>
+              4 = Je zapotřebí alespon stejný atribut
+              <br>
+              5 = Je zapotřebí atribut větší než 2x nepřátelského atributu
+              <br>
+              6 = Kritický uspěch
+            </v-card-subtitle>
 
           </v-container>
         </v-card>
         <!-- /Hod kostkou-->
 
         <!-- Dobrodruzi -->
-        <v-card color="primary" title="Dobrodruzi" class="mt-3">
+        <v-card v-if="this.bojujiciDobrodruh == null" color="primary" title="Dobrodruzi" class="mt-3">
           <v-card-text>
 
 
@@ -593,26 +734,36 @@ import axios from 'axios'
                 {{ player1.adventurer.krestniJmeno }}
               </v-btn>
 
-              <v-btn variant="flat" color="secondary">
+              <v-btn variant="flat" color="secondary" @click="fightChoseAdventurer(2)">
                 {{ player2.adventurer.krestniJmeno }}
               </v-btn>
 
-              <v-btn variant="flat" color="secondary">
+              <v-btn variant="flat" color="secondary" @click="fightChoseAdventurer(3)">
                 {{ player3.adventurer.krestniJmeno }}
               </v-btn>
 
             </div>
           </v-card-text>
         </v-card>
+        <!-- /Dobrodruzi -->
       </v-col>
-      <!-- /Dobrodruzi -->
+
       <!-- /Mod boje -->
 
-      <v-col cols="4">
+      <!-- Přepínač herního modu-->
+      <v-col cols="3">
+        <v-card color="primary">
+          <v-card-title v-if="this.battleModeSwitch">
+            <h3>Herní mod: Boj</h3>
+          </v-card-title>
+          <v-card-title v-else>
+            <h3>Herní mod: Pruzkum</h3>
+          </v-card-title>
 
-        <v-card color="primary" title="Herní režim">
           <v-card-text>
-            <v-switch v-model="battleModeSwitch"></v-switch>
+            <v-switch v-model="battleModeSwitch" :label="`Přepínač`">
+
+            </v-switch>
           </v-card-text>
         </v-card>
 
@@ -641,22 +792,39 @@ import axios from 'axios'
 
       </v-col>
     </v-row>
+    <!-- /Přepínač herního modu-->
 
+    <!-- Kartu dobrodruhů-->
     <v-row>
-
       <!-- Karta hráče 1 -->
       <v-col cols="4">
         <v-card color="primary" v-if="this.player1.adventurer != null">
           <v-card-title>{{
             this.player1.adventurer.krestniJmeno + ' ' + this.player1.adventurer.prijmeni
           }}</v-card-title>
-          <v-card-subtitle>{{ this.player1.owner }}</v-card-subtitle>
+          <v-card-subtitle>{{ this.player1.adventurer.rasa + " - " + this.player1.adventurer.trida }}</v-card-subtitle>
           <v-card-text>
-            {{ this.player1.adventurer }}
+            <v-row>
+              <v-col>
+                <h4>Životy: {{ this.player1.adventurer.zivoty }}</h4>
+              </v-col>
+              <v-col>
+                <h4>Peníze: {{ this.player1.adventurer.penize }}</h4>
+              </v-col>
+            </v-row>
+            <br>
+            <v-row>
+              <v-col>
+                <h4>Level: {{ this.player1.adventurer.level }}</h4>
+              </v-col>
+              <v-col>
+                <h4>Zkušenosti: {{ this.player1.adventurer.zkusenosti }}</h4>
+              </v-col>
+            </v-row>
           </v-card-text>
           <v-card-actions>
             <v-btn @click="openInventory(1)">Inventář</v-btn>
-            <v-btn>Status</v-btn>
+            <v-btn @click="openDetail(1)">Detail</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -694,11 +862,18 @@ import axios from 'axios'
 
   </v-container>
 
-
+</div>
 </template>
 <script>
+import DetailModal from '../parts/GameModalDeaily.vue'
+import AbilityCard from "../parts/AbilityCard.vue"
 
 export default {
+  name: 'Gamepage',
+  components: {
+    DetailModal,
+    AbilityCard
+  },
   data: () => ({
     //Duležité konstanty pro session
     uzivatelStore: useUzivatelStore(),
@@ -826,12 +1001,20 @@ export default {
     inventoryPlayer: null,
     inventoryLoadedAdventurerID: null,
     inventoryLoadedArray: null,
-
     inventoryLoadedMoney: null,
     inventoryChangeMoneyInput: null,
-
     inventoryAddType: null,
     invntoryAddChoices: null,
+    invetarDobrodruh: null,
+    inventarVaha: 0,
+
+    //Detail dobrodruha
+    detailModal: false,
+    detailDobrodruh: null,
+    detailLevelInput: null,
+    detailExperienceInput: null,
+    detailTridaShopnosti: [],
+    detailRasaSchopnosti: [],
 
     // Bojový mod
     bojPorovnanyAtribut: 'Volný hod',
@@ -846,8 +1029,7 @@ export default {
     moznostiNepratel: [],
     vybranyNepritel: null,
     aktivniNepratele: [],
-    // /Nepřátelé
-    // /Bojový mod
+
   }),
 
   mounted() {
@@ -918,17 +1100,25 @@ export default {
   },
 
   methods: {
+    
 
     //Inventář
+    //Otevře inventář pro daného dobrodruha
     openInventory(hrac) {
       switch (hrac) {
         case 1:
           this.inventoryLoadedMoney = this.player1.adventurer.penize
+          this.invetarDobrodruh = this.player1.adventurer
+          this.inventarVaha = 0
           axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.player1.adventurer.inventar } })
             .then(queryResponse => {
               this.inventoryLoadedArray = queryResponse.data
               this.inventoryLoadedAdventurerID = this.player1.adventurer._id
               this.inventoryModal = true;
+              queryResponse.data.forEach(item => {
+                this.inventarVaha += item.vaha
+              });
+
             })
 
           break;
@@ -937,6 +1127,9 @@ export default {
           break;
       }
     },
+
+    //Inventář
+    //Změní počet peněz u daného dobrodruha
     inventoryChangeMoney() {
       console.log(this.inventoryChangeMoneyInput)
       axios.post('http://localhost:3000/character/changeMoney', { money: this.inventoryChangeMoneyInput, adventurer: this.inventoryLoadedAdventurerID })
@@ -975,7 +1168,40 @@ export default {
 
     },
 
-    // /Inventář
+    //Detail
+    openDetail(hrac) {
+      switch (hrac) {
+        case 1:
+          this.detailDobrodruh = this.player1.adventurer
+          this.detailModal = true
+
+          axios.get('http://localhost:3000/schopnosti/byOwner',{params:{'owner': this.detailDobrodruh.trida}})
+            .then(queryResponse => {
+              this.detailTridaShopnosti = queryResponse.data
+            })
+
+            axios.get('http://localhost:3000/schopnosti/byOwner',{params:{'owner': this.detailDobrodruh.rasa}})
+            .then(queryResponse => {
+              this.detailRasaSchopnosti = queryResponse.data
+            })
+          break;
+
+        default:
+          break;
+      }
+    },
+
+    detailChangeLevelExperience() {
+      axios.post('http://localhost:3000/character/changeLevelAndExperience', { 'adventurer': this.detailDobrodruh._id, 'level': this.detailLevelInput, 'zkusenosti': this.detailExperienceInput })
+        .then(responseQuery => {
+          if (responseQuery) {
+            this.detailModal = false
+            this.detailLevelInput = null,
+              this.detailExperienceInput = null
+            this.resyncAdventurers()
+          }
+        })
+    },
 
     // Nepřátelé
     loadEnemies() {
@@ -1042,6 +1268,14 @@ export default {
 
     throwDice() {
       this.hozennaKostka = Math.floor((Math.random() * 6) + 1);
+    },
+
+    clearDice() {
+      this.hozennaKostka = 0
+      this.bojujiciNepritel = null
+      this.bojujiciDobrodruh = null
+      this.bojujiciDobrodruhVybava = []
+      this.bojujiciDobrodruhPredmet = null
     },
 
 

@@ -13,23 +13,24 @@ router.get("/", (req,res) =>{
 
 
 router.post("/characterCreation", (req,res) =>{
-    console.log('připojeno')
-    console.log(req.body.newAdventurer)
-    console.log(req.body)
     data = req.body.newAdventurer
     atributesInput = req.body.atributes
+
     const newAdventurer = new AdventurerModel({
         majitel: req.body.owner,
         krestniJmeno: data.name,
         prijmeni: data.secondName,
         prezdivka: data.nickname,
-        zivoty: atributesInput.houzevnatost ,
+        zivoty: (atributesInput.houzevnatost *5) ,
         rasa: data.race,
         trida: data.class,
         mainGear: data.mainGear,
         secondaryGear: data.secondaryGear,
         bonusGear: data.bonusGear,
         presvedceni: data.aligment,
+        vek: data.age,
+        popis: data.description,
+        pribeh: data.story,
         atributy: {
             sila: atributesInput.sila,
             houzevnatost: atributesInput.houzevnatost,
@@ -85,11 +86,26 @@ router.post('/removeFromInventory', async (req,res) =>{
         .then(res.send(true))
 })
 
-router.post('/changeMoney',async (req,res) =>{
+router.post('/changeMoney', (req,res) =>{
 
    AdventurerModel.updateOne({_id: req.body.adventurer}, {penize: req.body.money})
     .then(res.send(true))
 
+})
+
+router.post('/changeLevelAndExperience', async (req,res) =>{
+    let adventurer = await AdventurerModel.findOne({_id: req.body.adventurer})
+
+    if (req.body.level != undefined) {
+        adventurer.level = req.body.level
+    }
+
+    if (req.body.zkusenosti != undefined) {
+        adventurer.zkusenosti = req.body.zkusenosti
+    }
+
+    adventurer.save()
+        .then(res.send(true))
 })
 
 module.exports = router

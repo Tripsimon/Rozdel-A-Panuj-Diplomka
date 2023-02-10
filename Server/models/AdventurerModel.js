@@ -14,6 +14,9 @@ const AdventurerSchema = new Schema({
     secondaryGear: String,
     bonusGear: String,
     presvedceni: String,
+    vek: Number,
+    popis: String,
+    pribeh: String,
     atributy:{
         sila: Number,
         houzevnatost: Number,

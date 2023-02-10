@@ -128,7 +128,7 @@ app.provide('gvClasses',{
     passive: "Tohle neco dela",
     abilities: [
     ],
-    mainGear:['63c723d7b1f3a96286014792','63c723d7b1f3a96286014792'],
+    mainGear:['63c723d7b1f3a96286014792'],
     secondaryGear:["63cd4164590a36f414778487"],
     bonusGear:['63cd418a590a36f41477848b'],
   },

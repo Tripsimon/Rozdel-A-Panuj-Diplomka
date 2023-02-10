@@ -78,7 +78,7 @@ router.get('/allType', (req,res) =>{
 })
 
 router.get('/multipleID', (req,res) =>{
-    EquipmentModel.find({_id: {$in: req.query.items}, })
+    EquipmentModel.find({_id: {$in: req.query.items} })
         .then(queryResult => res.send(queryResult))
 })
 

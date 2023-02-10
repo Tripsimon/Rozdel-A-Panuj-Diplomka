@@ -45,8 +45,14 @@ app.use('/vybava',vybavaRouter);
 const monsterRouter = require('./routes/monsterRouty.js')
 app.use('/monster',monsterRouter);
 
-const schopnostiRouter = require('./routes/schopnostiRouty')
+const schopnostiRouter = require('./routes/schopnostiRouty.js')
 app.use('/schopnosti',schopnostiRouter);
+
+const rasyRouter = require('./routes/raceRouty.js')
+app.use('/rasy',rasyRouter);
+
+const tridyRouter = require('./routes/tridaRouty.js')
+app.use('/tridy',tridyRouter);
 
 
 app.use(express.static(path.join(__dirname,'/uploads')))

@@ -16,9 +16,27 @@ router.get("/dump", (req,res) =>{
 })
 
 router.get("/byOwner",(req,res) =>{
-    AbilityModel.find({'owner': req.query.owner})
+    console.log('Majitel',req.query.owner)
+    AbilityModel.find({majitel: req.query.owner})
         .then(queryResponse => res.send(queryResponse) )
     
+})
+
+router.get("/getByID",(req,res) =>{
+    AbilityModel.findOne({'_id': req.query.id})
+        .then(queryResponse => res.send(queryResponse) )
+    
+})
+
+router.get('/getMultipleByID', (req,res) =>{
+    console.log(req.query.abilities)
+    AbilityModel.find({_id: {$in: req.query.abilities}})
+        .then(queryResponse => res.send(queryResponse))
+})
+
+router.get('/getByOwner', (req,res) =>{
+    AbilityModel.find({majitel: req.query.owner})
+        .then(queryResponse => res.send(queryResponse))
 })
 
 
