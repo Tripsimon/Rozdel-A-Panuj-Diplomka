@@ -115,7 +115,7 @@ const uzivatelStore = useUzivatelStore();
             console.log("špatné heslo")
           }
 
-          })
+        })
       },
 
       test(){

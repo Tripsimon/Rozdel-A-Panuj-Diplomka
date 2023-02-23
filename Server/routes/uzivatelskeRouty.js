@@ -5,6 +5,7 @@ const router = express.Router()
 
 //DB Model
 const UserModel = require('../models/UserModel');
+const { exit } = require('process');
 
 router.get("/", (req,res) =>{
     UserModel.findById('633f3ddd1e466bc5da8211f5')
@@ -14,20 +15,35 @@ router.get("/", (req,res) =>{
 
 router.post("/registrace", async (req,res) =>{
 
+    let usedNick = await UserModel.exists({'prezdivka': req.body.prezdivka})
+    let usedMail = await UserModel.exists({'email': req.body.email})
+    
     const salt = await bcrypt.genSalt(10);
     hashovaneHeslo = await bcrypt.hash(req.body.heslo,salt);
-    
-    const newUser = new UserModel({
-        email: req.body.email,
-        prezdivka: req.body.prezdivka,
-        heslo: hashovaneHeslo
-    });
 
-    
-    console.log(newUser);
-    res.status(201);
-    newUser.save()
-    
+    //Kontrola existence
+    if(usedMail != null ){
+        console.log('Sem to spadne mail')
+        res.send('usedMail');
+    }else if(usedNick != null){
+        console.log('Sem to spadne nick')
+        res.send('usedNick');
+    }else{
+        console.log('Vytvářím ucet')
+        const newUser = new UserModel({
+            email: req.body.email,
+            prezdivka: req.body.prezdivka,
+            heslo: hashovaneHeslo
+        });
+        newUser.save()
+            .then( queryData =>
+                {   
+                    res.status(200);
+                    res.send(queryData._id);
+                    console.log('Zalozen novy ucet');
+                })
+            
+    }
 })
 
 router.post("/prihlaseni", async(req,res)=>{
@@ -59,14 +75,10 @@ router.post("/prihlaseni", async(req,res)=>{
                     res.send(false)
                 }
             }
-            })
+        }
+    )
 
 
 
 })
-
-
-
-
-
 module.exports = router

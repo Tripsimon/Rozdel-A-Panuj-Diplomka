@@ -24,18 +24,20 @@ router.post("/createSession", async (req, res) => {
         password: req.body.heslo,
         slots: 3,
 
-            player1: {
-                owner: null,
-                adventurer: null
-            },
-            player2: {
-                owner: null,
-                adventurer: null
-            },
-            player3: {
-                owner: null,
-                adventurer: null
-            }
+        player1: {
+            owner: null,
+            adventurer: null
+        },
+
+        player2: {
+            owner: null,
+            adventurer: null
+        },
+
+        player3: {
+            owner: null,
+            adventurer: null
+        }
         
     });
 
