@@ -41,14 +41,26 @@ app.use('/pozadi',pozadiRouter);
 
 const vybavaRouter = require('./routes/vybavaRouty.js')
 app.use('/vybava',vybavaRouter);
-/*
-Mozna potřeba pro obrazky ?
+
+const monsterRouter = require('./routes/monsterRouty.js')
+app.use('/monster',monsterRouter);
+
+const schopnostiRouter = require('./routes/schopnostiRouty.js')
+app.use('/schopnosti',schopnostiRouter);
+
+const rasyRouter = require('./routes/raceRouty.js')
+app.use('/rasy',rasyRouter);
+
+const tridyRouter = require('./routes/tridaRouty.js')
+app.use('/tridy',tridyRouter);
+
+
 app.use(express.static(path.join(__dirname,'/uploads')))
 //img
 app.get('/obr',(req,res) =>{
     
 })
-*/
+
 
 //Websockets
 io.on('connection',socket =>{

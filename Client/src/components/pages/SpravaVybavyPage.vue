@@ -168,14 +168,11 @@ export default {
         },
 
         updateData(){
-            console.log("AAA")
             axios.get('http://localhost:3000/vybava/allType',{params:{type: this.chosenType}})
                 .then(response =>{
-
-                    console.log(response)
                     this.loadedData = response.data
-                
-                })
+                }
+            )
         }
 
     }

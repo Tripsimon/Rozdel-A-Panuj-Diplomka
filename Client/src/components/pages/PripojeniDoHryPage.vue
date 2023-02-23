@@ -2,7 +2,6 @@
 import axios from "axios";
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import { isProxy, toRaw } from 'vue';
-const uzivatelStore = useUzivatelStore();
 </script>
 
 <template>
@@ -55,7 +54,9 @@ const uzivatelStore = useUzivatelStore();
       openSessions: [],
       chosenSession: null,
       sessionData: null,
-      sessionPassword: null
+      sessionPassword: null,
+
+      uzivatelStore: useUzivatelStore
     }),
   
     mounted(){
@@ -64,10 +65,10 @@ const uzivatelStore = useUzivatelStore();
       axios.get("http://localhost:3000/character/getCharacters",{params: {owner: this.uzivatelStore._id}})
         .then((response) => {
           this.avaliableAdventurers = response.data
-          console.log(this.avaliableAdventurers)
         
           response.data.forEach(element => {
-            this.adventurerChoices.push(element.name +" '"+ element.nickname +"' "+element.secondName)
+            console.log(element)
+            this.adventurerChoices.push(element.krestniJmeno +" '"+ element.prezdivka +"' "+element.prijmeni)
           });
           
 

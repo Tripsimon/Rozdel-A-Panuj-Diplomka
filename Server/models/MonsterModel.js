@@ -5,14 +5,25 @@ const Schema = mongoose.Schema;
 
 //Vytvoření schéma pro práci s uživateli
 const MonsterSchema = new Schema({
-    jmeno:String,
-    skupina: String,
+    jmeno: String,
     popis: String,
-    hbitost: Number,
+
+    sila: Number,
     houzevnatost: Number,
+    obratnost: Number,
+    charisma: Number,
+    inteligence: Number,
+    znalost: Number,
+
     zbroj: Number,
-    iniciativa: Number,
-    velikost: String},
+    zivoty: Number,
+
+    pruraz: Number,
+    poskozeni: Number,
+
+    velikostniSkupina: String
+
+    },
     {collection: "MonstraKolekce"}
     )
 

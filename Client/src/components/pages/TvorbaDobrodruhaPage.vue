@@ -1,12 +1,13 @@
 
 <script setup>
+import axios, { Axios } from 'axios';
 import { inject } from 'vue'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
 const gvClasses = inject('gvClasses')
 const gvRaces = inject('gvRaces')
 
-const uzivatelStore = useUzivatelStore();
+
 </script>
 
 <template>
@@ -22,8 +23,6 @@ const uzivatelStore = useUzivatelStore();
           <!-- Prvni krok-->
           <v-window-item :value="1">
 
-
-
             <v-alert v-model="alert1" closable title="Nevyplněné informace" text="PRosím, vyplnte požadované iformace"
               type="error" variant="tonal"></v-alert>
 
@@ -32,27 +31,38 @@ const uzivatelStore = useUzivatelStore();
             <v-text-field label="Příjmení" v-model="newAdventurer.secondName"></v-text-field>
             <v-text-field label="Přezdívka" v-model="newAdventurer.nickname"></v-text-field>
 
-            <v-select label="Rasa" :items="gvRaces['names']" v-model="newAdventurer.race"></v-select>
+            <v-select label="Rasa" :items="rasaMoznosti" item-title="jmeno" return-object v-model="rasaVybrana"
+              @update:modelValue="onRaceSelect"></v-select>
 
-            <!-- Karta pro popis vybrané třídy -->
+            <!-- Karta pro popis vybrané rasy -->
             <v-card class="mx-auto" v-if="newAdventurer.race != null" color="primary">
-              <v-card-title>{{ gvRaces[newAdventurer.race]['name'] }}</v-card-title>
-              <v-card-subtitle>{{ gvRaces[newAdventurer.race]['description'] }}</v-card-subtitle>
+              <v-card-title>{{ rasaVybrana.jmeno }}</v-card-title>
+              <v-card-subtitle>{{ rasaVybrana.popis }}</v-card-subtitle>
               <v-divider color="secondary"></v-divider>
               <v-card-text>
                 <h3>Bonusové statistiky: </h3>
-                <p v-if="gvRaces[newAdventurer.race]['bonusStats'].sila">Síla: {{gvRaces[newAdventurer.race]['bonusStats'].sila}}</p>
-                <p v-if="gvRaces[newAdventurer.race]['bonusStats'].houzevnatost">Houževnatost:
-                  {{ gvRaces[newAdventurer.race]['bonusStats'].houzevnatost }}</p>
-                <p v-if="gvRaces[newAdventurer.race]['bonusStats'].obratnost">Obratnost:
-                  {{ gvRaces[newAdventurer.race]['bonusStats'].obratnost }}</p>
-                <p v-if="gvRaces[newAdventurer.race]['bonusStats'].charisma">Charisma:
-                  {{ gvRaces[newAdventurer.race]['bonusStats'].charisma }}</p>
-                <p v-if="gvRaces[newAdventurer.race]['bonusStats'].inteligence">Inteligence:
-                  {{ gvRaces[newAdventurer.race]['bonusStats'].inteligence }}</p>
-                <p v-if="gvRaces[newAdventurer.race]['bonusStats'].vedeni">Vědění: {{
-    gvRaces[newAdventurer.race]['bonusStats'].vedeni
-}}
+                <p v-if="rasaVybrana.bonusoveAtributy.sila">
+                  Síla: {{ rasaVybrana.bonusoveAtributy.sila }}
+                </p>
+
+                <p v-if="rasaVybrana.bonusoveAtributy.houzevnatost">
+                  Houževnatost: {{ rasaVybrana.bonusoveAtributy.houzevnatost }}
+                </p>
+
+                <p v-if="rasaVybrana.bonusoveAtributy.obratnost">
+                  Obratnost: {{ rasaVybrana.bonusoveAtributy.obratnost }}
+                </p>
+
+                <p v-if="rasaVybrana.bonusoveAtributy.charisma">
+                  Charisma: {{ rasaVybrana.bonusoveAtributy.charisma }}
+                </p>
+
+                <p v-if="rasaVybrana.bonusoveAtributy.inteligence">
+                  Inteligence: {{ rasaVybrana.bonusoveAtributy.inteligence }}
+                </p>
+
+                <p v-if="rasaVybrana.bonusoveAtributy.znalost">
+                  Znalost: {{ rasaVybrana.bonusoveAtributy.znalost }}
                 </p>
 
               </v-card-text>
@@ -60,33 +70,29 @@ const uzivatelStore = useUzivatelStore();
               <v-card-text>
                 <h3>Bonusové schopnosti:</h3>
               </v-card-text>
-              <v-card-text v-for="ability in gvRaces[newAdventurer.race]['bonusAbilities']">
-                <h4>{{ ability['name'] }}</h4>
-                <p>{{ ability['description'] }}</p>
-                <p>[{{ ability['effect'] }}]</p>
+              <v-card-text v-for="ability in this.rasaSchopnosti">
+                <h4>{{ ability.jmeno }}</h4>
+                <p>{{ ability.popisFluff }}</p>
+                <p>[{{ ability.popisSchopnosti }}]</p>
               </v-card-text>
-              <v-card-subtitle>{{ gvRaces[newAdventurer.race]['description'] }}</v-card-subtitle>
             </v-card>
-            <!-- Karta pro popis vybrané třídy -->
+            <!-- Karta pro popis vybrané rasy -->
 
 
-            <v-select v-if="newAdventurer.race != null" :items="gvRaces[newAdventurer.race]['avaliableClasses']"
-              v-model="newAdventurer.class" label="Povolání"></v-select>
+            <v-select v-if="newAdventurer.race != null" :items="this.rasaVybrana.dostupneTridy" v-model="tridaVybrana"
+              label="Povolání" @update:modelValue="onClassSelect()"></v-select>
 
             <!-- Karta pro popis vybraného povolání-->
-            <v-card class="mx-auto" v-if="newAdventurer.class != null" border="" color="primary">
-              <v-card-title>{{ gvClasses[newAdventurer.class]['name'] }}</v-card-title>
-              <v-card-subtitle>{{ gvClasses[newAdventurer.class]['description'] }}</v-card-subtitle>
-              <v-divider color="secondary"></v-divider>
-              <v-card-text>
-                <h3>Pasivní schopnost: </h3>
-                <p>{{ gvClasses[newAdventurer.class]['passive'] }}</p>
-              </v-card-text>
-              <v-divider color="secondary"></v-divider>
-              <v-card-text>
-                <h3>Aktivní schopnost</h3>
-                <p>{{ gvClasses[newAdventurer.class]['abilities'][0] }}</p>
-              </v-card-text>
+            <v-card class="mx-auto" v-if="this.tridaVybranaObjekt != null" color="primary">
+              <v-card-title>{{ this.tridaVybranaObjekt.jmeno }}</v-card-title>
+              <v-card-subtitle>{{ this.tridaVybranaObjekt.popis }}</v-card-subtitle>
+
+              <ul>
+                <li v-if=" this.tridaSchopnosti != null" v-for="ability in this.tridaSchopnosti">
+                  <AbilityCard :ability="ability" color="primary"/>
+                </li>
+              </ul>
+
             </v-card>
             <!-- Karta pro popis vybraného povolání-->
           </v-window-item>
@@ -239,14 +245,17 @@ const uzivatelStore = useUzivatelStore();
 
 
 
-            <h2 class="d-flex justify-center">Výbava</h2>
+            <h2 class="d-flex justify-center mt-3">Výbava</h2>
 
-            <v-select label="Hlavní výzbroj" :items="gvClasses[newAdventurer.class]['mainGear']" v-model="newAdventurer.mainGear"></v-select>
+            <v-select label="Hlavní výzbroj" v-model="newAdventurer.mainGear" :items="this.tridaVybava.hlavni"
+              item-title="jmeno" return-object >
+            </v-select>
 
-            <v-select label="Sekundární výzbroj" :items="gvClasses[newAdventurer.class]['secondaryGear']" v-model="newAdventurer.secondaryGear"></v-select>
+            <v-select label="Sekundární výzbroj" :items="this.tridaVybava.sekundarni" 
+              v-model="newAdventurer.secondaryGear" item-title="jmeno" return-object></v-select>
 
-            <v-select label="Bonusová výbava" :items="gvClasses[newAdventurer.class]['bonusGear']"
-              v-model="newAdventurer.bonusGear"></v-select>
+            <v-select label="Bonusová výbava" :items="this.tridaVybava.bonusova" 
+              v-model="newAdventurer.bonusGear" item-title="jmeno" return-object></v-select>
 
 
 
@@ -257,66 +266,72 @@ const uzivatelStore = useUzivatelStore();
           <v-window-item :value="3">
             <h2>Role dobrodruha</h2>
 
-            <v-select :items="['Zákonné dobro', 'Neutrální dobro','Chaotické/zmatené dobro','Zákonně neutrální','Opravdu neutrální','Chaoticky neutrální','Zákonně zlý','Neutrálně zlý','Chaoticky zlý']" v-model="newAdventurer.aligment" label="Přesvědčení"></v-select>
-            <v-text-field label="Věk"></v-text-field>
-            <v-textarea  label="Popis"
-              value="Nezjištěno"></v-textarea>
+            <v-select
+              :items="['Zákonné dobro', 'Neutrální dobro', 'Chaotické/zmatené dobro', 'Zákonně neutrální', 'Opravdu neutrální', 'Chaoticky neutrální', 'Zákonně zlý', 'Neutrálně zlý', 'Chaoticky zlý']"
+              v-model="newAdventurer.aligment" label="Přesvědčení"></v-select>
+            <v-text-field label="Věk" v-model="this.newAdventurer.age"></v-text-field>
+            <v-textarea label="Popis" v-model="this.newAdventurer.description"></v-textarea>
 
-            <v-textarea  label="Příběh"
-              value="Nezjištěno"></v-textarea>
+            <v-textarea label="Příběh" v-model="this.newAdventurer.story" ></v-textarea>
           </v-window-item>
           <!-- /Třetí krok-->
 
           <v-window-item :value="4">
-            <v-container >
+            <v-container>
               <h2>Shrunutí</h2>
-              <v-card title="Základní informace" color="success" >
+              <v-card title="Základní informace" color="success">
                 <template v-slot:text>
-                  <p>Jméno: {{ newAdventurer.name }} </p> 
-                  <p v-if="newAdventurer.nickname != null" >Přezdívka: "{{ newAdventurer.nickname }}"</p> 
+                  <p>Jméno: {{ newAdventurer.name }} </p>
+                  <p v-if="newAdventurer.nickname != null">Přezdívka: "{{ newAdventurer.nickname }}"</p>
                   <p> Příjmení: {{ newAdventurer.secondName }}</p>
                 </template>
               </v-card>
-              
-              <v-card title="Statistiky" class="mt-5" color="success" >
+
+              <v-card title="Statistiky" class="mt-5" color="success">
                 <template v-slot:text>
                   <h4>Síla:</h4>
-                  <p>{{this.atributes.sila }} </p>
-                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].sila">Bonus: {{gvRaces[newAdventurer.race]['bonusStats'].sila}}</p>
+                  <p>{{ this.atributes.sila }} </p>
+                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].sila">Bonus:
+                    {{ gvRaces[newAdventurer.race]['bonusStats'].sila }}</p>
 
                   <h4>Houževnatost:</h4>
-                  <p>{{this.atributes.houzevnatost }} </p>
-                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].houzevnatost">Bonus: {{gvRaces[newAdventurer.race]['bonusStats'].houzevnatost}}</p>
+                  <p>{{ this.atributes.houzevnatost }} </p>
+                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].houzevnatost">Bonus:
+                    {{ gvRaces[newAdventurer.race]['bonusStats'].houzevnatost }}</p>
 
                   <h4>Obratnost:</h4>
-                  <p>{{this.atributes.obratnost }} </p>
-                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].obratnost">Bonus: {{gvRaces[newAdventurer.race]['bonusStats'].obratnost}}</p>
+                  <p>{{ this.atributes.obratnost }} </p>
+                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].obratnost">Bonus:
+                    {{ gvRaces[newAdventurer.race]['bonusStats'].obratnost }}</p>
 
                   <h4>Charisma:</h4>
-                  <p>{{this.atributes.charisma }} </p>
-                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].charisma">Bonus: {{gvRaces[newAdventurer.race]['bonusStats'].charisma}}</p>
+                  <p>{{ this.atributes.charisma }} </p>
+                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].charisma">Bonus:
+                    {{ gvRaces[newAdventurer.race]['bonusStats'].charisma }}</p>
 
                   <h4>Inteligence:</h4>
-                  <p>{{this.atributes.inteligence }} </p>
-                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].inteligence">Bonus: {{gvRaces[newAdventurer.race]['bonusStats'].inteligence}}</p>
+                  <p>{{ this.atributes.inteligence }} </p>
+                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].inteligence">Bonus:
+                    {{ gvRaces[newAdventurer.race]['bonusStats'].inteligence }}</p>
 
                   <h4>Znalost:</h4>
-                  <p>{{this.atributes.znalost }} </p>
-                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].znalost">Bonus: {{gvRaces[newAdventurer.race]['bonusStats'].znalost}}</p>
+                  <p>{{ this.atributes.znalost }} </p>
+                  <p v-if="gvRaces[newAdventurer.race]['bonusStats'].znalost">Bonus:
+                    {{ gvRaces[newAdventurer.race]['bonusStats'].znalost }}</p>
 
                 </template>
               </v-card>
 
-              <v-card title="Výbava" color="success" class="mt-5"  text="...">
+              <v-card title="Výbava" color="success" class="mt-5" text="...">
                 <template v-slot:text>
-                <h4>Hlavní výbava: {{ newAdventurer.mainGear }}</h4>
-                <h4>sekundární výbava: {{ newAdventurer.secondaryGear }}</h4>
-                <p>Bonusová výbava: {{ newAdventurer.bonusGear }}</p>
-              </template>
+                  <h4>Hlavní výbava: {{ newAdventurer.mainGear.jmeno }}</h4>
+                  <h4>Postranní výbava: {{ newAdventurer.secondaryGear.jmeno }}</h4>
+                  <p>Bonusová výbava: {{ newAdventurer.bonusGear.jmeno }}</p>
+                </template>
               </v-card>
             </v-container>
 
-            
+
           </v-window-item>
 
         </v-window>
@@ -349,8 +364,31 @@ const uzivatelStore = useUzivatelStore();
   
   
 <script>
+
+import AbilityCard from '../parts/AbilityCard.vue'
+
 export default {
+
+
   data: () => ({
+    uzivatelStore: useUzivatelStore(),
+
+    //Rasa
+    rasaMoznosti: [],
+    rasaVybrana: null,
+    rasaSchopnosti: [],
+
+    //Třída
+    tridaVybrana: null,
+    tridaVybranaObjekt: null,
+    tridaVybava: {
+      hlavni: [],
+      sekundarni: [],
+      bonusova: [],
+    },
+    tridaPasivniSchopnost: null,
+    tridaSchopnosti: [],
+
     step: 1,
     alert1: false,
     alert2: false,
@@ -365,7 +403,9 @@ export default {
       secondaryGear: null,
       bonusGear: null,
       aligment: null,
-
+      age: null,
+      description: "Nezjištěno",
+      story: "Nezjištěno",
     },
     atributes: {
       'sila': 8,
@@ -376,8 +416,66 @@ export default {
       'znalost': 8,
     },
     volneAtributy: 10,
+
+
   }),
+
+  components: {
+    AbilityCard
+  },
+
+  mounted() {
+    axios.get('http://localhost:3000/rasy/dump')
+      .then(responseQuery => {
+        this.rasaMoznosti = responseQuery.data
+      })
+  },
+
   methods: {
+
+    onRaceSelect() {
+      axios.get('http://localhost:3000/schopnosti/getMultipleByID', { params: { abilities: this.rasaVybrana.schopnosti } })
+        .then(queryResponse => this.rasaSchopnosti = queryResponse.data)
+      this.newAdventurer.race = this.rasaVybrana.jmeno
+
+    },
+
+    onClassSelect() {
+      this.newAdventurer.class = this.tridaVybrana
+
+
+      axios.get('http://localhost:3000/tridy/getByName', { params: { name: this.tridaVybrana } })
+        .then(query => {
+          this.tridaVybranaObjekt = query.data
+
+          axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.hlavniVybava } })
+            .then(queryResponse => {
+              this.tridaVybava.hlavni = queryResponse.data
+            })
+
+          axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.krajniVybava } })
+            .then(queryResponse => {
+              this.tridaVybava.sekundarni = queryResponse.data
+            })
+
+                        
+            axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.bonusovaVybava } })
+            .then(queryResponse => {
+              this.tridaVybava.bonusova = queryResponse.data
+            })
+
+
+
+            axios.get('http://localhost:3000/schopnosti/getByOwner', { params: { owner: this.tridaVybrana} })
+            .then(queryResponse => {
+              this.tridaSchopnosti = queryResponse.data
+            })
+
+
+            
+        })
+
+    },
 
     // Práce s atributy
     decrement(stat) {
@@ -494,7 +592,8 @@ export default {
 
       switch (this.step) {
         case 1:
-          if (this.newAdventurer.name == null || this.newAdventurer.class == null || this.newAdventurer.race == null || this.newAdventurer.secondName == null) {
+          if (this.newAdventurer.name == null || this.newAdventurer.race == null || this.newAdventurer.class == null || this.newAdventurer.secondName == null) {
+
             this.alert1 = true;
           } else {
             this.alert1 = false;
@@ -503,21 +602,21 @@ export default {
           break;
 
         case 2:
-          if(this.newAdventurer.mainGear == null || this.newAdventurer.secondaryGear == null || this.newAdventurer.bonusGear == null){
+          if (this.newAdventurer.mainGear == null || this.newAdventurer.secondaryGear == null || this.newAdventurer.bonusGear == null) {
 
-          }else{
+          } else {
             this.alert2 = false;
             this.step++
           }
           break;
 
         case 3:
-        if (this.newAdventurer.aligment == null) {
-          
-        }else{
-          this.alert3 = false;
-          this.step++;
-        }
+          if (this.newAdventurer.aligment == null || this.newAdventurer.age == null) {
+
+          } else {
+            this.alert3 = false;
+            this.step++;
+          }
           break;
         default:
           break;
@@ -530,31 +629,42 @@ export default {
         this.step--
       }
     },
-    // /Navigace v formulářo
 
-    // Odeslat do DB
-    //TODO: Odeslání
-    sendtoDB(){
-      console.log('Ukladam dobrodruha')
-      let obsah = JSON.stringify({
-                    "newAdventurer":this.newAdventurer,
-                    "owner": this.uzivatelStore._id,
-                    "atributes":this.atributes,
-                    "bonusAtributes":this.gvRaces[this.newAdventurer.race]['bonusStats']
-                })
+    sendtoDB() {
 
-                
-                let xhr = new XMLHttpRequest();
 
-                xhr.open("POST", "http://localhost:3000/character/characterCreation");
+      //Přidání atributů
+      if(this.rasaVybrana.bonusoveAtributy.sila != null){
+        this.atributes.sila = this.atributes.sila + this.rasaVybrana.bonusoveAtributy.sila
+      }
+      if(this.rasaVybrana.bonusoveAtributy.houzevnatost != null){
+        this.atributes.houzevnatost = this.atributes.houzevnatost + this.rasaVybrana.bonusoveAtributy.houzevnatost
+      }
+      if(this.rasaVybrana.bonusoveAtributy.obratnost != null){
+        this.atributes.obratnost = this.atributes.obratnost + this.rasaVybrana.bonusoveAtributy.obratnost
+      }
+      if(this.rasaVybrana.bonusoveAtributy.charisma != null){
+        this.atributes.charisma = this.atributes.charisma + this.rasaVybrana.bonusoveAtributy.charisma
+      }
+      if(this.rasaVybrana.bonusoveAtributy.inteligence != null){
+        this.atributes.inteligence = this.atributes.inteligence + this.rasaVybrana.bonusoveAtributy.inteligence
+      }
+      if(this.rasaVybrana.bonusoveAtributy.znalost != null){
+        this.atributes.znalost = this.atributes.znalost + this.rasaVybrana.bonusoveAtributy.znalost
+      }
 
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
+      let obsah = ({
+        "newAdventurer": this.newAdventurer,
+        "owner": this.uzivatelStore._id,
+        "atributes": this.atributes,
+      })
 
-                xhr.onload = () => console.log(xhr.responseText);
 
-                xhr.send(obsah);  
-
+      console.log('Obsah', obsah)
+      
+      axios.post("http://localhost:3000/character/characterCreation", obsah)
+        .then(this.$router.push({ path: '/' }))
+      
     },
 
     validate() {

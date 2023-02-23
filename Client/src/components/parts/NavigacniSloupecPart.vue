@@ -18,7 +18,6 @@ const uzivatelStore = useUzivatelStore();
 
       <v-list-item-title>Správa účtu</v-list-item-title>
       <v-list-item to="/sprava-uctu" prepend-icon="mdi-account" title="Uživatelský učet" value="yeet"></v-list-item>
-
       <v-list-item-title>Hrát</v-list-item-title>
       <v-list-item to="/pripojeni-do-hry" prepend-icon="mdi-newspaper-variant" title="Připojit se do hry"
         value="pripojeniHry"></v-list-item>

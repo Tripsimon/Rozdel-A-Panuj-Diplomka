@@ -3,18 +3,21 @@ const Schema = mongoose.Schema;
 
 //Vytvoření schéma pro práci s Dobrodruhy
 const AdventurerSchema = new Schema({
-    owner: String,
-    name: String,
-    health: Number,
-    secondName: String,
-    nickname: String,
-    race: String,
-    class: String,
+    majitel: String,
+    krestniJmeno: String,
+    prijmeni: String,
+    prezdivka: String,
+    zivoty: Number,
+    rasa: String,
+    trida: String,
     mainGear: String,
     secondaryGear: String,
     bonusGear: String,
-    aligment: String,
-    atributes:{
+    presvedceni: String,
+    vek: Number,
+    popis: String,
+    pribeh: String,
+    atributy:{
         sila: Number,
         houzevnatost: Number,
         obratnost: Number,
@@ -22,9 +25,10 @@ const AdventurerSchema = new Schema({
         inteligence: Number,
         znalost: Number
     },
+    inventar: [String],
+    penize: Number,
     level: Number,
-    experience: Number,
-    money: Number,
+    zkusenosti: Number,
 },
     {collection: "DobrodruziKolekce"}
     )
