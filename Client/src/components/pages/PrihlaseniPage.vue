@@ -1,16 +1,21 @@
 <script setup>
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
-const uzivatelStore = useUzivatelStore();
+import axios from "axios";
+
 </script>
 
 <template>
+
   <v-container>
-    <v-card color="primary">
+
+    <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText" />
+
+    <v-card color="primary" class="mt-3">
       <v-card-text>
         <v-form ref="form" lazy-validation>
           <v-text-field v-model="email" label="E-mail" required></v-text-field>
 
-          <v-text-field v-model="heslo" :rules="[v => !!v || 'Item is required']" label="Heslo" required></v-text-field>
+          <v-text-field v-model="heslo" type='password' label="Heslo" required></v-text-field>
           <v-btn color="success" class="mr-4" @click="prihlaseni(email, heslo, uzivatelStore)">
             Přihlášení
           </v-btn>
@@ -23,43 +28,62 @@ const uzivatelStore = useUzivatelStore();
 
 
 <script>
+import Alert from '../parts/AlertHandler.vue'
+
 export default {
+  components: {
+    Alert
+  },
+
   data: () => ({
-    email: "",
-    heslo: ""
+     uzivatelStore: useUzivatelStore(),
+
+      email: "",
+      heslo: "",
+
+      showAlert: false,
+      alertTitulek: 'Text',
+      alertText: 'Text',
   }),
 
   methods: {
-    prihlaseni(email, heslo, store) {
-      let obsah = JSON.stringify({
-        "email": email,
-        "heslo": heslo,
-      })
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST", "http://localhost:3000/uzivatel/prihlaseni");
+    prihlaseni() {
 
-      xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("Content-Type", "application/json");
 
-      xhr.send(obsah);
+      axios.post("http://localhost:3000/uzivatel/prihlaseni",{'email':this.email,'heslo':this.heslo})
+        .then(queryResponse =>{
 
-      xhr.onload = () => {
+          switch (queryResponse.data) {
+            case 'noUser':
+              this.alertTitulek = "Učet nenalezen",
+              this.alertText = 'Nebyl nalezen učet s tímto E-Mailem. Prosím, skontroluje zadaná data'
+              this.showAlert = true
+            break;
 
-        if (xhr.status == 200) {
-          let json = JSON.parse(xhr.response);
-          store.$patch({
-            prihlasen: true,
-            prezdivka: json.prezdivka,
-            _id: json._id,
-          });
-        } else if (xhr.status == 404) {
-          console.log("Uživatel neexistuje");
-        }
-      };
+            case 'wrongPass':
+              this.alertTitulek = "špatné přihlašovací udaje",
+              this.alertText = 'Byly zadány špatné přihlašovací udaje. Prosím, zkuste to znovu'
+              this.showAlert = true
+            break;
+          
+            default:
+              if (queryResponse.status == 200 || queryResponse.data != null) {
+                this.uzivatelStore.$patch({
+                  prihlasen: true,
+                  prezdivka: queryResponse.data.prezdivka,
+                  _id: queryResponse.data._id,
+                });
+              } 
+              break;
+          }
 
+
+        })
+
+    
 
     }
-
+    
   },
 }
 </script>

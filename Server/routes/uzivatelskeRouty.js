@@ -38,7 +38,7 @@ router.post("/registrace", async (req,res) =>{
         newUser.save()
             .then( queryData =>
                 {   
-                    res.status(200);
+                    res.status(201);
                     res.send(queryData._id);
                     console.log('Zalozen novy ucet');
                 })
@@ -50,18 +50,13 @@ router.post("/prihlaseni", async(req,res)=>{
     const salt = await bcrypt.genSalt(10);
     heslo = req.body.heslo
     
-
     UserModel.findOne({email:req.body.email})
         .then(async User  =>
             {
                 if(User == null){
-                    console.log("Rip Ucet");
-                    res.status(404);
-                    res.send(null);
-                    
+                    res.send('noUser'); 
                 }else{
 
-                console.log(User.heslo);
                 const porovnej = await bcrypt.compare(heslo,User.heslo)
                 
                 if(porovnej){
@@ -71,14 +66,10 @@ router.post("/prihlaseni", async(req,res)=>{
                         _id : User._id
                     });
                 }else{
-                    res.status(400);
-                    res.send(false)
+                    res.send('wrongPass')
                 }
             }
-        }
-    )
-
-
+    })
 
 })
 module.exports = router

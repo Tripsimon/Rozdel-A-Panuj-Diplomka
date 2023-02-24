@@ -1,13 +1,12 @@
 <script setup>
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
-const uzivatelStore = useUzivatelStore();
 </script>
 
 <template >
   <v-navigation-drawer color="primary" v-model="drawer" app>
     <v-list>
-      <v-list-item dark title="Nepřihlášený uživatel">
-      </v-list-item>
+      <v-list-item v-if="!this.uzivatelStore.prihlasen" dark title="Nepřihlášený uživatel"></v-list-item>
+      <v-list-item v-else dark :title="this.uzivatelStore.prezdivka"></v-list-item>
 
 
     </v-list>
@@ -15,31 +14,42 @@ const uzivatelStore = useUzivatelStore();
 
     <v-list density="compact" nav>
 
+      <div v-if="this.uzivatelStore.prihlasen">
+        <v-list-item-title>Správa účtu</v-list-item-title>
+        <v-list-item to="/sprava-uctu" prepend-icon="mdi-account" title="Uživatelský učet" value="yeet"></v-list-item>
+      </div>
 
-      <v-list-item-title>Správa účtu</v-list-item-title>
-      <v-list-item to="/sprava-uctu" prepend-icon="mdi-account" title="Uživatelský učet" value="yeet"></v-list-item>
-      <v-list-item-title>Hrát</v-list-item-title>
-      <v-list-item to="/pripojeni-do-hry" prepend-icon="mdi-newspaper-variant" title="Připojit se do hry"
-        value="pripojeniHry"></v-list-item>
-      <v-list-item to="/zalozeni-hry" prepend-icon="mdi-newspaper-variant" title="Založit hru"
-        value="zalozeniHry"></v-list-item>
-      <v-divider></v-divider>
+      <div v-if="this.uzivatelStore.prihlasen">
+        <v-list-item-title>Hrát</v-list-item-title>
+        <v-list-item to="/pripojeni-do-hry" prepend-icon="mdi-location-enter" title="Připojit se do hry" value="pripojeniHry"></v-list-item>
+        <v-list-item to="/zalozeni-hry" prepend-icon="mdi-folder-plus-outline" title="Založit hru" value="zalozeniHry"></v-list-item>
+        <v-divider></v-divider>
+      </div>
 
-      <v-list-item-title>Správa dobrodruhů</v-list-item-title>
-      <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-account-hard-hat" title="Tvorba nového dobrodruha"
-        value="tvorbaDobrodruha" theme="secondary"></v-list-item>
-      <v-list-item to="/vypis-dobrodruhu" prepend-icon="mdi-newspaper-variant" title="Výpis dobrodruhů" value="myfiles">
-      </v-list-item>
-      <v-divider></v-divider>
+      <div>
+        <v-list-item-title>Rozděl a Panuj</v-list-item-title>
+        <v-list-item to="/pravidla" prepend-icon="mdi-format-list-checkbox" title="Pravidla" value="pravidla" theme="secondary"></v-list-item>
+        <v-divider></v-divider>
+      </div>
 
-      <v-list-item-title>Správa herních dat</v-list-item-title>
-      <v-list-item to="/sprava-pozadi" prepend-icon="mdi-account-hard-hat" title="Spravová pozadí" value="spravaPozadi"
-        theme="secondary"></v-list-item>
-        <v-list-item to="/sprava-vybavy" prepend-icon="mdi-account-hard-hat" title="Spravová výbavy" value="spravaPozadi"
-        theme="secondary"></v-list-item>
-        <v-list-item to="/sprava-nepratel" prepend-icon="mdi-account-hard-hat" title="Spravová nepřátel" value="spravaNepratel"
-        theme="secondary"></v-list-item>
-      <v-divider></v-divider>
+      <div v-if="this.uzivatelStore.prihlasen">
+        <v-list-item-title>Správa dobrodruhů</v-list-item-title>
+        <v-list-item to="/tvorba-dobrodruha" prepend-icon="mdi-account-plus-outline" title="Tvorba nového dobrodruha" value="tvorbaDobrodruha" theme="secondary"></v-list-item>
+        <v-list-item to="/vypis-dobrodruhu" prepend-icon="mdi-account-search-outline" title="Výpis dobrodruhů" value="myfiles">
+        </v-list-item>
+        <v-divider></v-divider>
+      </div>
+
+      <div v-if="this.uzivatelStore.prihlasen">
+        <v-list-item-title>Správa herních dat</v-list-item-title>
+        <v-list-item to="/sprava-pozadi" prepend-icon="mdi-image-edit-outline" title="Spravová pozadí" value="spravaPozadi"
+          theme="secondary"></v-list-item>
+          <v-list-item to="/sprava-vybavy" prepend-icon="mdi-shield-sword-outline" title="Spravová výbavy" value="spravaPozadi"
+          theme="secondary"></v-list-item>
+          <v-list-item to="/sprava-nepratel" prepend-icon="mdi-emoticon-devil-outline" title="Spravová nepřátel" value="spravaNepratel"
+          theme="secondary"></v-list-item>
+        <v-divider></v-divider>
+      </div>
 
     </v-list>
   </v-navigation-drawer>
@@ -62,6 +72,9 @@ const uzivatelStore = useUzivatelStore();
 
 <script>
 export default {
-  data: () => ({ drawer: false }),
+  data: () => ({ 
+    drawer: false,
+    uzivatelStore: useUzivatelStore(),
+  }),
 }
 </script>

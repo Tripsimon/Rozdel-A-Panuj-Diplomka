@@ -1,7 +1,6 @@
 <script setup>
 import axios from "axios";
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
-const uzivatelStore = useUzivatelStore();
 </script>
 <template>
   <v-container>
@@ -48,6 +47,7 @@ export default {
   },
 
   data: () => ({
+    uzivatelStore: useUzivatelStore(),
     email: "",
     prezdivka: "",
     heslo: "",
@@ -67,18 +67,6 @@ export default {
       axios.post("http://localhost:3000/uzivatel/registrace", {'email': this.email, 'prezdivka': this.prezdivka, 'heslo': this.heslo})
         .then(queryResponse => {
 
-
-          if (queryResponse.status == 200 || queryResponse.data != null) {
-            console.log(queryResponse.data)
-            this.uzivatelStore.$patch({
-              prihlasen: true,
-              prezdivka: this.prezdivka,
-              _id: queryResponse.data
-            })
-            
-            this.$router.push({path: '/'})
-          }
-
           switch (queryResponse.data) {
             case 'usedMail':
               this.showAlert = true;
@@ -93,10 +81,19 @@ export default {
               break;
 
             default:
+                if (queryResponse.status == 201 || queryResponse.data != null) {
+                  this.uzivatelStore.$patch({
+                    prihlasen: true,
+                    prezdivka: this.prezdivka,
+                    _id: queryResponse.data
+                  })
+                  this.$router.push({path: '/'})
+                }
               break;
           }
+
         })
-      
+    
     }
   }
 }
