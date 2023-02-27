@@ -44,7 +44,7 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
         <v-list-item-title>Správa herních dat</v-list-item-title>
         <v-list-item to="/sprava-pozadi" prepend-icon="mdi-image-edit-outline" title="Spravová pozadí" value="spravaPozadi"
           theme="secondary"></v-list-item>
-          <v-list-item to="/sprava-vybavy" prepend-icon="mdi-shield-sword-outline" title="Spravová výbavy" value="spravaPozadi"
+          <v-list-item to="/sprava-vybavy" prepend-icon="mdi-shield-star-outline" title="Spravová výbavy" value="spravaPozadi"
           theme="secondary"></v-list-item>
           <v-list-item to="/sprava-nepratel" prepend-icon="mdi-emoticon-devil-outline" title="Spravová nepřátel" value="spravaNepratel"
           theme="secondary"></v-list-item>
