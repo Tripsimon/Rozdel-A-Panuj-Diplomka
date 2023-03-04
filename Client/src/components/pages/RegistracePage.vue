@@ -11,19 +11,20 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
       <h1 class="d-flex justify-center">Registrace</h1>
       <v-card-text>
 
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="form" v-model="valid" fast-fail  @submit.prevent="submit"  >
 
-          <v-text-field v-model="email" label="E-mail" required></v-text-field>
+          <v-text-field v-model="email" :rules="rules.emailRule" label="E-mail" required></v-text-field>
 
-          <v-text-field v-model="prezdivka" :counter="10" :rules="nameRules" label="Jméno" required></v-text-field>
+          <v-text-field v-model="prezdivka" :rules="rules.nameRule"  label="Jméno" required></v-text-field>
+
+          <v-text-field v-model="heslo"  :rules="rules.hesloRule" label="Heslo"
+            type='password' required></v-text-field>
+
+          <v-text-field v-model="reHeslo"   label="Heslo znovu"
+            type='password' required></v-text-field>
 
 
-          <v-text-field v-model="heslo" :items="items" label="Heslo" :type="show1 ? 'text' : 'password'" required></v-text-field>
-
-          <v-text-field v-model="reHeslo" :items="items" label="Heslo znovu" :type="show1 ? 'text' : 'password'" required></v-text-field>
-
-
-          <v-btn color="success" class="mr-4" @click="register(email, prezdivka, heslo)">
+          <v-btn color="success"  class="mr-4" @click="register()">
             Registrovat
           </v-btn>
         </v-form>
@@ -52,6 +53,31 @@ export default {
     prezdivka: "",
     heslo: "",
     reHeslo: "",
+    valid: '',
+    rules: {
+      hesloRule: [
+        value => {
+          if (value?.length > 7) return true
+          return 'Heslo musí obsahovat alespon 8 znaků'
+        },
+
+      ],
+      nameRule: [
+        value => {
+          if (value?.length > 3) return true
+          return 'Jméno musí obsahovat alespon 4 znaky'
+        },
+
+      ],
+
+      emailRule: [ 
+        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Formát zadání není E-Mail'
+      ],
+      
+
+
+    },
+
 
     showAlert: false,
     alertTitulek: 'Text',
@@ -62,9 +88,20 @@ export default {
   methods: {
 
     register() {
+      
+      if (this.valid != true) {
+        this.showAlert = true,
+        this.alertTitulek = "Nesprávná data",
+        this.alertText = "Prosím, vyplně formulář korektními daty"
+      }else if(this.heslo != this.reHeslo) {
+        this.showAlert = true,
+        this.alertTitulek = "Rozdílná hesla",
+        this.alertText = "Zadaná kontrola hesla se liší. Zkontrolujte prosím zadaná data"
+      }else{
 
+      
 
-      axios.post("http://localhost:3000/uzivatel/registrace", {'email': this.email, 'prezdivka': this.prezdivka, 'heslo': this.heslo})
+      axios.post("http://localhost:3000/uzivatel/registrace", { 'email': this.email, 'prezdivka': this.prezdivka, 'heslo': this.heslo })
         .then(queryResponse => {
 
           switch (queryResponse.data) {
@@ -81,20 +118,21 @@ export default {
               break;
 
             default:
-                if (queryResponse.status == 201 || queryResponse.data != null) {
-                  this.uzivatelStore.$patch({
-                    prihlasen: true,
-                    prezdivka: this.prezdivka,
-                    _id: queryResponse.data
-                  })
-                  this.$router.push({path: '/'})
-                }
+              if (queryResponse.status == 201 || queryResponse.data != null) {
+                this.uzivatelStore.$patch({
+                  prihlasen: true,
+                  prezdivka: this.prezdivka,
+                  _id: queryResponse.data
+                })
+                this.$router.push({ path: '/' })
+              }
               break;
           }
 
         })
-    
+      }
     }
+    
   }
 }
 </script>
