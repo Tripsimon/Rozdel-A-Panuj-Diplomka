@@ -883,6 +883,7 @@ export default {
     battleModeSwitch: false,
 
     //Udrzeni hracu v sessionu
+    /*
     player1: {
       owner: "Nepřipojen", adventurerID: null,
       adventurer: {
@@ -990,6 +991,14 @@ export default {
       }
     },
 
+    */
+
+    
+    player1: {owner: null, adventurer: null, adventurerID: null},
+    player2: {owner: null, adventurer: null, adventurerID: null},
+    player3: {owner: null, adventurer: null, adventurerID: null},
+
+
     //Herni pozadi pruzkumneho modu
     dostupnePozadi: null,
     vybranePozadi: null,
@@ -1049,6 +1058,7 @@ export default {
       axios.get('http://localhost:3000/sessions/sessionPlayers', { params: { sid: this.sid } })
         .then(response => {
 
+          console.log(response)
           this.player1.owner = response.data[0].owner
           this.player1.adventurerID = response.data[0].adventurer
 
@@ -1058,31 +1068,27 @@ export default {
           this.player3.owner = response.data[2].owner
           this.player3.adventurerID = response.data[2].adventurer
 
-
-
-
-          axios.get('http://localhost:3000/character/SessionAdventurers', { params: { adventurer1: this.player1.adventurerID, adventurer2: this.player2.adventurerID, adventurer3: this.player3.adventurerID } })
+          axios.get('http://localhost:3000/character/sessionAdventurers', { params: { adventurer1: this.player1.adventurerID, adventurer2: this.player2.adventurerID, adventurer3: this.player3.adventurerID } })
             .then(response => {
-              this.player1.adventurer = response.data[0]
-              console.log(this.player1.adventurer)
+              //this.player1.adventurer = response.data[0]
+              
             })
 
         })
     })
+
+    // /Websocket
 
     //Zjištění ownera
     let urlParams = new URLSearchParams(window.location.search)
     this.sid = urlParams.get('sid')
     axios.get('http://localhost:3000/sessions/checkOwner', { params: { sid: this.sid, user: this.uzivatelStore._id } })
       .then(response => {
-
         if (response.data) {
-
           this.isOwner = true
         } else {
           socket.emit('playerJoined')
         }
-
       })
 
 
@@ -1285,7 +1291,8 @@ export default {
 
     // Resinc sessionu
     updateAdventurers() {
-      axios.get('http://localhost:3000/sessions/returnSession', { params: { sessionName: this.jmenoSessionu } })
+      console.log(this.sessionID)
+      axios.get('http://localhost:3000/sessions/returnSession', { params: { sessionID: this.sid } })
         .then(responseQuery => {
           this.player1.owner = responseQuery.data.player1.owner
           this.player2.owner = responseQuery.data.player2.owner
@@ -1300,13 +1307,17 @@ export default {
     },
 
     resyncAdventurers() {
+
+      
       axios.get('http://localhost:3000/character/getMultipleAdventurers', { params: { adventurers: [this.player1.adventurerID, this.player2.adventurerID, this.player3.adventurerID] } })
         .then(responseQuery => {
           console.log(responseQuery.data)
+          
           this.player1.adventurer = responseQuery.data[0]
           this.player2.adventurer = responseQuery.data[1]
           this.player3.adventurer = responseQuery.data[2]
         })
+
     },
     // /Resinc sessionu
 

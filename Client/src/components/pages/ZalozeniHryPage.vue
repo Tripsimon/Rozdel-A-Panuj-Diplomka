@@ -1,7 +1,6 @@
 <script setup>
 import axios from "axios";
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
-const uzivatelStore = useUzivatelStore();
 </script>
 
 <template>
@@ -11,8 +10,8 @@ const uzivatelStore = useUzivatelStore();
           <v-form ref="form" lazy-validation>
             <v-text-field v-model="jmenoSessionu" label="Jméno herní místnosti" required></v-text-field>
   
-            <v-text-field v-model="heslo"  label="Heslo" required></v-text-field>
-            <v-btn color="success" class="mr-4" @click="zalozeniHry(email, heslo, uzivatelStore)">
+            <v-text-field v-model="heslo" label="Heslo" type='password' required></v-text-field>
+            <v-btn color="success" class="mr-4" @click="zalozeniHry()">
               Založit
             </v-btn>
           </v-form>
@@ -26,6 +25,8 @@ const uzivatelStore = useUzivatelStore();
   <script>
   export default {
     data: () => ({
+      uzivatelStore: useUzivatelStore(),
+
       jmenoSessionu: null,
       heslo: null,
 

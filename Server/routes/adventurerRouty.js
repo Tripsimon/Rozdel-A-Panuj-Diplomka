@@ -56,17 +56,20 @@ router.get("/getCharacters", async (req,res) =>{
 
 //Metoda pro navrácení všech dobrodruhů při resincu sessionu
 router.get('/getMultipleAdventurers', (req,res) =>{
-    console.log(req.query.adventurers)
+    console.log(res.query)
+    /*
+
     AdventurerModel.find({_id: {$in: req.query.adventurers}})
         .then(responseQuery => res.send(responseQuery))
-
+    */
 })
 
-router.get('/SessionAdventurers', (req,res) =>{
-    console.log(req.query.sid)
+router.get('/sessionAdventurers', (req,res) =>{
+    
     AdventurerModel.find({_id: req.query.adventurer1})
         .then(queryData => res.send(queryData))
-
+    
+   res.send("Tohle je potřeba opravit !");
 })
 
 // Přidá předmět do batohu dobrodruha

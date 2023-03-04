@@ -77,12 +77,9 @@ import { isProxy, toRaw } from 'vue';
       // Sehnání sessionů
       axios.get("http://localhost:3000/sessions/openSessions")
         .then((response) =>{
-
-        response.data.forEach(ses => {
-          this.openSessions.push(toRaw(ses.sessionName))
-        });
-        
-        
+          response.data.forEach(ses => {
+            this.openSessions.push(toRaw(ses.sessionName))
+          });
         })
     },
 

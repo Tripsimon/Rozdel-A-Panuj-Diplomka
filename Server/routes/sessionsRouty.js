@@ -55,9 +55,14 @@ router.get("/checkOwner", async (req, res) => {
     })
 })
 
+/**
+ * Navrátí Session
+ */
 router.get("/returnSession", (req,res) =>{
-    SessionModel.findOne({returnSession: req.query.sessionName})
-        .then(result => res.send(result))
+    SessionModel.findOne({_id: req.query.sessionID})
+        .then(result => {
+            res.send(result);
+        })
 })
 
 router.post("/joinSession",(req,res) =>{
@@ -80,10 +85,10 @@ router.post("/joinSession",(req,res) =>{
 })
 
 router.get('/sessionPlayers',  (req,res) =>{
-
+    console.log(req.query)
     SessionModel.findOne({_id: req.query.sid})
         .then(queryData => {
-            res.send([queryData.player1,queryData.player2,queryData.player3])
+            //res.send([queryData.player1,queryData.player2,queryData.player3])
         })
     
     

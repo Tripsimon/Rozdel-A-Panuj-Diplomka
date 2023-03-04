@@ -72,18 +72,15 @@ export default {
                   prihlasen: true,
                   prezdivka: queryResponse.data.prezdivka,
                   _id: queryResponse.data._id,
+
                 });
+                this.$router.push({path: '/'})
               } 
               break;
           }
-
-
-        })
-
-    
-
+        }
+      )
     }
-    
   },
 }
 </script>
