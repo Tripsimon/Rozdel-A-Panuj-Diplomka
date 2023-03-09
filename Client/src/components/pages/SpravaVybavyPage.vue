@@ -7,6 +7,7 @@ import FormData from 'form-data'
 <template>
 
 
+    <!-- Výber typu-->
     <v-container>
         <v-card color="primary">
             <h1 class="d-flex justify-center">Správa výbavy</h1>
@@ -15,6 +16,7 @@ import FormData from 'form-data'
             </v-card-text>
         </v-card>
 
+        <!-- Zbraně -->
         <v-card title="Tvorba předmětu" color="primary" class="mt-5" v-if="chosenType == 'Zbran'">
             <v-card-text>
                 <v-text-field v-model="chosenName" label="Jméno předmětu" required>
@@ -23,15 +25,18 @@ import FormData from 'form-data'
                 <v-text-field v-model="chosenDescription" label="Popis" required>
                 </v-text-field>
 
+                <v-text-field v-model="chosenPierce" label="Pruraznost" required>
+                        </v-text-field>
+
                 <v-row>
                     <v-col>
 
-                        <v-text-field v-model="chosenPierce" label="Pruraznost" required>
+                        <v-text-field v-model="chosenDamageBase" label="Základní poškození" required>
                         </v-text-field>
                     </v-col>
 
                     <v-col>
-                        <v-text-field v-model="chosenDamage" label="Poškození" required>
+                        <v-text-field v-model="chosenDamageSeverity" label="Závažnost poškození" required>
                         </v-text-field>
                     </v-col>
 
@@ -121,7 +126,8 @@ export default {
         chosenName: null,
         chosenDescription: null,
         chosenPierce: null,
-        chosenDamage: null,
+        chosenDamageBase: null,
+        chosenDamageSeverity: null,
         chosenArmor: null,
         chosenWeight: null,
 
@@ -138,7 +144,8 @@ export default {
                     'type': this.chosenType,
                     'description': this.chosenDescription,
                     'pierce': this.chosenPierce,
-                    'damage': this.chosenDamage,
+                    'damageBase': this.chosenDamageBase,
+                    'damageSeverity': this.chosenDamageSeverity,
                     'weight': this.chosenWeight
                 })
                 .then(response => console.log(response))

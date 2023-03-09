@@ -28,7 +28,8 @@ router.post('/createMonster', (req, res) => {
         zivoty: req.body.life,
 
         pruraz: req.body.pierce,
-        poskozeni: req.body.damage,
+        poskozeniZaklad: req.body.damageBase,
+        poskozeniZavaznost: req.body.damageSeverity,
 
         velikostniSkupina: req.body.sizeGroup
     })
@@ -38,6 +39,9 @@ router.post('/createMonster', (req, res) => {
 
 })
 
+/**
+ * Vrátí všechny monstra v databázi
+ */
 router.get("/dump", (req, res) => {
     MonsterModel.find().then(queryResult => res.send(queryResult))
 

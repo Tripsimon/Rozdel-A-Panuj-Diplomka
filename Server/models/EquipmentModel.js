@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
-
-//Vytvoření schéma pro práci s uživateli
+/**
+ * Schéma pro předměty dobrodruhů
+ */
 const EquipmentSchema = new Schema({
     jmeno: String,
     typ: String,
     popis: String,
     pruraznost: Number,
-    poskozeni: Number,
+    poskozeniZaklad: Number,
+    poskozeniZavaznost: Number,
     obrana: Number,
     vaha: Number,
     poznamka: String,},

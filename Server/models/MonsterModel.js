@@ -19,7 +19,8 @@ const MonsterSchema = new Schema({
     zivoty: Number,
 
     pruraz: Number,
-    poskozeni: Number,
+    poskozeniZaklad: Number,
+    poskozeniZavaznost: Number,
 
     velikostniSkupina: String
 

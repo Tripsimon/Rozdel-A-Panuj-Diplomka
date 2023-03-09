@@ -75,16 +75,19 @@ import FormData from 'form-data'
 
                 </v-row>
 
-                <v-row>
-
-
-                    <v-col>
+                <v-col>
                         <v-text-field v-model="chosenPierce" label="Průraz" required>
+                        </v-text-field>
+                    </v-col>
+
+                <v-row>
+                    <v-col>
+                        <v-text-field v-model="chosenDamageBase" label="Základní poškození" required>
                         </v-text-field>
                     </v-col>
                     <v-col>
 
-                        <v-text-field v-model="chosenDamage" label="Poškození" required>
+                        <v-text-field v-model="chosenDamageSeverity" label="Závažnost poškození" required>
                         </v-text-field>
                     </v-col>
 
@@ -145,7 +148,8 @@ export default {
         chosenLife: null,
 
         chosenPierce: null,
-        chosenDamage: null,
+        chosenDamageBase: null,
+        chosenDamageSeverity: null,
 
         chosenSizeGroup: null,
     }),
@@ -174,7 +178,8 @@ export default {
                     'life': this.chosenLife,
 
                     'pierce': this.chosenPierce,
-                    'damage': this.chosenDamage,
+                    'damageBase': this.chosenDamageBase,
+                    'damageSeverity': this.chosenDamageSeverity,
 
                     'sizeGroup': this.chosenSizeGroup
                 }
