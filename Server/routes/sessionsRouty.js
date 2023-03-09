@@ -45,14 +45,14 @@ router.post("/createSession", async (req, res) => {
 })
 
 router.get("/checkOwner", async (req, res) => {
-
-    SessionModel.findOne({_id: req.query.sid}).then(data => {
-        if (data.owner == req.query.user) {
+    SessionModel.findOne({_id: req.query.sid}).then(queryResponse => {
+        if (queryResponse.owner == req.query.user) {
             res.send(true)
         } else {
             res.send(false)
         }
     })
+    
 })
 
 /**
@@ -65,33 +65,71 @@ router.get("/returnSession", (req,res) =>{
         })
 })
 
-router.post("/joinSession",(req,res) =>{
-    SessionModel.findOne({returnSession: req.body.sessionName})
-    .then(result => {
-        if (result.password == req.body.password) {
-            switch (result.slots) {
-                case 3:
-                    SessionModel.findOneAndUpdate({returnSession: req.body.sessionName},{slots: 2,player1: {owner: req.body.player,adventurer: req.body.adventurer}})
-                        .then(resp => console.log(resp))
-                    break;
-            
-                default:
-                    break;
-            }
-            res.send( result._id);
-        }else{res.send(false)}
+/**
+ * Upráví záznam sessionu pro připojení hrače
+ */
+router.post("/joinSession", async(req,res) =>{
 
-    })
+    let session = await SessionModel.findOne({_id: req.body.sessionID})
+    if(session.password == req.body.password){
+        if(session.player1.adventurer == null && session.player1.owner == null){
+            session.player1 = {owner: req.body.player,adventurer: req.body.adventurer}
+            session.slots --;
+            session.save();
+            res.send('success')
+        }else if(session.player2.adventurer == null && session.player2.owner == null){
+            session.player2 = {owner: req.body.player,adventurer: req.body.adventurer}
+            session.slots --;
+            session.save();
+            res.send('success')
+        }else if(session.player3.adventurer == null && session.player3.owner == null){
+            session.player3 = {owner: req.body.player,adventurer: req.body.adventurer}
+            session.slots --;
+            session.save();
+            res.send('success')
+        }
+    }else{
+        res.send('wrongPassword')
+    }
 })
 
 router.get('/sessionPlayers',  (req,res) =>{
-    console.log(req.query)
     SessionModel.findOne({_id: req.query.sid})
         .then(queryData => {
-            //res.send([queryData.player1,queryData.player2,queryData.player3])
+            res.send([queryData.player1,queryData.player2,queryData.player3])
         })
-    
-    
+})
+
+router.get('/sessionDisconnect', async(req,res) =>{
+    let session = await SessionModel.findOne({_id: req.query.sessionID})
+    console.log(req.query)
+    console.log(session)
+    if (session.owner == req.query.userID) {
+        session.delete();
+        res.send("sessionDelete")
+        return
+    }else if (session.player1.owner == req.query.userID) {
+        session.player1.owner = null;
+        session.player1.adventurer = null;
+        session.slots = session.slots+1
+        session.save();
+        res.send('player1Disconnect')
+        return
+    }else if (session.player2.owner == req.query.userID) {
+        session.player2.owner = null;
+        session.player2.adventurer = null;
+        session.slots = session.slots+1
+        session.save();
+        res.send('player2Disconnect')
+        return
+    }else if (session.player3.owner == req.query.userID) {
+        session.player1.owner = null;
+        session.player2.adventurer = null;
+        session.slots = session.slots+1
+        session.save();
+        res.send('player3Disconnect')
+        return
+    }
 })
 
 module.exports = router

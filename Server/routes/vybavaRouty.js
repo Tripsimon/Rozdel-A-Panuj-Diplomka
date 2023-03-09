@@ -43,8 +43,6 @@ router.post('/createWeapon',(req,res) =>{
 
 router.post('/createArmor',(req,res) =>{
 
-    console.log(req.body)
-
     let newItem = new EquipmentModel({
         jmeno: req.body.name,
         typ: req.body.type,

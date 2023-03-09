@@ -6,35 +6,40 @@ import { isProxy, toRaw } from 'vue';
 
 <template>
     <v-container>
+
+      <!--Výber herní postavy pro připojení -->
       <v-card color="primary">
         <v-card-text>
             <h3> Výber herní postavy</h3>
             <v-select
-
               :items="adventurerChoices"
               variant="underlined"
               v-model="chosenAdventurer"
             ></v-select>
         </v-card-text>
-
       </v-card>
 
+      <!-- Výběr serveru pro připojení-->
       <v-card color="primary" class="mt-4">
         <v-card-text>
             <h3> Výber serveru</h3>
             <v-select
               label="Výběr"
-              :items="this.openSessions"
-              variant="underlined"
               v-model="chosenSession"
-              @update:modelValue="sessionSelect"
+              :items="this.sessions"
+              item-title="sessionName"
+              variant="underlined"
+              return-object
             ></v-select>
+
             <v-text-field
               v-if="chosenSession != null"
               v-model="sessionPassword"
+              type='password'
               label="Heslo hry"
             ></v-text-field>
         </v-card-text>
+
         <v-card-actions v-if="sessionPassword != null">
             <v-btn :onclick="joinSession">Připojit</v-btn>
           </v-card-actions>
@@ -53,73 +58,67 @@ import { isProxy, toRaw } from 'vue';
       chosenAdventurer: null,
       openSessions: [],
       chosenSession: null,
+
+      sessions: [],
+
       sessionData: null,
       sessionPassword: null,
 
-      uzivatelStore: useUzivatelStore
+      uzivatelStore: useUzivatelStore()
     }),
   
     mounted(){
 
-      // Sehnání dobrodruhů
+      /**
+       * Naplnění možností dobrodruhů hráče
+       */
       axios.get("http://localhost:3000/character/getCharacters",{params: {owner: this.uzivatelStore._id}})
         .then((response) => {
           this.avaliableAdventurers = response.data
         
           response.data.forEach(element => {
-            console.log(element)
             this.adventurerChoices.push(element.krestniJmeno +" '"+ element.prezdivka +"' "+element.prijmeni)
           });
-          
-
       })
 
-      // Sehnání sessionů
+      /**
+       * Naplnění možností otevřených herních místností
+       */
       axios.get("http://localhost:3000/sessions/openSessions")
-        .then((response) =>{
-          response.data.forEach(ses => {
-            this.openSessions.push(toRaw(ses.sessionName))
-          });
+        .then((queryResponse) =>{
+          this.sessions = queryResponse.data
         })
+
     },
 
     methods: {
 
-      sessionSelect(){
-        axios.get('http://localhost:3000/sessions/returnSession',{params:{sessionName: this.chosenSession}})
-          .then(data => {
-            this.sessionData = data.data
-          })
-      },
-
-      //Připojení do hry
+      /**
+       * Připojení do sessionu
+       */
       joinSession(){
 
         let adventurer = this.adventurerChoices.indexOf(this.chosenAdventurer,0)
-
-        console.log(this.uzivatelStore._id)
         
         let body = {
-          "sessionID":this.chosenSession,
+          "sessionID":this.chosenSession._id,
           "password":this.sessionPassword,
           "adventurer":this.avaliableAdventurers[adventurer]._id,
           "player": this.uzivatelStore._id
         }
+        
+        
         axios.post("http://localhost:3000/sessions/joinSession",body)
-          .then(data =>{
-            if(data.data != false){
-              this.$router.push({path: '/RaPSession', query: {sid: data.data}})
-          }else{
-            console.log("špatné heslo")
-          }
-
+          .then(queryResponse =>{
+            if(queryResponse.data == 'Wrong Password'){
+              console.log("Asi heslo")
+            }else{
+              console.log(queryResponse.data)
+              this.$router.push({path: '/RaPSession', query: {sid: this.chosenSession._id}})
+            }
         })
+        
       },
-
-      test(){
-        console.log(this.openSessions)
-      }
-  
     },
   }
   </script>

@@ -73,8 +73,6 @@ export default {
       emailRule: [ 
         v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Formát zadání není E-Mail'
       ],
-      
-
 
     },
 

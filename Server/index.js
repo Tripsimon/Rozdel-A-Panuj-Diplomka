@@ -3,9 +3,10 @@ const cors = require('cors');
 const bp = require('body-parser')
 const mongoose = require('mongoose');
 const path = require('path')
+const axios = require('axios');
 const io = require('socket.io')(3001,{
     cors:{
-        origin: 'http://127.0.0.1:5173'
+        origin: 'http://localhost:5173'
     }
 });
 
@@ -17,7 +18,7 @@ app.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
 mongoose.connect('mongodb://localhost:3500/RozdelAPanuj_Develop')
-    .then(() => console.log("DB connected to docker"))
+    .then(() => console.log("Server připojen k databázi"))
     .catch(err =>console.log(err));
 
 
@@ -57,18 +58,42 @@ app.use('/tridy',tridyRouter);
 
 app.use(express.static(path.join(__dirname,'/uploads')))
 //img
-app.get('/obr',(req,res) =>{
-    
-})
 
-
+let users = [];
 //Websockets
 io.on('connection',socket =>{
-    socket.on('playerJoined', () => {
-        io.emit('updatePlayers')
+
+    socket.on('joinRoom', (room,userID) =>{
+        socket.join(room)
+        users[socket.id] = {'sessionID':room , 'userID':userID};
+        socket.to(room).emit('resyncPlayers')
+        console.log(users)
+
+    })
+
+    socket.on('resyncPlayers', (room) =>{
+        socket.to(room).emit('resyncPlayers')
+    })
+
+    socket.on('disconnect', ()=>{
+        console.log('Odpojil se socket ' + socket.id)
+        console.log(users)
+
+        axios.get('http://localhost:3000/sessions/sessionDisconnect', { params: { sessionID: users[socket.id].sessionID,userID: users[socket.id].userID}})
+            .then(queryResponse => {
+                switch (queryResponse.data) {
+                    case 'sessionDelete':
+                        
+                        break;
+                
+                    default:
+                        break;
+                }
+                socket.to(users[socket.id].sessionID).emit('resyncPlayers')
+                console.log(queryResponse.data)
+            })
+
     })
 })
-
-
 
 app.listen(PORT)

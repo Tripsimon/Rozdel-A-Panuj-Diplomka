@@ -56,23 +56,32 @@ router.get("/getCharacters", async (req,res) =>{
 
 //Metoda pro navrácení všech dobrodruhů při resincu sessionu
 router.get('/getMultipleAdventurers', (req,res) =>{
-    console.log(res.query)
-    /*
-
     AdventurerModel.find({_id: {$in: req.query.adventurers}})
         .then(responseQuery => res.send(responseQuery))
-    */
+    
 })
 
 router.get('/sessionAdventurers', (req,res) =>{
     
-    AdventurerModel.find({_id: req.query.adventurer1})
+    let queryData = []
+    if (req.query.adventurer1 != null) {
+        queryData.push(req.query.adventurer1)
+    }
+    if (req.query.adventurer2 != null) {
+        queryData.push(req.query.adventurer2)
+    }
+    if (req.query.adventurer3 != null) {
+        queryData.push(req.query.adventurer3)
+    }
+    
+    AdventurerModel.find({_id: {$in: queryData}})
         .then(queryData => res.send(queryData))
     
-   res.send("Tohle je potřeba opravit !");
 })
 
-// Přidá předmět do batohu dobrodruha
+/**
+ * Přidá předmět do inventáře dobrodruha
+ */
 router.post('/putIntoInventory',async (req,res) =>{
     let adventurer = await AdventurerModel.findOne({_id: req.body.adventurer})
     adventurer.inventar.push(req.body.item)
@@ -81,7 +90,9 @@ router.post('/putIntoInventory',async (req,res) =>{
         
 })
 
-// Odebere předmět z batohu dobrodruha
+/**
+ * Odebere předmět z inventáře dobrodruha
+ */
 router.post('/removeFromInventory', async (req,res) =>{
     let adventurer = await AdventurerModel.findOne({_id: req.body.adventurer})
     adventurer.inventar.pull(req.body.item)

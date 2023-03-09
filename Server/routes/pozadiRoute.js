@@ -28,11 +28,9 @@ router.get("/", (req,res) =>{
 
 router.post('/setFileName',(req,res)=>{
     fileName = req.body.name
-    console.log(fileName);
 })
 
 router.post('/nahraniSouboru',(req,res)=>{
-    console.log('Upload')
 
     upload(req,res,(err)=>{
         if (err) {
@@ -73,16 +71,5 @@ router.get('/dump',async (req,res) =>{
     });
     res.send(pozadi)
 })
-
-router.get('/getOne',async (req,res,next) =>{
-    const images = await ImageModel.findOne()
-    
-
-})
-
-//Images
-
-
-
 
 module.exports = router

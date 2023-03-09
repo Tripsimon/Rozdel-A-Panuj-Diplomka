@@ -12,8 +12,6 @@ router.get("/", (req, res) => {
 })
 
 router.post('/createMonster', (req, res) => {
-
-    console.log(req.body)
     let newMonster = new MonsterModel({
 
         jmeno: req.body.name,

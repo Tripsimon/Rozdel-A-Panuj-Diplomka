@@ -658,9 +658,6 @@ export default {
         "owner": this.uzivatelStore._id,
         "atributes": this.atributes,
       })
-
-
-      console.log('Obsah', obsah)
       
       axios.post("http://localhost:3000/character/characterCreation", obsah)
         .then(this.$router.push({ path: '/' }))
