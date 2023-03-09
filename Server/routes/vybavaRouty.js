@@ -78,8 +78,12 @@ router.get('/allType', (req,res) =>{
  * 
  */
 router.get('/multipleID', (req,res) =>{
+    console.log(req.query)
     EquipmentModel.find({_id: {$in: req.query.items} })
-        .then(queryResult => res.send(queryResult))
+        .then(queryResult => {
+            res.send(queryResult);
+            console.log(queryResult)
+        })
 })
 
 

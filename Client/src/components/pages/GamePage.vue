@@ -30,7 +30,7 @@ import axios from 'axios'
               </v-card-actions>
             </v-card>
             <v-expansion-panels class="mt-3" variant="accordion">
-              <v-expansion-panel v-for="item in this.inventoryLoadedArray" :key="i">
+              <v-expansion-panel v-for="item in this.inventoryLoadedArray" :key="item.name">
                 <v-expansion-panel-title>{{ item.jmeno + " - " + item.typ }}</v-expansion-panel-title>
 
                 <v-expansion-panel-text v-if="item.typ == 'Zbran'">
@@ -125,7 +125,7 @@ import axios from 'axios'
                               <th>{{item.poskozeni}}</th>
                               <th>{{item.poskozeni}}</th>
                               <th>{{item.vaha}}</th>
-                              <th><v-btn>Přidat</v-btn></th>
+                              <th><v-btn @click="inventoryAddPush(item._id)">Přidat</v-btn></th>
                             </tr>
                           </tbody>
                           
@@ -159,7 +159,7 @@ import axios from 'axios'
                               <th>{{ item.popis }}</th>
                               <th>{{ item.obrana }}</th>
                               <th>{{ item.vaha }}</th>
-                              <th><v-btn>Přidat</v-btn></th>
+                              <th><v-btn @click="inventoryAddPush(item._id)">Přidat</v-btn></th>
                             </tr>
                           </tbody>
                         </v-table>
@@ -188,7 +188,7 @@ import axios from 'axios'
                               <th>{{ item.jmeno }}</th>
                               <th>{{ item.popis }}</th>
                               <th>{{ item.vaha }}</th>
-                              <th><v-btn>Přidat</v-btn></th>
+                              <th><v-btn @click="inventoryAddPush(item._id)">Přidat</v-btn></th>
                             </tr>
                           </tbody>
                       </v-table>
@@ -842,15 +842,15 @@ import axios from 'axios'
           <v-card v-if="this.bojujiciDobrodruh == null" color="primary" title="Dobrodruzi" class="mt-3">
             <v-card-text>
               <div class="d-flex justify-space-around align-center flex-column flex-sm-row fill-height">
-                <v-btn variant="flat" color="secondary" @click="fightChoseAdventurer(1)">
+                <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary" @click="fightChoseAdventurer(1)">
                   {{ player1.adventurer.krestniJmeno }}
                 </v-btn>
 
-                <v-btn variant="flat" color="secondary" @click="fightChoseAdventurer(2)">
+                <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary" @click="fightChoseAdventurer(2)">
                   {{ player2.adventurer.krestniJmeno }}
                 </v-btn>
 
-                <v-btn variant="flat" color="secondary" @click="fightChoseAdventurer(3)">
+                <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary" @click="fightChoseAdventurer(3)">
                   {{ player3.adventurer.krestniJmeno }}
                 </v-btn>
 
@@ -1118,6 +1118,11 @@ export default {
      */
     this.loadEnemies()
 
+    /**
+     * Načte možnosti přidání nepřítele
+     */
+     this.inventoryAddGetChoices()
+
     this.resyncPlayers()
   },
 
@@ -1169,19 +1174,23 @@ export default {
         default:
           break;
       }
+
+      this.reloadInventory()
+      this.inventoryModal = true;
+    },
+
+    reloadInventory(){
       this.inventoryLoadedMoney = this.invetarDobrodruh.penize
       this.inventarVaha = 0
       axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.invetarDobrodruh.inventar } })
         .then(queryResponse => {
-          this.inventoryLoadedArray = queryResponse.data
+          this.inventoryLoadedArray = JSON.parse(JSON.stringify(queryResponse.data))
           this.inventoryLoadedAdventurerID = this.invetarDobrodruh._id
-          this.inventoryModal = true;
+
           queryResponse.data.forEach(item => {
             this.inventarVaha += item.vaha
           });
       })
-      this.inventoryAddGetChoices()
-
     },
 
     /**
@@ -1189,14 +1198,14 @@ export default {
      */
     inventoryChangeMoney() {
       axios.post('http://localhost:3000/character/changeMoney', { money: this.inventoryChangeMoneyInput, adventurer: this.inventoryLoadedAdventurerID })
-      this.inventoryModal = false
+      this.reloadInventory()
       this.socketsResyncPlayers()
     },
 
     inventoryAddGetChoices() {
       axios.get('http://localhost:3000/vybava/allType', { params: { type: 'Zbran' } })
         .then(response => {
-          this.inventoryAddWeapons = response.data
+          this.inventoryAddWeapons =  response.data
         })
 
         axios.get('http://localhost:3000/vybava/allType', { params: { type: 'Zbroj' } })
@@ -1218,20 +1227,23 @@ export default {
       axios.post('http://localhost:3000/character/putIntoInventory', { "item": item, 'adventurer': this.inventoryLoadedAdventurerID })
         .then(responseQuery => {
           if (responseQuery.data == true) {
-            this.resyncAdventurers()
+            this.inventoryModal = false
+            this.resyncPlayers()
           }
         })
     },
 
     /**
-     *     //Odebere předmět z inventáře dobrodruha a resynkne dobrodruhy
+     * Odebere předmět z inventáře dobrodruha a resynkne dobrodruhy
      * @param {string} item ID Itemu
      */
     invetoryRemove(item) {
       axios.post('http://localhost:3000/character/removeFromInventory', { "item": item, 'adventurer': this.inventoryLoadedAdventurerID })
         .then(responseQuery => {
           if (responseQuery.data == true) {
-            this.resyncAdventurers()
+            this.inventoryModal = false
+            this.resyncPlayers()
+            this.reloadInventory()
           }
         })
 
