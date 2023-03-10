@@ -24,7 +24,7 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
             type='password' required></v-text-field>
 
 
-          <v-btn color="success"  class="mr-4" @click="register()">
+          <v-btn color="success" class="mr-4" @click="register()">
             Registrovat
           </v-btn>
         </v-form>

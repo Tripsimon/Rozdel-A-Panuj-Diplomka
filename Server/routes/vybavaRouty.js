@@ -14,10 +14,12 @@ router.get("/", (req, res) => {
  */
 router.post('/createWeapon',(req,res) =>{
 
+    console.log(req.body)
     let newItem = new EquipmentModel({
         jmeno: req.body.name,
         typ: req.body.type,
         popis: req.body.description,
+        schopnosti: req.body.abilities,
         pruraznost: req.body.pierce,
         poskozeniZaklad: req.body.damageBase,
         poskozeniZavaznost: req.body.damageSeverity,
@@ -25,6 +27,7 @@ router.post('/createWeapon',(req,res) =>{
         poznamka: null,
     })
 
+    console.log("Předmět",newItem)
     newItem.save()
         .then( res.send("Uspesne zapsano"))
 })
@@ -38,6 +41,7 @@ router.post('/createArmor',(req,res) =>{
         jmeno: req.body.name,
         typ: req.body.type,
         popis: req.body.description,
+        schopnosti: req.body.abilities,
         obrana: req.body.obrana,
         vaha: req.body.weight,
         poznamka: null,
@@ -56,12 +60,20 @@ router.post('/createItem',(req,res) =>{
         jmeno: req.body.name,
         typ: req.body.type,
         popis: req.body.description,
+        schopnosti: req.body.abilities,
         vaha: req.body.weight,
         poznamka: null,
     })
 
     newItem.save()
         .then( res.send("Uspesne zapsano"))
+})
+
+router.get('/removeItem',(req,res)=>{
+    EquipmentModel.findByIdAndDelete({_id: req.query.itemID})
+        .then(queryResponse =>{
+            res.send(queryResponse)
+        })
 })
 
 /**

@@ -33,7 +33,7 @@ import axios from 'axios'
               <v-expansion-panel v-for="item in this.inventoryLoadedArray" :key="item.name">
                 <v-expansion-panel-title>{{ item.jmeno + " - " + item.typ }}</v-expansion-panel-title>
 
-                <v-expansion-panel-text v-if="item.typ == 'Zbran'">
+                <v-expansion-panel-text v-if="item.typ == 'Zbraň'">
                   <v-row>
                     <v-col>
                       <h4>Průraznost: {{ item.pruraznost }}</h4>
@@ -196,16 +196,6 @@ import axios from 'axios'
                   </v-window>
                 </v-card-text>
 
-                <!--
-                              <v-select label="Typ" :items="['Zbran', 'Zbroj', 'Předmět']" v-model="inventoryAddType"
-                                @update:modelValue="inventoryAddTypeChange()"></v-select>
-
-                              <v-btn v-for="item in this.inventoryAddChoices" @click="inventoryAddPush(item._id)"> {{
-                                item.jmeno
-                              }}</v-btn>
-
-                              {{ this.inventoryAddChoices }}
-                              -->
                 </v-card-text>
               </v-card-text>
             </v-card>
@@ -537,7 +527,7 @@ import axios from 'axios'
                       <v-select :items="this.bojujiciDobrodruhVybava" v-model="this.bojujiciDobrodruhPredmet"
                         item-title="jmeno" return-object label="Vyberte předmět"></v-select>
                       <v-col v-if="!!this.bojujiciDobrodruhPredmet">
-                        <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbran'">Průraz: {{
+                        <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Průraz: {{
                           this.bojujiciDobrodruhPredmet.pruraznost
                         }}</h3>
                         <h3 v-else>Předmět nemá zadanou hodnotu pruraznosti</h3>
@@ -597,7 +587,7 @@ import axios from 'axios'
                       <v-select :items="this.bojujiciDobrodruhVybava" v-model="this.bojujiciDobrodruhPredmet"
                         item-title="jmeno" return-object label="Vyberte předmět"></v-select>
                       <v-col v-if="!!this.bojujiciDobrodruhPredmet">
-                        <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbran'">Poškození: {{
+                        <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Poškození: {{
                           this.bojujiciDobrodruhPredmet.poskozeni
                         }}</h3>
                         <h3 v-else>Předmět nemá zadanou hodnotu poškození</h3>
@@ -1203,7 +1193,7 @@ export default {
     },
 
     inventoryAddGetChoices() {
-      axios.get('http://localhost:3000/vybava/allType', { params: { type: 'Zbran' } })
+      axios.get('http://localhost:3000/vybava/allType', { params: { type: 'Zbraň' } })
         .then(response => {
           this.inventoryAddWeapons =  response.data
         })

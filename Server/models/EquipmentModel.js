@@ -8,6 +8,7 @@ const EquipmentSchema = new Schema({
     jmeno: String,
     typ: String,
     popis: String,
+    schopnosti: String,
     pruraznost: Number,
     poskozeniZaklad: Number,
     poskozeniZavaznost: Number,
