@@ -5,24 +5,23 @@ import axios from "axios";
 </script>
 
 <template>
+  <div id="content">
+    <Alert v-model="showAlert" style='z-index:2000' type="error" :title="alertTitle" :text="alertText" />
+    <v-container>
+      <v-card color="primary" class="mt-3">
+        <v-card-text>
+          <v-form ref="form" lazy-validation>
+            <v-text-field v-model="email" label="E-mail" required></v-text-field>
 
-  <v-container>
-
-    <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText" />
-
-    <v-card color="primary" class="mt-3">
-      <v-card-text>
-        <v-form ref="form" lazy-validation>
-          <v-text-field v-model="email" label="E-mail" required></v-text-field>
-
-          <v-text-field v-model="heslo" type='password' label="Heslo" required></v-text-field>
-          <v-btn color="success" class="mr-4" @click="prihlaseni(email, heslo, uzivatelStore)">
-            Přihlášení
-          </v-btn>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </v-container>
+            <v-text-field v-model="heslo" type='password' label="Heslo" required></v-text-field>
+            <v-btn color="success" class="mr-4" @click="prihlaseni(email, heslo, uzivatelStore)">
+              Přihlášení
+            </v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-container>
+  </div>
 </template>
     
 
@@ -36,36 +35,36 @@ export default {
   },
 
   data: () => ({
-     uzivatelStore: useUzivatelStore(),
+    uzivatelStore: useUzivatelStore(),
 
-      email: "",
-      heslo: "",
+    email: "",
+    heslo: "",
 
-      showAlert: false,
-      alertTitulek: 'Text',
-      alertText: 'Text',
+    showAlert: false,
+    alertTitle: 'Text',
+    alertText: 'Text',
   }),
 
   methods: {
     prihlaseni() {
 
 
-      axios.post("http://localhost:3000/uzivatel/prihlaseni",{'email':this.email,'heslo':this.heslo})
-        .then(queryResponse =>{
 
+      axios.post("http://localhost:3000/uzivatel/prihlaseni", { 'email': this.email, 'heslo': this.heslo })
+        .then(queryResponse => {
           switch (queryResponse.data) {
             case 'noUser':
               this.alertTitulek = "Učet nenalezen",
-              this.alertText = 'Nebyl nalezen učet s tímto E-Mailem. Prosím, skontroluje zadaná data'
+                this.alertText = 'Nebyl nalezen učet s tímto E-Mailem. Prosím, zkontroluje zadaná data'
               this.showAlert = true
-            break;
+              break;
 
             case 'wrongPass':
               this.alertTitulek = "špatné přihlašovací udaje",
-              this.alertText = 'Byly zadány špatné přihlašovací udaje. Prosím, zkuste to znovu'
+                this.alertText = 'Byly zadány špatné přihlašovací udaje. Prosím, zkuste to znovu'
               this.showAlert = true
-            break;
-          
+              break;
+
             default:
               if (queryResponse.status == 200 || queryResponse.data != null) {
                 this.uzivatelStore.$patch({
@@ -74,17 +73,15 @@ export default {
                   _id: queryResponse.data._id,
 
                 });
-                this.$router.push({path: '/'})
-              } 
+                this.$router.push({ path: '/' })
+              }
               break;
           }
         }
-      )
+        )
     }
   },
 }
 </script>
     
-<style>
-
-</style>
+<style></style>

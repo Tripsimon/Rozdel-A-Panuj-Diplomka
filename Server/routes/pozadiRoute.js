@@ -30,13 +30,13 @@ router.post('/setFileName',(req,res)=>{
     fileName = req.body.name
 })
 
-router.post('/nahraniSouboru',(req,res)=>{
+router.post('/nahraniSouboru',async (req,res)=>{
 
-    upload(req,res,(err)=>{
+    await upload(req,res,(err)=>{
         if (err) {
             console.log(err);
         }else{
-            const newImage = new ImageModel({
+             const  newImage =  new  ImageModel({
                 name: fileName,
                 image: {
                     data:req.file.filename,
@@ -45,7 +45,7 @@ router.post('/nahraniSouboru',(req,res)=>{
             })
 
             newImage.save()
-                .then(res.send("něco to udělalo"))
+                .then(res.send("fileSaved"))
                 .catch(err=>console.log(err))
         }
     })

@@ -2,13 +2,13 @@
 
 <script setup>
 import axios from 'axios'
-import FormData from 'form-data'
 </script>
 <template>
-    <Alert  type="error" style='z-index:2000' :title="alertTitle" :text="alertText" v-model="showAlert"/>
+
 
     <!-- Výber typu-->
     <v-container>
+        <Alert  type="error" style='z-index:2000' :title="alertTitle" :text="alertText" v-model="showAlert"/>
         <v-card color="primary">
             <h1 class="d-flex justify-center">Správa výbavy</h1>
             <v-card-text>
@@ -290,9 +290,10 @@ export default {
                 })
         },
 
+        /**
+         * Nahraje předmět do databáze
+         */
         uploadItem() {
-            console.log(this.valid)
-            
             if(this.valid){
             axios.post('http://localhost:3000/vybava/createItem',
                 {
