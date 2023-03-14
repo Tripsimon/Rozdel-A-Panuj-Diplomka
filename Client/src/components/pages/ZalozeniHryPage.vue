@@ -58,14 +58,18 @@ export default {
 
   methods: {
 
-
+    /**
+     * Metoda pro založení hry
+     */
     zalozeniHry() {
+
       if(!this.valid){
         this.showAlert = true;
         this.alertTitle = "Nefunkční data"
         this.alertText = "Nesprávně vyplněný formulář. Prosím zkontrolujte zadaná data"
         return
       }
+
       let obsah = {
         "majitel": this.uzivatelStore._id,
         "jmenoMajitele": this.uzivatelStore.prezdivka,
@@ -74,11 +78,16 @@ export default {
       }
 
       axios.post("http://localhost:3000/sessions/createSession", obsah)
-        .then(res => this.$router.push({ path: '/RaPSession', query: { sid: res.data } }))
-        ;
-
+        .then(queryResponse =>{
+          if (queryResponse.data == null) {
+            this.showAlert = true;
+            this.alertTitle = "Chyba v komunikaci"
+            this.alertText = "Komunikace se serverem se nezdařila. Prosím, zkuste akci znovu později"
+            return
+          }
+          this.$router.push({ path: '/RaPSession', query: { sid: queryResponse.data }
+        })});
     }
-
   },
 }
 </script>
