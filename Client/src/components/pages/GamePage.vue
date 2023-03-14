@@ -1188,8 +1188,9 @@ export default {
      */
     inventoryChangeMoney() {
       axios.post('http://localhost:3000/character/changeMoney', { money: this.inventoryChangeMoneyInput, adventurer: this.inventoryLoadedAdventurerID })
-      this.reloadInventory()
-      this.socketsResyncPlayers()
+      this.inventoryModal = false;
+      this.reloadInventory();
+      this.socketsResyncPlayers();
     },
 
     inventoryAddGetChoices() {

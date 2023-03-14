@@ -16,12 +16,6 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
       <v-list density="compact" nav>
 
         <div v-if="this.uzivatelStore.prihlasen">
-          <v-list-item-title>Správa účtu</v-list-item-title>
-          <v-list-item to="/sprava-uctu" prepend-icon="mdi-account" title="Uživatelský učet" value="spravaUctu"
-            color="secondary"></v-list-item>
-        </div>
-
-        <div v-if="this.uzivatelStore.prihlasen">
           <v-list-item-title>Hrát</v-list-item-title>
           <v-list-item to="/pripojeni-do-hry" prepend-icon="mdi-location-enter" title="Připojit se do hry"
             value="pripojeniHry" color="secondary"></v-list-item>
@@ -68,8 +62,9 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="!uzivatelStore.prihlasen" variant="text" to="/registrace"> Registrace</v-btn>
-      <v-btn v-if="!uzivatelStore.prihlasen" variant="text" to="/prihlaseni"> Přihlásit se</v-btn>
+      <v-btn v-if="!uzivatelStore.prihlasen" color="secondary" variant="text" to="/registrace"> Registrace</v-btn>
+      <v-btn v-if="!uzivatelStore.prihlasen" color="secondary" variant="text" to="/prihlaseni"> Přihlásit se</v-btn>
+      <v-btn v-if="uzivatelStore.prihlasen" color="secondary" variant="text" @click="uzivatelStore.odhlasUzivatele()"> ODhlásit se</v-btn>
 
     </v-app-bar>
   </div>

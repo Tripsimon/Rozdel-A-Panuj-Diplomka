@@ -16,7 +16,7 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="secondary" class="mr-4" @click="zalozeniHry()">
+          <v-btn color="secondary" variant="text" class="mr-4" @click="zalozeniHry()">
               Založit
             </v-btn>
         </v-card-actions>
@@ -62,7 +62,6 @@ export default {
      * Metoda pro založení hry
      */
     zalozeniHry() {
-
       if(!this.valid){
         this.showAlert = true;
         this.alertTitle = "Nefunkční data"

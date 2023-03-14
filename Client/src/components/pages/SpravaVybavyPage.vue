@@ -12,7 +12,7 @@ import axios from 'axios'
         <v-card color="primary">
             <h1 class="d-flex justify-center">Správa výbavy</h1>
             <v-card-text>
-                <v-select label="Typ" :items="['Zbraň', 'Zbroj', 'Předmět']" v-model="chosenType"
+                <v-select color="secondary" variant="outlined" label="Typ" :items="['Zbraň', 'Zbroj', 'Předmět']" v-model="chosenType"
                     @update:modelValue="updateData()"></v-select>
             </v-card-text>
         </v-card>
@@ -21,37 +21,37 @@ import axios from 'axios'
             <!-- Zbraně -->
             <v-card title="Tvorba předmětu" color="primary" class="mt-5">
                 <v-card-text v-if="chosenType == 'Zbraň'">
-                    <v-text-field v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
                     </v-text-field>
 
                     <v-row>
 
                         <v-col>
-                            <v-textarea v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
                             </v-textarea>
                         </v-col>
 
                         <v-col>
-                            <v-textarea v-model="chosenAbilities"  label="Schopnosti předmětu"
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities"  label="Schopnosti předmětu"
                                 required>
                             </v-textarea>
                         </v-col>
 
                     </v-row>
 
-                    <v-text-field v-model="chosenPierce" type="number" :rules="this.rules.required" label="Pruraznost" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" type="number" :rules="this.rules.required" label="Pruraznost" required>
                     </v-text-field>
 
                     <v-row>
                         <v-col>
 
-                            <v-text-field v-model="chosenDamageBase" type="number" :rules="this.rules.required" label="Základní poškození"
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageBase" type="number" :rules="this.rules.required" label="Základní poškození"
                                 required>
                             </v-text-field>
                         </v-col>
 
                         <v-col>
-                            <v-text-field v-model="chosenDamageSeverity" type="number" :rules="this.rules.required"
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageSeverity" type="number" :rules="this.rules.required"
                                 label="Závažnost poškození" required>
                             </v-text-field>
                         </v-col>
@@ -59,7 +59,7 @@ import axios from 'axios'
 
                     </v-row>
 
-                    <v-text-field v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
                     </v-text-field>
 
                 </v-card-text>
@@ -67,28 +67,28 @@ import axios from 'axios'
 
                 <!-- Zbroj -->
                 <v-card-text v-if="chosenType == 'Zbroj'">
-                    <v-text-field v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
                     </v-text-field>
 
                     <v-row>
 
                         <v-col>
-                            <v-textarea v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
                             </v-textarea>
                         </v-col>
 
                         <v-col>
-                            <v-textarea v-model="chosenAbilities"  label="Schopnosti předmětu"
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities"  label="Schopnosti předmětu"
                                 required>
                             </v-textarea>
                         </v-col>
 
                     </v-row>
 
-                    <v-text-field v-model="chosenArmor" type="number" :rules="this.rules.required" label="Obrana" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" type="number" :rules="this.rules.required" label="Obrana" required>
                     </v-text-field>
 
-                    <v-text-field v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
                     </v-text-field>
 
                 </v-card-text>
@@ -96,30 +96,30 @@ import axios from 'axios'
 
                 <!-- Předmět -->
                 <v-card-text v-if="chosenType == 'Předmět'">
-                    <v-text-field v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
                     </v-text-field>
                     <v-row>
 
                         <v-col>
-                            <v-textarea v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
                             </v-textarea>
                         </v-col>
 
                         <v-col>
-                            <v-textarea v-model="chosenAbilities"  label="Schopnosti předmětu"
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities"  label="Schopnosti předmětu"
                                 required>
                             </v-textarea>
                         </v-col>
 
                     </v-row>
 
-                    <v-text-field v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
                     </v-text-field>
 
                 </v-card-text>
 
                 <v-card-actions>
-                    <v-btn @click="submit">
+                    <v-btn color="secondary" variant="text" @click="submit">
                         Nahrát
                     </v-btn>
                 </v-card-actions>
@@ -129,14 +129,19 @@ import axios from 'axios'
         <!-- Export dat -->
         <v-card v-if="chosenType != null" color="primary" class="mt-3">
             <v-card-text>
+                {{ this.chosenType }}
+
                 <v-table >
-                    <thead>
+                    <thead v-if="this.chosenType == 'Zbraň'"  >
                         <tr>
                             <th>
                                 Jméno
                             </th>
                             <th>
                                 Popis
+                            </th>
+                            <th>
+                                Schopnosti
                             </th>
                             <th>
                                 Pruraznost
@@ -156,15 +161,81 @@ import axios from 'axios'
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <thead v-if="this.chosenType == 'Zbroj'"  >
+                        <tr>
+                            <th>
+                                Jméno
+                            </th>
+                            <th>
+                                Popis
+                            </th>
+                            <th>
+                                Schopnosti
+                            </th>
+                            <th>
+                                Obrana
+                            </th>
+                            <th>
+                                Váha
+                            </th>
+                            <th>
+                                Akce
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <thead v-if="this.chosenType == 'Předmět'"  >
+                        <tr>
+                            <th>
+                                Jméno
+                            </th>
+                            <th>
+                                Popis
+                            </th>
+                            <th>
+                                Schopnost
+                            </th>
+                            <th>
+                                Váha
+                            </th>
+                            <th>
+                                Akce
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody v-if="this.chosenType == 'Zbraň'" >
                         <tr v-for="item in this.loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
+                            <th>{{ item.schopnosti }}</th>
                             <th>{{ item.pruraznost }}</th>
                             <th>{{ item.poskozeniZaklad }}</th>
                             <th>{{ item.poskozeniZavaznost }}</th>
                             <th>{{ item.vaha }}</th>
                             <!-- TODO: Asi ikonka -->
+                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn></th>
+                        </tr>
+                    </tbody>
+
+                    <tbody v-if="this.chosenType == 'Zbroj'" >
+                        <tr v-for="item in this.loadedData" :key="item._id">
+                            <th>{{ item.jmeno }}</th>
+                            <th>{{ item.popis }}</th>
+                            <th>{{ item.schopnosti }}</th>
+                            <th>{{ item.obrana }}</th>
+                            <th>{{ item.vaha }}</th>
+                            <!-- TODO: Asi ikonka -->
+                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn></th>
+                        </tr>
+                    </tbody>
+
+                    <tbody v-if="this.chosenType == 'Předmět'" >
+                        <tr v-for="item in this.loadedData" :key="item._id">
+                            <th>{{ item.jmeno }}</th>
+                            <th>{{ item.popis }}</th>
+                            <th>{{ item.schopnosti }}</th>
+                            <th>{{ item.vaha }}</th>
                             <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn></th>
                         </tr>
                     </tbody>

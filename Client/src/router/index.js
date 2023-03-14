@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CharacterCreationPage from '../components/pages/TvorbaDobrodruhaPage.vue';
-import SpravaUzivatelePage from '../components/pages/SpravaUzivatelePage.vue'
 import RegistracePage from '../components/pages/RegistracePage.vue'
 import PrihlaseniPage from '../components/pages/PrihlaseniPage.vue'
 import LandingPage from '../components/pages/LandingPage.vue'
@@ -34,11 +33,6 @@ const router = createRouter({
       path:'/tvorba-dobrodruha',
       name:'Character Creation Page',
       component: CharacterCreationPage
-    },
-    {
-      path:'/sprava-uctu',
-      name:'Sprava Uctu',
-      component: SpravaUzivatelePage
     },
     {
       path:'/vypis-dobrodruhu',
