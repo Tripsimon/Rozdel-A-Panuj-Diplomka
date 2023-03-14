@@ -165,7 +165,7 @@ import axios from 'axios'
                             <th>{{ item.poskozeniZavaznost }}</th>
                             <th>{{ item.vaha }}</th>
                             <!-- TODO: Asi ikonka -->
-                            <th><v-btn @click="removeItem(item._id)">Smazat</v-btn></th>
+                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn></th>
                         </tr>
                     </tbody>
                 </v-table>

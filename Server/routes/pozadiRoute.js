@@ -32,6 +32,7 @@ router.post('/setFileName',(req,res)=>{
 
 router.post('/nahraniSouboru',async (req,res)=>{
 
+    //TODO:: Opravit
     await upload(req,res,(err)=>{
         if (err) {
             console.log(err);

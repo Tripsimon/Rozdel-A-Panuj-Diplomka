@@ -5,21 +5,21 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
 <template>
   <div id="content">
-    <Alert  type="error" style='z-index:2000' :title="alertTitle" :text="alertText" v-model="showAlert"/>
+    <Alert  type="error" style="z-index:2000" :title="alertTitle" :text="alertText" v-model="showAlert"/>
     <v-container>
       <v-card color="primary">
         <v-card-text>
-          <v-form ref="form" lazy-validation>
-            <v-text-field color="secondary" v-model="jmenoSessionu" label="Jméno herní místnosti" required></v-text-field>
-            <v-text-field color="secondary" v-model="heslo" label="Heslo" type='password' required></v-text-field>
-            <v-btn color="secondary" class="mr-4" @click="zalozeniHry()">
-              Založit
-            </v-btn>
+          <v-form ref="form" v-model="valid" quick-validation>
+            <v-text-field color="secondary" variant="outlined" :rules="this.rules.required" v-model="jmenoSessionu" label="Jméno herní místnosti" required></v-text-field>
+            <v-text-field color="secondary" variant="outlined" :rules="this.rules.required" v-model="heslo" label="Heslo" type='password' required></v-text-field>
+
           </v-form>
         </v-card-text>
-        <v-card-action>
-
-        </v-card-action>
+        <v-card-actions>
+          <v-btn color="secondary" class="mr-4" @click="zalozeniHry()">
+              Založit
+            </v-btn>
+        </v-card-actions>
       </v-card>
     </v-container>
   </div>
@@ -41,11 +41,12 @@ export default {
     alertText: "",
     uzivatelStore: useUzivatelStore(),
 
+    valid:false,
     rules:{
       required: [
         value => {
           if (value) return true
-          return 'You must enter a first name.'
+          return 'Pole musí být vyplněno'
         },
       ]
     },
@@ -59,12 +60,19 @@ export default {
 
 
     zalozeniHry() {
+      if(!this.valid){
+        this.showAlert = true;
+        this.alertTitle = "Nefunkční data"
+        this.alertText = "Nesprávně vyplněný formulář. Prosím zkontrolujte zadaná data"
+        return
+      }
       let obsah = {
         "majitel": this.uzivatelStore._id,
         "jmenoMajitele": this.uzivatelStore.prezdivka,
         "jmenoSessionu": this.jmenoSessionu,
         "heslo": this.heslo
       }
+
       axios.post("http://localhost:3000/sessions/createSession", obsah)
         .then(res => this.$router.push({ path: '/RaPSession', query: { sid: res.data } }))
         ;

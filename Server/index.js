@@ -6,7 +6,7 @@ const path = require('path')
 const axios = require('axios');
 const io = require('socket.io')(3001,{
     cors:{
-        origin: 'http://localhost:5173'
+        origin: '*'
     }
 });
 
