@@ -56,7 +56,7 @@ const tridyRouter = require('./routes/tridaRouty.js')
 app.use('/tridy',tridyRouter);
 
 
-app.use(express.static(path.join(__dirname,'/uploads')))
+app.use(express.static(path.join(__dirname,'/files')))
 //img
 
 let users = [];

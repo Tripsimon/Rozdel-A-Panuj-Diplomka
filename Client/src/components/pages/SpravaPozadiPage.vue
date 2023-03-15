@@ -12,16 +12,20 @@ import FormData from 'form-data'
 
       <!-- Import pozadí -->
       <v-card color="primary">
-        <h1 class="d-flex justify-center">Import pozadí</h1>
+        <v-card-title><h4>Import pozadí</h4></v-card-title>
+        <v-form>
         <v-card-text>
-          <v-file-input v-model="inputFile" accept="image/jpeg" label="Nové JPEG herní pozadí"></v-file-input>
-          <v-text-field v-model="inputFileName" :counter="20" label="Jméno souboru" required></v-text-field>
-          <v-card-actions>
-            <v-btn @click="uploadImage">
+
+          <v-file-input color="secondary" variant="outlined" v-model="inputFile" accept="image/jpeg" label="Nové JPEG herní pozadí"></v-file-input>
+          <v-text-field color="secondary" variant="outlined" v-model="inputFileName" :counter="20" label="Jméno souboru" required></v-text-field>
+
+        </v-card-text>
+        <v-card-actions>
+            <v-btn color="secondary" @click="uploadImage">
               Nahrát
             </v-btn>
           </v-card-actions>
-        </v-card-text>
+        </v-form>
       </v-card>
 
       <v-card color="primary" class="mt-3" title="Aktivní pozadí">
@@ -44,7 +48,7 @@ import FormData from 'form-data'
             <tbody>
               <tr class="mt-2" v-for="image in this.loadedImages" :key="image">
                 <th>{{ image }}</th>
-                <th><v-img :src='"http://localhost:3000/" + image + ".jpg"' max-height="500"></v-img></th>
+                <th><v-img :src='"http://localhost:3000/backgrounds/" + image' max-height="500"></v-img></th>
                 <th><v-btn icon="mdi-close-box-outline" @click="removeImage(image)" color="error"></v-btn></th>
                 <!-- TODO: Asi ikonka -->
               </tr>
@@ -89,20 +93,18 @@ export default {
 
     //TODO:: Uprava asi
     uploadImage() {
-      if(this.inputFile = null || this.inputFileName == null)
+      if(this.inputFile == null || this.inputFileName == null)
       {
         this.showAlert = true
         this.alertText = "Nesprávně vyplněná data. Prosím, zkontrolujte si zadaná data"
         return
       }
+
+
       const formData = new FormData();
-      formData.append('testImage', this.inputFile[0])
-
-      axios.post('http://localhost:3000/pozadi/setFileName', { 'name': this.inputFileName })
-        .then(axios.post('http://localhost:3000/pozadi/nahraniSouboru', formData)
-          .then(this.loadImages()))
-
-
+      formData.append('image', this.inputFile[0],this.inputFileName)
+      formData.append('imageName',this.inputFileName)
+      axios.post('http://localhost:3000/pozadi/nahraniSouboru', formData)
     },
 
     removeImage(img) {

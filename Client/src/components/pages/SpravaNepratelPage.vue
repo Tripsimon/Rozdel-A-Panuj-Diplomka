@@ -8,27 +8,23 @@ import FormData from 'form-data'
 
 
     <v-container>
-        <v-card color="primary">
-            <h1 class="d-flex justify-center">Správa nepřátel</h1>
-        </v-card>
-
         <v-card title="Tvorba nepřítele" color="primary" class="mt-5">
             <v-card-text>
-                <v-text-field v-model="chosenName" label="Jméno nepřítele" required>
+                <v-text-field color="secondary" variant="outlined" v-model="chosenName" label="Jméno nepřítele" required>
                 </v-text-field>
 
-                <v-text-field v-model="chosenDescription" label="Popis" required>
+                <v-text-field color="secondary" variant="outlined" v-model="chosenDescription" label="Popis" required>
                 </v-text-field>
 
                 <v-row>
                     <v-col>
 
-                        <v-text-field v-model="chosenStrength" label="Síla" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenStrength" label="Síla" required>
                         </v-text-field>
                     </v-col>
 
                     <v-col>
-                        <v-text-field v-model="chosenConstitution" label="Houževnatost" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenConstitution" label="Houževnatost" required>
                         </v-text-field>
                     </v-col>
                 </v-row>
@@ -36,12 +32,12 @@ import FormData from 'form-data'
                 <v-row>
                     <v-col>
 
-                        <v-text-field v-model="chosenAgility" label="Obratnost" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenAgility" label="Obratnost" required>
                         </v-text-field>
                     </v-col>
 
                     <v-col>
-                        <v-text-field v-model="chosenCharisma" label="Charisma" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenCharisma" label="Charisma" required>
                         </v-text-field>
                     </v-col>
                 </v-row>
@@ -49,12 +45,12 @@ import FormData from 'form-data'
                 <v-row>
                     <v-col>
 
-                        <v-text-field v-model="chosenInteligence" label="Inteligence" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenInteligence" label="Inteligence" required>
                         </v-text-field>
                     </v-col>
 
                     <v-col>
-                        <v-text-field v-model="chosenKnowledge" label="Znalost" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenKnowledge" label="Znalost" required>
                         </v-text-field>
                     </v-col>
                 </v-row>
@@ -62,12 +58,12 @@ import FormData from 'form-data'
                 <v-row>
 
                     <v-col>
-                        <v-text-field v-model="chosenArmor" label="Zbroj" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" label="Zbroj" required>
                         </v-text-field>
                     </v-col>
 
                     <v-col>
-                        <v-text-field v-model="chosenLife" label="životy" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenLife" label="životy" required>
                         </v-text-field>
                     </v-col>
 
@@ -75,19 +71,18 @@ import FormData from 'form-data'
 
                 </v-row>
 
-                <v-col>
-                        <v-text-field v-model="chosenPierce" label="Průraz" required>
+                        <v-text-field  color="secondary" variant="outlined" v-model="chosenPierce" label="Průraz" required>
                         </v-text-field>
-                    </v-col>
+
 
                 <v-row>
                     <v-col>
-                        <v-text-field v-model="chosenDamageBase" label="Základní poškození" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenDamageBase" label="Základní poškození" required>
                         </v-text-field>
                     </v-col>
                     <v-col>
 
-                        <v-text-field v-model="chosenDamageSeverity" label="Závažnost poškození" required>
+                        <v-text-field color="secondary" variant="outlined" v-model="chosenDamageSeverity" label="Závažnost poškození" required>
                         </v-text-field>
                     </v-col>
 
@@ -96,22 +91,22 @@ import FormData from 'form-data'
 
                 <v-row>
                     <v-col>
-                        <v-select label="Výběr" :items='["Maličká", "Malá", "Střední", "Veliká", "Gigantická"]'
-                            variant="underlined" v-model="chosenSizeGroup"></v-select>
+                        <v-select color="secondary" variant="outlined" label="Velikostní skupina" :items='["Maličká", "Malá", "Střední", "Veliká", "Gigantická"]'
+                             v-model="chosenSizeGroup"></v-select>
                     </v-col>
                 </v-row>
 
             </v-card-text>
 
             <v-card-actions>
-                <v-btn @click="uploadMonster">
+                <v-btn color="secondary"  @click="uploadMonster">
                     Nahrát
                 </v-btn>
             </v-card-actions>
         </v-card>
 
 
-        <v-card v-for="monster in this.loadedMonsters" color="primary" class="mt-5">
+        <v-card v-for="monster in this.loadedMonsters" :key="monster.jmeno" color="primary" class="mt-5">
             <v-card-title>{{ monster.jmeno}}</v-card-title>
             <v-card-actions>
                 <v-btn>Smazat</v-btn>
