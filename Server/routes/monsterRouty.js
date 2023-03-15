@@ -16,6 +16,7 @@ router.post('/createMonster', (req, res) => {
 
         jmeno: req.body.name,
         popis: req.body.description,
+        schopnosti: req.body.abilities,
 
         sila: req.body.strength,
         houzevnatost: req.body.constitution,
@@ -45,6 +46,12 @@ router.post('/createMonster', (req, res) => {
 router.get("/dump", (req, res) => {
     MonsterModel.find().then(queryResult => res.send(queryResult))
 
+})
+
+router.delete("/removeMonster", (req,res) =>{
+    console.log(req.body)
+    MonsterModel.deleteOne({'_id': req.body.id})
+        .then(res.send('monsterDeleted'))
 })
 
 module.exports = router

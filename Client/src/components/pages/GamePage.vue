@@ -286,7 +286,7 @@ import axios from 'axios'
       <v-row>
         <!-- Mod pruzkumu -->
         <v-col v-if="battleModeSwitch == false" cols="9">
-          <v-img :src="'http://localhost:3000/' + vybranePozadi + '.jpg'" max-width="100%">
+          <v-img :src="'http://localhost:3000/backgrounds/' + vybranePozadi " max-width="100%">
           </v-img>
         </v-col>
 
@@ -295,8 +295,8 @@ import axios from 'axios'
           <!-- Nepřátelé -->
           <v-card color="primary" title="Nepřátelé">
             <v-container>
-              <v-expansion-panels v-if="this.aktivniNepratele.length != 0">
-                <v-expansion-panel v-for=" (enemy, index, key) in this.aktivniNepratele">
+              <v-expansion-panels v-if="this.dataBoje.aktivniNepratele.length != 0">
+                <v-expansion-panel v-for=" (enemy, index, key) in this.dataBoje.aktivniNepratele">
                   <v-expansion-panel-title>{{ enemy.jmeno + " " + enemy.realneZivoty + " / " + enemy.zivoty }}
                   </v-expansion-panel-title>
                   <v-expansion-panel-text>
@@ -356,7 +356,7 @@ import axios from 'axios'
 
                 </v-expansion-panel>
               </v-expansion-panels>
-              <h4 v-if="this.aktivniNepratele.length == 0">Nepřátelé nejsou vybráni pro boj</h4>
+              <h4 v-if="this.dataBoje.aktivniNepratele.length == 0">Nepřátelé nejsou vybráni pro boj</h4>
             </v-container>
 
           </v-card>
@@ -366,49 +366,49 @@ import axios from 'axios'
             <v-container>
               <v-select label="Porovnávaný atribut"
                 :items="['Volný hod', 'Atributy', 'Zásah', 'Průraz', 'Steč', 'Uhyb', 'Blokace', 'Výdrž']"
-                variant="underlined" v-model="bojPorovnanyAtribut"></v-select>
+                variant="underlined" v-model="dataBoje.bojPorovnanyAtribut" @update:modelValue="this.socketsResyngBattle()" ></v-select>
 
-              <v-row v-if="this.bojPorovnanyAtribut == 'Volný hod'">
+              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Volný hod'">
                 <v-col>
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                      <h1 align="center" justify="center">{{ this.dataBoje.hozennaKostka }}</h1>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
                         Hodit kostkou
                       </v-btn>
 
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
+                      <v-btn color="blue-darken-1" variant="text" @click="clearDice">
                         Vynulovat
                       </v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.bojPorovnanyAtribut == 'Atributy'">
+              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Atributy'">
 
                 <v-col>
-                  <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
                       <v-row>
-                        <v-col>Síla: {{ this.bojujiciDobrodruh.atributy.sila }}</v-col>
-                        <v-col>Houževnastost: {{ this.bojujiciDobrodruh.atributy.houzevnatost }}</v-col>
+                        <v-col>Síla: {{ this.dataBoje.bojujiciDobrodruh.atributy.sila }}</v-col>
+                        <v-col>Houževnastost: {{ this.dataBoje.bojujiciDobrodruh.atributy.houzevnatost }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</v-col>
-                        <v-col>Charisma: {{ this.bojujiciDobrodruh.atributy.charisma }}</v-col>
+                        <v-col>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</v-col>
+                        <v-col>Charisma: {{ this.dataBoje.bojujiciDobrodruh.atributy.charisma }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Inteligence: {{ this.bojujiciDobrodruh.atributy.inteligence }}</v-col>
-                        <v-col>Znalost: {{ this.bojujiciDobrodruh.atributy.znalost }}</v-col>
+                        <v-col>Inteligence: {{ this.dataBoje.bojujiciDobrodruh.atributy.inteligence }}</v-col>
+                        <v-col>Znalost: {{ this.dataBoje.bojujiciDobrodruh.atributy.znalost }}</v-col>
                       </v-row>
                     </v-card-text>
                   </v-card>
@@ -419,7 +419,7 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                      <h1 align="center" justify="center">{{ dataBoje.hozennaKostka }}</h1>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -434,43 +434,43 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.bojujiciNepritel.jmeno }}
+                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
                       <v-row>
-                        <v-col>Síla: {{ this.bojujiciNepritel.sila }}</v-col>
-                        <v-col>Houževnastost: {{ this.bojujiciDobrodruh.atributy.houzevnatost }}</v-col>
+                        <v-col>Síla: {{ this.dataBoje.bojujiciNepritel.sila }}</v-col>
+                        <v-col>Houževnastost: {{ this.dataBoje.bojujiciDobrodruh.atributy.houzevnatost }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</v-col>
-                        <v-col>Charisma: {{ this.bojujiciDobrodruh.atributy.charisma }}</v-col>
+                        <v-col>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</v-col>
+                        <v-col>Charisma: {{ this.dataBoje.bojujiciDobrodruh.atributy.charisma }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Inteligence: {{ this.bojujiciDobrodruh.atributy.inteligence }}</v-col>
-                        <v-col>Znalost: {{ this.bojujiciDobrodruh.atributy.znalost }}</v-col>
+                        <v-col>Inteligence: {{ this.dataBoje.bojujiciDobrodruh.atributy.inteligence }}</v-col>
+                        <v-col>Znalost: {{ this.dataBoje.bojujiciDobrodruh.atributy.znalost }}</v-col>
                       </v-row>
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.bojPorovnanyAtribut == 'Zásah'">
+              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Zásah'">
                 <v-col>
-                  <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
@@ -482,7 +482,7 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                      <h1 align="center" justify="center">{{ dataBoje.hozennaKostka }}</h1>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -497,38 +497,38 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.bojujiciNepritel.jmeno }}
+                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.bojPorovnanyAtribut == 'Průraz'">
+              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Průraz'">
                 <v-col>
-                  <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
                     <v-card-title color="error">Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="this.bojujiciDobrodruhVybava" v-model="this.bojujiciDobrodruhPredmet"
+                      <v-select :items="this.dataBoje.bojujiciDobrodruhVybava" v-model="this.dataBoje.bojujiciDobrodruhPredmet"
                         item-title="jmeno" return-object label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!this.bojujiciDobrodruhPredmet">
-                        <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Průraz: {{
-                          this.bojujiciDobrodruhPredmet.pruraznost
+                      <v-col v-if="!!this.dataBoje.bojujiciDobrodruhPredmet">
+                        <h3 v-if="this.dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Průraz: {{
+                          this.dataBoje.bojujiciDobrodruhPredmet.pruraznost
                         }}</h3>
                         <h3 v-else>Předmět nemá zadanou hodnotu pruraznosti</h3>
                       </v-col>
@@ -542,7 +542,7 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                      <h1 align="center" justify="center">{{ dataBoje.hozennaKostka }}</h1>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -557,38 +557,38 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.bojujiciNepritel.jmeno }}
+                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Zbroj: {{ this.bojujiciNepritel.zbroj }}</h3>
+                        <h3>Zbroj: {{ this.dataBoje.bojujiciNepritel.zbroj }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.bojPorovnanyAtribut == 'Steč'">
+              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Steč'">
                 <v-col>
-                  <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
                     <v-card-title color="error">Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="this.bojujiciDobrodruhVybava" v-model="this.bojujiciDobrodruhPredmet"
+                      <v-select :items="this.dataBoje.bojujiciDobrodruhVybava" v-model="this.dataBoje.bojujiciDobrodruhPredmet"
                         item-title="jmeno" return-object label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!this.bojujiciDobrodruhPredmet">
-                        <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Poškození: {{
-                          this.bojujiciDobrodruhPredmet.poskozeni
+                      <v-col v-if="!!this.dataBoje.bojujiciDobrodruhPredmet">
+                        <h3 v-if="this.dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Poškození: {{
+                          this.dataBoje.bojujiciDobrodruhPredmet.poskozeni
                         }}</h3>
                         <h3 v-else>Předmět nemá zadanou hodnotu poškození</h3>
                       </v-col>
@@ -602,7 +602,7 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                      <h1 align="center" justify="center">{{ dataBoje.hozennaKostka }}</h1>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -617,36 +617,36 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.bojujiciNepritel.jmeno }}
+                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Zdraví: {{ this.bojujiciNepritel.realneZivoty + '/' + this.bojujiciNepritel.zivoty }}</h3>
+                        <h3>Zdraví: {{ this.dataBoje.bojujiciNepritel.realneZivoty + '/' + this.dataBoje.bojujiciNepritel.zivoty }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.bojPorovnanyAtribut == 'Uhyb'">
+              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Uhyb'">
                 <v-col>
-                  <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
@@ -658,7 +658,7 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                      <h1 align="center" justify="center">{{ dataBoje.hozennaKostka }}</h1>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -673,39 +673,39 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.bojujiciNepritel.jmeno }}
+                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.bojPorovnanyAtribut == 'Blokace'">
+              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Blokace'">
 
                 <v-col>
-                  <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="this.bojujiciDobrodruhVybava" v-model="this.bojujiciDobrodruhPredmet"
+                      <v-select :items="this.dataBoje.bojujiciDobrodruhVybava" v-model="this.dataBoje.bojujiciDobrodruhPredmet"
                         item-title="jmeno" return-object label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!this.bojujiciDobrodruhPredmet">
-                        <h3 v-if="this.bojujiciDobrodruhPredmet.typ == 'Zbroj'">Obrana: {{
-                          this.bojujiciDobrodruhPredmet.obrana
+                      <v-col v-if="!!this.dataBoje.bojujiciDobrodruhPredmet">
+                        <h3 v-if="this.dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbroj'">Obrana: {{
+                          this.dataBoje.bojujiciDobrodruhPredmet.obrana
                         }}</h3>
                         <h3 v-else>Předmět nemá zadanou hodnotu obrany</h3>
                       </v-col>
@@ -719,7 +719,7 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                      <h1 align="center" justify="center">{{ dataBoje.hozennaKostka }}</h1>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -734,36 +734,36 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.bojujiciNepritel.jmeno }}
+                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Průraznost: {{ this.bojujiciNepritel.pruraz }}</h3>
+                        <h3>Průraznost: {{ this.dataBoje.bojujiciNepritel.pruraz }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.bojPorovnanyAtribut == 'Výdrž'">
+              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Výdrž'">
                 <v-col>
-                  <v-card v-if="this.bojujiciDobrodruh == null">
+                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.bojujiciDobrodruh.krestniJmeno + " " + this.bojujiciDobrodruh.prijmeni }}
+                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.bojujiciDobrodruh.zivoty }}</h3>
+                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.zivoty }}</h3>
                       </v-col>
 
                     </v-card-text>
@@ -775,7 +775,7 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <h1 align="center" justify="center">{{ hozennaKostka }}</h1>
+                      <h1 align="center" justify="center">{{ dataBoje.hozennaKostka }}</h1>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -790,17 +790,17 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.bojujiciNepritel == null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.bojujiciNepritel != null">
+                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.bojujiciNepritel.jmeno }}
+                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
@@ -829,18 +829,18 @@ import axios from 'axios'
           </v-card>
 
           <!-- Dobrodruzi -->
-          <v-card v-if="this.bojujiciDobrodruh == null" color="primary" title="Dobrodruzi" class="mt-3">
+          <v-card v-if="this.dataBoje.bojujiciDobrodruh == null" color="primary" title="Dobrodruzi" class="mt-3">
             <v-card-text>
               <div class="d-flex justify-space-around align-center flex-column flex-sm-row fill-height">
                 <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary" @click="fightChoseAdventurer(1)">
                   {{ player1.adventurer.krestniJmeno }}
                 </v-btn>
 
-                <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary" @click="fightChoseAdventurer(2)">
+                <v-btn v-if="player2.adventurer != null" variant="flat" color="secondary" @click="fightChoseAdventurer(2)">
                   {{ player2.adventurer.krestniJmeno }}
                 </v-btn>
 
-                <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary" @click="fightChoseAdventurer(3)">
+                <v-btn v-if="player3.adventurer != null" variant="flat" color="secondary" @click="fightChoseAdventurer(3)">
                   {{ player3.adventurer.krestniJmeno }}
                 </v-btn>
 
@@ -850,7 +850,7 @@ import axios from 'axios'
         </v-col>
 
         <!-- Přepínač herního modu-->
-        <v-col cols="3">
+        <v-col v-if="this.myIdentity == 'Owner'" cols="3">
           <v-card color="primary">
             <v-card-title v-if="this.battleModeSwitch">
               <h3>Herní mod: Boj</h3>
@@ -859,7 +859,7 @@ import axios from 'axios'
               <h3>Herní mod: Pruzkum</h3>
             </v-card-title>
             <v-card-text>
-              <v-switch v-model="battleModeSwitch" :label="`Přepínač`">
+              <v-switch v-model="battleModeSwitch" @update:modelValue="socketsResyncGamemode()" :label="`Přepínač`">
               </v-switch>
             </v-card-text>
           </v-card>
@@ -1013,7 +1013,6 @@ export default {
     sid: null,
     isOwner: false,
     myIdentity: null,
-
     battleModeSwitch: false,
 
     player1: { owner: null, adventurer: null, adventurerID: null },
@@ -1049,18 +1048,22 @@ export default {
     detailRasaSchopnosti: [],
 
     // Bojový mod
-    bojPorovnanyAtribut: 'Volný hod',
-    hozennaKostka: 0,
-    bojujiciNepritel: null,
-    bojujiciDobrodruh: null,
-    bojujiciDobrodruhVybava: [],
-    bojujiciDobrodruhPredmet: null,
+    dataBoje:{
+      bojPorovnanyAtribut: 'Volný hod',
+      hozennaKostka: 0,
+      bojujiciNepritel: null,
+      bojujiciDobrodruh: null,
+      bojujiciDobrodruhVybava: [],
+      bojujiciDobrodruhPredmet: null,
+      aktivniNepratele: [],
+    },
+    
+    
 
     // Nepřátelé
     dostupniNepratele: null,
     moznostiNepratel: [],
     vybranyNepritel: null,
-    aktivniNepratele: [],
   }),
 
   mounted() {
@@ -1070,6 +1073,7 @@ export default {
     this.sid = urlParams.get('sid')
     this.webSocket = io('http://localhost:3001')
 
+    //WEBSOCKET
     //Připojení websocketu
     this.webSocket.on('connect', () => {
       console.log('Websocket servis připojen')
@@ -1080,6 +1084,7 @@ export default {
       .then(response => {
         if (response.data) {
           this.isOwner = true
+          this.myIdentity = 'Owner'
         } else {
           this.socketsResyncPlayers();
           this.resyncPlayers();
@@ -1091,9 +1096,15 @@ export default {
     this.webSocket.on('resyncPlayers', () => {
       this.resyncPlayers();
     })
-    // /Websocket
+    
+    //Změna herního modu
+    this.webSocket.on('resyncGamemode', (mode) =>{
+      this.battleModeSwitch = mode;
+    })
 
-
+    this.webSocket.on('resyncBattle', (data) =>{
+      this.dataBoje = data
+    })
 
 
     //Načtení pozadí
@@ -1139,8 +1150,13 @@ export default {
      * Resyncne herní mod
      */
     socketsResyncGamemode() {
-      this.webSocket.emit('resyncGamemode', this.sid,)
+      this.webSocket.emit('resyncGamemode', this.sid, this.battleModeSwitch)
     },
+
+    socketsResyngBattle(){
+      this.webSocket.emit('resyncBattle', this.sid, this.dataBoje)
+    },
+
 
     //Inventář
     /**
@@ -1316,8 +1332,8 @@ export default {
       vybrany.realneZivoty = vybrany.zivoty
 
       // ! Zajimava obklika do bakalaá5ky
-      this.aktivniNepratele.push(JSON.parse(JSON.stringify(vybrany)))
-      this.socketsResyncPlayers()
+      this.dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(vybrany)))
+      this.socketsResyngBattle()
     },
 
     /**
@@ -1327,8 +1343,8 @@ export default {
      */
 
     fightAddLifeToEnemy(index) {
-      this.aktivniNepratele[index].realneZivoty = this.aktivniNepratele[index].realneZivoty + 1
-      this.socketsResyncPlayers()
+      this.dataBoje.aktivniNepratele[index].realneZivoty = this.dataBoje.aktivniNepratele[index].realneZivoty + 1
+      this.socketsResyngBattle()
     },
 
     /**
@@ -1337,12 +1353,13 @@ export default {
      * Resync
      */
     fightRemoveLifeToEnemy(index) {
-      this.aktivniNepratele[index].realneZivoty = this.aktivniNepratele[index].realneZivoty - 1
-      this.socketsResyncPlayers()
+      this.dataBoje.aktivniNepratele[index].realneZivoty = this.dataBoje.aktivniNepratele[index].realneZivoty - 1
+      this.socketsResyngBattle()
     },
 
     fightRemoveEnemy(index) {
-      this.aktivniNepratele.splice(index, 1)
+      this.dataBoje.aktivniNepratele.splice(index, 1)
+      this.socketsResyngBattle()
     },
 
     // Herní cyklus
@@ -1350,10 +1367,10 @@ export default {
     fightChoseAdventurer(adventurer) {
       switch (adventurer) {
         case 1:
-          this.bojujiciDobrodruh = this.player1.adventurer
+          this.dataBoje.bojujiciDobrodruh = this.player1.adventurer
           axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.player1.adventurer.inventar } })
             .then(queryResponse => {
-              this.bojujiciDobrodruhVybava = queryResponse.data
+              this.dataBoje.bojujiciDobrodruhVybava = queryResponse.data
             })
 
           break;
@@ -1361,10 +1378,12 @@ export default {
         default:
           break;
       }
+      this.socketsResyngBattle()
     },
 
     fightChoseEnemy(enemy) {
-      this.bojujiciNepritel = this.aktivniNepratele[enemy]
+      this.dataBoje.bojujiciNepritel = this.dataBoje.aktivniNepratele[enemy]
+      this.socketsResyngBattle()
     },
 
 
@@ -1373,15 +1392,17 @@ export default {
 
 
     throwDice() {
-      this.hozennaKostka = Math.floor((Math.random() * 6) + 1);
+      this.dataBoje.hozennaKostka = Math.floor((Math.random() * 6) + 1);
+      this.socketsResyngBattle()
     },
 
     clearDice() {
-      this.hozennaKostka = 0
-      this.bojujiciNepritel = null
-      this.bojujiciDobrodruh = null
-      this.bojujiciDobrodruhVybava = []
-      this.bojujiciDobrodruhPredmet = null
+      this.dataBoje.hozennaKostka = 0
+      this.dataBoje.bojujiciNepritel = null
+      this.dataBoje.bojujiciDobrodruh = null
+      this.dataBoje.bojujiciDobrodruhVybava = []
+      this.dataBoje.bojujiciDobrodruhPredmet = null
+      this.socketsResyngBattle()
     },
 
 

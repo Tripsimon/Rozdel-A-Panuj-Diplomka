@@ -60,6 +60,7 @@ app.use(express.static(path.join(__dirname,'/files')))
 //img
 
 let users = [];
+
 //Websockets
 io.on('connection',socket =>{
 
@@ -73,6 +74,14 @@ io.on('connection',socket =>{
 
     socket.on('resyncPlayers', (room) =>{
         socket.to(room).emit('resyncPlayers')
+    })
+
+    socket.on('resyncGamemode',(room,mode) =>{
+        socket.to(room).emit('resyncGamemode',mode)
+    })
+
+    socket.on('resyncBattle',(room,dataBoje) =>{
+        socket.to(room).emit('resyncBattle',dataBoje)
     })
 
     socket.on('disconnect', ()=>{
