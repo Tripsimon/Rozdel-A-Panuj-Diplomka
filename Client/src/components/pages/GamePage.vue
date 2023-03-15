@@ -1357,6 +1357,10 @@ export default {
       this.socketsResyngBattle()
     },
 
+    /**
+     * Odebere nepřítele z bojiště
+     * @param {int} index Pozice nepřítele na bojišti
+     */
     fightRemoveEnemy(index) {
       this.dataBoje.aktivniNepratele.splice(index, 1)
       this.socketsResyngBattle()
@@ -1364,21 +1368,31 @@ export default {
 
     // Herní cyklus
 
+    /**
+     * 
+     * @param {int} adventurer : ID dobrodruha pro boj
+     */
     fightChoseAdventurer(adventurer) {
       switch (adventurer) {
         case 1:
           this.dataBoje.bojujiciDobrodruh = this.player1.adventurer
-          axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.player1.adventurer.inventar } })
-            .then(queryResponse => {
-              this.dataBoje.bojujiciDobrodruhVybava = queryResponse.data
-            })
-
-          break;
+        break;
+        case 2:
+          this.dataBoje.bojujiciDobrodruh = this.player2.adventurer
+        break;
+        case 3:
+          this.dataBoje.bojujiciDobrodruh = this.player3.adventurer
+        break;
 
         default:
           break;
       }
-      this.socketsResyngBattle()
+      axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.dataBoje.bojujiciDobrodruh.inventar } })
+            .then(queryResponse => {
+              this.dataBoje.bojujiciDobrodruhVybava = queryResponse.data
+              this.socketsResyngBattle()
+            })
+
     },
 
     fightChoseEnemy(enemy) {
@@ -1445,7 +1459,7 @@ export default {
      * Resyncne herní mod
      */
     resyncGamemode() {
-
+      
     },
   },
 }

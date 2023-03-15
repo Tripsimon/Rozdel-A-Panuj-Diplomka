@@ -13,18 +13,18 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
         <v-form ref="form" v-model="valid" fast-fail  @submit.prevent="submit"  >
 
-          <v-text-field v-model="email" :rules="rules.emailRule" label="E-mail" required></v-text-field>
+          <v-text-field color="secondary" variant="outlined" v-model="email" :rules="rules.emailRule" label="E-mail" required></v-text-field>
 
-          <v-text-field v-model="prezdivka" :rules="rules.nameRule"  label="Jméno" required></v-text-field>
+          <v-text-field color="secondary" variant="outlined" v-model="prezdivka" :rules="rules.nameRule"  label="Jméno" required></v-text-field>
 
-          <v-text-field v-model="heslo"  :rules="rules.hesloRule" label="Heslo"
+          <v-text-field color="secondary" variant="outlined" v-model="heslo"  :rules="rules.hesloRule" label="Heslo"
             type='password' required></v-text-field>
 
-          <v-text-field v-model="reHeslo"   label="Heslo znovu"
+          <v-text-field color="secondary" variant="outlined" v-model="reHeslo"   label="Heslo znovu"
             type='password' required></v-text-field>
 
 
-          <v-btn color="success" class="mr-4" @click="register()">
+          <v-btn color="secondary" variant="text" class="mr-4" @click="register()">
             Registrovat
           </v-btn>
         </v-form>

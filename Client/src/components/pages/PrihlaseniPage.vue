@@ -11,10 +11,10 @@ import axios from "axios";
       <v-card color="primary" class="mt-3">
         <v-card-text>
           <v-form ref="form" lazy-validation>
-            <v-text-field v-model="email" label="E-mail" required></v-text-field>
+            <v-text-field color="secondary" variant="outlined" v-model="email" label="E-mail" required></v-text-field>
 
-            <v-text-field v-model="heslo" type='password' label="Heslo" required></v-text-field>
-            <v-btn color="success" class="mr-4" @click="prihlaseni(email, heslo, uzivatelStore)">
+            <v-text-field color="secondary" variant="outlined" v-model="heslo" type='password' label="Heslo" required></v-text-field>
+            <v-btn color="secondary" variant="text"  class="mr-4" @click="prihlaseni(email, heslo, uzivatelStore)">
               Přihlášení
             </v-btn>
           </v-form>

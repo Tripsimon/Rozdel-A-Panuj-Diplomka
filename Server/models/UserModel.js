@@ -7,7 +7,9 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     email: String,
     heslo: String,
-    prezdivka: String,},
+    prezdivka: String,
+    opravneni: String,
+    },
     {collection: "UzivateleKolekce"}
     )
 

@@ -33,7 +33,8 @@ router.post("/registrace", async (req,res) =>{
         const newUser = new UserModel({
             email: req.body.email,
             prezdivka: req.body.prezdivka,
-            heslo: hashovaneHeslo
+            heslo: hashovaneHeslo,
+            opravneni: 'uzivatel'
         });
         newUser.save()
             .then( queryData =>
