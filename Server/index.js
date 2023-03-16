@@ -17,7 +17,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
-mongoose.connect('mongodb://localhost:3500/lesak')
+mongoose.connect('mongodb://localhost:27017/lesak')
     .then(() => console.log("Server připojen k databázi"))
     .catch(err =>console.log(err));
 
