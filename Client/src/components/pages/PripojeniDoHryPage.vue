@@ -23,6 +23,39 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
         <v-text-field v-if="chosenSession != null" color="secondary" variant="outlined" v-model="sessionPassword" type='password'
           label="Heslo hry"></v-text-field>
+
+          <v-table theme="">
+            <thead>
+              <tr>
+                <th>
+                  Jméno
+                </th>
+                <th>
+                  Majitel
+                </th>
+                <th>
+                  Připojeno
+                </th>
+                <th>
+                  Akce
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr class="mt-2" v-for="session in this.sessions" :key="session">
+                {{ session }}
+                <th>{{session.sessionName}}</th>
+                <th>{{session.ownerName}}</th>
+                <th>{{( 3 - session.slots)}}/3</th>
+                <th>
+                  <v-btn color="success" @click="joinSession(session._id)" icon="mdi-arrow-right-thin-circle-outline"></v-btn>
+                </th>
+                <!-- TODO: Asi ikonka -->
+              </tr>
+            </tbody>
+          </v-table>
       </v-card-text>
 
       <v-card-text v-else>
@@ -30,7 +63,7 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
       </v-card-text>
 
         <v-card-actions v-if="sessionPassword != null">
-          <v-btn :onclick="joinSession">Připojit</v-btn>
+          <v-btn @click="joinSession">Připojit</v-btn>
         </v-card-actions>
     </v-card>
 
@@ -52,7 +85,6 @@ export default {
 
     sessionData: null,
     sessionPassword: null,
-
     uzivatelStore: useUzivatelStore()
   }),
 
@@ -80,12 +112,13 @@ export default {
     /**
      * Připojení do sessionu
      */
-    joinSession() {
+    joinSession(id) {
 
+      console.log("DSADS")
       let adventurer = this.adventurerChoices.indexOf(this.chosenAdventurer, 0)
 
       let body = {
-        "sessionID": this.chosenSession._id,
+        "sessionID": id,
         "password": this.sessionPassword,
         "adventurer": this.avaliableAdventurers[adventurer]._id,
         "player": this.uzivatelStore._id

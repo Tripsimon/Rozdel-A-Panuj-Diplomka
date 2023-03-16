@@ -132,4 +132,10 @@ router.get('/sessionDisconnect', async(req,res) =>{
     }
 })
 
+router.get('/sessionsClear', (req,res) => {
+    if(req.body.password == 'WnaBp$03^6iI')
+    SessionModel.deleteMany({})
+        .then(res.send('sessionCleared'))
+})
+
 module.exports = router
