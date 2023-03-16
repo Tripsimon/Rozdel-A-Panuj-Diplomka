@@ -24,7 +24,7 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
         <v-text-field v-if="chosenSession != null" color="secondary" variant="outlined" v-model="sessionPassword" type='password'
           label="Heslo hry"></v-text-field>
 
-          <v-table theme="">
+          <v-table>
             <thead>
               <tr>
                 <th>
