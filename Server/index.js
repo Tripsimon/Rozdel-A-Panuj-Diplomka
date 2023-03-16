@@ -10,8 +10,12 @@ const io = require('socket.io')(3001,{
     }
 });
 
+const corsOptions = {
+    origin: '*'
+}
+
 const app = express()
-app.use(cors());
+app.use(cors(corsOptions));
 //Body Parser
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
