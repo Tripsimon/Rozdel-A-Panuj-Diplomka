@@ -11,7 +11,7 @@ const io = require('socket.io')(3001,{
 });
 
 const corsOptions = {
-    origin: '46.36.40.226:50103'
+    origin: 'http://46.36.40.226:50103'
 }
 
 const app = express()
