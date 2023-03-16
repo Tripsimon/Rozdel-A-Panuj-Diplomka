@@ -1,17 +1,15 @@
 <script setup>
 import NavigacniSloupecPart from './components/parts/NavigacniSloupecPart.vue';
-import {useUzivatelStore} from "./stores/uzivatelStore.js"
-
-const uzivatelStore = useUzivatelStore();
+import FooterPart from './components/parts/FooterPart.vue';
 </script>
 
 <template>
   <v-app id="inspire">
     <navigacni-sloupec-part></navigacni-sloupec-part>
-
     <v-main>
       <router-view></router-view>
     </v-main>
+    <footer-part></footer-part>
   </v-app>
 </template>
 
