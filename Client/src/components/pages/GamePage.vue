@@ -1080,7 +1080,7 @@ export default {
     })
     this.socketsJoinRoom();
 
-    axios.get('http://localhost:3000/sessions/checkOwner', { params: { sid: this.sid, user: this.uzivatelStore._id } })
+    axios.get(axios.defaults.baseURL+'/sessions/checkOwner', { params: { sid: this.sid, user: this.uzivatelStore._id } })
       .then(response => {
         if (response.data) {
           this.isOwner = true
@@ -1108,7 +1108,7 @@ export default {
 
 
     //Načtení pozadí
-    axios.get('http://localhost:3000/pozadi/dump')
+    axios.get(axios.defaults.baseURL+'/pozadi/dump')
       .then(res => {
         this.dostupnePozadi = res.data
         this.vybranePozadi = this.dostupnePozadi[0]
@@ -1188,7 +1188,7 @@ export default {
     reloadInventory(){
       this.inventoryLoadedMoney = this.invetarDobrodruh.penize
       this.inventarVaha = 0
-      axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.invetarDobrodruh.inventar } })
+      axios.get(axios.defaults.baseURL+'/vybava/multipleID', { params: { items: this.invetarDobrodruh.inventar } })
         .then(queryResponse => {
           this.inventoryLoadedArray = JSON.parse(JSON.stringify(queryResponse.data))
           this.inventoryLoadedAdventurerID = this.invetarDobrodruh._id
@@ -1203,24 +1203,24 @@ export default {
      * Metoda pro změnu počtu peněz vybraného dobrodruha
      */
     inventoryChangeMoney() {
-      axios.post('http://localhost:3000/character/changeMoney', { money: this.inventoryChangeMoneyInput, adventurer: this.inventoryLoadedAdventurerID })
+      axios.post(axios.defaults.baseURL+'/character/changeMoney', { money: this.inventoryChangeMoneyInput, adventurer: this.inventoryLoadedAdventurerID })
       this.inventoryModal = false;
       this.reloadInventory();
       this.socketsResyncPlayers();
     },
 
     inventoryAddGetChoices() {
-      axios.get('http://localhost:3000/vybava/allType', { params: { type: 'Zbraň' } })
+      axios.get(axios.defaults.baseURL+'/vybava/allType', { params: { type: 'Zbraň' } })
         .then(response => {
           this.inventoryAddWeapons =  response.data
         })
 
-        axios.get('http://localhost:3000/vybava/allType', { params: { type: 'Zbroj' } })
+        axios.get(axios.defaults.baseURL+'/vybava/allType', { params: { type: 'Zbroj' } })
         .then(response => {
           this.inventoryAddArmor = response.data
         })
 
-        axios.get('http://localhost:3000/vybava/allType', { params: { type: 'Předmět' } })
+        axios.get(axios.defaults.baseURL+'/vybava/allType', { params: { type: 'Předmět' } })
         .then(response => {
           this.inventoryAddItem = response.data
         })
@@ -1231,7 +1231,7 @@ export default {
      * @param {id} item -> Předmět který se má přidat  
      */
     inventoryAddPush(item) {
-      axios.post('http://localhost:3000/character/putIntoInventory', { "item": item, 'adventurer': this.inventoryLoadedAdventurerID })
+      axios.post(axios.defaults.baseURL+'/character/putIntoInventory', { "item": item, 'adventurer': this.inventoryLoadedAdventurerID })
         .then(responseQuery => {
           if (responseQuery.data == true) {
             this.inventoryModal = false
@@ -1245,7 +1245,7 @@ export default {
      * @param {string} item ID Itemu
      */
     invetoryRemove(item) {
-      axios.post('http://localhost:3000/character/removeFromInventory', { "item": item, 'adventurer': this.inventoryLoadedAdventurerID })
+      axios.post(axios.defaults.baseURL+'/character/removeFromInventory', { "item": item, 'adventurer': this.inventoryLoadedAdventurerID })
         .then(responseQuery => {
           if (responseQuery.data == true) {
             this.inventoryModal = false
@@ -1279,12 +1279,12 @@ export default {
           break;
       }
 
-      axios.get('http://localhost:3000/schopnosti/byOwner', { params: { 'owner': this.detailDobrodruh.trida } })
+      axios.get(axios.defaults.baseURL+'/schopnosti/byOwner', { params: { 'owner': this.detailDobrodruh.trida } })
         .then(queryResponse => {
           this.detailTridaShopnosti = queryResponse.data
         })
 
-      axios.get('http://localhost:3000/schopnosti/byOwner', { params: { 'owner': this.detailDobrodruh.rasa } })
+      axios.get(axios.defaults.baseURL+'/schopnosti/byOwner', { params: { 'owner': this.detailDobrodruh.rasa } })
         .then(queryResponse => {
           this.detailRasaSchopnosti = queryResponse.data
         })
@@ -1296,7 +1296,7 @@ export default {
      * Resync
      */
     detailChangeLevelExperience() {
-      axios.post('http://localhost:3000/character/changeLevelAndExperience', { 'adventurer': this.detailDobrodruh._id, 'level': this.detailLevelInput, 'zkusenosti': this.detailExperienceInput })
+      axios.post(axios.defaults.baseURL+'/character/changeLevelAndExperience', { 'adventurer': this.detailDobrodruh._id, 'level': this.detailLevelInput, 'zkusenosti': this.detailExperienceInput })
         .then(responseQuery => {
           if (responseQuery) {
             this.detailModal = false
@@ -1312,7 +1312,7 @@ export default {
      * Načte všechny dostupné nepřátelské entity
      */
     loadEnemies() {
-      axios.get('http://localhost:3000/monster/dump')
+      axios.get(axios.defaults.baseURL+'/monster/dump')
         .then(queryResponse => {
           this.dostupniNepratele = queryResponse.data,
             queryResponse.data.forEach(enemy => {
@@ -1387,7 +1387,7 @@ export default {
         default:
           break;
       }
-      axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.dataBoje.bojujiciDobrodruh.inventar } })
+      axios.get(axios.defaults.baseURL+'/vybava/multipleID', { params: { items: this.dataBoje.bojujiciDobrodruh.inventar } })
             .then(queryResponse => {
               this.dataBoje.bojujiciDobrodruhVybava = queryResponse.data
               this.socketsResyngBattle()
@@ -1430,7 +1430,7 @@ export default {
      */
     resyncPlayers() {
       console.log("Proběhne resync")
-      axios.get('http://localhost:3000/sessions/sessionPlayers', { params: { sid: this.sid } })
+      axios.get(axios.defaults.baseURL+'/sessions/sessionPlayers', { params: { sid: this.sid } })
         .then(response => {
 
           this.player1.owner = response.data[0].owner
@@ -1442,7 +1442,7 @@ export default {
           this.player3.owner = response.data[2].owner
           this.player3.adventurerID = response.data[2].adventurer
 
-          axios.get('http://localhost:3000/character/sessionAdventurers', { params: { adventurer1: this.player1.adventurerID, adventurer2: this.player2.adventurerID, adventurer3: this.player3.adventurerID } })
+          axios.get(axios.defaults.baseURL+'/character/sessionAdventurers', { params: { adventurer1: this.player1.adventurerID, adventurer2: this.player2.adventurerID, adventurer3: this.player3.adventurerID } })
             .then(response => {
 
               console.log(response)

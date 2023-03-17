@@ -32,7 +32,7 @@ export default {
     methods: {
 
         getAdventurers() {
-            axios.get("http://localhost:3000/character/getCharacters", { params: { owner: this.uzivatelStore._id } })
+            axios.get(axios.defaults.baseURL+'/character/getCharacters', { params: { owner: this.uzivatelStore._id } })
                 .then((response) => {
                     this.avaliableAdventurers = response.data
                 })

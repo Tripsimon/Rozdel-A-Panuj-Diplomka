@@ -104,16 +104,16 @@ export default {
       const formData = new FormData();
       formData.append('image', this.inputFile[0],this.inputFileName)
       formData.append('imageName',this.inputFileName)
-      axios.post('http://localhost:3000/pozadi/nahraniSouboru', formData)
+      axios.post(axios.defaults.baseURL+'/pozadi/nahraniSouboru', formData)
     },
 
     removeImage(img) {
-      axios.delete('http://localhost:3000/pozadi/smazaniSouboru/' + img,)
+      axios.delete(axios.defaults.baseURL+'/pozadi/smazaniSouboru/' + img,)
         .then(this.loadImages())
     },
 
     loadImages() {
-      axios.get('http://localhost:3000/pozadi/dump')
+      axios.get(axios.defaults.baseURL+'/pozadi/dump')
         .then(queryResponse => {
           this.loadedImages = queryResponse.data
         })

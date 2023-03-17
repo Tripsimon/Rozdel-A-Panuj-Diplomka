@@ -76,7 +76,7 @@ export default {
         "heslo": this.heslo
       }
 
-      axios.post("http://localhost:3000/sessions/createSession", obsah)
+      axios.post(axios.defaults.baseURL+'/sessions/createSession', obsah)
         .then(queryResponse =>{
           if (queryResponse.data == null) {
             this.showAlert = true;

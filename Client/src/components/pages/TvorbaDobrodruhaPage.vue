@@ -443,7 +443,7 @@ export default {
   },
 
   mounted() {
-    axios.get('http://localhost:3000/rasy/dump')
+    axios.get(axios.defaults.baseURL+'/rasy/dump')
       .then(responseQuery => {
         this.rasaMoznosti = responseQuery.data
       })
@@ -452,7 +452,7 @@ export default {
   methods: {
 
     onRaceSelect() {
-      axios.get('http://localhost:3000/schopnosti/getMultipleByID', { params: { abilities: this.rasaVybrana.schopnosti } })
+      axios.get(axios.defaults.baseURL+'/schopnosti/getMultipleByID', { params: { abilities: this.rasaVybrana.schopnosti } })
         .then(queryResponse => this.rasaSchopnosti = queryResponse.data)
       this.newAdventurer.race = this.rasaVybrana.jmeno
 
@@ -462,29 +462,29 @@ export default {
       this.newAdventurer.class = this.tridaVybrana
 
 
-      axios.get('http://localhost:3000/tridy/getByName', { params: { name: this.tridaVybrana } })
+      axios.get(axios.defaults.baseURL+'/tridy/getByName', { params: { name: this.tridaVybrana } })
         .then(query => {
           this.tridaVybranaObjekt = query.data
 
-          axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.hlavniVybava } })
+          axios.get(axios.defaults.baseURL+'/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.hlavniVybava } })
             .then(queryResponse => {
               this.tridaVybava.hlavni = queryResponse.data
             })
 
-          axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.krajniVybava } })
+          axios.get(axios.defaults.baseURL+'/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.krajniVybava } })
             .then(queryResponse => {
               this.tridaVybava.sekundarni = queryResponse.data
             })
 
 
-          axios.get('http://localhost:3000/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.bonusovaVybava } })
+          axios.get(axios.defaults.baseURL+'/vybava/multipleID', { params: { items: this.tridaVybranaObjekt.bonusovaVybava } })
             .then(queryResponse => {
               this.tridaVybava.bonusova = queryResponse.data
             })
 
 
 
-          axios.get('http://localhost:3000/schopnosti/getByOwner', { params: { owner: this.tridaVybrana } })
+          axios.get(axios.defaults.baseURL+'/schopnosti/getByOwner', { params: { owner: this.tridaVybrana } })
             .then(queryResponse => {
               this.tridaSchopnosti = queryResponse.data
             })
@@ -675,7 +675,7 @@ export default {
         "atributes": this.atributes,
       })
 
-      axios.post("http://localhost:3000/character/characterCreation", obsah)
+      axios.post(axios.defaults.baseURL+'/character/characterCreation', obsah)
         .then(this.$router.push({ path: '/' }))
 
     },

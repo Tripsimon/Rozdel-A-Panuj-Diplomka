@@ -5,6 +5,7 @@ import vuetify from './plugins/vuetify'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { loadFonts } from './plugins/webfontloader'
+import axios from "axios";
 
 let app=createApp(App)
 
@@ -14,6 +15,12 @@ pinia.use(piniaPluginPersistedstate)
 loadFonts()
 
 //Konstanty
+
+axios.defaults.baseURL = 'http://46.36.40.226:50102'
+
+app.provide('configFile',{
+  backendAdress:'http://46.36.40.226:50102'
+})
 
 app.provide('gvRaces',{
   names:['Anhilarský člověk', 'Grobr', 'Hruurský člověk','Ork','Inu-Im'],

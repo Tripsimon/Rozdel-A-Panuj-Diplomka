@@ -93,7 +93,7 @@ export default {
     /**
      * Naplnění možností dobrodruhů hráče
      */
-    axios.get("http://localhost:3000/character/getCharacters", { params: { owner: this.uzivatelStore._id } })
+    axios.get(axios.defaults.baseURL+'/character/getCharacters', { params: { owner: this.uzivatelStore._id } })
       .then((response) => {
         this.avaliableAdventurers = response.data
 
@@ -123,7 +123,7 @@ export default {
         "adventurer": this.avaliableAdventurers[adventurer]._id,
         "player": this.uzivatelStore._id
       }
-      axios.post("http://localhost:3000/sessions/joinSession", body)
+      axios.post(axios.defaults.baseURL+'/sessions/joinSession', body)
         .then(queryResponse => {
           if (queryResponse.data == 'Wrong Password') {
             console.log("Asi heslo")
@@ -139,7 +139,7 @@ export default {
      * Naplnění možností otevřených herních místností
      */
     findSessions(){
-      axios.get("http://localhost:3000/sessions/openSessions")
+      axios.get(axios.defaults.baseURL+'/sessions/openSessions')
       .then((queryResponse) => {
 
         this.sessions = queryResponse.data

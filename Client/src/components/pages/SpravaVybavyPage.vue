@@ -326,7 +326,7 @@ export default {
         },
 
         uploadWeapon() {
-            axios.post('http://localhost:3000/vybava/createWeapon',
+            axios.post(axios.defaults.baseURL+'/vybava/createWeapon',
                 {
                     'name': this.chosenName,
                     'type': this.chosenType,
@@ -345,7 +345,7 @@ export default {
         },
 
         uploadArmor() {
-            axios.post('http://localhost:3000/vybava/createArmor',
+            axios.post(axios.defaults.baseURL+'/vybava/createArmor',
                 {
                     'name': this.chosenName,
                     'type': this.chosenType,
@@ -366,7 +366,7 @@ export default {
          */
         uploadItem() {
             if(this.valid){
-            axios.post('http://localhost:3000/vybava/createItem',
+            axios.post(axios.defaults.baseURL+'/vybava/createItem',
                 {
                     'name': this.chosenName,
                     'type': this.chosenType,
@@ -391,7 +391,7 @@ export default {
          * Načte nová data pro zobrazení v tabulce existujících předmětů
          */
         updateData() {
-            axios.get('http://localhost:3000/vybava/allType', { params: { type: this.chosenType } })
+            axios.get(axios.defaults.baseURL+'/vybava/allType', { params: { type: this.chosenType } })
                 .then(response => {
                     this.loadedData = response.data
                 })
@@ -401,7 +401,7 @@ export default {
          * Smaže item z databáze předmětů
          */
         removeItem(itemID) {
-            axios.get('http://localhost:3000/vybava/removeItem', { params: { itemID: itemID } })
+            axios.get(axios.defaults.baseURL+'/vybava/removeItem', { params: { itemID: itemID } })
                 .then(queryResponse => {
                     if (queryResponse.status == 200) {
                         this.updateData()

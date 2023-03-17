@@ -1,12 +1,13 @@
 <script setup>
 import axios from "axios";
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+
+
 </script>
 <template>
   <v-container>
-
+    {{ axios.defaults.baseURL }}
     <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText" />
-
     <v-card color="primary" class="mt-3">
       <h1 class="d-flex justify-center">Registrace</h1>
       <v-card-text>
@@ -41,14 +42,28 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 <script>
 
 import Alert from '../parts/AlertHandler.vue'
+import { inject } from 'vue'
+import { RouterLink } from "vue-router";
+
 
 export default {
+
+
+
+  setup(){
+  const configFileInject = inject('configFile')
+  console.log(configFileInject)
+
+  },
   components: {
     Alert
   },
 
   data: () => ({
+  
     uzivatelStore: useUzivatelStore(),
+
+
     email: "",
     prezdivka: "",
     heslo: "",
@@ -86,7 +101,6 @@ export default {
   methods: {
 
     register() {
-      
       if (this.valid != true) {
         this.showAlert = true,
         this.alertTitulek = "Nesprávná data",
@@ -99,7 +113,7 @@ export default {
 
       
 
-      axios.post("http://localhost:3000/uzivatel/registrace", { 'email': this.email, 'prezdivka': this.prezdivka, 'heslo': this.heslo })
+      axios.post(axios.defaults.baseURL+"/uzivatel/registrace", { 'email': this.email, 'prezdivka': this.prezdivka, 'heslo': this.heslo })
         .then(queryResponse => {
 
           switch (queryResponse.data) {

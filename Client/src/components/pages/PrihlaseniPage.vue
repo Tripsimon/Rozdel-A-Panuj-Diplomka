@@ -50,7 +50,7 @@ export default {
 
 
 
-      axios.post("http://localhost:3000/uzivatel/prihlaseni", { 'email': this.email, 'heslo': this.heslo })
+      axios.post(axios.defaults.baseURL+'/uzivatel/prihlaseni', { 'email': this.email, 'heslo': this.heslo })
         .then(queryResponse => {
           switch (queryResponse.data) {
             case 'noUser':

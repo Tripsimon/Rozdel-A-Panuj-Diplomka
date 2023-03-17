@@ -26,6 +26,11 @@ mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/l
 
 const PORT = process.env.PORT || 3000;
 
+app.locals.backendAdress = 'http://46.36.40.226:50102/'
+
+
+
+
 app.get("/",(req,res) => {
     res.send("Server je aktivní");
 })
@@ -62,6 +67,7 @@ app.use(express.static(path.join(__dirname,'/files')))
 //img
 
 let users = [];
+axios.defaults.baseURL = 'http://46.36.40.226:50102'
 
 //Websockets
 io.on('connection',socket =>{
@@ -90,7 +96,7 @@ io.on('connection',socket =>{
         console.log('Odpojil se socket ' + socket.id)
         console.log(users)
 
-        axios.get('http://localhost:3000/sessions/sessionDisconnect', { params: { sessionID: users[socket.id].sessionID,userID: users[socket.id].userID}})
+        axios.get(axios.defaults.baseURL+'/sessions/sessionDisconnect', { params: { sessionID: users[socket.id].sessionID,userID: users[socket.id].userID}})
             .then(queryResponse => {
                 switch (queryResponse.data) {
                     case 'sessionDelete':

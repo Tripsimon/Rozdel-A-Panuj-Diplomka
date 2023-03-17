@@ -232,12 +232,12 @@ export default {
          * Vypíše všechna dostupná monstra
          */
         getMonsters() {
-            axios.get('http://localhost:3000/monster/dump')
+            axios.get(axios.defaults.baseURL+'/monster/dump')
                 .then(queryResponse => this.loadedMonsters = queryResponse.data)
         },
 
         uploadMonster() {
-            axios.post('http://localhost:3000/monster/createMonster',
+            axios.post(axios.defaults.baseURL+'/monster/createMonster',
                 {
                     'name': this.chosenName,
                     'description': this.chosenDescription,
@@ -267,7 +267,7 @@ export default {
          * @param {int} id ID monstra
          */
         removeMonster(id){
-            axios.delete('http://localhost:3000/monster/removeMonster',{ data:{'id':id}})
+            axios.delete(axios.defaults.baseURL+'/monster/removeMonster',{ data:{'id':id}})
                 .then( queryResponse =>{
                     if(queryResponse.data == 'monsterDeleted'){this.getMonsters()}
                     
