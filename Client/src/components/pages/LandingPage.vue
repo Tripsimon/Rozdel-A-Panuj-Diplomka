@@ -3,91 +3,94 @@
 </script>
 
 <template>
-<v-carousel>
-  <v-carousel-item
-    src="https://cdn.pixabay.com/photo/2019/02/14/07/28/painting-3995999_960_720.jpg"
-    cover
-  ></v-carousel-item>
+  <v-parallax src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+    <div class="d-flex flex-column fill-height justify-center align-center text-white">
+      <h1 class="text-h4 font-weight-thin mb-4">
+        Rozděl a Panuj
+      </h1>
+      <h4 class="subheading">
+        Společné dobrodružství na dosah ruky !
+      </h4>
+    </div>
+  </v-parallax>
 
-  <v-carousel-item
-    src="https://picsum.photos/1920/600"
-    cover
-  ></v-carousel-item>
+  <v-container>
+    <v-card class="mb-3" variant="tonal">
+      <v-card-title style="background-color: #001d3d;">
+        <p style="color: #cca000;">Dobrodružství zcela zdarma </p>
+      </v-card-title>
 
-  <v-carousel-item
-    src="https://picsum.photos/1920/600"
-    cover
-  ></v-carousel-item>
-</v-carousel>
+      <v-card-text>
+       <p style="blue"> Nějakej text</p>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="secondary">Click me</v-btn>
+      </v-card-actions>
+    </v-card>
 
-<v-container>
-  <v-card
-  title="Text o Jednoduchosti"
-  subtitle="Subtitle"
-  text="..."
-  variant="tonal"
->
-  <v-card-actions>
-    <v-btn>Click me</v-btn>
-  </v-card-actions>
-</v-card>
+    <v-card    variant="tonal">
+      <v-card-title style="background-color: #001d3d;">
+        Zjednodušená pravidla
+      </v-card-title>
+      <v-card-subtitle>
+        DSADSA
+      </v-card-subtitle>
+      <v-card-text>
+        dsad
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="secondary">Click me</v-btn>
+      </v-card-actions>
+    </v-card>
 
-<v-card
-  title="Text o Jednoduchosti"
-  subtitle="Subtitle"
-  text="..."
-  variant="tonal"
->
-  <v-card-actions>
-    <v-btn>Click me</v-btn>
-  </v-card-actions>
-</v-card>
-
-<v-card
-  title="Text o Jednoduchosti"
-  subtitle="Subtitle"
-  text="..."
-  variant="tonal"
->
-  <v-card-actions>
-    <v-btn>Click me</v-btn>
-  </v-card-actions>
-</v-card>
-
-
-<v-card
-  title="Text o Jednoduchosti"
-  subtitle="Subtitle"
-  text="..."
-  variant="tonal"
->
-  <v-card-actions>
-    <v-btn>Click me</v-btn>
-  </v-card-actions>
-</v-card>
-
-<v-card
-  title="Text o Jednoduchosti"
-  subtitle="Subtitle"
-  text="..."
-  variant="tonal"
->
-  <v-card-actions>
-    <v-btn>Click me</v-btn>
-  </v-card-actions>
-</v-card>
-
-<v-expansion-panels>
-  <v-expansion-panel
-    title="Title"
-    text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima"
-  >
-  </v-expansion-panel>
-</v-expansion-panels>
+    <v-card    variant="tonal">
+      <v-card-title style="background-color: #001d3d;">
+        PLně v češtině
+      </v-card-title>
+      <v-card-subtitle>
+        DSADSA
+      </v-card-subtitle>
+      <v-card-text>
+        dsad
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="secondary">Click me</v-btn>
+      </v-card-actions>
+    </v-card>
 
 
-</v-container>
+    <v-card    variant="tonal">
+      <v-card-title style="background-color: #001d3d;">
+        dsadsa
+      </v-card-title>
+      <v-card-subtitle>
+        DSADSA
+      </v-card-subtitle>
+      <v-card-text>
+        dsad
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="secondary">Click me</v-btn>
+      </v-card-actions>
+    </v-card>
 
+    <v-card    variant="tonal">
+      <v-card-title style="background-color: #001d3d;">
+        dsadsa
+      </v-card-title>
+      <v-card-subtitle>
+        DSADSA
+      </v-card-subtitle>
+      <v-card-text>
+        dsad
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="secondary">Click me</v-btn>
+      </v-card-actions>
+    </v-card>
+
+
+  </v-container>
 </template>
 
 <script>
