@@ -13,4 +13,4 @@ const UserSchema = new Schema({
     {collection: "UzivateleKolekce"}
     )
 
-module.exports = User = mongoose.model("RozdelAPanuj_Develop",UserSchema,"UzivateleKolekce");
+module.exports = User = mongoose.model("lesak",UserSchema,"UzivateleKolekce");

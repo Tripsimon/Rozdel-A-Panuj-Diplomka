@@ -19,7 +19,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
-mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/?authMechanism=DEFAULT&directConnection=true&authSource=lesak&tls=false&readPreference=primary')
+mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/lesak?authMechanism=DEFAULT&directConnection=true&authSource=lesak&tls=false&readPreference=primary')
     .then(() => console.log("Server připojen k databázi"))
     .catch(err =>console.log(err));
 
