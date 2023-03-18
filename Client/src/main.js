@@ -19,7 +19,7 @@ loadFonts()
 axios.defaults.baseURL = 'http://46.36.40.226:50102'
 
 app.provide('configFile',{
-  backendAdress:'http://46.36.40.226:50102'
+  backendAdress:'https://api.rozdel-a-panuj.cz'
 })
 
 app.provide('gvRaces',{

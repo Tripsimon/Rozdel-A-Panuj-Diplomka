@@ -67,7 +67,7 @@ app.use(express.static(path.join(__dirname,'/files')))
 //img
 
 let users = [];
-axios.defaults.baseURL = 'http://46.36.40.226:50102'
+axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
 
 //Websockets
 io.on('connection',socket =>{
