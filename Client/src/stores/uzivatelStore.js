@@ -1,4 +1,3 @@
-import {watch} from 'vue'
 import {defineStore} from 'pinia'
 
 export const useUzivatelStore = defineStore('uzivatelStore',{
@@ -6,18 +5,21 @@ export const useUzivatelStore = defineStore('uzivatelStore',{
         return {
         prihlasen: false,
         prezdivka: "",
+        opravneni: '',
         _id: "",
         }
     },
     actions:{
-        zapisUzivatele(prezdivka,id){
+        zapisUzivatele(prezdivka,id,opravneni){
             this.prihlasen = true;
             this.prezdivka = prezdivka;
+            this.opravneni = opravneni,
             this._id = id;
         },
         odhlasUzivatele(){
             this.prihlasen = false;
             this.prezdivka = "",
+            this.opravneni = '',
             this._id = ""
         }
     },

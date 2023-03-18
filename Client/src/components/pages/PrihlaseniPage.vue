@@ -67,12 +67,7 @@ export default {
 
             default:
               if (queryResponse.status == 200 || queryResponse.data != null) {
-                this.uzivatelStore.$patch({
-                  prihlasen: true,
-                  prezdivka: queryResponse.data.prezdivka,
-                  _id: queryResponse.data._id,
-
-                });
+                this.uzivatelStore.zapisUzivatele(queryResponse.data.prezdivka,queryResponse.data._id,queryResponse.data.opravneni);
                 this.$router.push({ path: '/' })
               }
               break;

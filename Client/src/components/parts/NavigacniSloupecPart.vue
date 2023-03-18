@@ -41,7 +41,8 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
           <v-divider></v-divider>
         </div>
 
-        <div v-if="this.uzivatelStore.prihlasen">
+        {{ }}
+        <div v-if="this.uzivatelStore.prihlasen && this.uzivatelStore.opravneni == 'administrator'">
           <v-list-item-title>Správa herních dat</v-list-item-title>
           <v-list-item to="/sprava-pozadi" prepend-icon="mdi-image-edit-outline" title="Spravová pozadí"
             value="spravaPozadi" color="secondary"></v-list-item>

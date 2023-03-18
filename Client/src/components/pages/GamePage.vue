@@ -444,15 +444,15 @@ import axios from 'axios'
                     <v-card-text>
                       <v-row>
                         <v-col>Síla: {{ this.dataBoje.bojujiciNepritel.sila }}</v-col>
-                        <v-col>Houževnastost: {{ this.dataBoje.bojujiciDobrodruh.atributy.houzevnatost }}</v-col>
+                        <v-col>Houževnastost: {{ this.dataBoje.bojujiciNepritel.houzevnatost }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</v-col>
-                        <v-col>Charisma: {{ this.dataBoje.bojujiciDobrodruh.atributy.charisma }}</v-col>
+                        <v-col>Obratnost: {{ this.dataBoje.bojujiciNepritel.obratnost }}</v-col>
+                        <v-col>Charisma: {{ this.dataBoje.bojujiciNepritel.charisma }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Inteligence: {{ this.dataBoje.bojujiciDobrodruh.atributy.inteligence }}</v-col>
-                        <v-col>Znalost: {{ this.dataBoje.bojujiciDobrodruh.atributy.znalost }}</v-col>
+                        <v-col>Inteligence: {{ this.dataBoje.bojujiciNepritel.inteligence }}</v-col>
+                        <v-col>Znalost: {{ this.dataBoje.bojujiciNepritel.znalost }}</v-col>
                       </v-row>
                     </v-card-text>
                   </v-card>
@@ -507,7 +507,7 @@ import axios from 'axios'
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ this.dataBoje.bojujiciNepritel.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>

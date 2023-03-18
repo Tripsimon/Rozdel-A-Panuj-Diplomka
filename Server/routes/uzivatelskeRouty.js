@@ -64,7 +64,8 @@ router.post("/prihlaseni", async(req,res)=>{
                     res.status(200);
                     res.json({
                         prezdivka : User.prezdivka,
-                        _id : User._id
+                        _id : User._id,
+                        opravneni: User.opravneni
                     });
                 }else{
                     res.send('wrongPass')

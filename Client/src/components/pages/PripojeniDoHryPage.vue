@@ -18,12 +18,8 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
     <v-card color="primary" class="mt-4" >
       <v-card-title ><h4 >Výběr serveru:</h4></v-card-title>
       <v-card-text v-if="this.sessions != []">
-        <v-select color="secondary" variant="outlined" label="Výber serveru" v-model="chosenSession"
-          :items="this.sessions" item-title="sessionName" return-object></v-select>
-
-        <v-text-field v-if="chosenSession != null" color="secondary" variant="outlined" v-model="sessionPassword" type='password'
+        <v-text-field color="secondary" variant="outlined" v-model="sessionPassword" type='password'
           label="Heslo hry"></v-text-field>
-
           <v-table>
             <thead>
               <tr>
@@ -45,7 +41,6 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
             <tbody>
 
               <tr class="mt-2" v-for="session in this.sessions" :key="session">
-                {{ session }}
                 <th>{{session.sessionName}}</th>
                 <th>{{session.ownerName}}</th>
                 <th>{{( 3 - session.slots)}}/3</th>
@@ -57,7 +52,6 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
             </tbody>
           </v-table>
       </v-card-text>
-
       <v-card-text v-else>
         <p >Žádný server není dostupný. Prosím, zkuste se přpojit později</p>
       </v-card-text>
