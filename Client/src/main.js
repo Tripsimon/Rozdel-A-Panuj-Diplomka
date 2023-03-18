@@ -84,8 +84,8 @@ app.provide('gvRaces',{
     name:'Ork',
     description:'Ostatními nazívaní barbaři, Hruurové jsou tradicionalistický lid bohatý ve svých tradicích, pověrách a kodu cti',
     bonusStats:{
-      znalost: +2,
-      sila: +1,
+      houzevnatost: +1,
+      sila: +2,
     },
     bonusAbilities:[
       {

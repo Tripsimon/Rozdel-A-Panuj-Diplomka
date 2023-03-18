@@ -286,7 +286,7 @@ import axios from 'axios'
       <v-row>
         <!-- Mod pruzkumu -->
         <v-col v-if="battleModeSwitch == false" cols="9">
-          <v-img :src="'http://localhost:3000/backgrounds/' + vybranePozadi " max-width="100%">
+          <v-img :src="axios.defaults.baseURL+'/backgrounds/' + vybranePozadi " max-width="100%">
           </v-img>
         </v-col>
 

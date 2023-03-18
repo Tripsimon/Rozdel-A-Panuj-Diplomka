@@ -48,7 +48,7 @@ import FormData from 'form-data'
             <tbody>
               <tr class="mt-2" v-for="image in this.loadedImages" :key="image">
                 <th>{{ image }}</th>
-                <th><v-img :src='"http://localhost:3000/backgrounds/" + image' max-height="500"></v-img></th>
+                <th><v-img :src='axios.defaults.baseURL+ "/backgrounds/" + image' max-height="500"></v-img></th>
                 <th><v-btn icon="mdi-close-box-outline" @click="removeImage(image)" color="error"></v-btn></th>
                 <!-- TODO: Asi ikonka -->
               </tr>
