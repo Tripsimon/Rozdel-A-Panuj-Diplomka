@@ -1097,8 +1097,12 @@ export default {
     //Duležité proměné
     let urlParams = new URLSearchParams(window.location.search)
     this.sid = urlParams.get('sid')
-    this.webSocket = io('http://localhost:3001')
-
+    if(axios.defaults.baseURL == 'http://localhost:3000'){
+      this.webSocket = io('http://localhost:3001')
+    }else{
+      this.webSocket = io('http://46.36.40.226:3001')
+  }
+  
     //WEBSOCKET
     //Připojení websocketu
     this.webSocket.on('connect', () => {
