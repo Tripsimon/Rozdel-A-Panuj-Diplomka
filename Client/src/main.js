@@ -16,7 +16,7 @@ loadFonts()
 
 //Konstanty
 
-axios.defaults.baseURL = 'http://46.36.40.226:50102'
+axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
 
 app.provide('configFile',{
   backendAdress:'https://api.rozdel-a-panuj.cz'
