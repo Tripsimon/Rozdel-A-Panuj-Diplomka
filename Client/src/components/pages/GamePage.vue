@@ -1101,6 +1101,7 @@ export default {
       this.webSocket = io('http://localhost:3001')
     }else{
       this.webSocket = io('http://46.36.40.226:3001')
+      //https://api.rozdel-a-panuj.cz/
   }
   
     //WEBSOCKET
