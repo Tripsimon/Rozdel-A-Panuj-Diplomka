@@ -21,7 +21,7 @@ router.post("/characterCreation", (req,res) =>{
         krestniJmeno: data.name,
         prijmeni: data.secondName,
         prezdivka: data.nickname,
-        zivoty: (atributesInput.houzevnatost *5) ,
+        zivoty: (atributesInput.houzevnatost *10) ,
         rasa: data.race,
         trida: data.class,
         mainGear: data.mainGear,

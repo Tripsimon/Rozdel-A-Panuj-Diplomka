@@ -4,8 +4,7 @@ import axios, { Axios } from 'axios';
 import { inject } from 'vue'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
-const gvClasses = inject('gvClasses')
-const gvRaces = inject('gvRaces')
+
 
 
 </script>
@@ -22,7 +21,7 @@ const gvRaces = inject('gvRaces')
             <v-window-item :value="1">
               <v-form ref="form" v-model="validOne" quick-validation>
                 <h2 class="d-flex justify-center">Pilíře Dobrodruha</h2>
-                <v-text-field color="secondary" :rules="this.rules.required" variant="outlined" label="Křestní jméno"
+                <v-text-field color="secondary" variant="outlined" :rules="this.rules.required"  label="Křestní jméno"
                   v-model="newAdventurer.name"></v-text-field>
                 <v-text-field color="secondary" :rules="this.rules.required" variant="outlined" label="Příjmení"
                   v-model="newAdventurer.secondName"></v-text-field>
@@ -76,7 +75,7 @@ const gvRaces = inject('gvRaces')
                 <!-- Karta pro popis vybrané rasy -->
 
 
-                <v-select v-if="newAdventurer.race != null" :items="this.rasaVybrana.dostupneTridy" v-model="tridaVybrana"
+                <v-select color="secondary" variant="outlined" v-if="newAdventurer.race != null" :items="this.rasaVybrana.dostupneTridy" v-model="tridaVybrana"
                   label="Povolání" @update:modelValue="onClassSelect()"></v-select>
 
                 <!-- Karta pro popis vybraného povolání-->
@@ -244,14 +243,14 @@ const gvRaces = inject('gvRaces')
 
               <h2 class="d-flex justify-center mt-3">Výbava</h2>
 
-              <v-select label="Hlavní výzbroj" v-model="newAdventurer.mainGear" :items="this.tridaVybava.hlavni"
+              <v-select color="secondary" variant="outlined" label="Hlavní výzbroj" v-model="newAdventurer.mainGear" :items="this.tridaVybava.hlavni"
                 item-title="jmeno" return-object>
               </v-select>
 
-              <v-select label="Sekundární výzbroj" :items="this.tridaVybava.sekundarni"
+              <v-select color="secondary" variant="outlined" label="Sekundární výzbroj" :items="this.tridaVybava.sekundarni"
                 v-model="newAdventurer.secondaryGear" item-title="jmeno" return-object></v-select>
 
-              <v-select label="Bonusová výbava" :items="this.tridaVybava.bonusova" v-model="newAdventurer.bonusGear"
+              <v-select color="secondary" variant="outlined" label="Bonusová výbava" :items="this.tridaVybava.bonusova" v-model="newAdventurer.bonusGear"
                 item-title="jmeno" return-object></v-select>
 
 
@@ -263,13 +262,13 @@ const gvRaces = inject('gvRaces')
             <v-window-item :value="3">
               <h2>Role dobrodruha</h2>
 
-              <v-select
+              <v-select color="secondary" variant="outlined"
                 :items="['Zákonné dobro', 'Neutrální dobro', 'Chaotické/zmatené dobro', 'Zákonně neutrální', 'Opravdu neutrální', 'Chaoticky neutrální', 'Zákonně zlý', 'Neutrálně zlý', 'Chaoticky zlý']"
                 v-model="newAdventurer.aligment" label="Přesvědčení"></v-select>
-              <v-text-field label="Věk" v-model="this.newAdventurer.age"></v-text-field>
-              <v-textarea label="Popis" v-model="this.newAdventurer.description"></v-textarea>
+              <v-text-field  color="secondary" variant="outlined" label="Věk" v-model="this.newAdventurer.age"></v-text-field>
+              <v-textarea color="secondary" variant="outlined" label="Popis" v-model="this.newAdventurer.description"></v-textarea>
 
-              <v-textarea label="Příběh" v-model="this.newAdventurer.story"></v-textarea>
+              <v-textarea color="secondary" variant="outlined" label="Příběh" v-model="this.newAdventurer.story"></v-textarea>
             </v-window-item>
             <!-- /Třetí krok-->
 
@@ -288,33 +287,33 @@ const gvRaces = inject('gvRaces')
                   <template v-slot:text>
                     <h4>Síla:</h4>
                     <p>{{ this.atributes.sila }} </p>
-                    <p v-if="gvRaces[newAdventurer.race]['bonusStats'].sila">Bonus:
-                      {{ gvRaces[newAdventurer.race]['bonusStats'].sila }}</p>
+                    <p v-if="rasaVybrana.bonusoveAtributy.sila">Bonus:
+                      {{ rasaVybrana.bonusoveAtributy.sila }}</p>
 
                     <h4>Houževnatost:</h4>
                     <p>{{ this.atributes.houzevnatost }} </p>
-                    <p v-if="gvRaces[newAdventurer.race]['bonusStats'].houzevnatost">Bonus:
-                      {{ gvRaces[newAdventurer.race]['bonusStats'].houzevnatost }}</p>
+                    <p v-if="rasaVybrana.bonusoveAtributy.houzevnatost">Bonus:
+                      {{ rasaVybrana.bonusoveAtributy.houzevnatost }}</p>
 
                     <h4>Obratnost:</h4>
                     <p>{{ this.atributes.obratnost }} </p>
-                    <p v-if="gvRaces[newAdventurer.race]['bonusStats'].obratnost">Bonus:
-                      {{ gvRaces[newAdventurer.race]['bonusStats'].obratnost }}</p>
+                    <p v-if="rasaVybrana.bonusoveAtributy.obratnost">Bonus:
+                      {{ rasaVybrana.bonusoveAtributy.obratnost }}</p>
 
                     <h4>Charisma:</h4>
                     <p>{{ this.atributes.charisma }} </p>
-                    <p v-if="gvRaces[newAdventurer.race]['bonusStats'].charisma">Bonus:
-                      {{ gvRaces[newAdventurer.race]['bonusStats'].charisma }}</p>
+                    <p v-if="rasaVybrana.bonusoveAtributy.charisma">Bonus:
+                      {{ rasaVybrana.bonusoveAtributy.charisma }}</p>
 
                     <h4>Inteligence:</h4>
                     <p>{{ this.atributes.inteligence }} </p>
-                    <p v-if="gvRaces[newAdventurer.race]['bonusStats'].inteligence">Bonus:
-                      {{ gvRaces[newAdventurer.race]['bonusStats'].inteligence }}</p>
+                    <p v-if="rasaVybrana.bonusoveAtributy.inteligence">Bonus:
+                      {{ rasaVybrana.bonusoveAtributy.inteligence }}</p>
 
                     <h4>Znalost:</h4>
                     <p>{{ this.atributes.znalost }} </p>
-                    <p v-if="gvRaces[newAdventurer.race]['bonusStats'].znalost">Bonus:
-                      {{ gvRaces[newAdventurer.race]['bonusStats'].znalost }}</p>
+                    <p v-if="rasaVybrana.bonusoveAtributy.znalost">Bonus:
+                      {{ rasaVybrana.bonusoveAtributy.znalost }}</p>
 
                   </template>
                 </v-card>
