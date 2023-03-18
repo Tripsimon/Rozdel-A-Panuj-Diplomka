@@ -123,7 +123,7 @@ export default {
             console.log("Asi heslo")
           } else {
             console.log(queryResponse.data)
-            this.$router.push({ path: '/RaPSession', query: { sid: this.chosenSession._id } })
+            this.$router.push({ path: '/RaPSession', query: { sid: id } })
           }
         })
 
