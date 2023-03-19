@@ -45,12 +45,22 @@ router.post("/characterCreation", (req,res) =>{
         zkusenosti:0
 
     })
-    newAdventurer.save().then(res.send("Character Cretion"))
+    newAdventurer.save().then(res.send("Character Cretion"))    .catch(err =>{
+        console.log(err);
+        res.send('err')
+    })
     
 })
 
-router.get("/getCharacters", async (req,res) =>{
-    res.send(await AdventurerModel.find({owner: req.query.owner }))
+router.get("/getCharacters",  (req,res) =>{
+    AdventurerModel.find({majitel: req.query.owner })
+    .then(queryResponse => {
+        res.send(queryResponse)
+    })
+    .catch(err =>{
+        console.log(err);
+        res.send('err')
+    })
 })
 
 
@@ -58,6 +68,10 @@ router.get("/getCharacters", async (req,res) =>{
 router.get('/getMultipleAdventurers', (req,res) =>{
     AdventurerModel.find({_id: {$in: req.query.adventurers}})
         .then(responseQuery => res.send(responseQuery))
+        .catch(err =>{
+            console.log(err);
+            res.send('err')
+        })
     
 })
 
@@ -76,6 +90,10 @@ router.get('/sessionAdventurers', (req,res) =>{
     
     AdventurerModel.find({_id: {$in: queryData}})
         .then(queryData => res.send(queryData))
+        .catch(err =>{
+            console.log(err);
+            res.send('err')
+        })
     
 })
 
@@ -87,6 +105,10 @@ router.post('/putIntoInventory',async (req,res) =>{
     adventurer.inventar.push(req.body.item)
     adventurer.save()
         .then(res.send(true))
+        .catch(err =>{
+            console.log(err);
+            res.send('err')
+        })
         
 })
 
@@ -98,12 +120,20 @@ router.post('/removeFromInventory', async (req,res) =>{
     adventurer.inventar.pull(req.body.item)
     adventurer.save()
         .then(res.send(true))
+        .catch(err =>{
+            console.log(err);
+            res.send('err')
+        })
 })
 
 router.post('/changeMoney', (req,res) =>{
 
    AdventurerModel.updateOne({_id: req.body.adventurer}, {penize: req.body.money})
     .then(res.send(true))
+    .catch(err =>{
+        console.log(err);
+        res.send('err')
+    })
 
 })
 
@@ -120,6 +150,10 @@ router.post('/changeLevelAndExperience', async (req,res) =>{
 
     adventurer.save()
         .then(res.send(true))
+        .catch(err =>{
+            console.log(err);
+            res.send('err')
+        })
 })
 
 module.exports = router
