@@ -4,8 +4,15 @@ const bp = require('body-parser')
 const mongoose = require('mongoose');
 const path = require('path')
 const axios = require('axios');
+
+const {createServer} = require('https')
 const { Server } = require('socket.io')
-const io = new Server(3001,{    
+
+const app = express()
+
+const httpsServer = createServer(app)
+
+const io = new Server(httpsServer,{    
     cors:{origin: '*'}
 })
 /*
@@ -17,12 +24,12 @@ const io = require('socket.io')(3001,{
 */
 
 
-const app = express()
 
-app.use(cors());
+
+httpsServer.use(cors());
 //Body Parser
-app.use(bp.json())
-app.use(bp.urlencoded({ extended: true }))
+httpsServer.use(bp.json())
+httpsServer.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
 mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/lesak?authMechanism=DEFAULT&directConnection=true&authSource=lesak&tls=false&readPreference=primary')
@@ -34,39 +41,39 @@ const PORT = process.env.PORT || 3000;
 
 
 
-app.get("/",(req,res) => {
+httpsServer.get("/",(req,res) => {
     res.send("Server je aktivní");
 })
 
 const charakterRouter = require('./routes/adventurerRouty.js')
-app.use('/character',charakterRouter);
+httpsServer.use('/character',charakterRouter);
 
 const uzivatelRouter = require('./routes/uzivatelskeRouty.js')
-app.use('/uzivatel',uzivatelRouter)
+httpsServer.use('/uzivatel',uzivatelRouter)
 
 const sessionsRouty = require('./routes/sessionsRouty.js');
-app.use('/sessions',sessionsRouty)
+httpsServer.use('/sessions',sessionsRouty)
 
 const pozadiRouter = require('./routes/pozadiRoute.js')
-app.use('/pozadi',pozadiRouter);
+httpsServer.use('/pozadi',pozadiRouter);
 
 const vybavaRouter = require('./routes/vybavaRouty.js')
-app.use('/vybava',vybavaRouter);
+httpsServer.use('/vybava',vybavaRouter);
 
 const monsterRouter = require('./routes/monsterRouty.js')
-app.use('/monster',monsterRouter);
+httpsServer.use('/monster',monsterRouter);
 
 const schopnostiRouter = require('./routes/schopnostiRouty.js')
-app.use('/schopnosti',schopnostiRouter);
+httpsServer.use('/schopnosti',schopnostiRouter);
 
 const rasyRouter = require('./routes/raceRouty.js')
-app.use('/rasy',rasyRouter);
+httpsServer.use('/rasy',rasyRouter);
 
 const tridyRouter = require('./routes/tridaRouty.js')
-app.use('/tridy',tridyRouter);
+httpsServer.use('/tridy',tridyRouter);
 
 
-app.use(express.static(path.join(__dirname,'/files')))
+httpsServer.use(express.static(path.join(__dirname,'/files')))
 //img
 
 let users = [];
@@ -116,4 +123,4 @@ io.on('connection',socket =>{
     })
 })
 
-app.listen(PORT)
+httpsServer.listen(PORT)
