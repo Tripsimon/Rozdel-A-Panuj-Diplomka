@@ -15,7 +15,6 @@ const { Server } = require('socket.io')
  */
 const PORT = process.env.PORT || 3000;
 const app = express()
-https.createServer(app).listen(PORT, () =>{console.log("Server poslouchá")})
 
 /*
 const httpsServer = createServer(app)
@@ -129,5 +128,7 @@ io.on('connection',socket =>{
 
     })
 })
+
+https.createServer(app).listen(PORT, () =>{console.log("Server poslouchá")})
 
 //app.listen(PORT)
