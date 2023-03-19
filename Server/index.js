@@ -15,9 +15,12 @@ const axios = require('axios');
 const PORT = process.env.PORT || 3000;
 const app = express()
 const server = require('http').createServer(app)
-const io = require('socket.io')(server,{cors: { origin: "*"}})
-//https.createServer(app).listen(PORT, () =>{console.log("Server poslouchá")})
 
+const io = require('socket.io')(server,{
+    cors:{
+        origin: '*',
+    }
+})
 
 /*
 const httpsServer = createServer(app)
@@ -133,4 +136,4 @@ io.on('connection',socket =>{
 
 
 
-app.listen(PORT)
+server.listen(PORT)

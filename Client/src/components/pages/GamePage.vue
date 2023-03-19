@@ -1098,7 +1098,7 @@ export default {
     let urlParams = new URLSearchParams(window.location.search)
     this.sid = urlParams.get('sid')
     if(axios.defaults.baseURL == 'http://localhost:3000'){
-      this.webSocket = io('http://localhost:3001')
+      this.webSocket = io('http://localhost:3000')
     }else{
       this.webSocket = io('https://api.rozdel-a-panuj.cz')
       //
