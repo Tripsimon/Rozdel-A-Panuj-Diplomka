@@ -14,7 +14,7 @@ const { Server } = require('socket.io')
  * Tvorba express serveru
  */
 const app = express()
-https.createServer(app)
+https.createServer(app).listen(PORT, () =>{console.log("Server poslouchá")})
 
 /*
 const httpsServer = createServer(app)
@@ -129,4 +129,4 @@ io.on('connection',socket =>{
     })
 })
 
-app.listen(PORT)
+//app.listen(PORT)
