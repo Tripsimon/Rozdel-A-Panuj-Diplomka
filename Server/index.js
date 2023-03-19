@@ -10,11 +10,7 @@ const { Server } = require('socket.io')
 
 const app = express()
 
-const httpsServer = createServer(app)
 
-const io = new Server(httpsServer,{    
-    cors:{origin: '*'}
-})
 /*
 const io = require('socket.io')(3001,{
     cors:{
@@ -78,6 +74,11 @@ app.use(express.static(path.join(__dirname,'/files')))
 let users = [];
 axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
 
+const httpsServer = createServer(app)
+const io = new Server(httpsServer,{    
+    cors:{origin: '*'}
+})
+
 //Websockets
 io.on('connection',socket =>{
 
@@ -86,7 +87,6 @@ io.on('connection',socket =>{
         users[socket.id] = {'sessionID':room , 'userID':userID};
         socket.to(room).emit('resyncPlayers')
         console.log(users)
-
     })
 
     socket.on('resyncPlayers', (room) =>{
@@ -122,4 +122,4 @@ io.on('connection',socket =>{
     })
 })
 
-app.listen(PORT)
+httpsServer.listen(PORT)
