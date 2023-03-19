@@ -1,23 +1,35 @@
+/**
+ * Importy
+ */
 const express = require('express')
 const cors = require('cors');
 const bp = require('body-parser')
 const mongoose = require('mongoose');
 const path = require('path')
 const axios = require('axios');
-
-const {createServer} = require('https')
+const https = require('https')
 const { Server } = require('socket.io')
 
+/**
+ * Tvorba express serveru
+ */
 const app = express()
-
+https.createServer(app)
 
 /*
-const io = require('socket.io')(3001,{
+const httpsServer = createServer(app)
+const io = new Server(httpsServer,{    
+    cors:{origin: '*'}
+})
+*/
+
+
+const io = require('socket.io')({
     cors:{
         origin: '*'
     }
 });
-*/
+
 
 
 
@@ -74,19 +86,14 @@ app.use(express.static(path.join(__dirname,'/files')))
 let users = [];
 axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
 
-const httpsServer = createServer(app)
-const io = new Server(httpsServer,{    
-    cors:{origin: '*'}
-})
+
 
 //Websockets
 io.on('connection',socket =>{
-
     socket.on('joinRoom', (room,userID) =>{
         socket.join(room)
         users[socket.id] = {'sessionID':room , 'userID':userID};
         socket.to(room).emit('resyncPlayers')
-        console.log(users)
     })
 
     socket.on('resyncPlayers', (room) =>{
@@ -122,4 +129,4 @@ io.on('connection',socket =>{
     })
 })
 
-httpsServer.listen(PORT)
+app.listen(PORT)
