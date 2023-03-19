@@ -156,4 +156,11 @@ router.post('/changeLevelAndExperience', async (req,res) =>{
         })
 })
 
+router.delete('/deleteAdventurer',(req,res) =>{
+    AdventurerModel.deleteOne({_id: req.body.adventurer})
+        .then(res.send('actionComplete'))
+        .catch(err =>{console.log(err); res.send('err')})
+    
+})
+
 module.exports = router

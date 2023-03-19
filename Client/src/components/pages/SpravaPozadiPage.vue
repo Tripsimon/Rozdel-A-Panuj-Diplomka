@@ -108,7 +108,7 @@ export default {
     },
 
     removeImage(img) {
-      axios.delete(axios.defaults.baseURL+'/pozadi/smazaniSouboru/' + img,)
+      axios.delete(axios.defaults.baseURL+'/pozadi/smazaniSouboru/' + img)
         .then(this.loadImages())
     },
 

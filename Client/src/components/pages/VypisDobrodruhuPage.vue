@@ -4,14 +4,15 @@ import axios from 'axios'
 </script>
 
 <template>
-    <v-container>
+    <v-container class="mt-3">
+        <confirm-dialog :toggle="dialogToggle" @close-dialog=" closeDialog"></confirm-dialog>
         <div id="content">
             <v-card v-if="this.avaliableAdventurers != null" v-for="adventurer in this.avaliableAdventurers" :key="adventurer._id" color="primary"
                 class="mt-3">
                 <v-card-title>{{ adventurer.krestniJmeno + ' "' + adventurer.prezdivka + '" ' + adventurer.prijmeni
                 }}</v-card-title>
-                <v-card-subtitle>{{ adventurer.popis }}</v-card-subtitle>
-                <v-card-subtitle>{{ adventurer.pribeh }}</v-card-subtitle>
+                <v-card-subtitle>Popis: {{ adventurer.popis }}</v-card-subtitle>
+                <v-card-subtitle>Příběh: {{ adventurer.pribeh }}</v-card-subtitle>
                 <v-card-text>
 
                     <h3>Atributy</h3>
@@ -64,7 +65,7 @@ import axios from 'axios'
                     <v-divider class="mt-2 mb-2"></v-divider>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn color="secondary">Vymazat dobrodruha</v-btn>
+                    <v-btn color="secondary" @click="smazDobrodruha(adventurer._id)">Vymazat dobrodruha</v-btn>
                 </v-card-actions>
             </v-card>
             <v-card v-if="this.avaliableAdventurers.length == 0" title="Tento učet nemá žádného dobrodruha">
@@ -76,10 +77,19 @@ import axios from 'axios'
     </v-container>
 </template>
 <script>
+import ConfirmDialog from '../parts/ConfirmDialog.vue'
 export default {
+
+    
+  components: () =>({
+        ConfirmDialog
+    }),
+
     data: () => ({
         uzivatelStore: useUzivatelStore(),
-        avaliableAdventurers: []
+        avaliableAdventurers: [],
+        dialogToggle: false,
+        adventurerToDelete: null,
     }),
 
     mounted() {
@@ -93,6 +103,19 @@ export default {
                 .then((response) => {
                     this.avaliableAdventurers = response.data
                 })
+        },
+
+        smazDobrodruha(id){
+            this.dialogToggle = true
+            this.adventurerToDelete = id
+        },
+
+        closeDialog(response){
+            this.dialogToggle = false
+            console.log(this.adventurerToDelete)
+            if(response && this.adventurerToDelete != null){
+                axios.delete(axios.defaults.baseURL+'/character/deleteAdventurer',{data:{adventurer: this.adventurerToDelete}})
+            }
         }
 
     }

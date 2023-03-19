@@ -42,16 +42,9 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 <script>
 
 import Alert from '../parts/AlertHandler.vue'
-import { inject } from 'vue'
-import { RouterLink } from "vue-router";
-
-
 export default {
 
-
-
   setup(){
-  const configFileInject = inject('configFile')
   console.log(configFileInject)
 
   },
