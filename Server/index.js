@@ -13,6 +13,7 @@ const { Server } = require('socket.io')
 /**
  * Tvorba express serveru
  */
+const PORT = process.env.PORT || 3000;
 const app = express()
 https.createServer(app).listen(PORT, () =>{console.log("Server poslouchá")})
 
@@ -44,7 +45,7 @@ mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/l
     .catch(err =>console.log(err));
 
 
-const PORT = process.env.PORT || 3000;
+
 
 
 
