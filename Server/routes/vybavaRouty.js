@@ -13,8 +13,6 @@ router.get("/", (req, res) => {
  * Vytvoří nový předmět který je zbran
  */
 router.post('/createWeapon',(req,res) =>{
-
-    console.log(req.body)
     let newItem = new EquipmentModel({
         jmeno: req.body.name,
         typ: req.body.type,
@@ -26,8 +24,6 @@ router.post('/createWeapon',(req,res) =>{
         vaha: req.body.weight,
         poznamka: null,
     })
-
-    console.log("Předmět",newItem)
     newItem.save()
         .then( res.send("Uspesne zapsano"))
 })
@@ -90,11 +86,9 @@ router.get('/allType', (req,res) =>{
  * 
  */
 router.get('/multipleID', (req,res) =>{
-    console.log(req.query)
     EquipmentModel.find({_id: {$in: req.query.items} })
         .then(queryResult => {
             res.send(queryResult);
-            console.log(queryResult)
         })
 })
 

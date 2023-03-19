@@ -108,7 +108,6 @@ export default {
      */
     joinSession(id) {
 
-      console.log("DSADS")
       let adventurer = this.adventurerChoices.indexOf(this.chosenAdventurer, 0)
 
       let body = {
@@ -120,9 +119,7 @@ export default {
       axios.post(axios.defaults.baseURL+'/sessions/joinSession', body)
         .then(queryResponse => {
           if (queryResponse.data == 'Wrong Password') {
-            console.log("Asi heslo")
           } else {
-            console.log(queryResponse.data)
             this.$router.push({ path: '/RaPSession', query: { sid: id } })
           }
         })

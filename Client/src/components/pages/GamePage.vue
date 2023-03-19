@@ -1100,7 +1100,7 @@ export default {
     if(axios.defaults.baseURL == 'http://localhost:3000'){
       this.webSocket = io('http://localhost:3001')
     }else{
-      this.webSocket = io('https://api.rozdel-a-panuj.cz')
+      this.webSocket = io('https://api.rozdel-a-panuj.cz:3001')
       //
   }
   

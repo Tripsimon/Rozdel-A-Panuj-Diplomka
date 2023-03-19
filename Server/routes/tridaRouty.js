@@ -11,7 +11,6 @@ router.get("/", (req, res) => {
 })
 
 router.get('/getByName', (req,res) =>{
-    console.log(req.query.name)
     ClassModel.findOne({jmeno: req.query.name})
         .then(queryResponse => res.send(queryResponse))
 })
