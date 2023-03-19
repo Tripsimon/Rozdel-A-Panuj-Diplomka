@@ -4,11 +4,17 @@ const bp = require('body-parser')
 const mongoose = require('mongoose');
 const path = require('path')
 const axios = require('axios');
+const { Server } = require('socket.io')
+const io = new Server(3001,{    
+    cors:{origin: '*'}
+})
+/*
 const io = require('socket.io')(3001,{
     cors:{
         origin: '*'
     }
 });
+*/
 
 
 const app = express()
@@ -25,9 +31,6 @@ mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/l
 
 
 const PORT = process.env.PORT || 3000;
-
-app.locals.backendAdress = 'http://46.36.40.226:50102/'
-
 
 
 
