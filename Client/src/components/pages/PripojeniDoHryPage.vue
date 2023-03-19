@@ -55,10 +55,6 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
       <v-card-text v-else>
         <p >Žádný server není dostupný. Prosím, zkuste se přpojit později</p>
       </v-card-text>
-
-        <v-card-actions v-if="sessionPassword != null">
-          <v-btn @click="joinSession">Připojit</v-btn>
-        </v-card-actions>
     </v-card>
 
   </v-container>
@@ -110,10 +106,12 @@ export default {
 
       let adventurer = this.adventurerChoices.indexOf(this.chosenAdventurer, 0)
 
+      console.log(this.chosenAdventurer)
       let body = {
         "sessionID": id,
         "password": this.sessionPassword,
-        "adventurer": this.avaliableAdventurers[adventurer]._id,
+
+        //"adventurer": this.avaliableAdventurers[adventurer]._id,
         "player": this.uzivatelStore._id
       }
       axios.post(axios.defaults.baseURL+'/sessions/joinSession', body)

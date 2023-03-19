@@ -4,11 +4,17 @@ const bp = require('body-parser')
 const mongoose = require('mongoose');
 const path = require('path')
 const axios = require('axios');
+const { Server } = require('socket.io')
+const io = new Server(3001,{    
+    cors:{origin: '*'}
+})
+/*
 const io = require('socket.io')(3001,{
     cors:{
         origin: '*'
     }
 });
+*/
 
 
 const app = express()
