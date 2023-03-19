@@ -7,14 +7,15 @@ const bp = require('body-parser')
 const mongoose = require('mongoose');
 const path = require('path')
 const axios = require('axios');
-const https = require('https')
-const { Server } = require('socket.io')
+
 
 /**
  * Tvorba express serveru
  */
 const PORT = process.env.PORT || 3000;
 const app = express()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server,{cors: { origin: "*"}})
 //https.createServer(app).listen(PORT, () =>{console.log("Server poslouchá")})
 
 
@@ -25,13 +26,13 @@ const io = new Server(httpsServer,{
 })
 */
 
-
+/*
 const io = require('socket.io')({
     cors:{
         origin: '*'
     }
 });
-
+*/
 
 
 
