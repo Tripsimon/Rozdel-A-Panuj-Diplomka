@@ -26,10 +26,10 @@ const io = require('socket.io')(3001,{
 
 
 
-httpsServer.use(cors());
+app.use(cors());
 //Body Parser
-httpsServer.use(bp.json())
-httpsServer.use(bp.urlencoded({ extended: true }))
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
 mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/lesak?authMechanism=DEFAULT&directConnection=true&authSource=lesak&tls=false&readPreference=primary')
@@ -41,39 +41,39 @@ const PORT = process.env.PORT || 3000;
 
 
 
-httpsServer.get("/",(req,res) => {
+app.get("/",(req,res) => {
     res.send("Server je aktivní");
 })
 
 const charakterRouter = require('./routes/adventurerRouty.js')
-httpsServer.use('/character',charakterRouter);
+app.use('/character',charakterRouter);
 
 const uzivatelRouter = require('./routes/uzivatelskeRouty.js')
-httpsServer.use('/uzivatel',uzivatelRouter)
+app.use('/uzivatel',uzivatelRouter)
 
 const sessionsRouty = require('./routes/sessionsRouty.js');
-httpsServer.use('/sessions',sessionsRouty)
+app.use('/sessions',sessionsRouty)
 
 const pozadiRouter = require('./routes/pozadiRoute.js')
-httpsServer.use('/pozadi',pozadiRouter);
+app.use('/pozadi',pozadiRouter);
 
 const vybavaRouter = require('./routes/vybavaRouty.js')
-httpsServer.use('/vybava',vybavaRouter);
+app.use('/vybava',vybavaRouter);
 
 const monsterRouter = require('./routes/monsterRouty.js')
-httpsServer.use('/monster',monsterRouter);
+app.use('/monster',monsterRouter);
 
 const schopnostiRouter = require('./routes/schopnostiRouty.js')
-httpsServer.use('/schopnosti',schopnostiRouter);
+app.use('/schopnosti',schopnostiRouter);
 
 const rasyRouter = require('./routes/raceRouty.js')
-httpsServer.use('/rasy',rasyRouter);
+app.use('/rasy',rasyRouter);
 
 const tridyRouter = require('./routes/tridaRouty.js')
-httpsServer.use('/tridy',tridyRouter);
+app.use('/tridy',tridyRouter);
 
 
-httpsServer.use(express.static(path.join(__dirname,'/files')))
+app.use(express.static(path.join(__dirname,'/files')))
 //img
 
 let users = [];
