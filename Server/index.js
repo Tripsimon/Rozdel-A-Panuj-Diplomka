@@ -27,7 +27,6 @@ const io = require('socket.io')(3001,{
 
 
 app.use(cors());
-//Body Parser
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
@@ -123,4 +122,4 @@ io.on('connection',socket =>{
     })
 })
 
-httpsServer.listen(PORT)
+app.listen(PORT)
