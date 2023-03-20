@@ -67,6 +67,7 @@ export default {
   data: () => ({
     adventurerChoices: [],
     avaliableAdventurers: [],
+    playerAdventurers: [],
     chosenAdventurer: null,
     openSessions: [],
     chosenSession: null,
@@ -111,7 +112,7 @@ export default {
         "sessionID": id,
         "password": this.sessionPassword,
 
-        //"adventurer": this.avaliableAdventurers[adventurer]._id,
+        "adventurer": this.avaliableAdventurers[adventurer]._id,
         "player": this.uzivatelStore._id
       }
       axios.post(axios.defaults.baseURL+'/sessions/joinSession', body)

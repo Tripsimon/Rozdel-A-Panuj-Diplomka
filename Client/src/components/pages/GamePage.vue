@@ -362,20 +362,31 @@ import axios from 'axios'
           </v-card>
 
           <!-- Hod kostkou-->
-          <v-card color="primary" title="Hod kostkou" class="mt-3">
+          <v-card color="primary" class="mt-3">
+            <v-card-title>
+              Hod kostkou
+            </v-card-title>
+            <!-- Sekvencování-->
+            <v-card-text>
+              <v-slide-group show-arrows>
+                <v-slide-group-item v-for="nepritel in this.dataBoje.aktivniNepratele" :key="nepritel.jmeno" v-slot="{ isSelected, toggle }">
+                  <v-btn class="ma-2" rounded :color="isSelected ? 'primary' : undefined" @click="toggle">
+                    {{ nepritel.jmeno }}
+                  </v-btn>
+                </v-slide-group-item>
+              </v-slide-group>
+            </v-card-text>
+            <!-- Bitvní pole-->
             <v-container>
-              <v-select label="Porovnávaný atribut"
-                :items="['Volný hod', 'Atributy', 'Zásah', 'Průraz', 'Steč', 'Uhyb', 'Blokace', 'Výdrž']"
-                variant="underlined" v-model="dataBoje.bojPorovnanyAtribut"
-                @update:modelValue="this.socketsResyngBattle()"></v-select>
-
+              {{ this.adventurer1 }}
               <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Volný hod'">
                 <v-col>
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
+
                     <v-card-text>
                       <v-expand-x-transition>
-                        <v-img v-if="this.dataBoje.hozennaKostka != 0" 
+                        <v-img v-if="this.dataBoje.hozennaKostka != 0"
                           :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
                           justify="center" max-height="250"></v-img>
                       </v-expand-x-transition>
@@ -424,9 +435,9 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0" 
-                          :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
-                          justify="center" max-height="250"></v-img>
+                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                        justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -489,9 +500,9 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0" 
-                          :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
-                          justify="center" max-height="250"></v-img>
+                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                        justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -552,9 +563,9 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0" 
-                          :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
-                          justify="center" max-height="250"></v-img>
+                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                        justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -615,9 +626,9 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0" 
-                          :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
-                          justify="center" max-height="250"></v-img>
+                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                        justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -674,9 +685,9 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0" 
-                          :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
-                          justify="center" max-height="250"></v-img>
+                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                        justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -738,9 +749,9 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0" 
-                          :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
-                          justify="center" max-height="250"></v-img>
+                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                        justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -796,9 +807,9 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0" 
-                          :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
-                          justify="center" max-height="250"></v-img>
+                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                        justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="blue-darken-1" variant="text" @click="throwDice">
@@ -855,6 +866,7 @@ import axios from 'axios'
           <v-card v-if="this.dataBoje.bojujiciDobrodruh == null" color="primary" title="Dobrodruzi" class="mt-3">
             <v-card-text>
               <div class="d-flex justify-space-around align-center flex-column flex-sm-row fill-height">
+                {{ p }}
                 <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary"
                   @click="fightChoseAdventurer(1)">
                   {{ player1.adventurer.krestniJmeno }}
@@ -895,18 +907,31 @@ import axios from 'axios'
                 v-model="vybranePozadi"></v-select>
             </v-card-text>
           </v-card>
+
           <!-- Nastavení v boji -->
           <v-card v-if="battleModeSwitch == true" color="primary" title="Nepřátelé" class="mt-3">
             <v-card-text>
               <row>
                 <col>
-                <v-select label="Výběr" :items="moznostiNepratel" variant="underlined"
+                <v-select color="secondary" variant="outlined" label="Výběr" :items="moznostiNepratel"
                   v-model="vybranyNepritel"></v-select>
               </row>
             </v-card-text>
             <v-card-actions>
-              <v-btn @click="addEnemy">Přidat</v-btn>
+              <v-btn @click="addEnemy" color="secondary" variant="outlined">Přidat</v-btn>
             </v-card-actions>
+          </v-card>
+
+          <!-- Typ hodu-->
+          <v-card v-if="battleModeSwitch == true" color="primary" class="mt-3">
+            <v-card-title>
+              <h3 align="center">Mód hodu</h3>
+            </v-card-title>
+            <v-card-text>
+              <v-select label="Porovnávaný atribut" color="secondary" variant="outlined"
+                :items="['Volný hod', 'Atributy', 'Zásah', 'Průraz', 'Steč', 'Uhyb', 'Blokace', 'Výdrž']"
+                v-model="dataBoje.bojPorovnanyAtribut" @update:modelValue="this.socketsResyngBattle()"></v-select>
+            </v-card-text>
           </v-card>
 
           <!-- /Nastavení v boji -->
@@ -1097,13 +1122,13 @@ export default {
     //Duležité proměné
     let urlParams = new URLSearchParams(window.location.search)
     this.sid = urlParams.get('sid')
-    if(axios.defaults.baseURL == 'http://localhost:3000'){
+    if (axios.defaults.baseURL == 'http://localhost:3000') {
       this.webSocket = io('http://localhost:3000')
-    }else{
+    } else {
       this.webSocket = io('https://api.rozdel-a-panuj.cz')
       //
-  }
-  
+    }
+
     //WEBSOCKET
     //Připojení websocketu
     this.webSocket.on('connect', () => {
