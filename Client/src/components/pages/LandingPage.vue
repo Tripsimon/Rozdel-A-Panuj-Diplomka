@@ -20,8 +20,7 @@
         <v-card-title style="background-color: #001d3d;">
           <p style="color: #cca000;">Dobrodružství zcela zdarma </p>
         </v-card-title>
-
-        <v-card-text>
+        <v-card-text class="mt-3">
           <p style="blue">Pojdte siu s přáteli užít nevídane dobrodružství plné zvratů a hrdinství z pohodlí vašeho domova. Stačí mít jen skupinku statečných přátel a můžete začít třeba hned !</p>
         </v-card-text>
         <v-card-actions>
@@ -32,28 +31,22 @@
 
       <v-card class="mb-3" variant="tonal">
         <v-card-title style="background-color: #001d3d;">
-          Zjednodušená pravidla
+          Zjednodušená pravidla !
         </v-card-title>
-        <v-card-subtitle>
-          DSADSA
-        </v-card-subtitle>
-        <v-card-text>
-          dsad
+        <v-card-text class="mb-3">
+          Aplikace Rozděl a Panuj tradičně složitá a nabobtnaná pravidla stolních her na hrdiny přetváří do zábavného a interaktivního systému pro uplné nováčky nebo veterány žánru
         </v-card-text>
         <v-card-actions>
-          <v-btn color="secondary">Click me</v-btn>
+          <v-btn color="secondary">Pravidla</v-btn>
         </v-card-actions>
       </v-card>
 
       <v-card class="mb-3" variant="tonal">
         <v-card-title style="background-color: #001d3d;">
-          PLně v češtině
+          Plně v češtině !
         </v-card-title>
-        <v-card-subtitle>
-          DSADSA
-        </v-card-subtitle>
-        <v-card-text>
-          dsad
+        <v-card-text class="mb-3">
+          Už se nemusíte snažit krkolomně překládat pravidla zahraničních stolních her pro své kamarády. Rozděl a Panuj je plně v čestině.
         </v-card-text>
         <v-card-actions>
           <v-btn color="secondary">Click me</v-btn>
@@ -63,28 +56,10 @@
 
       <v-card class="mb-3" variant="tonal">
         <v-card-title style="background-color: #001d3d;">
-          dsadsa
+          Své dobrodružství, svá uskalý
         </v-card-title>
-        <v-card-subtitle>
-          DSADSA
-        </v-card-subtitle>
         <v-card-text>
-          dsad
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="secondary">Click me</v-btn>
-        </v-card-actions>
-      </v-card>
-
-      <v-card variant="tonal">
-        <v-card-title style="background-color: #001d3d;">
-          dsadsa
-        </v-card-title>
-        <v-card-subtitle>
-          DSADSA
-        </v-card-subtitle>
-        <v-card-text>
-          dsad
+          Rozděl a Panuj podporuje naprostou volnost v nastavení každého dobrodružství. Přidejte si svá monstra, dobrodruhy, předměty nebo i lokace !
         </v-card-text>
         <v-card-actions>
           <v-btn color="secondary">Click me</v-btn>

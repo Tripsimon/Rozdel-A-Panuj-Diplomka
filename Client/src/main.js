@@ -17,7 +17,7 @@ loadFonts()
 // Konstanty
 
 
-const devMode = false
+const devMode = true
 if(devMode){
   axios.defaults.baseURL ='http://localhost:3000'
 }else{
