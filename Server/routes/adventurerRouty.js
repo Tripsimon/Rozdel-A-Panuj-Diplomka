@@ -45,7 +45,9 @@ router.post("/characterCreation", (req,res) =>{
         zkusenosti:0
 
     })
-    newAdventurer.save().then(res.send("Character Cretion"))    .catch(err =>{
+    newAdventurer.save()
+    .then(res.send("Character Cretion"))
+    .catch(err =>{
         console.log(err);
         res.send('err')
     })
@@ -127,12 +129,10 @@ router.post('/removeFromInventory', async (req,res) =>{
 })
 
 router.post('/changeMoney', (req,res) =>{
-
    AdventurerModel.updateOne({_id: req.body.adventurer}, {penize: req.body.money})
     .then(res.send(true))
     .catch(err =>{
         console.log(err);
-        res.send('err')
     })
 
 })

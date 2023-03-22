@@ -22,23 +22,6 @@ const io = require('socket.io')(server,{
     }
 })
 
-/*
-const httpsServer = createServer(app)
-const io = new Server(httpsServer,{    
-    cors:{origin: '*'}
-})
-*/
-
-/*
-const io = require('socket.io')({
-    cors:{
-        origin: '*'
-    }
-});
-*/
-
-
-
 app.use(cors());
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
@@ -89,7 +72,16 @@ app.use(express.static(path.join(__dirname,'/files')))
 //img
 
 let users = [];
-axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
+
+const devMode = true;
+if (devMode) {
+    axios.defaults.baseURL = 'http://localhost:3000'
+
+}else{
+    axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
+}
+
+
 
 
 
