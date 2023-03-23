@@ -1,5 +1,6 @@
 <template>
     <v-row justify="center">
+        {{ itemAddOptions.value }}
         <v-dialog v-model="isShown.value" scrollable persistent>
             <v-card color="primary">
                 <v-card-title>
@@ -63,7 +64,7 @@
 
                         </v-expansion-panel>
                     </v-expansion-panels>
-                    {{ itemAddOptions.value }}
+
                     <v-card class="mt-3">
                         <v-card-title>Přidat předmět</v-card-title>
                         <v-card-text>

@@ -61,7 +61,7 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
       <v-btn v-if="!uzivatelStore.prihlasen" color="secondary" variant="text" to="/registrace"> Registrace</v-btn>
       <v-btn v-if="!uzivatelStore.prihlasen" color="secondary" variant="text" to="/prihlaseni"> Přihlásit se</v-btn>
-      <v-btn v-if="uzivatelStore.prihlasen" color="secondary" variant="text" @click="uzivatelStore.odhlasUzivatele()"> ODhlásit se</v-btn>
+      <v-btn v-if="uzivatelStore.prihlasen" color="secondary" variant="text" @click="{uzivatelStore.odhlasUzivatele();this.$router.push({ path: '/'})}"> ODhlásit se</v-btn>
 
     </v-app-bar>
   </div>

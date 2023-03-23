@@ -22,77 +22,6 @@ import axios from 'axios'
     :toggle="this.detailModal"
     :detailAdventurer="this.detailAdventurer"
     />
-    <!-- Modal pro detail dobrodruha 
-    <v-row justify="center">
-      <v-dialog v-model="detailModal" scrollable>
-        <v-card color="primary">
-          <v-card-title>Detail dobrodruha</v-card-title>
-          <v-divider></v-divider>
-          <v-card-text style="height: 80%;">
-
-            <v-card class="mt-3" title="Zkušenosti">
-              <v-card-text>
-                <v-row>
-                  <v-col cols="6"> <v-text-field v-model="detailLevelInput" type="number" single-line label="Level"
-                      :placeholder="this.detailDobrodruh.level"></v-text-field></v-col>
-                  <v-col cols="6"> <v-text-field v-model="detailExperienceInput" type="number" single-line
-                      label="Zkušenosti" :placeholder="this.detailDobrodruh.zkusenosti"></v-text-field></v-col>
-                </v-row>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn @click="detailChangeLevelExperience">Změnit</v-btn>
-              </v-card-actions>
-            </v-card>
-
-            <v-card class="mt-3" title="Atributy">
-              <v-card-text>
-                <v-row>
-                  <v-col>
-                    <h3> Síla: {{ this.detailDobrodruh.atributy.sila }}</h3>
-                  </v-col>
-                  <v-col>
-                    <h3> Houževnatost: {{ this.detailDobrodruh.atributy.houzevnatost }}</h3>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <h3> Obratnost: {{ this.detailDobrodruh.atributy.obratnost }}</h3>
-                  </v-col>
-                  <v-col>
-                    <h3> Charisma: {{ this.detailDobrodruh.atributy.charisma }}</h3>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <h3> Inteligence: {{ this.detailDobrodruh.atributy.inteligence }}</h3>
-                  </v-col>
-                  <v-col>
-                    <h3> Znalost: {{ this.detailDobrodruh.atributy.znalost }}</h3>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-
-            <v-card class="mt-3" title="Schopnosti rasy" v-if="this.detailRasaSchopnosti != null">
-              <AbilityCard v-for="ability in this.detailTridaShopnosti" :ability="ability" />
-            </v-card>
-
-            <v-card class="mt-3" title="Schopnosti třídy" v-if="this.detailTridaShopnosti != null">
-              <AbilityCard v-for="ability in this.detailTridaShopnosti" :ability="ability" />
-            </v-card>
-
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-btn color="blue-darken-1" variant="text" @click="detailModal = false">
-              Zavřít
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
-    -->
    
     <v-container class="mt-3">
       <v-row>
@@ -173,22 +102,36 @@ import axios from 'axios'
 
           </v-card>
 
+          <!-- Bojová fronta-->
+          <v-card color="primary" class="mt-3">
+            <v-card-title style="color: #cca000;" align='center'>
+            Bojová Fronta
+            </v-card-title>
+            <v-card-text>
+              <v-slide-group show-arrows>
+                <v-slide-group-item v-for="(warrior,index) in this.dataBoje.battleFrontInstance" :key="index" v-model="this.battleFrontChosen" v-slot="{ isSelected, toggle }">
+                  <v-btn class="ma-2"  :color="isSelected ? 'primary' : undefined" @click=" () =>{this.battleFrontChosen = index; isSelected = true}">
+                    {{ warrior.jmeno }}
+                    {{ this.battleFrontChosen }}
+                  </v-btn>
+                </v-slide-group-item>
+              </v-slide-group>
+            </v-card-text>
+            <v-card-action>
+              <v-btn color="secondary" @click="battleFrontFinish()">
+                Dokončit akci
+              </v-btn>
+              <v-btn color="secondary" @click="copyBattleFront()">
+                Dokončit bitevní kolo
+              </v-btn>
+            </v-card-action>
+          </v-card>
+
           <!-- Hod kostkou-->
           <v-card color="primary" class="mt-3">
             <v-card-title>
               Hod kostkou
             </v-card-title>
-            <!-- Sekvencování-->
-            <v-card-text>
-              <v-slide-group show-arrows>
-                <v-slide-group-item v-for="nepritel in this.dataBoje.aktivniNepratele" :key="nepritel.jmeno" v-slot="{ isSelected, toggle }">
-                  <v-btn class="ma-2" rounded :color="isSelected ? 'primary' : undefined" @click="toggle">
-                    {{ nepritel.jmeno }}
-                  </v-btn>
-                </v-slide-group-item>
-              </v-slide-group>
-            </v-card-text>
-            <!-- Bitvní pole-->
             <v-container>
               {{ this.adventurer1 }}
               <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Volný hod'">
@@ -913,7 +856,10 @@ export default {
       bojujiciDobrodruhVybava: [],
       bojujiciDobrodruhPredmet: null,
       aktivniNepratele: [],
+      battleFront: [],
+      battleFrontInstance: [],
     },
+    battleFrontChosen: null,
 
 
 
@@ -1110,6 +1056,8 @@ export default {
 
       // ! Zajimava obklika do bakalaá5ky
       this.dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(vybrany)))
+      this.battleFrontFillInstance()
+      this.copyBattleFront()
       this.socketsResyngBattle()
     },
 
@@ -1178,8 +1126,24 @@ export default {
     },
 
 
+    battleFrontFillInstance(){
+      if (this.player1.adventurer) {
+        
+      }
+      this.dataBoje.battleFront.push(JSON.parse(JSON.stringify(vybrany)))
+    },
 
-    // Boj
+    copyBattleFront(){
+      this.dataBoje.battleFrontInstance = JSON.parse(JSON.stringify(this.dataBoje.battleFront))
+    },
+
+    battleFrontFinish(){
+      console.log(this.dataBoje.battleFrontInstance)
+      this.dataBoje.battleFrontInstance.splice(this.battleFrontChosen,1)
+      console.log(this.dataBoje.battleFrontInstance)
+    },
+
+
 
 
     throwDice() {
@@ -1238,6 +1202,9 @@ export default {
     resyncGamemode() {
 
     },
+
+
+
   },
 }
 </script>
