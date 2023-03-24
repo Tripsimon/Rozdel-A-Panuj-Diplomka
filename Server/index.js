@@ -7,6 +7,7 @@ const bp = require('body-parser')
 const mongoose = require('mongoose');
 const path = require('path')
 const axios = require('axios');
+const {init} = require('./websocket.js');
 
 
 /**
@@ -15,12 +16,6 @@ const axios = require('axios');
 const PORT = process.env.PORT || 3000;
 const app = express()
 const server = require('http').createServer(app)
-
-const io = require('socket.io')(server,{
-    cors:{
-        origin: '*',
-    }
-})
 
 app.use(cors());
 app.use(bp.json())
@@ -64,15 +59,12 @@ app.use('/schopnosti',schopnostiRouter);
 const rasyRouter = require('./routes/raceRouty.js')
 app.use('/rasy',rasyRouter);
 
-const tridyRouter = require('./routes/tridaRouty.js')
+const tridyRouter = require('./routes/tridaRouty.js');
 app.use('/tridy',tridyRouter);
 
 
 app.use(express.static(path.join(__dirname,'/files')))
 //img
-
-let users = [];
-
 const devMode = true;
 if (devMode) {
     axios.defaults.baseURL = 'http://localhost:3000'
@@ -81,51 +73,6 @@ if (devMode) {
     axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
 }
 
-
-
-
-
-//Websockets
-io.on('connection',socket =>{
-    socket.on('joinRoom', (room,userID) =>{
-        socket.join(room)
-        users[socket.id] = {'sessionID':room , 'userID':userID};
-        socket.to(room).emit('resyncPlayers')
-    })
-
-    socket.on('resyncPlayers', (room) =>{
-        socket.to(room).emit('resyncPlayers')
-    })
-
-    socket.on('resyncGamemode',(room,mode) =>{
-        socket.to(room).emit('resyncGamemode',mode)
-    })
-
-    socket.on('resyncBattle',(room,dataBoje) =>{
-        socket.to(room).emit('resyncBattle',dataBoje)
-    })
-
-    socket.on('disconnect', ()=>{
-        console.log('Odpojil se socket ' + socket.id)
-        console.log(users)
-
-        axios.get(axios.defaults.baseURL+'/sessions/sessionDisconnect', { params: { sessionID: users[socket.id].sessionID,userID: users[socket.id].userID}})
-            .then(queryResponse => {
-                switch (queryResponse.data) {
-                    case 'sessionDelete':
-                        
-                        break;
-                
-                    default:
-                        break;
-                }
-                socket.to(users[socket.id].sessionID).emit('resyncPlayers')
-                console.log(queryResponse.data)
-            })
-
-    })
-})
-
-
+init(server);
 
 server.listen(PORT)

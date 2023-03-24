@@ -24,6 +24,7 @@ import axios from 'axios'
     />
    
     <v-container class="mt-3">
+      {{ this.player1.adventurer }}
       <v-row>
         <!-- Mod pruzkumu -->
         <v-col v-if="battleModeSwitch == false" cols="9">
@@ -38,10 +39,11 @@ import axios from 'axios'
             <v-container>
               <v-expansion-panels v-if="this.dataBoje.aktivniNepratele.length != 0">
                 <v-expansion-panel v-for=" (enemy, index, key) in this.dataBoje.aktivniNepratele">
-                  <v-expansion-panel-title>{{ enemy.jmeno + " " + enemy.realneZivoty + " / " + enemy.zivoty }}
+                  <v-expansion-panel-title>{{ enemy.jmeno + " " + enemy.realneZivoty + " / " + enemy.zivoty + " - " +enemy.identity}}
                   </v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <v-card-subtitle>{{ enemy.popis }}</v-card-subtitle>
+                    {{ enemy }}
                     <br>
                     <v-row>
                       <v-col>
@@ -109,12 +111,13 @@ import axios from 'axios'
             </v-card-title>
             <v-card-text>
               <v-slide-group show-arrows>
-                <v-slide-group-item v-for="(warrior,index) in this.dataBoje.battleFrontInstance" :key="index" v-model="this.battleFrontChosen" v-slot="{ isSelected, toggle }">
-                  <v-btn class="ma-2"  :color="isSelected ? 'primary' : undefined" @click=" () =>{this.battleFrontChosen = index; isSelected = true}">
-                    {{ warrior.jmeno }}
-                    {{ this.battleFrontChosen }}
+                <v-slide-group-item v-for="(warrior,index) in this.dataBoje.battleFrontInstance" :key="index"  v-slot="{ isSelected, toggle }">
+                  <v-btn class="ma-2"  :color="isSelected ? 'primary' : ('krestniJmeno' in warrior ? 'success' : 'error')" @click="{this.battleFrontChosen = index;toggle()}">
+                    {{ this.getIdentity(warrior) }}
                   </v-btn>
                 </v-slide-group-item>
+
+              
               </v-slide-group>
             </v-card-text>
             <v-card-action>
@@ -858,6 +861,7 @@ export default {
       aktivniNepratele: [],
       battleFront: [],
       battleFrontInstance: [],
+      battleFrontInstanceAdventurers: [],
     },
     battleFrontChosen: null,
 
@@ -867,8 +871,11 @@ export default {
     dostupniNepratele: null,
     moznostiNepratel: [],
     vybranyNepritel: null,
+    monsterIdentity: 1,
   }),
-
+  unmounted(){
+    this.webSocket.emit('disconnect',this.myIdentity)
+  },
   mounted() {
 
     //Duležité proměné
@@ -932,6 +939,12 @@ export default {
 
   methods: {
 
+    getIdentity(entity){
+      if(entity.jmeno){
+        return `${entity.jmeno} - ${entity.identity}`;
+      }
+      return `${entity.krestniJmeno} - ${entity.prijmeni}`;
+    }, 
     // SOCKETY
     /**
      * Odešle požadavek na připojení socketu do místisti s ID sessiony
@@ -1053,6 +1066,8 @@ export default {
       let pozice = this.moznostiNepratel.indexOf(this.vybranyNepritel);
       let vybrany = this.dostupniNepratele[pozice]
       vybrany.realneZivoty = vybrany.zivoty
+      vybrany.identity = this.monsterIdentity
+      this.monsterIdentity++; 
 
       // ! Zajimava obklika do bakalaá5ky
       this.dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(vybrany)))
@@ -1120,6 +1135,10 @@ export default {
 
     },
 
+    /**
+     * Vybere nepřítele pro hod kostkou
+     * @param {INT} enemy Pozice v poli aktivních nepřátel
+     */
     fightChoseEnemy(enemy) {
       this.dataBoje.bojujiciNepritel = this.dataBoje.aktivniNepratele[enemy]
       this.socketsResyngBattle()
@@ -1127,20 +1146,20 @@ export default {
 
 
     battleFrontFillInstance(){
+      this.dataBoje.battleFront = JSON.parse(JSON.stringify(this.dataBoje.aktivniNepratele))
       if (this.player1.adventurer) {
-        
+        this.dataBoje.battleFront.push(this.player1.adventurer)
       }
-      this.dataBoje.battleFront.push(JSON.parse(JSON.stringify(vybrany)))
+
     },
 
     copyBattleFront(){
       this.dataBoje.battleFrontInstance = JSON.parse(JSON.stringify(this.dataBoje.battleFront))
     },
 
+
     battleFrontFinish(){
-      console.log(this.dataBoje.battleFrontInstance)
       this.dataBoje.battleFrontInstance.splice(this.battleFrontChosen,1)
-      console.log(this.dataBoje.battleFrontInstance)
     },
 
 
