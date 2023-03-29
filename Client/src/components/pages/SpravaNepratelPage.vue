@@ -6,7 +6,10 @@ import FormData from 'form-data'
 </script>
 <template>
     <v-container>
-        <v-card title="Tvorba nepřítele" color="primary" class="mt-5">
+        <v-card color="primary" class="mt-5">
+            <v-card-title>
+                <h1 align="center">Tvorba nepřítele</h1>
+            </v-card-title>
             <v-card-text>
                 <v-text-field color="secondary" variant="outlined" v-model="chosenName" label="Jméno nepřítele" required>
                 </v-text-field>
@@ -17,10 +20,15 @@ import FormData from 'form-data'
                         </v-textarea>
                     </v-col>
                     <v-col>
-                        <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities" label="Schopnosti" required>
+                        <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities" label="Schopnosti"
+                            required>
                         </v-textarea>
                     </v-col>
                 </v-row>
+
+                <v-btn>
+                    Přidat
+                </v-btn>
 
 
                 <v-row>
@@ -136,7 +144,7 @@ import FormData from 'form-data'
                                 Schopnosti
                             </th>
 
-    
+
                             <th>
                                 Atributy
                             </th>
@@ -158,7 +166,7 @@ import FormData from 'form-data'
                             </th>
                         </tr>
                     </thead>
-                    <tbody >
+                    <tbody>
                         <tr v-for="monster in this.loadedMonsters" :key="monster.jmeno">
                             <th>{{ monster.jmeno }}</th>
                             <th>{{ monster.popis }}</th>
@@ -177,7 +185,8 @@ import FormData from 'form-data'
                             <th>{{ monster.poskozeniZaklad }}</th>
                             <th>{{ monster.poskozeniZavaznost }}</th>
                             <th>{{ monster.velikostniSkupina }}</th>
-                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeMonster(monster._id)"></v-btn>
+                            <th><v-btn icon="mdi-close-box-outline" color="error"
+                                    @click="removeMonster(monster._id)"></v-btn>
                             </th>
                         </tr>
                     </tbody>
@@ -232,12 +241,12 @@ export default {
          * Vypíše všechna dostupná monstra
          */
         getMonsters() {
-            axios.get(axios.defaults.baseURL+'/monster/dump')
+            axios.get(axios.defaults.baseURL + '/monster/dump')
                 .then(queryResponse => this.loadedMonsters = queryResponse.data)
         },
 
         uploadMonster() {
-            axios.post(axios.defaults.baseURL+'/monster/createMonster',
+            axios.post(axios.defaults.baseURL + '/monster/createMonster',
                 {
                     'name': this.chosenName,
                     'description': this.chosenDescription,
@@ -266,11 +275,11 @@ export default {
          * Smaže monstrum z databáze
          * @param {int} id ID monstra
          */
-        removeMonster(id){
-            axios.delete(axios.defaults.baseURL+'/monster/removeMonster',{ data:{'id':id}})
-                .then( queryResponse =>{
-                    if(queryResponse.data == 'monsterDeleted'){this.getMonsters()}
-                    
+        removeMonster(id) {
+            axios.delete(axios.defaults.baseURL + '/monster/removeMonster', { data: { 'id': id } })
+                .then(queryResponse => {
+                    if (queryResponse.data == 'monsterDeleted') { this.getMonsters() }
+
                 })
         },
 
