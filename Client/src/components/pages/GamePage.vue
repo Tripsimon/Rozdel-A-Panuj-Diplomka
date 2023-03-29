@@ -27,7 +27,7 @@ import axios from 'axios'
       {{ this.player1.adventurer }}
       <v-row>
         <!-- Mod pruzkumu -->
-        <v-col v-if="battleModeSwitch == false" cols="9">
+        <v-col v-if="battleModeSwitch == false" :cols="isOwner ? '9':'12'">
           <v-img :src="axios.defaults.baseURL + '/backgrounds/' + vybranePozadi" max-width="100%">
           </v-img>
         </v-col>
@@ -111,23 +111,23 @@ import axios from 'axios'
             </v-card-title>
             <v-card-text>
               <v-slide-group show-arrows>
-                <v-slide-group-item v-for="(warrior,index) in this.dataBoje.battleFrontInstance" :key="index"  v-slot="{ isSelected, toggle }">
-                  <v-btn class="ma-2"  :color="isSelected ? 'primary' : ('krestniJmeno' in warrior ? 'success' : 'error')" @click="{this.battleFrontChosen = index;toggle()}">
-                    {{ this.getIdentity(warrior) }}
+                <v-slide-group-item v-for="(entity,index) in this.dataBoje.battleFrontInstance" :key="index"  v-slot="{ isSelected, toggle }">
+                  <v-btn class="ma-2"  :color="isSelected ? 'primary' : ('krestniJmeno' in entity ? 'success' : 'error')" @click="{this.battleFrontChosen = index;toggle()}">
+                    {{ this.getIdentity(entity) }}
                   </v-btn>
                 </v-slide-group-item>
 
               
               </v-slide-group>
             </v-card-text>
-            <v-card-action>
-              <v-btn color="secondary" @click="battleFrontFinish()">
+            <v-card-actions>
+              <v-btn color="secondary"  variant="outlined" @click="battleFrontFinish()">
                 Dokončit akci
               </v-btn>
-              <v-btn color="secondary" @click="copyBattleFront()">
+              <v-btn color="secondary" variant="outlined" @click="copyBattleFront()">
                 Dokončit bitevní kolo
               </v-btn>
-            </v-card-action>
+            </v-card-actions>
           </v-card>
 
           <!-- Hod kostkou-->
@@ -1109,7 +1109,7 @@ export default {
     // Herní cyklus
 
     /**
-     * 
+     * Vybere dobrodruha pro boj
      * @param {int} adventurer : ID dobrodruha pro boj
      */
     fightChoseAdventurer(adventurer) {
