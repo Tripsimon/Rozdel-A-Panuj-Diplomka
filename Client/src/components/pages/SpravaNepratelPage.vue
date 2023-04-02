@@ -1,127 +1,165 @@
-
-
-<script setup>
-import axios from 'axios'
-import FormData from 'form-data'
-</script>
 <template>
     <v-container>
         <v-card color="primary" class="mt-5">
             <v-card-title>
-                <h1 align="center">Tvorba nepřítele</h1>
+                <h1 align="center" class="ma-3">Tvorba nepřítele</h1>
             </v-card-title>
+
             <v-card-text>
-                <v-text-field color="secondary" variant="outlined" v-model="chosenName" label="Jméno nepřítele" required>
-                </v-text-field>
+                <h2 class="mt-3">Základní informace</h2>
+                <v-divider class="mb-3"></v-divider>
+                <v-form ref="form" v-model="valid" fast-fail @submit.prevent="submit">
+                    <v-row>
+                        <v-col>
 
-                <v-row>
-                    <v-col>
-                        <v-textarea color="secondary" variant="outlined" v-model="chosenDescription" label="Popis" required>
-                        </v-textarea>
-                    </v-col>
-                    <v-col>
-                        <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities" label="Schopnosti"
-                            required>
-                        </v-textarea>
-                    </v-col>
-                </v-row>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenName"
+                                :rules="rules.required" label="Jméno nepřítele" required>
+                            </v-text-field>
 
-                <v-btn>
-                    Přidat
-                </v-btn>
+                            <v-select color="secondary" variant="outlined" label="Typ nepřítele"
+                                :items="avaliableMonsterTypes.data" :rules="rules.required">
+                            </v-select>
+
+                            <v-select color="secondary" variant="outlined" label="Velikostní skupina"
+                                :items='["Maličká", "Malá", "Lidská", "Veliká", "Gigantická"]' v-model="chosenSizeGroup" :rules="rules.required">
+                            </v-select>
+
+                        </v-col>
+                        <v-col>
+                            <v-textarea color="secondary" variant="outlined" style="height: 125%;"
+                                v-model="chosenDescription" label="Popis" :rules="rules.required">
+                            </v-textarea>
+                        </v-col>
+                    </v-row>
+
+                    <!-- Schpnosti -->
+                    <h2 class="mt-3">Schopnosti</h2>
+                    <v-divider class="mb-3"></v-divider>
+                    <v-btn class="mb-3" color="secondary" variant="outlined"
+                        @click="() => { chosenAbilities.push({}); abilityNumber++ }">
+                        Přidat schopnost
+                    </v-btn>
+
+                    <div v-for="instance in abilityNumber" v-bind:key="instance">
+                        <h2 class="mt-3">Schopnost #{{ instance }}</h2>
+                        <v-divider class="mb-3"></v-divider>
+                        <v-row>
+                            <v-col>
+                                <v-text-field color="secondary" v-model="chosenAbilities[instance - 1].jmeno"
+                                    variant="outlined" label="Jméno schopnosti" :rules="rules.required"> </v-text-field >
+                                <v-text-field color="secondary" v-model="chosenAbilities[instance - 1].typ"
+                                    variant="outlined" label="Typ" :rules="rules.required"> </v-text-field>
+                                <v-text-field color="secondary" v-model="chosenAbilities[instance - 1].cd"
+                                    variant="outlined" label="CD" :rules="rules.required"> </v-text-field>
+                            </v-col>
+                            <v-col>
+                                <v-textarea color="secondary" variant="outlined" style="height: 125%;"
+                                    v-model="chosenAbilities[instance - 1].schopnost" label="Popis" :rules="rules.required">
+                                </v-textarea>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+
+                            </v-col>
+                            <v-col>
+
+                            </v-col>
+                        </v-row>
+                    </div>
+
+                    <h2 class="mt-3">Atributy</h2>
+                    <v-divider class="mb-3"></v-divider>
+                    <v-row>
+                        <v-col>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenStrength" label="Síla"
+                            :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
+
+                        <v-col>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenConstitution"
+                                label="Houževnatost" :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenAgility" label="Obratnost"
+                            :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
+
+                        <v-col>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenCharisma" label="Charisma"
+                            :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenInteligence"
+                                label="Inteligence" :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
+
+                        <v-col>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenKnowledge" label="Znalost"
+                            :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+
+                        <v-col>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" label="Zbroj" :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
+
+                        <v-col>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenLife" label="životy" :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
 
 
-                <v-row>
-                    <v-col>
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenStrength" label="Síla" required>
-                        </v-text-field>
-                    </v-col>
 
-                    <v-col>
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenConstitution" label="Houževnatost"
-                            required>
-                        </v-text-field>
-                    </v-col>
-                </v-row>
+                    </v-row>
 
-                <v-row>
-                    <v-col>
-
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenAgility" label="Obratnost"
-                            required>
-                        </v-text-field>
-                    </v-col>
-
-                    <v-col>
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenCharisma" label="Charisma"
-                            required>
-                        </v-text-field>
-                    </v-col>
-                </v-row>
-
-                <v-row>
-                    <v-col>
-
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenInteligence" label="Inteligence"
-                            required>
-                        </v-text-field>
-                    </v-col>
-
-                    <v-col>
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenKnowledge" label="Znalost"
-                            required>
-                        </v-text-field>
-                    </v-col>
-                </v-row>
-
-                <v-row>
-
-                    <v-col>
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" label="Zbroj" required>
-                        </v-text-field>
-                    </v-col>
-
-                    <v-col>
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenLife" label="životy" required>
-                        </v-text-field>
-                    </v-col>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" label="Průraz" :rules="rules.required">
+                    </v-text-field>
 
 
+                    <v-row>
+                        <v-col>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageBase"
+                                label="Základní poškození" :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
+                        <v-col>
 
-                </v-row>
-
-                <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" label="Průraz" required>
-                </v-text-field>
-
-
-                <v-row>
-                    <v-col>
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenDamageBase"
-                            label="Základní poškození" required>
-                        </v-text-field>
-                    </v-col>
-                    <v-col>
-
-                        <v-text-field color="secondary" variant="outlined" v-model="chosenDamageSeverity"
-                            label="Závažnost poškození" required>
-                        </v-text-field>
-                    </v-col>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageSeverity"
+                                label="Závažnost poškození" :rules="rules.required">
+                            </v-text-field>
+                        </v-col>
 
 
-                </v-row>
+                    </v-row>
 
-                <v-row>
-                    <v-col>
-                        <v-select color="secondary" variant="outlined" label="Velikostní skupina"
-                            :items='["Maličká", "Malá", "Střední", "Veliká", "Gigantická"]'
-                            v-model="chosenSizeGroup"></v-select>
-                    </v-col>
-                </v-row>
+                    <v-row>
+                        <v-col>
 
+                        </v-col>
+                    </v-row>
+                </v-form>
             </v-card-text>
 
             <v-card-actions>
-                <v-btn color="secondary" @click="uploadMonster">
+                <v-btn color="secondary" @click="submit()">
                     Nahrát
                 </v-btn>
             </v-card-actions>
@@ -129,8 +167,14 @@ import FormData from 'form-data'
 
 
         <v-card color="primary" class="mt-5">
-            <v-card-title>Dostupná monstra</v-card-title>
-            <v-card-text>
+            <v-card-title>
+                <h1 align="center" class="ma-3">Dostupná monstra</h1>
+            </v-card-title>
+
+            <v-card-text v-if="loadedMonsters == ''">
+                <h2 class="ma-3">Žádná dostupná monstra</h2>
+            </v-card-text>
+            <v-card-text v-else>
                 <v-table>
                     <thead>
                         <tr>
@@ -143,8 +187,6 @@ import FormData from 'form-data'
                             <th>
                                 Schopnosti
                             </th>
-
-
                             <th>
                                 Atributy
                             </th>
@@ -167,10 +209,12 @@ import FormData from 'form-data'
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="monster in this.loadedMonsters" :key="monster.jmeno">
+                        <tr v-for="monster in loadedMonsters" :key="monster.jmeno">
                             <th>{{ monster.jmeno }}</th>
                             <th>{{ monster.popis }}</th>
-                            <th>{{ monster.schopnosti }}</th>
+                            <th>
+                                <p v-for="ability in monster.schopnosti" :key="ability.jmeno">{{ ability.jmeno }}</p>
+                            </th>
 
                             <th>
                                 <p>Síla:{{ monster.sila }}</p>
@@ -199,92 +243,103 @@ import FormData from 'form-data'
     </v-container>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
+let valid = false;
+const loadedMonsters = ref([]);
+const avaliableMonsterTypes = ref(["Data se nepodařilo načíst"])
 
-<script>
+const chosenName = ref(null);
+const chosenDescription = ref(null);
 
+const abilityNumber = ref(0)
+const chosenAbilities = ref([]);
 
-export default {
-    data: () => ({
+const chosenStrength = ref(null);
+const chosenConstitution = ref(null);
+const chosenAgility = ref(null);
+const chosenCharisma = ref(null);
+const chosenInteligence = ref(null);
+const chosenKnowledge = ref(null);
 
-        loadedMonsters: null,
-
-
-        chosenName: null,
-        chosenDescription: null,
-        chosenAbilities: null,
-
-        chosenStrength: null,
-        chosenConstitution: null,
-        chosenAgility: null,
-        chosenCharisma: null,
-        chosenInteligence: null,
-        chosenKnowledge: null,
-
-        chosenArmor: null,
-        chosenLife: null,
-
-        chosenPierce: null,
-        chosenDamageBase: null,
-        chosenDamageSeverity: null,
-
-        chosenSizeGroup: null,
-    }),
-
-    mounted() {
-        this.getMonsters()
-    },
-
-    methods: {
-
-        /**
-         * Vypíše všechna dostupná monstra
-         */
-        getMonsters() {
-            axios.get(axios.defaults.baseURL + '/monster/dump')
-                .then(queryResponse => this.loadedMonsters = queryResponse.data)
+const rules = {
+    required: [
+        value => {
+            if (value?.length > 0) return true
+            return 'Formulář není vyplněný'
         },
+    ],
+};
 
-        uploadMonster() {
-            axios.post(axios.defaults.baseURL + '/monster/createMonster',
-                {
-                    'name': this.chosenName,
-                    'description': this.chosenDescription,
-                    'abilities': this.chosenAbilities,
+const chosenArmor = ref(null);
+const chosenLife = ref(null);
+const chosenPierce = ref(null);
+const chosenDamageBase = ref(null);
+const chosenDamageSeverity = ref(null);
 
-                    'strength': this.chosenStrength,
-                    'constitution': this.chosenConstitution,
-                    'agility': this.chosenAgility,
-                    'charisma': this.chosenCharisma,
-                    'inteligence': this.chosenInteligence,
-                    'knowledge': this.chosenKnowledge,
+const chosenSizeGroup = ref('Lidská');
 
-                    'armor': this.chosenArmor,
-                    'life': this.chosenLife,
+onMounted(() => {
+    getMonsters()
+    getMonsterTypes()
+})
 
-                    'pierce': this.chosenPierce,
-                    'damageBase': this.chosenDamageBase,
-                    'damageSeverity': this.chosenDamageSeverity,
 
-                    'sizeGroup': this.chosenSizeGroup
-                }
-            ).then(response => { console.log(response), this.getMonsters() })
-        },
-
-        /**
-         * Smaže monstrum z databáze
-         * @param {int} id ID monstra
-         */
-        removeMonster(id) {
-            axios.delete(axios.defaults.baseURL + '/monster/removeMonster', { data: { 'id': id } })
-                .then(queryResponse => {
-                    if (queryResponse.data == 'monsterDeleted') { this.getMonsters() }
-
-                })
-        },
-
-    }
+function getMonsterTypes() {
+    axios.get(axios.defaults.baseURL + '/config/get', { params: { typ: 'typyNepratel' } })
+        .then(queryResponse => avaliableMonsterTypes.value = queryResponse)
 }
+
+/**
+ * Vypíše všechna dostupná monstra
+ */
+function getMonsters() {
+    axios.get(axios.defaults.baseURL + '/monster/dump')
+        .then(queryResponse => loadedMonsters.value = queryResponse.data)
+}
+
+function submit() {
+    axios.post(axios.defaults.baseURL + '/monster/createMonster',
+        {
+            'name': chosenName.value,
+            'description': chosenDescription.value,
+            'abilities': chosenAbilities.value,
+
+            'strength': chosenStrength.value,
+            'constitution': chosenConstitution.value,
+            'agility': chosenAgility.value,
+            'charisma': chosenCharisma.value,
+            'inteligence': chosenInteligence.value,
+            'knowledge': chosenKnowledge.value,
+
+            'armor': chosenArmor.value,
+            'life': chosenLife.value,
+
+            'pierce': chosenPierce.value,
+            'damageBase': chosenDamageBase.value,
+            'damageSeverity': chosenDamageSeverity.value,
+
+            'sizeGroup': chosenSizeGroup.value
+        }
+    ).then(response => { getMonsters() })
+}
+
+/**
+ * Smaže monstrum z databáze
+ * @param {int} id ID monstra
+ */
+function removeMonster(id) {
+    axios.delete(axios.defaults.baseURL + '/monster/removeMonster', { data: { 'id': id } })
+        .then(queryResponse => {
+            if (queryResponse.data == 'monsterDeleted') { this.getMonsters() }
+
+        })
+}
+
+
+
 </script>
 
 <style></style>

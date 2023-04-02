@@ -35,6 +35,9 @@ app.get("/",(req,res) => {
     res.send("Server je aktivní");
 })
 
+const configRouter = require('./routes/configRoute.js')
+app.use('/config',configRouter);
+
 const charakterRouter = require('./routes/adventurerRouty.js')
 app.use('/character',charakterRouter);
 

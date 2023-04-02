@@ -7,7 +7,14 @@ const Schema = mongoose.Schema;
 const MonsterSchema = new Schema({
     jmeno: String,
     popis: String,
-    schopnosti: String,
+    velikostniSkupina: String,
+
+    schopnosti: [{
+        jmeno:String,
+        typ: String,
+        cd: Number,
+        schopnost: String,
+    }],
 
     sila: Number,
     houzevnatost: Number,
@@ -23,7 +30,7 @@ const MonsterSchema = new Schema({
     poskozeniZaklad: Number,
     poskozeniZavaznost: Number,
 
-    velikostniSkupina: String
+
 
     },
     {collection: "MonstraKolekce"}

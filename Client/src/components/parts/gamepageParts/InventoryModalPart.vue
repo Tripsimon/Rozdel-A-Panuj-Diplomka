@@ -1,6 +1,5 @@
 <template>
     <v-row justify="center">
-        {{ itemAddOptions.value }}
         <v-dialog v-model="isShown.value" scrollable persistent>
             <v-card color="primary">
                 <v-card-title>

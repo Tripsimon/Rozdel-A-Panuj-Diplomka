@@ -1,5 +1,4 @@
 <template>
-    <v-divider></v-divider>
     <v-card :color="color">
         <v-card-text>
             <v-row>
