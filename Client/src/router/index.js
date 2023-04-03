@@ -11,6 +11,7 @@ import SpravaPozadiPage from '../components/pages/SpravaPozadiPage.vue'
 import spravaVybavy from '../components/pages/SpravaVybavyPage.vue'
 import spravaNepratel from  '../components/pages/SpravaNepratelPage.vue'
 import pravidlaPage from '../components/pages/PravidlaPage.vue'
+import podekovaniPage from '../components/pages/CreditsPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +75,11 @@ const router = createRouter({
       path:'/pravidla',
       name:'pravidla',
       component: pravidlaPage
+    },
+    {
+      path:'/podekovani',
+      name:'podekovani',
+      component: podekovaniPage
     },
   ]
 })

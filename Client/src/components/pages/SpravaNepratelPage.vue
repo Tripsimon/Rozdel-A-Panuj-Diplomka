@@ -8,12 +8,12 @@
             <v-card-text>
                 <h2 class="mt-3">Základní informace</h2>
                 <v-divider class="mb-3"></v-divider>
-                <v-form ref="form" v-model="valid" fast-fail @submit.prevent="submit">
+                <v-form ref="form" @submit.prevent="submit">
                     <v-row>
                         <v-col>
 
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenName"
-                                :rules="rules.required" label="Jméno nepřítele" required>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="rules.required"
+                                label="Jméno nepřítele" required>
                             </v-text-field>
 
                             <v-select color="secondary" variant="outlined" label="Typ nepřítele"
@@ -21,7 +21,8 @@
                             </v-select>
 
                             <v-select color="secondary" variant="outlined" label="Velikostní skupina"
-                                :items='["Maličká", "Malá", "Lidská", "Veliká", "Gigantická"]' v-model="chosenSizeGroup" :rules="rules.required">
+                                :items='["Maličká", "Malá", "Lidská", "Veliká", "Gigantická"]' v-model="chosenSizeGroup"
+                                :rules="rules.required">
                             </v-select>
 
                         </v-col>
@@ -41,15 +42,16 @@
                     </v-btn>
 
                     <div v-for="instance in abilityNumber" v-bind:key="instance">
-                        <h2 class="mt-3">Schopnost #{{ instance }}</h2>
+                        <h3 class="mt-3">Schopnost #{{ instance }}</h3>
                         <v-divider class="mb-3"></v-divider>
                         <v-row>
                             <v-col>
                                 <v-text-field color="secondary" v-model="chosenAbilities[instance - 1].jmeno"
-                                    variant="outlined" label="Jméno schopnosti" :rules="rules.required"> </v-text-field >
-                                <v-text-field color="secondary" v-model="chosenAbilities[instance - 1].typ"
-                                    variant="outlined" label="Typ" :rules="rules.required"> </v-text-field>
-                                <v-text-field color="secondary" v-model="chosenAbilities[instance - 1].cd"
+                                    variant="outlined" label="Jméno schopnosti" :rules="rules.required"> </v-text-field>
+                                <v-select color="secondary" v-model="chosenAbilities[instance - 1].typ" variant="outlined"
+                                    label="Typ" :items='["Pasivní","Aktivní"]'
+                                    :rules="rules.required"> </v-select>
+                                <v-text-field v-if="chosenAbilities[instance-1].typ == 'Aktivní'" color="secondary" v-model="chosenAbilities[instance - 1].cd"
                                     variant="outlined" label="CD" :rules="rules.required"> </v-text-field>
                             </v-col>
                             <v-col>
@@ -73,7 +75,7 @@
                     <v-row>
                         <v-col>
                             <v-text-field color="secondary" variant="outlined" v-model="chosenStrength" label="Síla"
-                            :rules="rules.required">
+                                :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
@@ -88,13 +90,13 @@
                         <v-col>
 
                             <v-text-field color="secondary" variant="outlined" v-model="chosenAgility" label="Obratnost"
-                            :rules="rules.required">
+                                :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
                         <v-col>
                             <v-text-field color="secondary" variant="outlined" v-model="chosenCharisma" label="Charisma"
-                            :rules="rules.required">
+                                :rules="rules.required">
                             </v-text-field>
                         </v-col>
                     </v-row>
@@ -109,7 +111,7 @@
 
                         <v-col>
                             <v-text-field color="secondary" variant="outlined" v-model="chosenKnowledge" label="Znalost"
-                            :rules="rules.required">
+                                :rules="rules.required">
                             </v-text-field>
                         </v-col>
                     </v-row>
@@ -117,12 +119,14 @@
                     <v-row>
 
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" label="Zbroj" :rules="rules.required">
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" label="Zbroj"
+                                :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenLife" label="životy" :rules="rules.required">
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenLife" label="životy"
+                                :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
@@ -130,7 +134,8 @@
 
                     </v-row>
 
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" label="Průraz" :rules="rules.required">
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" label="Průraz"
+                        :rules="rules.required">
                     </v-text-field>
 
 
@@ -246,8 +251,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+const form = ref(null);
 
-let valid = false;
 const loadedMonsters = ref([]);
 const avaliableMonsterTypes = ref(["Data se nepodařilo načíst"])
 
@@ -263,6 +268,8 @@ const chosenAgility = ref(null);
 const chosenCharisma = ref(null);
 const chosenInteligence = ref(null);
 const chosenKnowledge = ref(null);
+
+
 
 const rules = {
     required: [
@@ -301,7 +308,9 @@ function getMonsters() {
 }
 
 function submit() {
-    axios.post(axios.defaults.baseURL + '/monster/createMonster',
+    form.value?.validate().then(({valid}) => {
+        if(valid){
+            axios.post(axios.defaults.baseURL + '/monster/createMonster',
         {
             'name': chosenName.value,
             'description': chosenDescription.value,
@@ -324,6 +333,12 @@ function submit() {
             'sizeGroup': chosenSizeGroup.value
         }
     ).then(response => { getMonsters() })
+        }
+    
+    }).catch((nvm) => {
+        console.log(nvm);
+    })
+
 }
 
 /**
