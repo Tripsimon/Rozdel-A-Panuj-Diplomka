@@ -6,12 +6,13 @@
             </v-card-title>
 
             <v-card-text>
-                <h2 class="mt-3">Základní informace</h2>
-                <v-divider class="mb-3"></v-divider>
+
                 <v-form ref="form" @submit.prevent="submit">
+                    <!-- Základní informace-->
+                    <h2 class="mt-3">Základní informace</h2>
+                    <v-divider class="mb-3"></v-divider>
                     <v-row>
                         <v-col>
-
                             <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="rules.required"
                                 label="Jméno nepřítele" required>
                             </v-text-field>
@@ -33,7 +34,7 @@
                         </v-col>
                     </v-row>
 
-                    <!-- Schpnosti -->
+                    <!-- Schopnosti -->
                     <h2 class="mt-3">Schopnosti</h2>
                     <v-divider class="mb-3"></v-divider>
                     <v-btn class="mb-3" color="secondary" variant="outlined"
@@ -42,17 +43,24 @@
                     </v-btn>
 
                     <div v-for="instance in abilityNumber" v-bind:key="instance">
-                        <h3 class="mt-3">Schopnost #{{ instance }}</h3>
+                        <v-row >
+                            <v-col>
+                                <h3 class="mt-3">Schopnost #{{ instance }}</h3>
+                            </v-col>
+
+                            <v-btn align="right" icon="mdi-close-box-outline" @click="removeAbility(instance-1)" color="error"></v-btn>
+
+                        </v-row>
                         <v-divider class="mb-3"></v-divider>
                         <v-row>
                             <v-col>
                                 <v-text-field color="secondary" v-model="chosenAbilities[instance - 1].jmeno"
                                     variant="outlined" label="Jméno schopnosti" :rules="rules.required"> </v-text-field>
                                 <v-select color="secondary" v-model="chosenAbilities[instance - 1].typ" variant="outlined"
-                                    label="Typ" :items='["Pasivní","Aktivní"]'
-                                    :rules="rules.required"> </v-select>
-                                <v-text-field v-if="chosenAbilities[instance-1].typ == 'Aktivní'" color="secondary" v-model="chosenAbilities[instance - 1].cd"
-                                    variant="outlined" label="CD" :rules="rules.required"> </v-text-field>
+                                    label="Typ" :items='["Pasivní", "Aktivní"]' :rules="rules.required"> </v-select>
+                                <v-text-field v-if="chosenAbilities[instance - 1].typ == 'Aktivní'" color="secondary"
+                                    v-model="chosenAbilities[instance - 1].cd" type="number" variant="outlined"
+                                    label="Počet kol vyčerpání" :rules="rules.required"> </v-text-field>
                             </v-col>
                             <v-col>
                                 <v-textarea color="secondary" variant="outlined" style="height: 125%;"
@@ -60,27 +68,21 @@
                                 </v-textarea>
                             </v-col>
                         </v-row>
-                        <v-row>
-                            <v-col>
 
-                            </v-col>
-                            <v-col>
 
-                            </v-col>
-                        </v-row>
                     </div>
 
                     <h2 class="mt-3">Atributy</h2>
                     <v-divider class="mb-3"></v-divider>
                     <v-row>
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenStrength" label="Síla"
-                                :rules="rules.required">
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenStrength"
+                                label="Síla" :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenConstitution"
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenConstitution"
                                 label="Houževnatost" :rules="rules.required">
                             </v-text-field>
                         </v-col>
@@ -89,14 +91,14 @@
                     <v-row>
                         <v-col>
 
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenAgility" label="Obratnost"
-                                :rules="rules.required">
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenAgility"
+                                label="Obratnost" :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenCharisma" label="Charisma"
-                                :rules="rules.required">
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenCharisma"
+                                label="Charisma" :rules="rules.required">
                             </v-text-field>
                         </v-col>
                     </v-row>
@@ -104,14 +106,14 @@
                     <v-row>
                         <v-col>
 
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenInteligence"
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenInteligence"
                                 label="Inteligence" :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenKnowledge" label="Znalost"
-                                :rules="rules.required">
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenKnowledge"
+                                label="Znalost" :rules="rules.required">
                             </v-text-field>
                         </v-col>
                     </v-row>
@@ -119,14 +121,14 @@
                     <v-row>
 
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" label="Zbroj"
-                                :rules="rules.required">
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenArmor"
+                                label="Zbroj" :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenLife" label="životy"
-                                :rules="rules.required">
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenLife"
+                                label="životy" :rules="rules.required">
                             </v-text-field>
                         </v-col>
 
@@ -134,20 +136,20 @@
 
                     </v-row>
 
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" label="Průraz"
+                    <v-text-field color="secondary" variant="outlined" type="number" v-model="chosenPierce" label="Průraz"
                         :rules="rules.required">
                     </v-text-field>
 
 
                     <v-row>
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageBase"
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenDamageBase"
                                 label="Základní poškození" :rules="rules.required">
                             </v-text-field>
                         </v-col>
                         <v-col>
 
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageSeverity"
+                            <v-text-field color="secondary" type="number" variant="outlined" v-model="chosenDamageSeverity"
                                 label="Závažnost poškození" :rules="rules.required">
                             </v-text-field>
                         </v-col>
@@ -307,39 +309,45 @@ function getMonsters() {
         .then(queryResponse => loadedMonsters.value = queryResponse.data)
 }
 
+function removeAbility(index) {
+    this.abilityNumber--;
+    chosenAbilities.value.splice(index,1)
+}
+
 function submit() {
-    form.value?.validate().then(({valid}) => {
-        if(valid){
+    form.value?.validate().then(({ valid }) => {
+        if (valid) {
             axios.post(axios.defaults.baseURL + '/monster/createMonster',
-        {
-            'name': chosenName.value,
-            'description': chosenDescription.value,
-            'abilities': chosenAbilities.value,
+                {
+                    'name': chosenName.value,
+                    'description': chosenDescription.value,
+                    'abilities': chosenAbilities.value,
 
-            'strength': chosenStrength.value,
-            'constitution': chosenConstitution.value,
-            'agility': chosenAgility.value,
-            'charisma': chosenCharisma.value,
-            'inteligence': chosenInteligence.value,
-            'knowledge': chosenKnowledge.value,
+                    'strength': chosenStrength.value,
+                    'constitution': chosenConstitution.value,
+                    'agility': chosenAgility.value,
+                    'charisma': chosenCharisma.value,
+                    'inteligence': chosenInteligence.value,
+                    'knowledge': chosenKnowledge.value,
 
-            'armor': chosenArmor.value,
-            'life': chosenLife.value,
+                    'armor': chosenArmor.value,
+                    'life': chosenLife.value,
 
-            'pierce': chosenPierce.value,
-            'damageBase': chosenDamageBase.value,
-            'damageSeverity': chosenDamageSeverity.value,
+                    'pierce': chosenPierce.value,
+                    'damageBase': chosenDamageBase.value,
+                    'damageSeverity': chosenDamageSeverity.value,
 
-            'sizeGroup': chosenSizeGroup.value
+                    'sizeGroup': chosenSizeGroup.value
+                }
+            ).then(response => { getMonsters() })
         }
-    ).then(response => { getMonsters() })
-        }
-    
+
     }).catch((nvm) => {
         console.log(nvm);
     })
 
 }
+
 
 /**
  * Smaže monstrum z databáze
