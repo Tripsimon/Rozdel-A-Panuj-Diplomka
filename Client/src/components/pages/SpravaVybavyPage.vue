@@ -40,7 +40,7 @@
                         @click="() => { chosenAbilities.push({}); chosenAbilitiesCount++ }">
                         Přidat schopnost
                     </v-btn>
-                    <AbilityCreation v-for="i in chosenAbilitiesCount" :int="i" @updatedAbility="console.log('dsa')" />
+                    <AbilityCreation v-for="i in chosenAbilitiesCount" :key="i" :int="i" @updatedAbility="(ability,index) =>{updateAbility(ability,index)}" @removeAbility="(index) =>removeAbility(index)" />
 
                     <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" type="number"
                         :rules="rules.required" label="Pruraznost">
@@ -301,7 +301,16 @@ const rules = {
 };
 
 
+function updateAbility(ability,index) {
+    chosenAbilities[index] = ability
+}
 
+function removeAbility(index) {
+    console.log(index)
+    chosenAbilitiesCount.value--;
+    chosenAbilities.value.splice(index-1, 1)
+    
+}
 
 //Zbraň', 'Zbroj', 'Předmět
 function submit() {

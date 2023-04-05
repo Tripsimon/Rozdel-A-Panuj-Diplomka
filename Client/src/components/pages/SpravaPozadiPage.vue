@@ -44,7 +44,7 @@
             </thead>
 
             <tbody>
-              <tr class="mt-2" v-for="image in this.loadedImages" :key="image">
+              <tr class="mt-2" v-for="image in loadedImages" :key="image">
                 <th>{{ image }}</th>
                 <th><v-img :src='axios.defaults.baseURL + "/backgrounds/" + image' max-height="500"></v-img></th>
                 <th><v-btn icon="mdi-close-box-outline" @click="removeImage(image)" color="error"></v-btn></th>
@@ -61,6 +61,7 @@
 
 
 <script setup>
+import {ref, onMounted} from 'vue'
 import axios from 'axios'
 import FormData from 'form-data'
 import Alert from '../parts/AlertHandler.vue'
@@ -73,41 +74,42 @@ const showAlert = ref(false)
 const alertTitle = ref("")
 const alertText = ref("")
 
-const inputFile = ref(null)
+let inputFile = null
 const inputFileName = ref(null)
 const loadedImages = ref([])
 
 
 
   onMounted(() => {
-    this.loadImages()
+    loadImages()
   })
 
 
 
 function uploadImage() {
-  if (this.inputFile == null || this.inputFileName == null) {
-    this.showAlert = true
-    this.alertText = "Nesprávně vyplněná data. Prosím, zkontrolujte si zadaná data"
+  if (inputFile == null || inputFileName == null) {
+    showAlert.value = true
+    alertText.value = "Nesprávně vyplněná data. Prosím, zkontrolujte si zadaná data"
     return
   }
 
 
   const formData = new FormData();
-  formData.append('image', this.inputFile[0], this.inputFileName)
-  formData.append('imageName', this.inputFileName)
+  console.log(inputFile[0])
+  formData.append('image', inputFile[0], inputFileName.value)
+  formData.append('imageName', inputFileName.value)
   axios.post(axios.defaults.baseURL + '/pozadi/nahraniSouboru', formData)
 }
 
 function removeImage(img) {
   axios.delete(axios.defaults.baseURL + '/pozadi/smazaniSouboru/' + img)
-    .then(this.loadImages())
+    .then(loadImages())
 }
 
 function loadImages() {
   axios.get(axios.defaults.baseURL + '/pozadi/dump')
     .then(queryResponse => {
-      this.loadedImages = queryResponse.data
+      loadedImages.value = queryResponse.data
     })
 }
 
