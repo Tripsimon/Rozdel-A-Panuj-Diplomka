@@ -43,12 +43,13 @@
                     </v-btn>
 
                     <div v-for="instance in abilityNumber" v-bind:key="instance">
-                        <v-row >
+                        <v-row>
                             <v-col>
                                 <h3 class="mt-3">Schopnost #{{ instance }}</h3>
                             </v-col>
 
-                            <v-btn align="right" icon="mdi-close-box-outline" @click="removeAbility(instance-1)" color="error"></v-btn>
+                            <v-btn align="right" icon="mdi-close-box-outline" @click="removeAbility(instance - 1)"
+                                color="error"></v-btn>
 
                         </v-row>
                         <v-divider class="mb-3"></v-divider>
@@ -311,40 +312,41 @@ function getMonsters() {
 
 function removeAbility(index) {
     this.abilityNumber--;
-    chosenAbilities.value.splice(index,1)
+    chosenAbilities.value.splice(index, 1)
 }
 
 function submit() {
-    form.value?.validate().then(({ valid }) => {
-        if (valid) {
-            axios.post(axios.defaults.baseURL + '/monster/createMonster',
-                {
-                    'name': chosenName.value,
-                    'description': chosenDescription.value,
-                    'abilities': chosenAbilities.value,
+    form.value?.validate()
+        .then(({ valid }) => {
+            if (valid) {
+                axios.post(axios.defaults.baseURL + '/monster/createMonster',
+                    {
+                        'name': chosenName.value,
+                        'description': chosenDescription.value,
+                        'abilities': chosenAbilities.value,
 
-                    'strength': chosenStrength.value,
-                    'constitution': chosenConstitution.value,
-                    'agility': chosenAgility.value,
-                    'charisma': chosenCharisma.value,
-                    'inteligence': chosenInteligence.value,
-                    'knowledge': chosenKnowledge.value,
+                        'strength': chosenStrength.value,
+                        'constitution': chosenConstitution.value,
+                        'agility': chosenAgility.value,
+                        'charisma': chosenCharisma.value,
+                        'inteligence': chosenInteligence.value,
+                        'knowledge': chosenKnowledge.value,
 
-                    'armor': chosenArmor.value,
-                    'life': chosenLife.value,
+                        'armor': chosenArmor.value,
+                        'life': chosenLife.value,
 
-                    'pierce': chosenPierce.value,
-                    'damageBase': chosenDamageBase.value,
-                    'damageSeverity': chosenDamageSeverity.value,
+                        'pierce': chosenPierce.value,
+                        'damageBase': chosenDamageBase.value,
+                        'damageSeverity': chosenDamageSeverity.value,
 
-                    'sizeGroup': chosenSizeGroup.value
-                }
-            ).then(response => { getMonsters() })
-        }
+                        'sizeGroup': chosenSizeGroup.value
+                    }
+                ).then(response => { getMonsters() })
+            }
 
-    }).catch((nvm) => {
-        console.log(nvm);
-    })
+        }).catch((nvm) => {
+            console.log(nvm);
+        })
 
 }
 

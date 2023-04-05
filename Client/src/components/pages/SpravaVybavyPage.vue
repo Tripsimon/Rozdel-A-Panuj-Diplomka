@@ -1,94 +1,103 @@
-
-
-<script setup>
-import axios from 'axios'
-</script>
 <template>
-
-
     <!-- Výber typu-->
     <v-container>
-        <Alert  type="error" style='z-index:2000' :title="alertTitle" :text="alertText" v-model="showAlert"/>
+        <Alert type="error" style='z-index:2000' :title="alertTitle" :text="alertText" v-model="showAlert" />
         <v-card color="primary">
-            <h1 class="d-flex justify-center">Správa výbavy</h1>
-            <v-card-text>
-                <v-select color="secondary" variant="outlined" label="Typ" :items="['Zbraň', 'Zbroj', 'Předmět']" v-model="chosenType"
-                    @update:modelValue="updateData()"></v-select>
-            </v-card-text>
-        </v-card>
-        <v-form v-if="chosenType != null" ref="form" v-model="valid" fast-fail @submit.prevent="submit">
+            <v-form ref="form" @submit.prevent="submit">
+                <v-card-title>
+                    <h1 align="center" class="ma-3">Správa výbavy</h1>
+                </v-card-title>
 
-            <!-- Zbraně -->
-            <v-card title="Tvorba předmětu" color="primary" class="mt-5">
+                <v-card-text>
+                    <v-select color="secondary" variant="outlined" label="Typ" :items="['Zbraň', 'Zbroj', 'Předmět']"
+                        v-model="chosenType" @update:modelValue="updateData()"></v-select>
+                </v-card-text>
+
+                <!-- Zbran-->
                 <v-card-text v-if="chosenType == 'Zbraň'">
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
-                    </v-text-field>
+                    <h2>Tvorba zbraně</h2>
+                    <v-divider class="mb-3"></v-divider>
+
 
                     <v-row>
-
                         <v-col>
-                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
-                            </v-textarea>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="rules.required"
+                                label="Jméno předmětu">
+                            </v-text-field>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number"
+                                :rules="rules.required" label="Váha">
+                            </v-text-field>
                         </v-col>
-
                         <v-col>
-                            <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities"  label="Schopnosti předmětu"
-                                required>
+                            <v-textarea style="height: 125%;" color="secondary" variant="outlined"
+                                v-model="chosenDescription" :rules="rules.required" label="Popis předmětu">
                             </v-textarea>
                         </v-col>
 
                     </v-row>
 
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" type="number" :rules="this.rules.required" label="Pruraznost" required>
+                    <v-btn class="mb-3" color="secondary" variant="outlined"
+                        @click="() => { chosenAbilities.push({}); chosenAbilitiesCount++ }">
+                        Přidat schopnost
+                    </v-btn>
+                    <AbilityCreation v-for="i in chosenAbilitiesCount" :int="i" @updatedAbility="console.log('dsa')" />
+
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" type="number"
+                        :rules="rules.required" label="Pruraznost">
                     </v-text-field>
 
                     <v-row>
                         <v-col>
 
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageBase" type="number" :rules="this.rules.required" label="Základní poškození"
-                                required>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageBase" type="number"
+                                :rules="rules.required" label="Základní poškození">
                             </v-text-field>
                         </v-col>
 
                         <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageSeverity" type="number" :rules="this.rules.required"
-                                label="Závažnost poškození" required>
+                            <v-text-field color="secondary" variant="outlined" v-model="chosenDamageSeverity" type="number"
+                                :rules="rules.required" label="Závažnost poškození">
                             </v-text-field>
                         </v-col>
 
 
                     </v-row>
 
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
-                    </v-text-field>
+
 
                 </v-card-text>
 
 
                 <!-- Zbroj -->
                 <v-card-text v-if="chosenType == 'Zbroj'">
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
+                    <h2>Tvorba zbroje</h2>
+                    <v-divider class="mb-3"></v-divider>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="rules.required"
+                        label="Jméno předmětu">
                     </v-text-field>
 
                     <v-row>
 
                         <v-col>
-                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription"
+                                :rules="rules.required" label="Popis">
                             </v-textarea>
                         </v-col>
 
                         <v-col>
-                            <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities"  label="Schopnosti předmětu"
-                                required>
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities"
+                                label="Schopnosti předmětu">
                             </v-textarea>
                         </v-col>
 
                     </v-row>
 
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" type="number" :rules="this.rules.required" label="Obrana" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" type="number"
+                        :rules="rules.required" label="Obrana">
                     </v-text-field>
 
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number"
+                        :rules="rules.required" label="Váha">
                     </v-text-field>
 
                 </v-card-text>
@@ -96,43 +105,50 @@ import axios from 'axios'
 
                 <!-- Předmět -->
                 <v-card-text v-if="chosenType == 'Předmět'">
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="this.rules.required" label="Jméno předmětu" required>
+                    <h2>Tvorba předmětu</h2>
+                    <v-divider class="mb-3"></v-divider>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="rules.required"
+                        label="Jméno předmětu">
                     </v-text-field>
                     <v-row>
 
                         <v-col>
-                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription" :rules="this.rules.required" label="Popis" required>
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription"
+                                :rules="rules.required" label="Popis">
                             </v-textarea>
                         </v-col>
 
                         <v-col>
-                            <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities"  label="Schopnosti předmětu"
-                                required>
+                            <v-textarea color="secondary" variant="outlined" v-model="chosenAbilities"
+                                label="Schopnosti předmětu">
                             </v-textarea>
                         </v-col>
 
+                        <AbilityCreation />
+
                     </v-row>
 
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number" :rules="this.rules.required" label="Váha" required>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number"
+                        :rules="rules.required" label="Váha">
                     </v-text-field>
 
                 </v-card-text>
 
-                <v-card-actions>
+                <v-card-actions v-if="chosenType != null">
                     <v-btn color="secondary" variant="text" @click="submit">
                         Nahrát
                     </v-btn>
                 </v-card-actions>
-            </v-card>
-        </v-form>
+            </v-form>
+        </v-card>
+
 
         <!-- Export dat -->
-        <v-card v-if="chosenType != null" color="primary" class="mt-3">
+        <v-card v-if="loadedData != []" color="primary" class="mt-3">
             <v-card-text>
-                {{ this.chosenType }}
 
-                <v-table >
-                    <thead v-if="this.chosenType == 'Zbraň'"  >
+                <v-table>
+                    <thead v-if="chosenType == 'Zbraň'">
                         <tr>
                             <th>
                                 Jméno
@@ -161,7 +177,7 @@ import axios from 'axios'
                         </tr>
                     </thead>
 
-                    <thead v-if="this.chosenType == 'Zbroj'"  >
+                    <thead v-if="chosenType == 'Zbroj'">
                         <tr>
                             <th>
                                 Jméno
@@ -184,7 +200,7 @@ import axios from 'axios'
                         </tr>
                     </thead>
 
-                    <thead v-if="this.chosenType == 'Předmět'"  >
+                    <thead v-if="chosenType == 'Předmět'">
                         <tr>
                             <th>
                                 Jméno
@@ -204,8 +220,8 @@ import axios from 'axios'
                         </tr>
                     </thead>
 
-                    <tbody v-if="this.chosenType == 'Zbraň'" >
-                        <tr v-for="item in this.loadedData" :key="item._id">
+                    <tbody v-if="chosenType == 'Zbraň'">
+                        <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
                             <th>{{ item.schopnosti }}</th>
@@ -214,29 +230,32 @@ import axios from 'axios'
                             <th>{{ item.poskozeniZavaznost }}</th>
                             <th>{{ item.vaha }}</th>
                             <!-- TODO: Asi ikonka -->
-                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn></th>
+                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
+                            </th>
                         </tr>
                     </tbody>
 
-                    <tbody v-if="this.chosenType == 'Zbroj'" >
-                        <tr v-for="item in this.loadedData" :key="item._id">
+                    <tbody v-if="chosenType == 'Zbroj'">
+                        <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
                             <th>{{ item.schopnosti }}</th>
                             <th>{{ item.obrana }}</th>
                             <th>{{ item.vaha }}</th>
                             <!-- TODO: Asi ikonka -->
-                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn></th>
+                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
+                            </th>
                         </tr>
                     </tbody>
 
-                    <tbody v-if="this.chosenType == 'Předmět'" >
-                        <tr v-for="item in this.loadedData" :key="item._id">
+                    <tbody v-if="chosenType == 'Předmět'">
+                        <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
                             <th>{{ item.schopnosti }}</th>
                             <th>{{ item.vaha }}</th>
-                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn></th>
+                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
+                            </th>
                         </tr>
                     </tbody>
                 </v-table>
@@ -247,183 +266,178 @@ import axios from 'axios'
 
 
 
-<script>
-
+<script setup>
+import { ref } from 'vue'
 import Alert from '../parts/AlertHandler.vue'
+import AbilityCreation from '../parts/spravaParts/abilityCreationPart.vue'
+import axios from 'axios'
 
-export default {
+//Systémové variables
+const showAlert = ref(false)
+const alertTitle = ref("")
+const alertText = ref("")
+const loadedData = ref([])
+const form = ref(null)
 
-    components: {
-        Alert
-    },
-    data: () => ({
-        //Systémové variables
-        showAlert: false,
-        alertTitle: "",
-        alertText: "",
+const chosenType = ref(null)
+const chosenName = ref(null)
+const chosenDescription = ref(null)
+const chosenAbilitiesCount = ref(0)
+const chosenAbilities = ref([])
+const chosenPierce = ref(null)
+const chosenDamageBase = ref(null)
+const chosenDamageSeverity = ref(null)
+const chosenArmor = ref(null)
+const chosenWeight = ref(null)
 
-        loadedData: [],
-
-        chosenType: null,
-        chosenName: null,
-        chosenDescription: null,
-        chosenAbilities: null,
-        chosenPierce: null,
-        chosenDamageBase: null,
-        chosenDamageSeverity: null,
-        chosenArmor: null,
-        chosenWeight: null,
-
-        //validace
-        rules: {
-            required: [
-                value => {
-                    if (value?.length > 0) return true
-                    return 'Formulář není vyplněný'
-                },
-            ],
+//validace
+const rules = {
+    required: [
+        value => {
+            if (value?.length > 0) return true
+            return 'Formulář není vyplněný'
         },
-        valid: '',
-
-    }),
-
+    ],
+};
 
 
-    methods: {
-
-        //Zbraň', 'Zbroj', 'Předmět
-        submit(){
-            if(this.valid){
 
 
-            switch (this.chosenType) {
-                case 'Zbraň':
-                    this.uploadWeapon();
-                    this.updateData()
-                    this.clearInputs()
-                    break;
-            
-                case 'Zbroj':
-                    this.uploadArmor()
-                    this.updateData()
-                    this.clearInputs()
-                    break;
+//Zbraň', 'Zbroj', 'Předmět
+function submit() {
 
-                case 'Předmět':
-                    this.uploadItem()
-                    this.updateData()
-                    this.clearInputs()
-                    break;
+    form.value?.validate()
+        .then(({ valid }) => {
+            if (valid) {
+                switch (chosenType.value) {
+                    case 'Zbraň':
+                        uploadWeapon();
+                        updateData()
+                        clearInputs()
+                        break;
 
-                default:
-                    break;
+                    case 'Zbroj':
+                        uploadArmor()
+                        updateData()
+                        clearInputs()
+                        break;
+
+                    case 'Předmět':
+                        uploadItem()
+                        updateData()
+                        clearInputs()
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+                showAlert.value = true;
+                alertTitle.value = "Nevyplněný formulář"
+                alertText.value = "Prosím, vyplňte všechny potřebné složky formuláře"
             }
-            }else{
-                this.showAlert = true;
-                this.alertTitle = "Nevyplněný formulář"
-                this.alertText = "Prosím, vyplňte všechny potřebné složky formuláře"
+        })
+}
+
+function uploadWeapon() {
+    axios.post(axios.defaults.baseURL + '/vybava/createWeapon',
+        {
+            'name': chosenName.value,
+            'type': chosenType.value,
+            'description': chosenDescription.value,
+            'abilities': chosenAbilities.value,
+            'pierce': chosenPierce.value,
+            'damageBase': chosenDamageBase.value,
+            'damageSeverity': chosenDamageSeverity.value,
+            'weight': chosenWeight.value
+        })
+        .then(queryResponse => {
+            if (queryResponse.status == 200) {
+                updateData()
             }
-        },
+        })
+}
 
-        uploadWeapon() {
-            axios.post(axios.defaults.baseURL+'/vybava/createWeapon',
-                {
-                    'name': this.chosenName,
-                    'type': this.chosenType,
-                    'description': this.chosenDescription,
-                    'abilities': this.chosenAbilities,
-                    'pierce': this.chosenPierce,
-                    'damageBase': this.chosenDamageBase,
-                    'damageSeverity': this.chosenDamageSeverity,
-                    'weight': this.chosenWeight
-                })
-                .then(queryResponse => {
-                    if (queryResponse.status == 200) {
-                        this.updateData()
-                    }
-                })
-        },
-
-        uploadArmor() {
-            axios.post(axios.defaults.baseURL+'/vybava/createArmor',
-                {
-                    'name': this.chosenName,
-                    'type': this.chosenType,
-                    'description': this.chosenDescription,
-                    'abilities': this.chosenAbilities,
-                    'obrana': this.chosenArmor,
-                    'weight': this.chosenWeight
-                })
-                .then(queryResponse => {
-                    if (queryResponse.status == 200) {
-                        this.updateData()
-                    }
-                })
-        },
-
-        /**
-         * Nahraje předmět do databáze
-         */
-        uploadItem() {
-            if(this.valid){
-            axios.post(axios.defaults.baseURL+'/vybava/createItem',
-                {
-                    'name': this.chosenName,
-                    'type': this.chosenType,
-                    'description': this.chosenDescription,
-                    'abilities': this.chosenAbilities,
-                    'weight': this.chosenWeight
-                })
-                .then(queryResponse => {
-                    if (queryResponse.status == 200) {
-                        this.updateData()
-                        this.clearInputs()
-                    }
-                })
-            }else{
-                this.showAlert = true;
-                this.alertTitle = "Neplatný formulář"
-                this.alertText = "Formulář není správně vyplněný. Prosím zkontrolujte si zadaná data"
+function uploadArmor() {
+    axios.post(axios.defaults.baseURL + '/vybava/createArmor',
+        {
+            'name': chosenName,
+            'type': chosenType,
+            'description': chosenDescription,
+            'abilities': chosenAbilities,
+            'obrana': chosenArmor,
+            'weight': chosenWeight
+        })
+        .then(queryResponse => {
+            if (queryResponse.status == 200) {
+                updateData()
             }
-        },
+        })
+}
 
-        /**
-         * Načte nová data pro zobrazení v tabulce existujících předmětů
-         */
-        updateData() {
-            axios.get(axios.defaults.baseURL+'/vybava/allType', { params: { type: this.chosenType } })
-                .then(response => {
-                    this.loadedData = response.data
-                })
-        },
-
-        /**
-         * Smaže item z databáze předmětů
-         */
-        removeItem(itemID) {
-            axios.get(axios.defaults.baseURL+'/vybava/removeItem', { params: { itemID: itemID } })
-                .then(queryResponse => {
-                    if (queryResponse.status == 200) {
-                        this.updateData()
-                    }
-                })
-        },
-
-        /**
-         * Vyčistí formulář 
-         */
-        clearInputs() {
-                this.chosenName = null,
-                this.chosenDescription = null,
-                this.chosenAbilities = null,
-                this.chosenPierce = null,
-                this.chosenDamageBase = null,
-                this.chosenDamageSeverity = null,
-                this.chosenArmor = null,
-                this.chosenWeight = null
-        }
+/**
+ * Nahraje předmět do databáze
+ */
+function uploadItem() {
+    if (this.valid) {
+        axios.post(axios.defaults.baseURL + '/vybava/createItem',
+            {
+                'name': chosenName,
+                'type': chosenType,
+                'description': chosenDescription,
+                'abilities': chosenAbilities,
+                'weight': chosenWeight
+            })
+            .then(queryResponse => {
+                if (queryResponse.status == 200) {
+                    updateData()
+                    clearInputs()
+                }
+            })
+    } else {
+        showAlert.value = true;
+        alertTitle.value = "Neplatný formulář"
+        alertText.value = "Formulář není správně vyplněný. Prosím zkontrolujte si zadaná data"
     }
 }
+
+/**
+ * Načte nová data pro zobrazení v tabulce existujících předmětů
+ */
+function updateData() {
+    axios.get(axios.defaults.baseURL + '/vybava/allType', { params: { type: chosenType.value } })
+        .then(response => {
+            loadedData.value = response.data
+        })
+}
+
+/**
+ * Smaže item z databáze předmětů
+ */
+function removeItem(itemID) {
+    axios.get(axios.defaults.baseURL + '/vybava/removeItem', { params: { itemID: itemID } })
+        .then(queryResponse => {
+            if (queryResponse.status == 200) {
+                updateData()
+            }
+        })
+}
+
+/**
+ * Vyčistí formulář 
+ */
+function clearInputs() {
+    chosenName.value = null,
+        chosenDescription.value = null,
+        chosenAbilities.value = null,
+        chosenPierce.value = null,
+        chosenDamageBase.value = null,
+        chosenDamageSeverity.value = null,
+        chosenArmor.value = null,
+        chosenWeight.value = null
+}
+
+
 </script>
 
 <style></style>
