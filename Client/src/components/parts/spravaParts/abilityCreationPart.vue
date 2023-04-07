@@ -13,7 +13,7 @@
                 <v-text-field color="secondary" v-model="ability.jmeno" variant="outlined" label="Jméno schopnosti"
                     @change="change" :rules="rules.required"> </v-text-field>
 
-                <v-select color="secondary" @change="change" v-model="ability.typ" variant="outlined" label="Typ"
+                <v-select color="secondary" @update:modelValue="change" v-model="ability.typ" variant="outlined" label="Typ"
                     :items='["Pasivní", "Aktivní"]' :rules="rules.required"> </v-select>
 
                 <v-text-field v-if="ability.typ == 'Aktivní'" color="secondary" v-model="ability.cd" type="number"
@@ -21,7 +21,7 @@
             </v-col>
             <v-col>
                 <v-textarea color="secondary" variant="outlined" style="height: 125%;" v-model="ability.schopnost"
-                    label="Popis" :rules="rules.required">
+                    label="Popis" @change="change" :rules="rules.required">
                 </v-textarea>
             </v-col>
         </v-row>
@@ -34,6 +34,7 @@ import { ref } from 'vue'
 const props = defineProps(['int'])
 const ability = ref({})
 const emit = defineEmits(['updatedAbility','removeAbility']);
+const form = ref(null)
 const rules = {
     required: [
         value => {
