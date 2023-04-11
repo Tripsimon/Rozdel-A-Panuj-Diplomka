@@ -6,7 +6,6 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 </script>
 <template>
   <v-container>
-    {{ axios.defaults.baseURL }}
     <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText" />
     <v-card color="primary" class="mt-3">
       <h1 class="d-flex justify-center">Registrace</h1>

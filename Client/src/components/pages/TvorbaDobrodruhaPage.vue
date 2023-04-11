@@ -12,7 +12,7 @@
         <v-window v-model="step">
           <!-- Prvni krok-->
           <v-window-item :value="1">
-            <v-form ref="form1" v-model="validOne" quick-validation>
+            <v-form ref="form1" >
               <v-card-text>
                 <h2 class="d-flex">Pilíře Dobrodruha</h2>
                 <v-divider class="mb-3"></v-divider>
@@ -21,8 +21,8 @@
                   v-model="newAdventurer.name"></v-text-field>
                 <v-text-field color="secondary" :rules="rules.required" variant="outlined" label="Příjmení"
                   v-model="newAdventurer.secondName"></v-text-field>
-                <v-text-field color="secondary" variant="outlined" label="Přezdívka"
-                  v-model="newAdventurer.nickname"></v-text-field>
+                <v-text-field color="secondary" variant="outlined" label="Přezdívka" v-model="newAdventurer.nickname"
+                  :rules="rules.required"></v-text-field>
                 <v-select color="secondary" :rules="rules.required" variant="outlined" label="Rasa" :items="rasaMoznosti"
                   item-title="jmeno" return-object v-model="rasaVybrana" @update:modelValue="onRaceSelect"></v-select>
 
@@ -63,7 +63,7 @@
 
                 <!-- Karta pro popis vybrané rasy -->
                 <v-select color="secondary" variant="outlined" v-if="newAdventurer.race != null"
-                  :items="rasaVybrana.dostupneTridy" v-model="tridaVybrana" label="Povolání"
+                  :items="rasaVybrana.dostupneTridy" :rules="rules.required" v-model="tridaVybrana" label="Povolání"
                   @update:modelValue="onClassSelect()"></v-select>
 
                 <!-- Karta pro popis vybraného povolání-->
@@ -73,7 +73,7 @@
 
                   <h3>Bonusové schopnosti:</h3>
                   <v-divider class="mb-3" color="secondary"></v-divider>
-                  <AbilityCard class="mb-3" v-for="ability in tridaSchopnosti" :key="ability_id" :ability="ability" />
+                  <AbilityCard class="mb-3" v-for="ability in tridaSchopnosti" :key="ability._id" :ability="ability" />
                 </div>
 
               </v-card-text>
@@ -83,226 +83,132 @@
 
           <!-- Druhý krok-->
           <v-window-item :value="2">
-            <v-alert v-model="alert1" closable title="Nevyplněné informace" text="PRosím, vyplnte požadované iformace"
-              type="error" variant="tonal"></v-alert>
+            <v-form ref="form2" quick-validation>
+              <v-card-text>
+                <h2 class="d-flex">Atributy dobrodruha</h2>
+                <v-divider class="mb-3"></v-divider>
 
-            <h2 class="d-flex justify-center">Atributy dobrodruha</h2>
-            <v-banner lines="one" icon="mdi-arrow-up-bold" color="deep-purple-accent-4" class="my-4">
-
-              <h3 class="d-flex justify-center">Volně dostupné atributy: {{ volneAtributy }}</h3>
-
-              <template v-slot:actions>
-                <v-btn @click="resetujAtributy()">Navrátit</v-btn>
-              </template>
-            </v-banner>
-
-            <v-row>
-              <v-col ols="12" sm="6">
-                <v-card title="Síla" align="center" color="primary">
-                  <v-divider color="secondary"></v-divider>
-                  <v-container class="grey lighten-5">
-                    <v-row>
-                      <v-col cols="12" sm="4">
-                        <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" color="secondary"
-                          @click="decrement('sila')">
-                        </v-btn>
-                      </v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                          class="text-h2 font-weight-light mb-4" v-text="atributes.sila"></span></v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4">
-                        <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" color="secondary"
-                          @click="increment('sila')">
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-col>
-
-              <v-col ols="12" sm="6">
-                <v-card title="Houževnatost" align="center" color="primary">
-                  <v-divider color="secondary"></v-divider>
-                  <v-container class="grey lighten-5">
-                    <v-row>
-                      <v-col cols="12" sm="4">
-                        <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" color="secondary"
-                          @click="decrement('houzevnatost')"></v-btn>
-                      </v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                          class="text-h2 font-weight-light mb-4" v-text="atributes.houzevnatost"></span></v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4">
-                        <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" color="secondary"
-                          @click="increment('houzevnatost')"></v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col ols="12" sm="6">
-                <v-card title="Obratnost" align="center" color="primary">
-                  <v-divider color="secondary"></v-divider>
-                  <v-container class="grey lighten-5">
-                    <v-row>
-                      <v-col cols="12" sm="4">
-                        <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" color="secondary"
-                          @click="decrement('obratnost')"></v-btn>
-                      </v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                          class="text-h2 font-weight-light mb-4" v-text="atributes.obratnost"></span></v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4">
-                        <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" color="secondary"
-                          @click="increment('obratnost')"></v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-col>
-
-              <v-col ols="12" sm="6">
-                <v-card title="Charisma" align="center" color="primary">
-                  <v-divider color="secondary"></v-divider>
-                  <v-container class="grey lighten-5">
-                    <v-row>
-                      <v-col cols="12" sm="4">
-                        <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" color="secondary"
-                          @click="decrement('charisma')"></v-btn>
-                      </v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                          class="text-h2 font-weight-light mb-4" v-text="atributes.charisma"></span></v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4">
-                        <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" color="secondary"
-                          @click="increment('charisma')"></v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col ols="12" sm="6">
-                <v-card title="Inteligence" align="center" color="primary">
-                  <v-divider color="secondary"></v-divider>
-                  <v-container class="grey lighten-5">
-                    <v-row>
-                      <v-col cols="12" sm="4">
-                        <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" color="secondary"
-                          @click="decrement('inteligence')"></v-btn>
-                      </v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                          class="text-h2 font-weight-light mb-4" v-text="atributes.inteligence"></span></v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4">
-                        <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" color="secondary"
-                          @click="increment('inteligence')"></v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-col>
-
-              <v-col ols="12" sm="6">
-                <v-card title="Znalost" align="center" color="primary">
-                  <v-divider color="secondary"></v-divider>
-                  <v-container class="grey lighten-5">
-                    <v-row>
-                      <v-col cols="12" sm="4">
-                        <v-btn mb="4" size="medium" variant="text" icon="mdi-minus" color="secondary"
-                          @click="decrement('znalost')"></v-btn>
-                      </v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4"><span mb="4"
-                          class="text-h2 font-weight-light mb-4" v-text="atributes.znalost"></span></v-col>
-                      <v-col align="center" justify="center" cols="12" sm="4">
-                        <v-btn mb="4" size="medium " variant="text" icon="mdi-plus" color="secondary"
-                          @click="increment('znalost')"></v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-col>
-            </v-row>
+                <v-banner lines="one" icon="mdi-arrow-up-bold" color="secondary" class="my-4">
+                  <h3 class="d-flex justify-center">Volně dostupné atributy: {{ volneAtributy }}</h3>
+                  <template v-slot:actions>
+                    <v-btn variant="outlined" @click="resetujAtributy()">Navrátit</v-btn>
+                  </template>
+                </v-banner>
 
 
+                <v-row cols="12">
+                  <v-col col="4">
+                    <AtributeCard name="Síla" :atribute="atributes.sila" @decrease="decrement('sila')"
+                      @increase="increment('sila')" />
+                  </v-col>
+                  <v-col col="4">
+                    <AtributeCard name="Houževnatost" :atribute="atributes.houzevnatost"
+                      @decrease="decrement('houzevnatost')" @increase="increment('houzevnatost')" />
+                  </v-col>
+                  <v-col col="4">
+                    <AtributeCard name="Obratnost" :atribute="atributes.obratnost" @decrease="decrement('obratnost')"
+                      @increase="increment('obratnost')" />
+                  </v-col>
+                </v-row>
 
+                <v-row cols="12">
+                  <v-col col="4">
+                    <AtributeCard name="Charisma" :atribute="atributes.charisma" @decrease="decrement('charisma')"
+                      @increase="increment('charisma')" />
+                  </v-col>
+                  <v-col col="4">
+                    <AtributeCard name="Inteligence" :atribute="atributes.inteligence"
+                      @decrease="decrement('inteligence')" @increase="increment('inteligence')" />
+                  </v-col>
+                  <v-col col="4">
+                    <AtributeCard name="Znalost" :atribute="atributes.znalost" @decrease="decrement('znalost')"
+                      @increase="increment('znalost')" />
+                  </v-col>
+                </v-row>
 
-            <h2 class="d-flex justify-center mt-3">Výbava</h2>
+                <h2 class="d-flex mt-3">Výbava</h2>
+                <v-divider class="mb-3"></v-divider>
 
-            <v-select color="secondary" variant="outlined" label="Hlavní výzbroj" v-model="newAdventurer.mainGear"
-              :items="this.tridaVybava.hlavni" item-title="jmeno" return-object>
-            </v-select>
+                <v-select color="secondary" variant="outlined" label="Hlavní výzbroj" v-model="newAdventurer.mainGear"
+                  :rules="rules.required" :items="tridaVybava.hlavni" item-title="jmeno" return-object>
+                </v-select>
 
-            <v-select color="secondary" variant="outlined" label="Sekundární výzbroj" :items="this.tridaVybava.sekundarni"
-              v-model="newAdventurer.secondaryGear" item-title="jmeno" return-object></v-select>
+                <v-select color="secondary" variant="outlined" label="Sekundární výzbroj" :items="tridaVybava.sekundarni"
+                  :rules="rules.required" v-model="newAdventurer.secondaryGear" item-title="jmeno"
+                  return-object></v-select>
 
-            <v-select color="secondary" variant="outlined" label="Bonusová výbava" :items="this.tridaVybava.bonusova"
-              v-model="newAdventurer.bonusGear" item-title="jmeno" return-object></v-select>
+                <v-select color="secondary" variant="outlined" label="Bonusová výbava" :items="tridaVybava.bonusova"
+                  :rules="rules.required" v-model="newAdventurer.bonusGear" item-title="jmeno" return-object></v-select>
 
-
-
+              </v-card-text>
+            </v-form>
           </v-window-item>
           <!-- /Druhý krok-->
 
           <!-- Třetí krok-->
           <v-window-item :value="3">
-            <h2>Role dobrodruha</h2>
+            <v-form ref="form3" quick-validation>
+              <h2 class="d-flex">Povaha dobrodruha</h2>
+              <v-divider class="mb-3"></v-divider>
 
-            <v-select color="secondary" variant="outlined"
-              :items="['Zákonné dobro', 'Neutrální dobro', 'Chaotické/zmatené dobro', 'Zákonně neutrální', 'Opravdu neutrální', 'Chaoticky neutrální', 'Zákonně zlý', 'Neutrálně zlý', 'Chaoticky zlý']"
-              v-model="newAdventurer.aligment" label="Přesvědčení"></v-select>
-            <v-text-field color="secondary" variant="outlined" label="Věk"
-              v-model="this.newAdventurer.age"></v-text-field>
-            <v-textarea color="secondary" variant="outlined" label="Popis"
-              v-model="this.newAdventurer.description"></v-textarea>
+              <v-select color="secondary" variant="outlined"
+                :items="['Zákonné dobro', 'Neutrální dobro', 'Chaotické/zmatené dobro', 'Zákonně neutrální', 'Opravdu neutrální', 'Chaoticky neutrální', 'Zákonně zlý', 'Neutrálně zlý', 'Chaoticky zlý']"
+                v-model="newAdventurer.aligment" label="Přesvědčení" :rules="rules.required"></v-select>
+              <v-text-field color="secondary" type="number" variant="outlined" label="Věk" :rules="rules.required"
+                v-model="newAdventurer.age"></v-text-field>
+              <v-textarea color="secondary" variant="outlined" label="Popis" :rules="rules.required"
+                v-model="newAdventurer.description"></v-textarea>
 
-            <v-textarea color="secondary" variant="outlined" label="Příběh"
-              v-model="this.newAdventurer.story"></v-textarea>
+              <v-textarea color="secondary" variant="outlined" label="Příběh" v-model="newAdventurer.story"
+                :rules="rules.required"></v-textarea>
+            </v-form>
           </v-window-item>
           <!-- /Třetí krok-->
 
+          <!-- Čtvrtý krok-->
           <v-window-item :value="4">
             <v-container>
-              <h2>Shrunutí</h2>
+              <h2 class="d-flex">Shrnutí</h2>
+              <v-divider class="mb-3"></v-divider>
               <v-card title="Základní informace" color="success">
                 <template v-slot:text>
-                  <p>Jméno: {{ newAdventurer.name }} </p>
-                  <p v-if="newAdventurer.nickname != null">Přezdívka: "{{ newAdventurer.nickname }}"</p>
-                  <p> Příjmení: {{ newAdventurer.secondName }}</p>
+                  <p>Jméno: {{ newAdventurer.value.name }} </p>
+                  <p v-if="newAdventurer.value.nickname != null">Přezdívka: "{{ newAdventurer.value.nickname }}"</p>
+                  <p> Příjmení: {{ newAdventurer.value.secondName }}</p>
                 </template>
               </v-card>
 
               <v-card title="Statistiky" class="mt-5" color="success">
                 <template v-slot:text>
                   <h4>Síla:</h4>
-                  <p>{{ atributes.sila }} </p>
-                  <p v-if="rasaVybrana.bonusoveAtributy.sila">Bonus:
-                    {{ rasaVybrana.bonusoveAtributy.sila }}</p>
+                  <p>{{ atributes.value.sila }} </p>
+                  <p v-if="rasaVybrana.value.bonusoveAtributy.sila">Bonus:
+                    {{ rasaVybrana.value.bonusoveAtributy.sila }}</p>
 
                   <h4>Houževnatost:</h4>
-                  <p>{{ atributes.houzevnatost }} </p>
-                  <p v-if="rasaVybrana.bonusoveAtributy.houzevnatost">Bonus:
+                  <p>{{ atributes.value.houzevnatost }} </p>
+                  <p v-if="rasaVybrana.value.bonusoveAtributy.houzevnatost">Bonus:
                     {{ rasaVybrana.bonusoveAtributy.houzevnatost }}</p>
 
                   <h4>Obratnost:</h4>
-                  <p>{{ atributes.obratnost }} </p>
+                  <p>{{ atributes.value.obratnost }} </p>
                   <p v-if="rasaVybrana.bonusoveAtributy.obratnost">Bonus:
                     {{ rasaVybrana.bonusoveAtributy.obratnost }}</p>
 
                   <h4>Charisma:</h4>
-                  <p>{{ atributes.charisma }} </p>
+                  <p>{{ atributes.value.charisma }} </p>
                   <p v-if="rasaVybrana.bonusoveAtributy.charisma">Bonus:
                     {{ rasaVybrana.bonusoveAtributy.charisma }}</p>
 
                   <h4>Inteligence:</h4>
-                  <p>{{ atributes.inteligence }} </p>
+                  <p>{{ atributes.value.inteligence }} </p>
                   <p v-if="rasaVybrana.bonusoveAtributy.inteligence">Bonus:
                     {{ rasaVybrana.bonusoveAtributy.inteligence }}</p>
 
                   <h4>Znalost:</h4>
-                  <p>{{ atributes.znalost }} </p>
-                  <p v-if="rasaVybrana.bonusoveAtributy.znalost">Bonus:
-                    {{ rasaVybrana.bonusoveAtributy.znalost }}</p>
+                  <p>{{ atributes.value.znalost }} </p>
+                  <p v-if="rasaVybrana.value.bonusoveAtributy.znalost">Bonus:
+                    {{ rasaVybrana.value.bonusoveAtributy.znalost }}</p>
 
                 </template>
               </v-card>
@@ -315,10 +221,8 @@
                 </template>
               </v-card>
             </v-container>
-
-
           </v-window-item>
-
+          <!-- /Čtvrtý krok-->
         </v-window>
 
 
@@ -351,6 +255,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import AbilityCard from '../parts/AbilityCard.vue'
+import AtributeCard from '../parts/spravaParts/atributeBlockPart.vue'
 import Alert from '../parts/AlertHandler.vue'
 import axios from 'axios';
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
@@ -394,8 +299,9 @@ const rules = {
   ]
 }
 const step = ref(1)
-const alert2 = ref(false)
-const alert3 = ref(false)
+const form1 = ref()
+const form2 = ref()
+const form3 = ref()
 const newAdventurer = ref({
   name: null,
   secondName: null,
@@ -448,18 +354,18 @@ function onClassSelect() {
     .then(query => {
       tridaVybranaObjekt.value = query.data
 
-      axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.hlavniVybava } })
+      axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.value.hlavniVybava } })
         .then(queryResponse => {
           tridaVybava.value.hlavni = queryResponse.data
         })
 
-      axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.krajniVybava } })
+      axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.value.krajniVybava } })
         .then(queryResponse => {
           tridaVybava.value.sekundarni = queryResponse.data
         })
 
 
-      axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.bonusovaVybava } })
+      axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.value.bonusovaVybava } })
         .then(queryResponse => {
           tridaVybava.value.bonusova = queryResponse.data
         })
@@ -480,44 +386,44 @@ function onClassSelect() {
 function decrement(stat) {
   switch (stat) {
     case "sila":
-      if (atributes.sila > 1) {
-        atributes.sila--;
-        volneAtributy++;
+      if (atributes.value.sila > 1) {
+        atributes.value.sila--;
+        volneAtributy.value++;
       }
       break
 
     case "houzevnatost":
-      if (atributes.houzevnatost > 1) {
-        atributes.houzevnatost--;
-        volneAtributy++;
+      if (atributes.value.houzevnatost > 1) {
+        atributes.value.houzevnatost--;
+        volneAtributy.value++;
       }
       break;
 
     case "obratnost":
-      if (atributes.obratnost > 1) {
-        atributes.obratnost--;
-        volneAtributy++;
+      if (atributes.value.obratnost > 1) {
+        atributes.value.obratnost--;
+        volneAtributy.value++;
       }
       break;
 
     case "charisma":
-      if (atributes.charisma > 1) {
-        atributes.charisma--;
-        volneAtributy++;
+      if (atributes.value.charisma > 1) {
+        atributes.value.charisma--;
+        volneAtributy.value++;
       }
       break;
 
     case "inteligence":
-      if (atributes.inteligence > 1) {
-        atributes.inteligence--;
-        volneAtributy++;
+      if (atributes.value.inteligence > 1) {
+        atributes.value.inteligence--;
+        volneAtributy.value++;
       }
       break;
 
     case "znalost":
-      if (atributes.znalost > 1) {
-        atributes.znalost--;
-        volneAtributy++;
+      if (atributes.value.znalost > 1) {
+        atributes.value.znalost--;
+        volneAtributy.value++;
       }
       break;
 
@@ -530,44 +436,44 @@ function decrement(stat) {
 function increment(stat) {
   switch (stat) {
     case "sila":
-      if (atributes.sila < 20 && volneAtributy > 0) {
-        atributes.sila++;
-        volneAtributy--;
+      if (atributes.value.sila < 20 && volneAtributy.value > 0) {
+        atributes.value.sila++;
+        volneAtributy.value--;
       }
       break;
 
     case "houzevnatost":
-      if (atributes.houzevnatost < 20 && volneAtributy > 0) {
-        atributes.houzevnatost++;
-        volneAtributy--;
+      if (atributes.value.houzevnatost < 20 && volneAtributy.value > 0) {
+        atributes.value.houzevnatost++;
+        volneAtributy.value--;
       }
       break;
 
     case "obratnost":
-      if (atributes.obratnost < 20 && volneAtributy > 0) {
-        atributes.obratnost++;
-        volneAtributy--;
+      if (atributes.value.obratnost < 20 && volneAtributy.value > 0) {
+        atributes.value.obratnost++;
+        volneAtributy.value--;
       }
       break;
 
     case "charisma":
-      if (atributes.charisma < 20 && volneAtributy > 0) {
-        atributes.charisma++;
-        volneAtributy--;
+      if (atributes.value.charisma < 20 && volneAtributy.value > 0) {
+        atributes.value.charisma++;
+        volneAtributy.value--;
       }
       break;
 
     case "inteligence":
-      if (atributes.inteligence < 20 && volneAtributy > 0) {
-        atributes.inteligence++;
-        volneAtributy--;
+      if (atributes.value.inteligence < 20 && volneAtributy.value > 0) {
+        atributes.value.inteligence++;
+        volneAtributy.value--;
       }
       break;
 
     case "znalost":
-      if (atributes.znalost < 20 && volneAtributy > 0) {
-        atributes.znalost++;
-        volneAtributy--;
+      if (atributes.value.znalost < 20 && volneAtributy.value > 0) {
+        atributes.value.znalost++;
+        volneAtributy.value--;
       }
       break;
   }
@@ -588,33 +494,33 @@ function resetujAtributy() {
 // Navigace v formuláři
 function nextFormPage() {
 
-  switch (step) {
+  switch (step.value) {
     case 1:
-      if (newAdventurer.name == null || newAdventurer.race == null || newAdventurer.class == null || newAdventurer.secondName == null) {
-
-        alert1 = true;
-      } else {
-        alert1 = false;
-        step++
-      }
+      form1.value?.validate()
+        .then(valid => {
+          if (valid) {
+            step.value++;
+          }
+        })
       break;
 
     case 2:
-      if (newAdventurer.mainGear == null || newAdventurer.secondaryGear == null || newAdventurer.bonusGear == null) {
+      form2.value?.validate()
+        .then(valid => {
+          if (valid) {
+            step.value++;
+          }
+        })
 
-      } else {
-        alert2 = false;
-        step++
-      }
       break;
 
     case 3:
-      if (newAdventurer.aligment == null || newAdventurer.age == null) {
-
-      } else {
-        alert3 = false;
-        step++;
-      }
+      form3.value?.validate()
+        .then(valid => {
+          if (valid) {
+            step.value++;
+          }
+        })
       break;
     default:
       break;
@@ -623,8 +529,8 @@ function nextFormPage() {
 }
 
 function previousFormPage() {
-  if (step >= 2) {
-    step--
+  if (step.value >= 2) {
+    step.value--
   }
 }
 
