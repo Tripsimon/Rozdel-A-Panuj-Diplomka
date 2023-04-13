@@ -12,7 +12,7 @@
         <v-window v-model="step">
           <!-- Prvni krok-->
           <v-window-item :value="1">
-            <v-form ref="form1" >
+            <v-form ref="form1">
               <v-card-text>
                 <h2 class="d-flex">Pilíře Dobrodruha</h2>
                 <v-divider class="mb-3"></v-divider>
@@ -83,7 +83,7 @@
 
           <!-- Druhý krok-->
           <v-window-item :value="2">
-            <v-form ref="form2" quick-validation>
+            <v-form ref="form2">
               <v-card-text>
                 <h2 class="d-flex">Atributy dobrodruha</h2>
                 <v-divider class="mb-3"></v-divider>
@@ -147,7 +147,7 @@
 
           <!-- Třetí krok-->
           <v-window-item :value="3">
-            <v-form ref="form3" quick-validation>
+            <v-form ref="form3">
               <h2 class="d-flex">Povaha dobrodruha</h2>
               <v-divider class="mb-3"></v-divider>
 
@@ -170,50 +170,52 @@
             <v-container>
               <h2 class="d-flex">Shrnutí</h2>
               <v-divider class="mb-3"></v-divider>
-              <v-card title="Základní informace" color="success">
+
+              <v-card title="Základní informace" >
                 <template v-slot:text>
-                  <p>Jméno: {{ newAdventurer.value.name }} </p>
-                  <p v-if="newAdventurer.value.nickname != null">Přezdívka: "{{ newAdventurer.value.nickname }}"</p>
-                  <p> Příjmení: {{ newAdventurer.value.secondName }}</p>
+                  
+                  <p>Jméno: {{ newAdventurer.name }} </p>
+                  <p v-if="newAdventurer.nickname != null">Přezdívka: "{{ newAdventurer.nickname }}"</p>
+                  <p> Příjmení: {{ newAdventurer.secondName }}</p>
                 </template>
               </v-card>
 
-              <v-card title="Statistiky" class="mt-5" color="success">
+              <v-card title="Statistiky" class="mt-5" >
                 <template v-slot:text>
                   <h4>Síla:</h4>
-                  <p>{{ atributes.value.sila }} </p>
-                  <p v-if="rasaVybrana.value.bonusoveAtributy.sila">Bonus:
-                    {{ rasaVybrana.value.bonusoveAtributy.sila }}</p>
+                  <p>{{ atributes.sila }} </p>
+                  <p v-if="rasaVybrana.bonusoveAtributy.sila">Bonus:
+                    {{ rasaVybrana.bonusoveAtributy.sila }}</p>
 
                   <h4>Houževnatost:</h4>
-                  <p>{{ atributes.value.houzevnatost }} </p>
-                  <p v-if="rasaVybrana.value.bonusoveAtributy.houzevnatost">Bonus:
+                  <p>{{ atributes.houzevnatost }} </p>
+                  <p v-if="rasaVybrana.bonusoveAtributy.houzevnatost">Bonus:
                     {{ rasaVybrana.bonusoveAtributy.houzevnatost }}</p>
 
                   <h4>Obratnost:</h4>
-                  <p>{{ atributes.value.obratnost }} </p>
+                  <p>{{ atributes.obratnost }} </p>
                   <p v-if="rasaVybrana.bonusoveAtributy.obratnost">Bonus:
                     {{ rasaVybrana.bonusoveAtributy.obratnost }}</p>
 
                   <h4>Charisma:</h4>
-                  <p>{{ atributes.value.charisma }} </p>
+                  <p>{{ atributes.charisma }} </p>
                   <p v-if="rasaVybrana.bonusoveAtributy.charisma">Bonus:
                     {{ rasaVybrana.bonusoveAtributy.charisma }}</p>
 
                   <h4>Inteligence:</h4>
-                  <p>{{ atributes.value.inteligence }} </p>
+                  <p>{{ atributes.inteligence }} </p>
                   <p v-if="rasaVybrana.bonusoveAtributy.inteligence">Bonus:
                     {{ rasaVybrana.bonusoveAtributy.inteligence }}</p>
 
                   <h4>Znalost:</h4>
-                  <p>{{ atributes.value.znalost }} </p>
-                  <p v-if="rasaVybrana.value.bonusoveAtributy.znalost">Bonus:
-                    {{ rasaVybrana.value.bonusoveAtributy.znalost }}</p>
+                  <p>{{ atributes.znalost }} </p>
+                  <p v-if="rasaVybrana.bonusoveAtributy.znalost">Bonus:
+                    {{ rasaVybrana.bonusoveAtributy.znalost }}</p>
 
                 </template>
               </v-card>
 
-              <v-card title="Výbava" color="success" class="mt-5" text="...">
+              <v-card title="Výbava"  class="mt-5" text="...">
                 <template v-slot:text>
                   <h4>Hlavní výbava: {{ newAdventurer.mainGear.jmeno }}</h4>
                   <h4>Postranní výbava: {{ newAdventurer.secondaryGear.jmeno }}</h4>
@@ -254,6 +256,7 @@
   
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter,  } from 'vue-router'
 import AbilityCard from '../parts/AbilityCard.vue'
 import AtributeCard from '../parts/spravaParts/atributeBlockPart.vue'
 import Alert from '../parts/AlertHandler.vue'
@@ -262,6 +265,8 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
 
 //Systémové variables
+const router = useRouter()
+
 const showAlert = ref(false)
 const alertTitle = ref("")
 const alertText = ref("")
@@ -497,8 +502,8 @@ function nextFormPage() {
   switch (step.value) {
     case 1:
       form1.value?.validate()
-        .then(valid => {
-          if (valid) {
+        .then(form => {
+          if (form.valid) {
             step.value++;
           }
         })
@@ -506,8 +511,8 @@ function nextFormPage() {
 
     case 2:
       form2.value?.validate()
-        .then(valid => {
-          if (valid) {
+        .then(form => {
+          if (form.valid) {
             step.value++;
           }
         })
@@ -516,8 +521,8 @@ function nextFormPage() {
 
     case 3:
       form3.value?.validate()
-        .then(valid => {
-          if (valid) {
+        .then(form => {
+          if (form.valid) {
             step.value++;
           }
         })
@@ -536,29 +541,35 @@ function previousFormPage() {
 
 function sendtoDB() {
   //Přidání atributů
-  if (rasaVybrana.bonusoveAtributy.sila != null) {
-    atributes.sila = atributes.sila + rasaVybrana.bonusoveAtributy.sila
+  if (rasaVybrana.value.bonusoveAtributy.sila != null) {
+    atributes.value.sila = atributes.value.sila + rasaVybrana.value.bonusoveAtributy.sila
+    console.log(atributes.value.sila)
   }
-  if (rasaVybrana.bonusoveAtributy.houzevnatost != null) {
-    atributes.houzevnatost = atributes.houzevnatost + rasaVybrana.bonusoveAtributy.houzevnatost
+  if (rasaVybrana.value.bonusoveAtributy.houzevnatost != null) {
+    atributes.value.houzevnatost = atributes.value.houzevnatost + rasaVybrana.value.bonusoveAtributy.houzevnatost
+    console.log(atributes.value.houzevnatost)
   }
-  if (rasaVybrana.bonusoveAtributy.obratnost != null) {
-    atributes.obratnost = atributes.obratnost + rasaVybrana.bonusoveAtributy.obratnost
+  if (rasaVybrana.value.bonusoveAtributy.obratnost != null) {
+    atributes.value.obratnost = atributes.value.obratnost + rasaVybrana.value.bonusoveAtributy.obratnost
+    console.log(atributes.value.houzevnatost)
   }
-  if (rasaVybrana.bonusoveAtributy.charisma != null) {
-    atributes.charisma = atributes.charisma + rasaVybrana.bonusoveAtributy.charisma
+  if (rasaVybrana.value.bonusoveAtributy.charisma != null) {
+    atributes.value.charisma = atributes.value.charisma + rasaVybrana.value.bonusoveAtributy.charisma
+    console.log(atributes.value.houzevnatost)
   }
-  if (rasaVybrana.bonusoveAtributy.inteligence != null) {
-    atributes.inteligence = atributes.inteligence + rasaVybrana.bonusoveAtributy.inteligence
+  if (rasaVybrana.value.bonusoveAtributy.inteligence != null) {
+    atributes.value.inteligence = atributes.value.inteligence + rasaVybrana.value.bonusoveAtributy.inteligence
+    console.log(atributes.value.houzevnatost)
   }
-  if (rasaVybrana.bonusoveAtributy.znalost != null) {
-    atributes.znalost = atributes.znalost + rasaVybrana.bonusoveAtributy.znalost
+  if (rasaVybrana.value.bonusoveAtributy.znalost != null) {
+    atributes.value.znalost = atributes.value.znalost + rasaVybrana.value.bonusoveAtributy.znalost
+    console.log(atributes.value.houzevnatost)
   }
 
   let obsah = ({
-    "newAdventurer": newAdventurer,
+    "newAdventurer": newAdventurer.value,
     "owner": uzivatelStore._id,
-    "atributes": atributes,
+    "atributes": atributes.value,
   })
 
   axios.post(axios.defaults.baseURL + '/character/characterCreation', obsah)

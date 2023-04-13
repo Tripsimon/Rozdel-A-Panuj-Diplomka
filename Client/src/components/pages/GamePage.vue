@@ -24,7 +24,6 @@ import axios from 'axios'
     />
    
     <v-container class="mt-3">
-      {{ this.player1.adventurer }}
       <v-row>
         <!-- Mod pruzkumu -->
         <v-col v-if="battleModeSwitch == false" :cols="isOwner ? '9':'12'">
@@ -33,7 +32,7 @@ import axios from 'axios'
         </v-col>
 
         <!-- Mod boje -->
-        <v-col v-if="battleModeSwitch == true" cols="9">
+        <v-col v-if="battleModeSwitch == true" :cols="isOwner ? '9':'12'">
           <!-- Nepřátelé -->
           <v-card color="primary" title="Nepřátelé">
             <v-container>
