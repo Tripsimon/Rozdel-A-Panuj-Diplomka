@@ -28,7 +28,7 @@
 //Balíčky
 import axios from "axios";
 
-//Součásti vue a store
+//Součásti Vue a Store
 import { ref } from 'vue'
 import { useRouter,  } from 'vue-router'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
@@ -39,6 +39,7 @@ import Alert from '../parts/AlertHandler.vue'
 //Systémové variables
 const router = useRouter()
 let uzivatelStore = useUzivatelStore()
+
 //Alert variables
 const showAlert = ref(false)
 const alertTitle = ref('')
@@ -81,9 +82,9 @@ function zalozeniHry() {
         axios.post(axios.defaults.baseURL + '/sessions/createSession', obsah)
           .then(queryResponse => {
             if (queryResponse.data == null) {
-              showAlert = true;
-              alertTitle = "Chyba v komunikaci"
-              alertText = "Komunikace se serverem se nezdařila. Prosím, zkuste akci znovu později"
+              showAlert.value = true;
+              alertTitle.value = "Chyba v komunikaci"
+              alertText.value = "Komunikace se serverem se nezdařila. Prosím, zkuste akci znovu později"
               return
             }
             router.push({
