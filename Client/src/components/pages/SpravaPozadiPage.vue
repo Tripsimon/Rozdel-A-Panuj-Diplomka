@@ -1,3 +1,4 @@
+
 <template>
   <div id="content">
     <Alert type="error" style='z-index:2000' :title="alertTitle" :text="alertText" v-model="showAlert" />
@@ -58,34 +59,28 @@
   </div>
 </template>
 
-
-
 <script setup>
-import {ref, onMounted} from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import FormData from 'form-data'
 import Alert from '../parts/AlertHandler.vue'
 
-
-
-
-//Systémové variables
+//Alert variables
 const showAlert = ref(false)
 const alertTitle = ref("")
 const alertText = ref("")
 
+//Image inpu
 let inputFile = null
 const inputFileName = ref(null)
 const loadedImages = ref([])
 
+//On mount event
+onMounted(() => {
+  loadImages()
+})
 
-
-  onMounted(() => {
-    loadImages()
-  })
-
-
-
+//Upload obrázku
 function uploadImage() {
   if (inputFile == null || inputFileName == null) {
     showAlert.value = true
@@ -101,6 +96,7 @@ function uploadImage() {
   axios.post(axios.defaults.baseURL + '/pozadi/nahraniSouboru', formData)
 }
 
+//Smaže obrázek
 function removeImage(img) {
   axios.delete(axios.defaults.baseURL + '/pozadi/smazaniSouboru/' + img)
     .then(loadImages())

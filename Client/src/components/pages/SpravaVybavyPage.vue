@@ -1,23 +1,24 @@
 <template>
-    <!-- Výber typu-->
     <v-container>
-        <Alert type="error" style='z-index:2000' :title="alertTitle" :text="alertText" v-model="showAlert" />
+        <Alert type="error" style="z-index:2000" :title="alertTitle" :text="alertText" v-model="showAlert" />
         <v-card color="primary">
             <v-form ref="form" @submit.prevent="submit">
                 <v-card-title>
                     <h1 align="center" class="ma-3">Správa výbavy</h1>
                 </v-card-title>
 
+                <!-- Výběr typu -->
                 <v-card-text>
                     <v-select color="secondary" variant="outlined" label="Typ" :items="['Zbraň', 'Zbroj', 'Předmět']"
                         v-model="chosenType" @update:modelValue="updateData()"></v-select>
                 </v-card-text>
 
-                <!-- Zbran-->
-                <v-card-text v-if="chosenType == 'Zbraň'">
-                    <h2>Tvorba zbraně</h2>
+                <!-- Formulář -->
+                <v-card-text v-if="chosenType != null">
+                    <h2 v-if="chosenType == 'Zbraň'">Tvorba zbraně</h2>
+                    <h2 v-if="chosenType == 'Zbroj'">Tvorba zbroje</h2>
+                    <h2 v-if="chosenType == 'Předmět'">Tvorba předmětu</h2>
                     <v-divider class="mb-3"></v-divider>
-
 
                     <v-row>
                         <v-col>
@@ -33,22 +34,27 @@
                                 v-model="chosenDescription" :rules="rules.required" label="Popis předmětu">
                             </v-textarea>
                         </v-col>
-
                     </v-row>
 
                     <v-btn class="mb-3" color="secondary" variant="outlined"
                         @click="() => { chosenAbilities.push({}); chosenAbilitiesCount++ }">
                         Přidat schopnost
                     </v-btn>
-                    <AbilityCreation v-for="i in chosenAbilitiesCount" :key="i" :int="i" @updatedAbility="(ability,index) =>{updateAbility(ability,index)}" @removeAbility="(index) =>removeAbility(index)" />
+
+                    <AbilityCreation v-for="(i, index) in chosenAbilities" :key="index" :ability-prop="i" :int="index"
+                        @updatedAbility="(ability, index) => { updateAbility(ability, index) }"
+                        @removeAbility="(index) => removeAbility(index)" />
 
                     <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" type="number"
-                        :rules="rules.required" label="Pruraznost">
+                        :rules="rules.required" label="Pruraznost" v-if="chosenType == 'Zbraň'">
                     </v-text-field>
 
-                    <v-row>
-                        <v-col>
+                    <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" type="number"
+                        :rules="rules.required" v-if="chosenType == 'Zbroj'" label="Obrana">
+                    </v-text-field>
 
+                    <v-row v-if="chosenType == 'Zbraň'">
+                        <v-col>
                             <v-text-field color="secondary" variant="outlined" v-model="chosenDamageBase" type="number"
                                 :rules="rules.required" label="Základní poškození">
                             </v-text-field>
@@ -59,83 +65,7 @@
                                 :rules="rules.required" label="Závažnost poškození">
                             </v-text-field>
                         </v-col>
-
-
                     </v-row>
-
-
-
-                </v-card-text>
-
-
-                <!-- Zbroj -->
-                <v-card-text v-if="chosenType == 'Zbroj'">
-                    <h2>Tvorba zbroje</h2>
-                    <v-divider class="mb-3"></v-divider>
-
-
-                    <v-row>
-                        
-                        <v-col>
-                            <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="rules.required"
-                        label="Jméno předmětu">
-                    </v-text-field>
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number"
-                        :rules="rules.required" label="Váha">
-                    </v-text-field>
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenArmor" type="number"
-                        :rules="rules.required" label="Obrana">
-                    </v-text-field>
-                        </v-col>
-                        <v-col>
-                            <v-textarea style="height: 125%;" color="secondary" variant="outlined" v-model="chosenDescription"
-                                :rules="rules.required" label="Popis">
-                            </v-textarea>
-                        </v-col>
-
-                    </v-row>
-
-                    <v-btn class="mb-3" color="secondary" variant="outlined"
-                        @click="() => { chosenAbilities.push({}); chosenAbilitiesCount++ }">
-                        Přidat schopnost
-                    </v-btn>
-                    <AbilityCreation v-for="i in chosenAbilitiesCount" :key="i" :int="i" @updatedAbility="(ability,index) =>{updateAbility(ability,index)}" @removeAbility="(index) =>removeAbility(index)" />
-
-
-
-
-
-
-                </v-card-text>
-
-
-                <!-- Předmět -->
-                <v-card-text v-if="chosenType == 'Předmět'">
-                    <h2>Tvorba předmětu</h2>
-                    <v-divider class="mb-3"></v-divider>
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenName" :rules="rules.required"
-                        label="Jméno předmětu">
-                    </v-text-field>
-                    <v-row>
-
-                        <v-col>
-                            <v-textarea color="secondary" variant="outlined" v-model="chosenDescription"
-                                :rules="rules.required" label="Popis">
-                            </v-textarea>
-                        </v-col>
-
-                    </v-row>
-                    <v-btn class="mb-3" color="secondary" variant="outlined"
-                        @click="() => { chosenAbilities.push({}); chosenAbilitiesCount++ }">
-                        Přidat schopnost
-                    </v-btn>
-                    <AbilityCreation v-for="i in chosenAbilitiesCount" :key="i" :int="i" @updatedAbility="(ability,index) =>{updateAbility(ability,index)}" @removeAbility="(index) =>removeAbility(index)" />
-
-
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenWeight" type="number"
-                        :rules="rules.required" label="Váha">
-                    </v-text-field>
-
                 </v-card-text>
 
                 <v-card-actions v-if="chosenType != null">
@@ -147,10 +77,10 @@
         </v-card>
 
 
-        <!-- Export dat -->
-        <v-card v-if="loadedData != []" color="primary" class="mt-3">
+        <!-- Výpis existujících dat -->
+        <v-card v-if="loadedData !== null" color="primary" class="mt-3">
+            {{ loadedData }}
             <v-card-text>
-
                 <v-table>
                     <thead v-if="chosenType == 'Zbraň'">
                         <tr>
@@ -228,7 +158,9 @@
                         <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
-                            <th v-for="schonost in item.schopnosti" :key="schonost._id"><bold> {{schonost.jmeno  }}</bold></th>
+                            <th v-for="schonost in item.schopnosti" :key="schonost._id">
+                                <bold> {{ schonost.jmeno }}</bold>
+                            </th>
                             <th>{{ item.pruraznost }}</th>
                             <th>{{ item.poskozeniZaklad }}</th>
                             <th>{{ item.poskozeniZavaznost }}</th>
@@ -243,10 +175,9 @@
                         <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
-                            <th v-for="schonost in item.schopnosti" :key="schonost._id">{{ schonost.jmeno  }}</th>
+                            <th v-for="schonost in item.schopnosti" :key="schonost._id">{{ schonost.jmeno }}</th>
                             <th>{{ item.obrana }}</th>
                             <th>{{ item.vaha }}</th>
-                            <!-- TODO: Asi ikonka -->
                             <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
                             </th>
                         </tr>
@@ -256,7 +187,7 @@
                         <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
-                            <th v-for="schonost in item.schopnosti" :key="schonost._id">{{ schonost.jmeno  }}</th>
+                            <th v-for="schonost in item.schopnosti" :key="schonost._id">{{ schonost.jmeno }}</th>
                             <th>{{ item.vaha }}</th>
                             <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
                             </th>
@@ -271,6 +202,7 @@
 
 
 <script setup>
+//Importy
 import { ref } from 'vue'
 import Alert from '../parts/AlertHandler.vue'
 import AbilityCreation from '../parts/spravaParts/abilityCreationPart.vue'
@@ -280,8 +212,9 @@ import axios from 'axios'
 const showAlert = ref(false)
 const alertTitle = ref("")
 const alertText = ref("")
-const loadedData = ref([])
-const form = ref(null)
+const loadedData = ref(null)
+
+//Tvorba předmětu
 
 const chosenType = ref(null)
 const chosenName = ref(null)
@@ -294,7 +227,8 @@ const chosenDamageSeverity = ref(null)
 const chosenArmor = ref(null)
 const chosenWeight = ref(null)
 
-//validace
+//Formulář
+const form = ref(null)
 const rules = {
     required: [
         value => {
@@ -304,22 +238,32 @@ const rules = {
     ],
 };
 
-
-function updateAbility(ability,index) {
-    chosenAbilities.value[index-1] = ability
+/**
+ * Upravý input nové schopnosti
+ * @param {obj} ability Nová schopnost
+ * @param {int} index Pozice v poly
+ */
+function updateAbility(ability, index) {
+    console.log(ability, index);
+    chosenAbilities.value[index] = ability
     console.log(chosenAbilities.value)
 }
 
+/**
+ * ODebere novou schopnost
+ * @param {int} index Pozice v poly
+ */
 function removeAbility(index) {
-    console.log(index)
+    console.log(index, chosenAbilities.value)
     chosenAbilitiesCount.value--;
-    chosenAbilities.value.splice(index-1, 1)
-    
+    chosenAbilities.value.splice(5, 1)
+
 }
 
-//Zbraň', 'Zbroj', 'Předmět
+/**
+ * Odešle formulář
+ */
 function submit() {
-
     form.value?.validate()
         .then(({ valid }) => {
             if (valid) {
@@ -353,8 +297,10 @@ function submit() {
         })
 }
 
+/**
+ * Odešle zbran
+ */
 function uploadWeapon() {
-    console.log(chosenAbilities.value)
     axios.post(axios.defaults.baseURL + '/vybava/createWeapon',
         {
             'name': chosenName.value,
@@ -373,6 +319,9 @@ function uploadWeapon() {
         })
 }
 
+/**
+ * Odešle Zbroj
+ */
 function uploadArmor() {
     axios.post(axios.defaults.baseURL + '/vybava/createArmor',
         {
@@ -391,7 +340,7 @@ function uploadArmor() {
 }
 
 /**
- * Nahraje předmět do databáze
+ * Odešle předmět
  */
 function uploadItem() {
     if (this.valid) {
@@ -420,6 +369,7 @@ function uploadItem() {
  * Načte nová data pro zobrazení v tabulce existujících předmětů
  */
 function updateData() {
+    clearInputs()
     axios.get(axios.defaults.baseURL + '/vybava/allType', { params: { type: chosenType.value } })
         .then(response => {
             loadedData.value = response.data
@@ -451,8 +401,4 @@ function clearInputs() {
         chosenArmor.value = null,
         chosenWeight.value = null
 }
-
-
 </script>
-
-<style></style>

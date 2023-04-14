@@ -2,7 +2,7 @@
     <div>
         <v-row>
             <v-col>
-                <h3 class="mt-3">Schopnost #{{ props.int }}</h3>
+                <h3 class="mt-3">Schopnost #{{ props.int + 1 }}</h3>
             </v-col>
 
             <v-btn align="right" icon="mdi-close-box-outline" color="error" @click="$emit('removeAbility',props.int)"></v-btn>
@@ -29,12 +29,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+//Importy
+import { ref,watch } from 'vue'
 
-const props = defineProps(['int'])
-const ability = ref({})
+const props = defineProps(
+    {
+        int: Number,
+        abilityProp: Object
+    }
+)
+const ability = ref(props.abilityProp);
 const emit = defineEmits(['updatedAbility','removeAbility']);
-const form = ref(null)
 const rules = {
     required: [
         value => {
@@ -48,6 +53,9 @@ function change() {
     emit('updatedAbility', ability.value ,props.int)
 }
 
+watch(() => props.abilityProp, (val) => {
+    ability.value = val;
+})
 
 
 

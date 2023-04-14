@@ -30,7 +30,7 @@ import axios from "axios";
 
 //Součásti Vue a Store
 import { ref } from 'vue'
-import { useRouter,  } from 'vue-router'
+import { useRouter, } from 'vue-router'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
 //Komponenty
@@ -90,12 +90,12 @@ function zalozeniHry() {
             router.push({
               path: '/RaPSession', query: { sid: queryResponse.data }
             })
-          });
-      }else{
-        showAlert.value = true;
-        alertTitle.value = "Nefunkční data"
-        alertText.value = "Nesprávně vyplněný formulář. Prosím zkontrolujte zadaná data"
-        return
+          })
+          .catch(err => {
+            showAlert.value = true;
+            alertTitle.value = "Chyba v komunikaci"
+            alertText.value = "Komunikace se serverem se nezdařila. Prosím, zkuste akci znovu později"
+          })
       }
     })
 }
