@@ -4,8 +4,9 @@
             <v-col>
                 <h3 class="mt-3">Schopnost #{{ props.int + 1 }}</h3>
             </v-col>
-
-            <v-btn align="right" icon="mdi-close-box-outline" color="error" @click="$emit('removeAbility',props.int)"></v-btn>
+<v-col class="text-right">
+            <v-btn  icon="mdi-delete" color="error" @click="$emit('removeAbility',props.int)"></v-btn>
+        </v-col>
         </v-row>
         <v-divider class="mb-3"></v-divider>
         <v-row>

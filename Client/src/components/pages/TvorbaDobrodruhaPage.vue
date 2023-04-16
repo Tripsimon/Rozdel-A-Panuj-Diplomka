@@ -129,6 +129,10 @@
                   :rules="rules.required" v-model="newAdventurer.secondaryGear" item-title="jmeno"
                   return-object></v-select>
 
+                  <v-select color="secondary" variant="outlined" label="Zbroj" :items="tridaVybava.zbroj"
+                  :rules="rules.required" v-model="newAdventurer.armor" item-title="jmeno"
+                  return-object></v-select>
+
                 <v-select color="secondary" variant="outlined" label="Bonusová výbava" :items="tridaVybava.bonusova"
                   :rules="rules.required" v-model="newAdventurer.bonusGear" item-title="jmeno" return-object></v-select>
 
@@ -288,6 +292,7 @@ const tridaSchopnosti = ref([])
 const tridaVybava = ref({
   hlavni: [],
   sekundarni: [],
+  zbroj: [],
   bonusova: [],
 })
 
@@ -382,6 +387,12 @@ function onClassSelect() {
       axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.value.bonusovaVybava } })
         .then(queryResponse => {
           tridaVybava.value.bonusova = queryResponse.data
+        })
+
+        axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.value.zbrojVybava } })
+        .then(queryResponse => {
+          tridaVybava.value.zbroj = queryResponse.data
+
         })
 
       axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { owner: tridaVybrana.value } })
@@ -561,27 +572,21 @@ function previousFormPage() {
 function sendtoDB() {
   if (rasaVybrana.value.bonusoveAtributy.sila != null) {
     atributes.value.sila = atributes.value.sila + rasaVybrana.value.bonusoveAtributy.sila
-    console.log(atributes.value.sila)
   }
   if (rasaVybrana.value.bonusoveAtributy.houzevnatost != null) {
     atributes.value.houzevnatost = atributes.value.houzevnatost + rasaVybrana.value.bonusoveAtributy.houzevnatost
-    console.log(atributes.value.houzevnatost)
   }
   if (rasaVybrana.value.bonusoveAtributy.obratnost != null) {
     atributes.value.obratnost = atributes.value.obratnost + rasaVybrana.value.bonusoveAtributy.obratnost
-    console.log(atributes.value.houzevnatost)
   }
   if (rasaVybrana.value.bonusoveAtributy.charisma != null) {
     atributes.value.charisma = atributes.value.charisma + rasaVybrana.value.bonusoveAtributy.charisma
-    console.log(atributes.value.houzevnatost)
   }
   if (rasaVybrana.value.bonusoveAtributy.inteligence != null) {
     atributes.value.inteligence = atributes.value.inteligence + rasaVybrana.value.bonusoveAtributy.inteligence
-    console.log(atributes.value.houzevnatost)
   }
   if (rasaVybrana.value.bonusoveAtributy.znalost != null) {
     atributes.value.znalost = atributes.value.znalost + rasaVybrana.value.bonusoveAtributy.znalost
-    console.log(atributes.value.houzevnatost)
   }
 
   let obsah = ({

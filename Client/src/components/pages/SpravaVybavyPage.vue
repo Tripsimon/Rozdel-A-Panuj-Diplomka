@@ -1,6 +1,7 @@
 <template>
-    <v-container>
+    <v-container class="mt-5">
         <Alert type="error" style="z-index:2000" :title="alertTitle" :text="alertText" v-model="showAlert" />
+        <confirm-dialog :toggle="dialogToggle" @close-dialog="removeItemConfirmed"></confirm-dialog>
         <v-card color="primary">
             <v-form ref="form" @submit.prevent="submit">
                 <v-card-title>
@@ -36,8 +37,7 @@
                         </v-col>
                     </v-row>
 
-                    <v-btn class="mb-3" color="secondary" variant="outlined"
-                        @click="() => { chosenAbilities.push({}); chosenAbilitiesCount++ }">
+                    <v-btn class="mb-3" color="secondary" variant="outlined" @click="() => { addAbility() }">
                         Přidat schopnost
                     </v-btn>
 
@@ -45,7 +45,7 @@
                         @updatedAbility="(ability, index) => { updateAbility(ability, index) }"
                         @removeAbility="(index) => removeAbility(index)" />
 
-                    <v-text-field color="secondary" variant="outlined" v-model="chosenPierce" type="number"
+                    <v-text-field class="mt-3" color="secondary" variant="outlined" v-model="chosenPierce" type="number"
                         :rules="rules.required" label="Pruraznost" v-if="chosenType == 'Zbraň'">
                     </v-text-field>
 
@@ -76,10 +76,8 @@
             </v-form>
         </v-card>
 
-
         <!-- Výpis existujících dat -->
-        <v-card v-if="loadedData !== null" color="primary" class="mt-3">
-            {{ loadedData }}
+        <v-card v-if="loadedData.length != 0" color="primary" class="mt-3">
             <v-card-text>
                 <v-table>
                     <thead v-if="chosenType == 'Zbraň'">
@@ -158,8 +156,9 @@
                         <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
-                            <th v-for="schonost in item.schopnosti" :key="schonost._id">
-                                <bold> {{ schonost.jmeno }}</bold>
+                            <th>
+                                <p v-for="schonost in item.schopnosti" :key="schonost._id"> {{ schonost.jmeno }}</p>
+                                <p v-if="item.schopnosti == null"> Žádné schopnosti</p>
                             </th>
                             <th>{{ item.pruraznost }}</th>
                             <th>{{ item.poskozeniZaklad }}</th>
@@ -175,7 +174,10 @@
                         <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
-                            <th v-for="schonost in item.schopnosti" :key="schonost._id">{{ schonost.jmeno }}</th>
+                            <th>
+                                <p v-for="schonost in item.schopnosti" :key="schonost._id"> {{ schonost.jmeno }}</p>
+                                <p v-if="item.schopnosti == null"> Žádné schopnosti</p>
+                            </th>
                             <th>{{ item.obrana }}</th>
                             <th>{{ item.vaha }}</th>
                             <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
@@ -183,11 +185,15 @@
                         </tr>
                     </tbody>
 
+
                     <tbody v-if="chosenType == 'Předmět'">
                         <tr v-for="item in loadedData" :key="item._id">
                             <th>{{ item.jmeno }}</th>
                             <th>{{ item.popis }}</th>
-                            <th v-for="schonost in item.schopnosti" :key="schonost._id">{{ schonost.jmeno }}</th>
+                            <th>
+                                <p v-for="schonost in item.schopnosti" :key="schonost._id"> {{ schonost.jmeno }}</p>
+                                <p v-if="item.schopnosti == null"> Žádné schopnosti</p>
+                            </th>
                             <th>{{ item.vaha }}</th>
                             <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
                             </th>
@@ -206,20 +212,23 @@
 import { ref } from 'vue'
 import Alert from '../parts/AlertHandler.vue'
 import AbilityCreation from '../parts/spravaParts/abilityCreationPart.vue'
+import ConfirmDialog from '../parts/ConfirmDialog.vue'
 import axios from 'axios'
 
 //Systémové variables
 const showAlert = ref(false)
 const alertTitle = ref("")
 const alertText = ref("")
-const loadedData = ref(null)
+const dialogToggle = ref(false)
+let toDelete = null;
+
+//Data předmětů z DB
+const loadedData = ref([])
 
 //Tvorba předmětu
-
 const chosenType = ref(null)
 const chosenName = ref(null)
 const chosenDescription = ref(null)
-const chosenAbilitiesCount = ref(0)
 const chosenAbilities = ref([])
 const chosenPierce = ref(null)
 const chosenDamageBase = ref(null)
@@ -244,9 +253,7 @@ const rules = {
  * @param {int} index Pozice v poly
  */
 function updateAbility(ability, index) {
-    console.log(ability, index);
     chosenAbilities.value[index] = ability
-    console.log(chosenAbilities.value)
 }
 
 /**
@@ -254,9 +261,7 @@ function updateAbility(ability, index) {
  * @param {int} index Pozice v poly
  */
 function removeAbility(index) {
-    console.log(index, chosenAbilities.value)
-    chosenAbilitiesCount.value--;
-    chosenAbilities.value.splice(5, 1)
+    chosenAbilities.value.splice(index, 1)
 
 }
 
@@ -325,12 +330,12 @@ function uploadWeapon() {
 function uploadArmor() {
     axios.post(axios.defaults.baseURL + '/vybava/createArmor',
         {
-            'name': chosenName,
-            'type': chosenType,
-            'description': chosenDescription,
-            'abilities': chosenAbilities,
-            'obrana': chosenArmor,
-            'weight': chosenWeight
+            'name': chosenName.value,
+            'type': chosenType.value,
+            'description': chosenDescription.value,
+            'abilities': chosenAbilities.value,
+            'obrana': chosenArmor.value,
+            'weight': chosenWeight.value
         })
         .then(queryResponse => {
             if (queryResponse.status == 200) {
@@ -343,26 +348,21 @@ function uploadArmor() {
  * Odešle předmět
  */
 function uploadItem() {
-    if (this.valid) {
-        axios.post(axios.defaults.baseURL + '/vybava/createItem',
-            {
-                'name': chosenName,
-                'type': chosenType,
-                'description': chosenDescription,
-                'abilities': chosenAbilities,
-                'weight': chosenWeight
-            })
-            .then(queryResponse => {
-                if (queryResponse.status == 200) {
-                    updateData()
-                    clearInputs()
-                }
-            })
-    } else {
-        showAlert.value = true;
-        alertTitle.value = "Neplatný formulář"
-        alertText.value = "Formulář není správně vyplněný. Prosím zkontrolujte si zadaná data"
-    }
+
+    axios.post(axios.defaults.baseURL + '/vybava/createItem',
+        {
+            'name': chosenName.value,
+            'type': chosenType.value,
+            'description': chosenDescription.value,
+            'abilities': chosenAbilities.value,
+            'weight': chosenWeight.value
+        })
+        .then(queryResponse => {
+            if (queryResponse.status == 200) {
+                updateData()
+                clearInputs()
+            }
+        })
 }
 
 /**
@@ -376,16 +376,31 @@ function updateData() {
         })
 }
 
+
+/**
+ * Otevře dialog na smazání předmětu
+ */
+function removeItem(itemID) {
+    dialogToggle.value = true
+    toDelete = itemID
+}
+
 /**
  * Smaže item z databáze předmětů
  */
-function removeItem(itemID) {
-    axios.get(axios.defaults.baseURL + '/vybava/removeItem', { params: { itemID: itemID } })
-        .then(queryResponse => {
-            if (queryResponse.status == 200) {
-                updateData()
-            }
-        })
+function removeItemConfirmed(answer) {
+    dialogToggle.value = false
+    if (answer) {
+        axios.get(axios.defaults.baseURL + '/vybava/removeItem', { params: { itemID: toDelete } })
+            .then(queryResponse => {
+                if (queryResponse.status == 200) {
+                    updateData()
+                }
+            })
+    } else {
+        return
+    }
+
 }
 
 /**
@@ -400,5 +415,17 @@ function clearInputs() {
         chosenDamageSeverity.value = null,
         chosenArmor.value = null,
         chosenWeight.value = null
+}
+
+/**
+ * Přidá novou schopnost
+ */
+function addAbility() {
+    if (chosenAbilities.value == null) {
+        chosenAbilities.value = [{}]
+    } else {
+        chosenAbilities.value.push({})
+    }
+
 }
 </script>

@@ -103,9 +103,9 @@ function smazDobrodruha(id) {
     adventurerToDelete.value = id
 }
 
-function closeDialog(response) {
+function closeDialog(answer) {
     dialogToggle.value = false
-    if (response && adventurerToDelete != null) {
+    if (answer && adventurerToDelete != null) {
         axios.delete(axios.defaults.baseURL + '/character/deleteAdventurer', { data: { adventurer: adventurerToDelete } })
         .then(
             getAdventurers()

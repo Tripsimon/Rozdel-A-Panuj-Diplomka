@@ -68,7 +68,9 @@ app.use('/tridy',tridyRouter);
 
 app.use(express.static(path.join(__dirname,'/files')))
 //img
-const devMode = true;
+
+
+const devMode = false;
 if (devMode) {
     axios.defaults.baseURL = 'http://localhost:3000'
 

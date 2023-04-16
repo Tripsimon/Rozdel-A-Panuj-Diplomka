@@ -24,9 +24,6 @@ router.post("/characterCreation", (req,res) =>{
         zivoty: (atributesInput.houzevnatost *10) ,
         rasa: data.race,
         trida: data.class,
-        mainGear: data.mainGear,
-        secondaryGear: data.secondaryGear,
-        bonusGear: data.bonusGear,
         presvedceni: data.aligment,
         vek: data.age,
         popis: data.description,
@@ -39,7 +36,7 @@ router.post("/characterCreation", (req,res) =>{
             inteligence: atributesInput.inteligence,
             znalost: atributesInput.znalost
         },
-        inventar:[data.mainGear,data.secondaryGear,data.bonusGear],
+        inventar:[data.mainGear,data.secondaryGear,data.bonusGear,data.armor],
         penize:3,
         level:1,
         zkusenosti:0
