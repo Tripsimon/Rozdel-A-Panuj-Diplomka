@@ -10,7 +10,7 @@
                 <v-card-subtitle>Popis: {{ adventurer.popis }}</v-card-subtitle>
                 <v-card-subtitle>Příběh: {{ adventurer.pribeh }}</v-card-subtitle>
                 <v-card-text>
-                    <h3>Status</h3>
+                    <h3>Status:</h3>
                     <v-row>
                         <v-col></v-col>
                         <v-col>
@@ -79,15 +79,20 @@
 import { ref,onMounted} from 'vue'
 import ConfirmDialog from '../parts/ConfirmDialog.vue'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
-
+import { useRouter, } from 'vue-router'
 import axios from 'axios'
 
+const router = useRouter()
 const uzivatelStore = useUzivatelStore()
 const avaliableAdventurers = ref([])
 const dialogToggle = ref(false)
+
 const adventurerToDelete = ref(null)
 
 onMounted(() =>{
+    if (!uzivatelStore.prihlasen) {
+        router.push({path: '/'})
+    }
     getAdventurers()
 })
 

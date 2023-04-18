@@ -1,44 +1,31 @@
-<script setup>
-import { useUzivatelStore } from "../../stores/uzivatelStore.js"
-import { io } from 'socket.io-client'
-import axios from 'axios'
-
-
-
-</script>
-
 <template>
   <div>
-
     <!-- Modal pro inventář -->
-    <InventoryModal 
-    :toggle="this.inventarModal" 
-    :inventoryAdventurer="this.inventarDobrodruh" 
-    @resync-players="this.socketsResyncPlayers()"
-    @close-modal="this.inventarModal = false"
-    />
-    
-    <DetailModal
-    :toggle="this.detailModal"
-    :detailAdventurer="this.detailAdventurer"
-    />
-   
+    <InventoryModal :toggle="inventarModal" :inventoryAdventurer="inventarDobrodruh"
+      @resync-players="socketsResyncPlayers()" @close-modal="inventarModal = false" />
+
+    <!-- Modal pro detail -->
+    <DetailModal :toggle="detailModal" :detailAdventurer="detailAdventurer" />
+
+    <!-- Vlastní obsah-->
     <v-container class="mt-3">
       <v-row>
+        
         <!-- Mod pruzkumu -->
-        <v-col v-if="battleModeSwitch == false" :cols="isOwner ? '9':'12'">
-          <v-img :src="axios.defaults.baseURL + '/backgrounds/' + vybranePozadi" max-width="100%">
+        <v-col v-if="battleModeSwitch == false" :cols="myIdentity == 'Owner' ? '9' : '12'">
+          <v-img  :src="axios.defaults.baseURL + '/backgrounds/' + vybranePozadi" max-width="100%">
           </v-img>
         </v-col>
 
         <!-- Mod boje -->
-        <v-col v-if="battleModeSwitch == true" :cols="isOwner ? '9':'12'">
+        <v-col v-if="battleModeSwitch == true" :cols="myIdentity == 'Owner' ? '9' : '12'">
           <!-- Nepřátelé -->
           <v-card color="primary" title="Nepřátelé">
             <v-container>
-              <v-expansion-panels v-if="this.dataBoje.aktivniNepratele.length != 0">
-                <v-expansion-panel v-for=" (enemy, index, key) in this.dataBoje.aktivniNepratele">
-                  <v-expansion-panel-title>{{ enemy.jmeno + " " + enemy.realneZivoty + " / " + enemy.zivoty + " - " +enemy.identity}}
+              <v-expansion-panels v-if="dataBoje.aktivniNepratele.length != 0">
+                <v-expansion-panel v-for=" (enemy, index, key) in dataBoje.aktivniNepratele" :key="key">
+                  <v-expansion-panel-title>{{ enemy.jmeno + " " + enemy.realneZivoty + " / " + enemy.zivoty + " - "
+                    + enemy.identity }}
                   </v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <v-card-subtitle>{{ enemy.popis }}</v-card-subtitle>
@@ -98,7 +85,7 @@ import axios from 'axios'
 
                 </v-expansion-panel>
               </v-expansion-panels>
-              <h4 v-if="this.dataBoje.aktivniNepratele.length == 0">Nepřátelé nejsou vybráni pro boj</h4>
+              <h4 v-if="dataBoje.aktivniNepratele.length == 0">Nepřátelé nejsou vybráni pro boj</h4>
             </v-container>
 
           </v-card>
@@ -106,21 +93,23 @@ import axios from 'axios'
           <!-- Bojová fronta-->
           <v-card color="primary" class="mt-3">
             <v-card-title style="color: #cca000;" align='center'>
-            Bojová Fronta
+              Bojová Fronta
             </v-card-title>
             <v-card-text>
               <v-slide-group show-arrows>
-                <v-slide-group-item v-for="(entity,index) in this.dataBoje.battleFrontInstance" :key="index"  v-slot="{ isSelected, toggle }">
-                  <v-btn class="ma-2"  :color="isSelected ? 'primary' : ('krestniJmeno' in entity ? 'success' : 'error')" @click="{this.battleFrontChosen = index;toggle()}">
-                    {{ this.getIdentity(entity) }}
+                <v-slide-group-item v-for="(entity, index) in dataBoje.battleFrontInstance" :key="index"
+                  v-slot="{ isSelected, toggle }">
+                  <v-btn class="ma-2" :color="isSelected ? 'primary' : ('krestniJmeno' in entity ? 'success' : 'error')"
+                    @click="{ battleFrontChosen = index; toggle() }">
+                    {{ getIdentity(entity) }}
                   </v-btn>
                 </v-slide-group-item>
 
-              
+
               </v-slide-group>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="secondary"  variant="outlined" @click="battleFrontFinish()">
+              <v-btn color="secondary" variant="outlined" @click="battleFrontFinish()">
                 Dokončit akci
               </v-btn>
               <v-btn color="secondary" variant="outlined" @click="copyBattleFront()">
@@ -135,16 +124,16 @@ import axios from 'axios'
               Hod kostkou
             </v-card-title>
             <v-container>
-              {{ this.adventurer1 }}
-              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Volný hod'">
+              {{ adventurer1 }}
+              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Volný hod'">
                 <v-col>
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
 
                     <v-card-text>
                       <v-expand-x-transition>
-                        <v-img v-if="this.dataBoje.hozennaKostka != 0"
-                          :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                        <v-img v-if="dataBoje.hozennaKostka != 0"
+                          :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
                           justify="center" max-height="250"></v-img>
                       </v-expand-x-transition>
                     </v-card-text>
@@ -160,28 +149,28 @@ import axios from 'axios'
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Atributy'">
+              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Atributy'">
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
+                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
+                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
                       <v-row>
-                        <v-col>Síla: {{ this.dataBoje.bojujiciDobrodruh.atributy.sila }}</v-col>
-                        <v-col>Houževnastost: {{ this.dataBoje.bojujiciDobrodruh.atributy.houzevnatost }}</v-col>
+                        <v-col>Síla: {{ dataBoje.bojujiciDobrodruh.atributy.sila }}</v-col>
+                        <v-col>Houževnastost: {{ dataBoje.bojujiciDobrodruh.atributy.houzevnatost }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</v-col>
-                        <v-col>Charisma: {{ this.dataBoje.bojujiciDobrodruh.atributy.charisma }}</v-col>
+                        <v-col>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</v-col>
+                        <v-col>Charisma: {{ dataBoje.bojujiciDobrodruh.atributy.charisma }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Inteligence: {{ this.dataBoje.bojujiciDobrodruh.atributy.inteligence }}</v-col>
-                        <v-col>Znalost: {{ this.dataBoje.bojujiciDobrodruh.atributy.znalost }}</v-col>
+                        <v-col>Inteligence: {{ dataBoje.bojujiciDobrodruh.atributy.inteligence }}</v-col>
+                        <v-col>Znalost: {{ dataBoje.bojujiciDobrodruh.atributy.znalost }}</v-col>
                       </v-row>
                     </v-card-text>
                   </v-card>
@@ -192,8 +181,8 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                      <v-img v-if="dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
                         justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
@@ -209,43 +198,43 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
+                  <v-card v-if="dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
+                  <v-card v-if="dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
+                      {{ dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
                       <v-row>
-                        <v-col>Síla: {{ this.dataBoje.bojujiciNepritel.sila }}</v-col>
-                        <v-col>Houževnastost: {{ this.dataBoje.bojujiciNepritel.houzevnatost }}</v-col>
+                        <v-col>Síla: {{ dataBoje.bojujiciNepritel.sila }}</v-col>
+                        <v-col>Houževnastost: {{ dataBoje.bojujiciNepritel.houzevnatost }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Obratnost: {{ this.dataBoje.bojujiciNepritel.obratnost }}</v-col>
-                        <v-col>Charisma: {{ this.dataBoje.bojujiciNepritel.charisma }}</v-col>
+                        <v-col>Obratnost: {{ dataBoje.bojujiciNepritel.obratnost }}</v-col>
+                        <v-col>Charisma: {{ dataBoje.bojujiciNepritel.charisma }}</v-col>
                       </v-row>
                       <v-row>
-                        <v-col>Inteligence: {{ this.dataBoje.bojujiciNepritel.inteligence }}</v-col>
-                        <v-col>Znalost: {{ this.dataBoje.bojujiciNepritel.znalost }}</v-col>
+                        <v-col>Inteligence: {{ dataBoje.bojujiciNepritel.inteligence }}</v-col>
+                        <v-col>Znalost: {{ dataBoje.bojujiciNepritel.znalost }}</v-col>
                       </v-row>
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Zásah'">
+              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Zásah'">
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
+                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
+                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
@@ -257,8 +246,8 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                      <v-img v-if="dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
                         justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
@@ -274,39 +263,39 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
+                  <v-card v-if="dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
+                  <v-card v-if="dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
+                      {{ dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.dataBoje.bojujiciNepritel.obratnost }}</h3>
+                        <h3>Obratnost: {{ dataBoje.bojujiciNepritel.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Průraz'">
+              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Průraz'">
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
+                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
                     <v-card-title color="error">Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
+                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="this.dataBoje.bojujiciDobrodruhVybava"
-                        v-model="this.dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
+                      <v-select :items="dataBoje.bojujiciDobrodruhVybava"
+                        v-model="dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
                         label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!this.dataBoje.bojujiciDobrodruhPredmet">
-                        <h3 v-if="this.dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Průraz: {{
-                          this.dataBoje.bojujiciDobrodruhPredmet.pruraznost
+                      <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
+                        <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Průraz: {{
+                          dataBoje.bojujiciDobrodruhPredmet.pruraznost
                         }}</h3>
                         <h3 v-else>Předmět nemá zadanou hodnotu pruraznosti</h3>
                       </v-col>
@@ -320,8 +309,8 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                      <v-img v-if="dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
                         justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
@@ -337,39 +326,39 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
+                  <v-card v-if="dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
+                  <v-card v-if="dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
+                      {{ dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Zbroj: {{ this.dataBoje.bojujiciNepritel.zbroj }}</h3>
+                        <h3>Zbroj: {{ dataBoje.bojujiciNepritel.zbroj }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Steč'">
+              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Steč'">
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
+                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
                     <v-card-title color="error">Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
+                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="this.dataBoje.bojujiciDobrodruhVybava"
-                        v-model="this.dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
+                      <v-select :items="dataBoje.bojujiciDobrodruhVybava"
+                        v-model="dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
                         label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!this.dataBoje.bojujiciDobrodruhPredmet">
-                        <h3 v-if="this.dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Poškození: {{
-                          this.dataBoje.bojujiciDobrodruhPredmet.poskozeni
+                      <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
+                        <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Poškození: {{
+                          dataBoje.bojujiciDobrodruhPredmet.poskozeni
                         }}</h3>
                         <h3 v-else>Předmět nemá zadanou hodnotu poškození</h3>
                       </v-col>
@@ -383,8 +372,8 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                      <v-img v-if="dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
                         justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
@@ -400,37 +389,37 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
+                  <v-card v-if="dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
+                  <v-card v-if="dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
+                      {{ dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Zdraví: {{ this.dataBoje.bojujiciNepritel.realneZivoty + '/' +
-                          this.dataBoje.bojujiciNepritel.zivoty }}</h3>
+                        <h3>Zdraví: {{ dataBoje.bojujiciNepritel.realneZivoty + '/' +
+                          dataBoje.bojujiciNepritel.zivoty }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Uhyb'">
+              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Uhyb'">
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
+                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
+                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
@@ -442,8 +431,8 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                      <v-img v-if="dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
                         justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
@@ -459,40 +448,40 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
+                  <v-card v-if="dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
+                  <v-card v-if="dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
+                      {{ dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Blokace'">
+              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Blokace'">
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
+                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
+                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="this.dataBoje.bojujiciDobrodruhVybava"
-                        v-model="this.dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
+                      <v-select :items="dataBoje.bojujiciDobrodruhVybava"
+                        v-model="dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
                         label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!this.dataBoje.bojujiciDobrodruhPredmet">
-                        <h3 v-if="this.dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbroj'">Obrana: {{
-                          this.dataBoje.bojujiciDobrodruhPredmet.obrana
+                      <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
+                        <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbroj'">Obrana: {{
+                          dataBoje.bojujiciDobrodruhPredmet.obrana
                         }}</h3>
                         <h3 v-else>Předmět nemá zadanou hodnotu obrany</h3>
                       </v-col>
@@ -506,8 +495,8 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                      <v-img v-if="dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
                         justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
@@ -523,36 +512,36 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
+                  <v-card v-if="dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
+                  <v-card v-if="dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
+                      {{ dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Průraznost: {{ this.dataBoje.bojujiciNepritel.pruraz }}</h3>
+                        <h3>Průraznost: {{ dataBoje.bojujiciNepritel.pruraz }}</h3>
                       </v-col>
 
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row v-if="this.dataBoje.bojPorovnanyAtribut == 'Výdrž'">
+              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Výdrž'">
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciDobrodruh == null">
+                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
                     <v-card-title>Vyberte dobrodruha</v-card-title>
                   </v-card>
-                  <v-card color="success" v-if="this.dataBoje.bojujiciDobrodruh != null">
+                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciDobrodruh.krestniJmeno + " " + this.dataBoje.bojujiciDobrodruh.prijmeni }}
+                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.zivoty }}</h3>
+                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.zivoty }}</h3>
                       </v-col>
 
                     </v-card-text>
@@ -564,8 +553,8 @@ import axios from 'axios'
                   <v-card color="accent" align="center" justify="center">
                     <v-card-title>Hození kostkou</v-card-title>
                     <v-card-text>
-                      <v-img v-if="this.dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + this.dataBoje.hozennaKostka + '.jpg'" align="center"
+                      <v-img v-if="dataBoje.hozennaKostka != 0"
+                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
                         justify="center" max-height="250"></v-img>
                     </v-card-text>
                     <v-card-actions>
@@ -581,17 +570,17 @@ import axios from 'axios'
                 </v-col>
 
                 <v-col>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel == null">
+                  <v-card v-if="dataBoje.bojujiciNepritel == null">
                     <v-card-title>Vyberte nepřítele</v-card-title>
                   </v-card>
-                  <v-card v-if="this.dataBoje.bojujiciNepritel != null">
+                  <v-card v-if="dataBoje.bojujiciNepritel != null">
                     <v-card-title>
-                      {{ this.dataBoje.bojujiciNepritel.jmeno }}
+                      {{ dataBoje.bojujiciNepritel.jmeno }}
                     </v-card-title>
                     <v-card-text>
 
                       <v-col>
-                        <h3>Obratnost: {{ this.dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
+                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
                       </v-col>
 
                     </v-card-text>
@@ -620,7 +609,7 @@ import axios from 'axios'
           </v-card>
 
           <!-- Dobrodruzi -->
-          <v-card v-if="this.dataBoje.bojujiciDobrodruh == null" color="primary" title="Dobrodruzi" class="mt-3">
+          <v-card v-if="dataBoje.bojujiciDobrodruh == null" color="primary" title="Dobrodruzi" class="mt-3">
             <v-card-text>
               <div class="d-flex justify-space-around align-center flex-column flex-sm-row fill-height">
                 {{ p }}
@@ -645,9 +634,9 @@ import axios from 'axios'
         </v-col>
 
         <!-- Přepínač herního modu-->
-        <v-col v-if="this.myIdentity == 'Owner'" cols="3">
+        <v-col v-if="myIdentity == 'Owner'" cols="3">
           <v-card color="primary">
-            <v-card-title v-if="this.battleModeSwitch">
+            <v-card-title v-if="battleModeSwitch">
               <h3>Herní mod: Boj</h3>
             </v-card-title>
             <v-card-title v-else>
@@ -658,9 +647,10 @@ import axios from 'axios'
               </v-switch>
             </v-card-text>
           </v-card>
+
           <v-card v-if="battleModeSwitch == false" class="mt-3" color="primary" title="Pozadí">
             <v-card-text>
-              <v-select label="Výběr" :items="this.dostupnePozadi" variant="underlined"
+              <v-select label="Výběr" :items="dostupnePozadi" variant="underlined"
                 v-model="vybranePozadi"></v-select>
             </v-card-text>
           </v-card>
@@ -679,6 +669,7 @@ import axios from 'axios'
             </v-card-actions>
           </v-card>
 
+          {{ dataBoje }}
           <!-- Typ hodu-->
           <v-card v-if="battleModeSwitch == true" color="primary" class="mt-3">
             <v-card-title>
@@ -687,7 +678,7 @@ import axios from 'axios'
             <v-card-text>
               <v-select label="Porovnávaný atribut" color="secondary" variant="outlined"
                 :items="['Volný hod', 'Atributy', 'Zásah', 'Průraz', 'Steč', 'Uhyb', 'Blokace', 'Výdrž']"
-                v-model="dataBoje.bojPorovnanyAtribut" @update:modelValue="this.socketsResyngBattle()"></v-select>
+                :v-model="dataBoje.bojPorovnanyAtribut" @update:modelValue="socketsResyngBattle()"></v-select>
             </v-card-text>
           </v-card>
 
@@ -701,27 +692,27 @@ import axios from 'axios'
       <v-row>
         <!-- Karta hráče 1 -->
         <v-col cols="4">
-          <v-card color="primary" v-if="this.player1.adventurer != null">
+          <v-card color="primary" v-if="player1.adventurer != null">
             <v-card-title>{{
-              this.player1.adventurer.krestniJmeno + ' ' + this.player1.adventurer.prijmeni
+              player1.adventurer.krestniJmeno + ' ' + player1.adventurer.prijmeni
             }}</v-card-title>
-            <v-card-subtitle>{{ this.player1.adventurer.rasa + " - " + this.player1.adventurer.trida }}</v-card-subtitle>
+            <v-card-subtitle>{{ player1.adventurer.rasa + " - " + player1.adventurer.trida }}</v-card-subtitle>
             <v-card-text>
               <v-row>
                 <v-col>
-                  <h4>Životy: {{ this.player1.adventurer.zivoty }}</h4>
+                  <h4>Životy: {{ player1.adventurer.zivoty }}</h4>
                 </v-col>
                 <v-col>
-                  <h4>Peníze: {{ this.player1.adventurer.penize }}</h4>
+                  <h4>Peníze: {{ player1.adventurer.penize }}</h4>
                 </v-col>
               </v-row>
               <br>
               <v-row>
                 <v-col>
-                  <h4>Level: {{ this.player1.adventurer.level }}</h4>
+                  <h4>Level: {{ player1.adventurer.level }}</h4>
                 </v-col>
                 <v-col>
-                  <h4>Zkušenosti: {{ this.player1.adventurer.zkusenosti }}</h4>
+                  <h4>Zkušenosti: {{ player1.adventurer.zkusenosti }}</h4>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -734,27 +725,27 @@ import axios from 'axios'
 
         <!-- Karta hráče 2 -->
         <v-col cols="4">
-          <v-card color="primary" v-if="this.player2.adventurer != null">
+          <v-card color="primary" v-if="player2.adventurer != null">
             <v-card-title>{{
-              this.player2.adventurer.krestniJmeno + ' ' + this.player2.adventurer.prijmeni
+              player2.adventurer.krestniJmeno + ' ' + player2.adventurer.prijmeni
             }}</v-card-title>
-            <v-card-subtitle>{{ this.player2.adventurer.rasa + " - " + this.player2.adventurer.trida }}</v-card-subtitle>
+            <v-card-subtitle>{{ player2.adventurer.rasa + " - " + player2.adventurer.trida }}</v-card-subtitle>
             <v-card-text>
               <v-row>
                 <v-col>
-                  <h4>Životy: {{ this.player2.adventurer.zivoty }}</h4>
+                  <h4>Životy: {{ player2.adventurer.zivoty }}</h4>
                 </v-col>
                 <v-col>
-                  <h4>Peníze: {{ this.player2.adventurer.penize }}</h4>
+                  <h4>Peníze: {{ player2.adventurer.penize }}</h4>
                 </v-col>
               </v-row>
               <br>
               <v-row>
                 <v-col>
-                  <h4>Level: {{ this.player2.adventurer.level }}</h4>
+                  <h4>Level: {{ player2.adventurer.level }}</h4>
                 </v-col>
                 <v-col>
-                  <h4>Zkušenosti: {{ this.player2.adventurer.zkusenosti }}</h4>
+                  <h4>Zkušenosti: {{ player2.adventurer.zkusenosti }}</h4>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -767,27 +758,27 @@ import axios from 'axios'
 
         <!-- Karta hráče 3 -->
         <v-col cols="4">
-          <v-card color="primary" v-if="this.player3.adventurer != null">
+          <v-card color="primary" v-if="player3.adventurer != null">
             <v-card-title>{{
-              this.player3.adventurer.krestniJmeno + ' ' + this.player3.adventurer.prijmeni
+              player3.adventurer.krestniJmeno + ' ' + player3.adventurer.prijmeni
             }}</v-card-title>
-            <v-card-subtitle>{{ this.player3.adventurer.rasa + " - " + this.player3.adventurer.trida }}</v-card-subtitle>
+            <v-card-subtitle>{{ player3.adventurer.rasa + " - " + player3.adventurer.trida }}</v-card-subtitle>
             <v-card-text>
               <v-row>
                 <v-col>
-                  <h4>Životy: {{ this.player3.adventurer.zivoty }}</h4>
+                  <h4>Životy: {{ player3.adventurer.zivoty }}</h4>
                 </v-col>
                 <v-col>
-                  <h4>Peníze: {{ this.player3.adventurer.penize }}</h4>
+                  <h4>Peníze: {{ player3.adventurer.penize }}</h4>
                 </v-col>
               </v-row>
               <br>
               <v-row>
                 <v-col>
-                  <h4>Level: {{ this.player3.adventurer.level }}</h4>
+                  <h4>Level: {{ player3.adventurer.level }}</h4>
                 </v-col>
                 <v-col>
-                  <h4>Zkušenosti: {{ this.player3.adventurer.zkusenosti }}</h4>
+                  <h4>Zkušenosti: {{ player3.adventurer.zkusenosti }}</h4>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -803,428 +794,409 @@ import axios from 'axios'
 
   </div>
 </template>
-<script>
+<script setup>
+import {ref, onMounted, onUnmounted} from 'vue'
 import InventoryModal from '../parts/gamepageParts/InventoryModalPart.vue'
 import DetailModal from '../parts/gamepageParts/DetailModalPart.vue'
 import AbilityCard from "../parts/AbilityCard.vue"
-
-export default {
-  name: 'Gamepage',
-  components: {
-
-    AbilityCard,
-    InventoryModal,
-    DetailModal,
-  },
-  data: () => ({
-    //Duležité konstanty pro session
-    uzivatelStore: useUzivatelStore(),
-    webSocket: null,
-    jmenoSessionu: null,
-    sid: null,
-    isOwner: false,
-    myIdentity: null,
-    battleModeSwitch: false,
-
-    player1: { owner: null, adventurer: null, adventurerID: null },
-    player2: { owner: null, adventurer: null, adventurerID: null },
-    player3: { owner: null, adventurer: null, adventurerID: null },
-
-
-    //Herni pozadi pruzkumneho modu
-    dostupnePozadi: null,
-    vybranePozadi: null,
-
-
-    //Inventář
-    inventarModal: false, 
-    inventarDobrodruh: null,
-
-
-    //Detail dobrodruha
-    detailModal: false,
-    detailDobrodruh: null,
-    detailLevelInput: null,
-    detailExperienceInput: null,
-    detailTridaShopnosti: [],
-    detailRasaSchopnosti: [],
-
-    // Bojový mod
-    dataBoje: {
-      bojPorovnanyAtribut: 'Volný hod',
-      hozennaKostka: 0,
-      bojujiciNepritel: null,
-      bojujiciDobrodruh: null,
-      bojujiciDobrodruhVybava: [],
-      bojujiciDobrodruhPredmet: null,
-      aktivniNepratele: [],
-      battleFront: [],
-      battleFrontInstance: [],
-      battleFrontInstanceAdventurers: [],
-    },
-    battleFrontChosen: null,
-
-
-
-    // Nepřátelé
-    dostupniNepratele: null,
-    moznostiNepratel: [],
-    vybranyNepritel: null,
-    monsterIdentity: 1,
-  }),
-  unmounted(){
-    this.webSocket.emit('disconnect',this.myIdentity)
-  },
-  mounted() {
-
-    //Duležité proměné
-    let urlParams = new URLSearchParams(window.location.search)
-    this.sid = urlParams.get('sid')
-    if (axios.defaults.baseURL == 'http://localhost:3000') {
-      this.webSocket = io('http://localhost:3000')
-    } else {
-      this.webSocket = io('https://api.rozdel-a-panuj.cz')
-      //
-    }
-
-    //WEBSOCKET
-    //Připojení websocketu
-    this.webSocket.on('connect', () => {
-      console.log('Websocket servis připojen')
-    })
-    this.socketsJoinRoom();
-
-    axios.get(axios.defaults.baseURL + '/sessions/checkOwner', { params: { sid: this.sid, user: this.uzivatelStore._id } })
-      .then(response => {
-        if (response.data) {
-          this.isOwner = true
-          this.myIdentity = 'Owner'
-        } else {
-          this.socketsResyncPlayers();
-          this.resyncPlayers();
-        }
-      })
-
-
-    //Připojení hráče
-    this.webSocket.on('resyncPlayers', () => {
-      this.resyncPlayers();
-    })
-
-    //Změna herního modu
-    this.webSocket.on('resyncGamemode', (mode) => {
-      this.battleModeSwitch = mode;
-    })
-
-    this.webSocket.on('resyncBattle', (data) => {
-      this.dataBoje = data
-    })
-
-
-    //Načtení pozadí
-    axios.get(axios.defaults.baseURL + '/pozadi/dump')
-      .then(res => {
-        this.dostupnePozadi = res.data
-        this.vybranePozadi = this.dostupnePozadi[0]
-      })
-
-    /**
-     * Načte možnosti nepřátel
-     */
-    this.loadEnemies()
-
-    this.resyncPlayers()
-  },
-
-  methods: {
-
-    getIdentity(entity){
-      if(entity.jmeno){
-        return `${entity.jmeno} - ${entity.identity}`;
-      }
-      return `${entity.krestniJmeno} - ${entity.prijmeni}`;
-    }, 
-    // SOCKETY
-    /**
-     * Odešle požadavek na připojení socketu do místisti s ID sessiony
-     */
-    socketsJoinRoom() {
-      this.webSocket.emit('joinRoom', this.sid, this.uzivatelStore._id)
-    },
-
-    /**
-     * Resync připojených hráčů a jejich dobrodruhů v dané místnosti
-     * 
-     */
-    socketsResyncPlayers() {
-      this.webSocket.emit('resyncPlayers', this.sid)
-      this.resyncPlayers()
-    },
-
-    /**
-     * Resyncne herní mod
-     */
-    socketsResyncGamemode() {
-      this.webSocket.emit('resyncGamemode', this.sid, this.battleModeSwitch)
-    },
-
-    socketsResyngBattle() {
-      this.webSocket.emit('resyncBattle', this.sid, this.dataBoje)
-    },
-
-
-    //Inventář
-    /**
-     * Otevře inventář modal pro daného hráče
-     * @param {int} hrac -> Cislo hrace v pořadí
-     */
-    openInventory(hrac) {
-      switch (hrac) {
-        case 1:
-          this.inventarDobrodruh = this.player1.adventurer
-          break;
-
-        case 2:
-          this.inventarDobrodruh = this.player2.adventurer
-          break;
-
-        case 3:
-          this.inventarDobrodruh = this.player3.adventurer
-          break;
-
-        default:
-          break;
-      }
-      this.inventarModal = true;
-    },
-
-
-    //Detail
-    /**
-     * Otevře detail hráčova dobrodruha
-     * @param {*} hrac 
-     */
-    openDetail(hrac) {
-      switch (hrac) {
-        case 1:
-          this.detailAdventurer = this.player1.adventurer
-          break;
-        case 2:
-          this.detailAdventurer = this.player2.adventurer
-          break;
-        case 3:
-          this.detailAdventurer = this.player3.adventurer
-          break;
-
-        default:
-          break;
-      }
-
-      /*
-
-        */
-      this.detailModal = true
-    },
-
-    /**
-     * Změní level a zkušenosti vybraného dobrodruha
-     * Resync
-     */
-    detailChangeLevelExperience() {
-      axios.post(axios.defaults.baseURL + '/character/changeLevelAndExperience', { 'adventurer': this.detailDobrodruh._id, 'level': this.detailLevelInput, 'zkusenosti': this.detailExperienceInput })
-        .then(responseQuery => {
-          if (responseQuery) {
-            this.detailModal = false
-            this.detailLevelInput = null,
-              this.detailExperienceInput = null
-            this.socketsResyncPlayers()
-          }
-        })
-    },
-
-    // Nepřátelé
-    /**
-     * Načte všechny dostupné nepřátelské entity
-     */
-    loadEnemies() {
-      axios.get(axios.defaults.baseURL + '/monster/dump')
-        .then(queryResponse => {
-          this.dostupniNepratele = queryResponse.data,
-            queryResponse.data.forEach(enemy => {
-              this.moznostiNepratel.push(enemy.jmeno)
-            });
-
-        })
-    },
-
-    /**
-     * Přidá nepřítele do bojového pole
-     * Resync
-     */
-    addEnemy() {
-      let pozice = this.moznostiNepratel.indexOf(this.vybranyNepritel);
-      let vybrany = this.dostupniNepratele[pozice]
-      vybrany.realneZivoty = vybrany.zivoty
-      vybrany.identity = this.monsterIdentity
-      this.monsterIdentity++; 
-
-      // ! Zajimava obklika do bakalaá5ky
-      this.dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(vybrany)))
-      this.battleFrontFillInstance()
-      this.copyBattleFront()
-      this.socketsResyngBattle()
-    },
-
-    /**
-     * Přidá život nepříteli
-     * @param {int} index  Pozice nepřítele v bojovém poli
-     * Resync
-     */
-
-    fightAddLifeToEnemy(index) {
-      this.dataBoje.aktivniNepratele[index].realneZivoty = this.dataBoje.aktivniNepratele[index].realneZivoty + 1
-      this.socketsResyngBattle()
-    },
-
-    /**
-     * Odebere život nepříteli
-     * @param {int} index Pozice nepřítele v bojovém poli
-     * Resync
-     */
-    fightRemoveLifeToEnemy(index) {
-      this.dataBoje.aktivniNepratele[index].realneZivoty = this.dataBoje.aktivniNepratele[index].realneZivoty - 1
-      this.socketsResyngBattle()
-    },
-
-    /**
-     * Odebere nepřítele z bojiště
-     * @param {int} index Pozice nepřítele na bojišti
-     */
-    fightRemoveEnemy(index) {
-      this.dataBoje.aktivniNepratele.splice(index, 1)
-      this.socketsResyngBattle()
-    },
-
-    // Herní cyklus
-
-    /**
-     * Vybere dobrodruha pro boj
-     * @param {int} adventurer : ID dobrodruha pro boj
-     */
-    fightChoseAdventurer(adventurer) {
-      switch (adventurer) {
-        case 1:
-          this.dataBoje.bojujiciDobrodruh = this.player1.adventurer
-          break;
-        case 2:
-          this.dataBoje.bojujiciDobrodruh = this.player2.adventurer
-          break;
-        case 3:
-          this.dataBoje.bojujiciDobrodruh = this.player3.adventurer
-          break;
-
-        default:
-          break;
-      }
-      axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: this.dataBoje.bojujiciDobrodruh.inventar } })
-        .then(queryResponse => {
-          this.dataBoje.bojujiciDobrodruhVybava = queryResponse.data
-          this.socketsResyngBattle()
-        })
-
-    },
-
-    /**
-     * Vybere nepřítele pro hod kostkou
-     * @param {INT} enemy Pozice v poli aktivních nepřátel
-     */
-    fightChoseEnemy(enemy) {
-      this.dataBoje.bojujiciNepritel = this.dataBoje.aktivniNepratele[enemy]
-      this.socketsResyngBattle()
-    },
-
-
-    battleFrontFillInstance(){
-      this.dataBoje.battleFront = JSON.parse(JSON.stringify(this.dataBoje.aktivniNepratele))
-      if (this.player1.adventurer) {
-        this.dataBoje.battleFront.push(this.player1.adventurer)
-      }
-
-    },
-
-    copyBattleFront(){
-      this.dataBoje.battleFrontInstance = JSON.parse(JSON.stringify(this.dataBoje.battleFront))
-    },
-
-
-    battleFrontFinish(){
-      this.dataBoje.battleFrontInstance.splice(this.battleFrontChosen,1)
-    },
-
-
-
-
-    throwDice() {
-      this.dataBoje.hozennaKostka = Math.floor((Math.random() * 6) + 1);
-      this.socketsResyngBattle()
-    },
-
-    clearDice() {
-      this.dataBoje.hozennaKostka = 0
-      this.dataBoje.bojujiciNepritel = null
-      this.dataBoje.bojujiciDobrodruh = null
-      this.dataBoje.bojujiciDobrodruhVybava = []
-      this.dataBoje.bojujiciDobrodruhPredmet = null
-      this.socketsResyngBattle()
-    },
-
-
-    // /Boj
-
-    // /Herní cyklus
-
-    // Resinc sessionu
-    /**
-     * Znovu načte data hráčů a jejich dobrodruhů z důvodu udržení sessiony
-     */
-    resyncPlayers() {
-      console.log("Proběhne resync")
-      axios.get(axios.defaults.baseURL + '/sessions/sessionPlayers', { params: { sid: this.sid } })
-        .then(response => {
-
-          this.player1.owner = response.data[0].owner
-          this.player1.adventurerID = response.data[0].adventurer
-
-          this.player2.owner = response.data[1].owner
-          this.player2.adventurerID = response.data[1].adventurer
-
-          this.player3.owner = response.data[2].owner
-          this.player3.adventurerID = response.data[2].adventurer
-
-          axios.get(axios.defaults.baseURL + '/character/sessionAdventurers', { params: { adventurer1: this.player1.adventurerID, adventurer2: this.player2.adventurerID, adventurer3: this.player3.adventurerID } })
-            .then(response => {
-
-              console.log(response)
-              this.player1.adventurer = response.data[0]
-              this.player2.adventurer = response.data[1]
-              this.player3.adventurer = response.data[2]
-
-            })
-
-        })
-    },
-
-    /**
-     * Resyncne herní mod
-     */
-    resyncGamemode() {
-
-    },
-
-
-
-  },
+import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+import { io } from 'socket.io-client'
+import axios from 'axios'
+
+//Systémové variables
+const uzivatelStore = useUzivatelStore()
+const webSocket = ref(null)
+const sid = ref(null)
+const myIdentity = ref(null)
+const battleModeSwitch = ref(false)
+
+const player1 = { owner : null, adventurer: null, adventurerID: null }
+const player2 = { owner : null, adventurer: null, adventurerID : null }
+const player3 = { owner : null, adventurer: null, adventurerID: null }
+
+//Herni pozadi pruzkumneho modu
+const dostupnePozadi = ref([])
+const vybranePozadi = ref(false)
+const detailAdventurer = ref(null)
+
+
+//Inventář
+const inventarModal = ref(false)
+const inventarDobrodruh = ref(null)
+
+
+//Detail dobrodruha
+const detailModal = ref(false)
+const detailDobrodruh = ref(null)
+const detailLevelInput = ref(null)
+const detailExperienceInput = ref(null)
+const detailTridaShopnosti = ref([])
+const detailRasaSchopnosti = ref([])
+
+// Bojový mod
+const dataBoje = {
+  bojPorovnanyAtribut:  'Volný hod',
+  hozennaKostka: 0,
+  bojujiciNepritel: null,
+  bojujiciDobrodruh: null,
+  bojujiciDobrodruhVybava:[],
+  bojujiciDobrodruhPredmet: null,
+  aktivniNepratele:[],
+  battleFront:[],
+  battleFrontInstance:[],
+  battleFrontInstanceAdventurers:[]
 }
+const battleFrontChosen = ref(null)
+
+// Nepřátelé
+const dostupniNepratele = ref(null)
+const moznostiNepratel = ref([])
+const vybranyNepritel = ref(null)
+const monsterIdentity = ref(1)
+
+onUnmounted(() => {
+  webSocket.value.emit('unMount', myIdentity)
+})
+
+onMounted(() => {
+
+  //Duležité proměné
+  let urlParams = new URLSearchParams(window.location.search)
+  sid.value = urlParams.get('sid')
+  if (axios.defaults.baseURL == 'http://localhost:3000') {
+    webSocket.value = io('http://localhost:3000')
+  } else {
+    webSocket.value = io('https://api.rozdel-a-panuj.cz')
+    //
+  }
+
+  //WEBSOCKET
+  //Připojení websocketu
+  webSocket.value.on('connect', () => {
+    console.log('Websocket servis připojen')
+  })
+  socketsJoinRoom();
+
+  axios.get(axios.defaults.baseURL + '/sessions/checkOwner', { params: { sid: sid.value, user: uzivatelStore._id } })
+    .then(response => {
+      if (response.data) {
+
+        myIdentity.value = 'Owner'
+      } else {
+        socketsResyncPlayers();
+        resyncPlayers();
+      }
+    })
+
+
+  //Připojení hráče
+  webSocket.value.on('resyncPlayers', () => {
+    resyncPlayers();
+  })
+
+  //Změna herního modu
+  webSocket.value.on('resyncGamemode', (mode) => {
+    battleModeSwitch.value = mode;
+  })
+
+  webSocket.value.on('resyncBattle', (data) => {
+    dataBoje.value = data
+  })
+
+
+  //Načtení pozadí
+  axios.get(axios.defaults.baseURL + '/pozadi/dump')
+    .then(res => {
+      dostupnePozadi.value = res.data
+      vybranePozadi.value = dostupnePozadi.value[0]
+    })
+
+  /**
+   * Načte možnosti nepřátel
+   */
+  loadEnemies()
+
+  resyncPlayers()
+})
+
+
+
+  function getIdentity(entity) {
+    if (entity.jmeno) {
+      return `${entity.jmeno} - ${entity.identity}`;
+    }
+    return `${entity.krestniJmeno} - ${entity.prijmeni}`;
+  }
+
+// SOCKETY
+/**
+ * Odešle požadavek na připojení socketu do místisti s ID sessiony
+ */
+function socketsJoinRoom() {
+  webSocket.value.emit('joinRoom', sid.value, uzivatelStore._id)
+}
+
+/**
+ * Resync připojených hráčů a jejich dobrodruhů v dané místnosti
+ * 
+ */
+function socketsResyncPlayers() {
+  webSocket.value.emit('resyncPlayers', sid.value)
+  resyncPlayers()
+}
+
+/**
+ * Resyncne herní mod
+ */
+ function socketsResyncGamemode() {
+  webSocket.value.emit('resyncGamemode', sid.value, battleModeSwitch)
+}
+
+function socketsResyngBattle() {
+  webSocket.value.emit('resyncBattle', sid.value, dataBoje)
+}
+
+//Inventář
+/**
+ * Otevře inventář modal pro daného hráče
+ * @param {int} hrac -> Cislo hrace v pořadí
+ */
+ function openInventory(hrac) {
+  switch (hrac) {
+    case 1:
+      inventarDobrodruh.value = player1.adventurer
+      break;
+
+    case 2:
+      inventarDobrodruh.value = player2.adventurer
+      break;
+
+    case 3:
+      inventarDobrodruh .value= player3.adventurer
+      break;
+
+    default:
+      break;
+  }
+  inventarModal.value = true;
+}
+
+
+//Detail
+/**
+ * Otevře detail hráčova dobrodruha
+ * @param {*} hrac 
+ */
+ function openDetail(hrac) {
+  switch (hrac) {
+    case 1:
+      detailAdventurer.value = player1.adventurer
+      break;
+    case 2:
+      detailAdventurer.value = player2.adventurer
+      break;
+    case 3:
+      detailAdventurer.value = player3.adventurer
+      break;
+
+    default:
+      break;
+  }
+
+  /*
+
+    */
+  detailModal.value = true
+}
+
+/**
+ * Změní level a zkušenosti vybraného dobrodruha
+ * Resync
+ */
+ function detailChangeLevelExperience() {
+  axios.post(axios.defaults.baseURL + '/character/changeLevelAndExperience', { 'adventurer': detailDobrodruh.value._id, 'level': detailLevelInput.value, 'zkusenosti': detailExperienceInput.value })
+    .then(responseQuery => {
+      if (responseQuery) {
+        detailModal.value = false
+        detailLevelInput.value = null,
+        detailExperienceInput.value = null
+        socketsResyncPlayers()
+      }
+    })
+}
+
+// Nepřátelé
+/**
+ * Načte všechny dostupné nepřátelské entity
+ */
+ function loadEnemies() {
+  axios.get(axios.defaults.baseURL + '/monster/dump')
+    .then(queryResponse => {
+      dostupniNepratele.value = queryResponse.data,
+        queryResponse.data.forEach(enemy => {
+          moznostiNepratel.value.push(enemy.jmeno)
+        });
+
+    })
+}
+
+/**
+ * Přidá nepřítele do bojového pole
+ * Resync
+ */
+ function addEnemy() {
+  let pozice = moznostiNepratel.value.indexOf(vybranyNepritel);
+  let vybrany = dostupniNepratele[pozice]
+  vybrany.realneZivoty = vybrany.value.zivoty
+  vybrany.identity = monsterIdentity
+  monsterIdentity.value++;
+
+  // ! Zajimava obklika do bakalaá5ky
+  dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(vybrany)))
+  battleFrontFillInstance()
+  copyBattleFront()
+  socketsResyngBattle()
+}
+
+/**
+ * Přidá život nepříteli
+ * @param {int} index  Pozice nepřítele v bojovém poli
+ * Resync
+ */
+
+ function fightAddLifeToEnemy(index) {
+  dataBoje.value.aktivniNepratele[index].realneZivoty = dataBoje.aktivniNepratele[index].realneZivoty + 1
+  socketsResyngBattle()
+}
+
+/**
+ * Odebere život nepříteli
+ * @param {int} index Pozice nepřítele v bojovém poli
+ * Resync
+ */
+ function fightRemoveLifeToEnemy(index) {
+  dataBoje.value.aktivniNepratele[index].realneZivoty = dataBoje.aktivniNepratele[index].realneZivoty - 1
+  socketsResyngBattle()
+}
+
+/**
+ * Odebere nepřítele z bojiště
+ * @param {int} index Pozice nepřítele na bojišti
+ */
+ function fightRemoveEnemy(index) {
+  dataBoje.value.aktivniNepratele.splice(index, 1)
+  socketsResyngBattle()
+}
+
+// Herní cyklus
+
+/**
+ * Vybere dobrodruha pro boj
+ * @param {int} adventurer : ID dobrodruha pro boj
+ */
+ function fightChoseAdventurer(adventurer) {
+  switch (adventurer) {
+    case 1:
+      dataBoje.value.bojujiciDobrodruh = player1.adventurer
+      break;
+    case 2:
+      dataBoje.value.bojujiciDobrodruh = player2.adventurer
+      break;
+    case 3:
+      dataBoje.value.bojujiciDobrodruh = player3.adventurer
+      break;
+
+    default:
+      break;
+  }
+  axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: dataBoje.value.bojujiciDobrodruh.inventar } })
+    .then(queryResponse => {
+      dataBoje.value.bojujiciDobrodruhVybava = queryResponse.data
+      socketsResyngBattle()
+    })
+
+}
+
+/**
+ * Vybere nepřítele pro hod kostkou
+ * @param {INT} enemy Pozice v poli aktivních nepřátel
+ */
+ function fightChoseEnemy(enemy) {
+  dataBoje.value.bojujiciNepritel = dataBoje.aktivniNepratele[enemy]
+  socketsResyngBattle()
+}
+
+
+function battleFrontFillInstance(){
+  dataBoje.value.battleFront = JSON.parse(JSON.stringify(dataBoje.aktivniNepratele))
+  if (player1.adventurer) {
+    dataBoje.battleFront.push(player1.adventurer)
+  }
+
+}
+
+function copyBattleFront(){
+  dataBoje.value.battleFrontInstance = JSON.parse(JSON.stringify(dataBoje.battleFront))
+}
+
+
+function battleFrontFinish(){
+  dataBoje.value.battleFrontInstance.splice(battleFrontChosen, 1)
+}
+
+
+
+
+function throwDice() {
+  dataBoje.value.hozennaKostka = Math.floor((Math.random() * 6) + 1);
+  socketsResyngBattle()
+}
+
+function clearDice() {
+  dataBoje.value.hozennaKostka = 0
+  dataBoje.value.bojujiciNepritel = null
+  dataBoje.value.bojujiciDobrodruh = null
+  dataBoje.value.bojujiciDobrodruhVybava = []
+  dataBoje.value.bojujiciDobrodruhPredmet = null
+  socketsResyngBattle()
+}
+
+
+// /Boj
+
+// /Herní cyklus
+
+// Resinc sessionu
+/**
+ * Znovu načte data hráčů a jejich dobrodruhů z důvodu udržení sessiony
+ */
+ function resyncPlayers() {
+  console.log("Proběhne resync hráčů")
+  axios.get(axios.defaults.baseURL + '/sessions/sessionPlayers', { params: { sid: sid.value } })
+    .then(response => {
+
+      console.log(response.data[0])
+
+      player1.owner = response.data[0].owner
+      player1.adventurerID = response.data[0].adventurer
+
+      player2.owner = response.data[1].owner
+      player2.adventurerID = response.data[1].adventurer
+
+      player3.owner = response.data[2].owner
+      player3.adventurerID = response.data[2].adventurer
+
+      axios.get(axios.defaults.baseURL + '/character/sessionAdventurers', { params: { adventurer1: player1.adventurerID, adventurer2: player2.adventurerID, adventurer3: player3.adventurerID } })
+        .then(response => {
+          player1.adventurer = response.data[0]
+          player2.adventurer = response.data[1]
+          player3.adventurer = response.data[2]
+
+        })
+
+    })
+}
+
 </script>
     
 <style></style>

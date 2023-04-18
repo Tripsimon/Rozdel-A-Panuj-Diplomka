@@ -70,7 +70,7 @@ app.use(express.static(path.join(__dirname,'/files')))
 //img
 
 
-const devMode = false;
+const devMode = true;
 if (devMode) {
     axios.defaults.baseURL = 'http://localhost:3000'
 

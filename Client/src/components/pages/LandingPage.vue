@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
   <div id="content">
     <v-parallax src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
@@ -69,5 +65,6 @@
   </div>
 </template>
 
-<script>
+<script setup>
+
 </script>

@@ -1,27 +1,25 @@
-<script setup>
-import axios from "axios";
-import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
-
-</script>
 <template>
   <v-container>
-    <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText" />
+    
+    <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText"/>
     <v-card color="primary" class="mt-3">
       <h1 class="d-flex justify-center">Registrace</h1>
       <v-card-text>
 
-        <v-form ref="form" v-model="valid" fast-fail  @submit.prevent="submit"  >
+        <v-form ref="form" v-model="valid">
 
-          <v-text-field color="secondary" variant="outlined" v-model="email" :rules="rules.emailRule" label="E-mail" required></v-text-field>
+          <v-text-field color="secondary" variant="outlined" v-model="email" :rules="rules.emailRule" label="E-mail"
+            required></v-text-field>
 
-          <v-text-field color="secondary" variant="outlined" v-model="prezdivka" :rules="rules.nameRule"  label="Jméno" required></v-text-field>
+          <v-text-field color="secondary" variant="outlined" v-model="prezdivka" :rules="rules.nameRule" label="Jméno"
+            required></v-text-field>
 
-          <v-text-field color="secondary" variant="outlined" v-model="heslo"  :rules="rules.hesloRule" label="Heslo"
+          <v-text-field color="secondary" variant="outlined" v-model="heslo" :rules="rules.hesloRule" label="Heslo"
             type='password' required></v-text-field>
 
-          <v-text-field color="secondary" variant="outlined" v-model="reHeslo"   label="Heslo znovu"
-            type='password' required></v-text-field>
+          <v-text-field color="secondary" variant="outlined" v-model="reHeslo" :rules="rules.againPassword" label="Heslo znovu" type='password'
+            required></v-text-field>
 
 
           <v-btn color="secondary" variant="text" class="mr-4" @click="register()">
@@ -38,107 +36,99 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
     
 
     
-<script>
+<script setup>
+
+
+
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import Alert from '../parts/AlertHandler.vue'
-export default {
+import axios from 'axios'
+import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
-  setup(){
-  console.log(configFileInject)
+const uzivatelStore = useUzivatelStore()
+const router = useRouter()
 
-  },
-  components: {
-    Alert
-  },
+const email = ref("")
+const prezdivka = ref("")
+const heslo = ref("")
+const reHeslo = ref("")
+const valid = ref("")
 
-  data: () => ({
-  
-    uzivatelStore: useUzivatelStore(),
+const showAlert = ref(false)
+const alertTitulek = ref('text')
+const alertText = ref('text')
 
+const form = ref(false)
+const rules = {
+  hesloRule: [
+    value => {
+      if (value?.length > 7) return true
+      return 'Heslo musí obsahovat alespon 8 znaků'
+    },],
 
-    email: "",
-    prezdivka: "",
-    heslo: "",
-    reHeslo: "",
-    valid: '',
-    rules: {
-      hesloRule: [
-        value => {
-          if (value?.length > 7) return true
-          return 'Heslo musí obsahovat alespon 8 znaků'
-        },
+  nameRule: [
+    value => {
+      if (value?.length > 3) return true
+      return 'Jméno musí obsahovat alespon 4 znaky'
+    },],
 
-      ],
-      nameRule: [
-        value => {
-          if (value?.length > 3) return true
-          return 'Jméno musí obsahovat alespon 4 znaky'
-        },
+  emailRule: [
+    value => !value || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) || 'Formát zadání není E-Mail'
+  ],
 
-      ],
+  againPassword:[
+    value =>{
+      if(value == heslo.value) return true
+      return 'Heslo se neschoduje'
 
-      emailRule: [ 
-        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Formát zadání není E-Mail'
-      ],
-
-    },
-
-
-    showAlert: false,
-    alertTitulek: 'Text',
-    alertText: 'Text',
-
-  }),
-
-  methods: {
-
-    register() {
-      if (this.valid != true) {
-        this.showAlert = true,
-        this.alertTitulek = "Nesprávná data",
-        this.alertText = "Prosím, vyplně formulář korektními daty"
-      }else if(this.heslo != this.reHeslo) {
-        this.showAlert = true,
-        this.alertTitulek = "Rozdílná hesla",
-        this.alertText = "Zadaná kontrola hesla se liší. Zkontrolujte prosím zadaná data"
-      }else{
-
-      
-
-      axios.post(axios.defaults.baseURL+"/uzivatel/registrace", { 'email': this.email, 'prezdivka': this.prezdivka, 'heslo': this.heslo })
-        .then(queryResponse => {
-
-          switch (queryResponse.data) {
-            case 'usedMail':
-              this.showAlert = true;
-              this.alertTitulek = "Využitá adresa"
-              this.alertText = 'Tato E-Mailová adresa je již využívána. Prosím, zvolte jinou'
-              break;
-
-            case 'usedNick':
-              this.showAlert = true;
-              this.alertTitulek = "Využitá přezdívka"
-              this.alertText = 'Tato přezdívka adresa je již využívána.'
-              break;
-
-            default:
-              if (queryResponse.status == 201 || queryResponse.data != null) {
-                this.uzivatelStore.$patch({
-                  prihlasen: true,
-                  prezdivka: this.prezdivka,
-                  _id: queryResponse.data
-                })
-                this.$router.push({ path: '/' })
-              }
-              break;
-          }
-
-        })
-      }
     }
-    
-  }
+  ]
+
 }
+
+function register() {
+
+  form.value?.validate()
+    .then(form => {
+      if (form.valid) {
+        axios.post(axios.defaults.baseURL + "/uzivatel/registrace", { 'email': this.email, 'prezdivka': this.prezdivka, 'heslo': this.heslo })
+          .then(queryResponse => {
+
+            switch (queryResponse.data) {
+              case 'usedMail':
+                showAlert.value = true;
+                alertTitulek.value = "Využitá adresa"
+                alertText.value = 'Tato E-Mailová adresa je již využívána. Prosím, zvolte jinou'
+                break;
+
+              case 'usedNick':
+                showAlert.value = true;
+                alertTitulek.value = "Využitá přezdívka"
+                alertText.value = 'Tato přezdívka adresa je již využívána.'
+                break;
+
+              default:
+                if (queryResponse.status == 201 || queryResponse.data != null) {
+                  uzivatelStore.$patch({
+                    prihlasen: true,
+                    prezdivka: this.prezdivka,
+                    _id: queryResponse.data
+                  })
+                  router.push({ path: '/' })
+                }
+                break;
+            }
+
+          })
+      }
+    })
+}
+
+
+
+
 </script>
     
 <style></style>

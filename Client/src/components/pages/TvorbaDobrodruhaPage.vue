@@ -264,7 +264,7 @@
   
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter, } from 'vue-router'
+import { useRouter } from 'vue-router'
 import AbilityCard from '../parts/AbilityCard.vue'
 import AtributeCard from '../parts/spravaParts/atributeBlockPart.vue'
 import Alert from '../parts/AlertHandler.vue'
@@ -347,6 +347,10 @@ const volneAtributy = ref(10)
  * Funkce po mountnutí komponenty
  */
 onMounted(() => {
+  if (!uzivatelStore.prihlasen) {
+        router.push({path: '/'})
+    }
+
   axios.get(axios.defaults.baseURL + '/rasy/dump')
     .then(responseQuery => {
       rasaMoznosti.value = responseQuery.data

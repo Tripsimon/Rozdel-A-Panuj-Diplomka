@@ -5,7 +5,7 @@
     <v-container>
       <v-card color="primary">
         <v-card-text>
-          <v-form ref="form" v-model="valid">
+          <v-form ref="form" >
             <v-text-field color="secondary" variant="outlined" :rules="rules.required" v-model="jmenoSessionu"
               label="Jméno herní místnosti" required></v-text-field>
             <v-text-field color="secondary" variant="outlined" :rules="rules.required" v-model="heslo" label="Heslo"
@@ -29,7 +29,7 @@
 import axios from "axios";
 
 //Součásti Vue a Store
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter, } from 'vue-router'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
@@ -59,7 +59,11 @@ const rules = {
 }
 
 
-
+onMounted(() =>{
+    if (!uzivatelStore.prihlasen) {
+        router.push({path: '/'})
+    }
+})
 
 
 /**

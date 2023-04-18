@@ -209,7 +209,9 @@
 
 <script setup>
 //Importy
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter} from 'vue-router'
+import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import Alert from '../parts/AlertHandler.vue'
 import AbilityCreation from '../parts/spravaParts/abilityCreationPart.vue'
 import ConfirmDialog from '../parts/ConfirmDialog.vue'
@@ -220,6 +222,8 @@ const showAlert = ref(false)
 const alertTitle = ref("")
 const alertText = ref("")
 const dialogToggle = ref(false)
+const router = useRouter()
+const uzivatelStore = useUzivatelStore()
 let toDelete = null;
 
 //Data předmětů z DB
@@ -246,6 +250,13 @@ const rules = {
         },
     ],
 };
+
+onMounted(() =>{
+    console.log(uzivatelStore)
+    if (!uzivatelStore.prihlasen || uzivatelStore.opravneni != 'administrator') {
+        router.push({path: '/'})
+    }
+})
 
 /**
  * Upravý input nové schopnosti

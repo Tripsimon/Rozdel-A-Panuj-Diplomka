@@ -253,8 +253,12 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import axios from 'axios'
 const form = ref(null);
+const router = useRouter()
+const uzivatelStore = useUzivatelStore()
 
 const loadedMonsters = ref([]);
 const avaliableMonsterTypes = ref(["Data se nepodařilo načíst"])
@@ -291,7 +295,15 @@ const chosenDamageSeverity = ref(null);
 
 const chosenSizeGroup = ref('Lidská');
 
+
+
 onMounted(() => {
+
+    console.log(uzivatelStore)
+    if (!uzivatelStore.prihlasen || uzivatelStore.opravneni != 'administrator') {
+        router.push({path: '/'})
+    }
+
     getMonsters()
     getMonsterTypes()
 })

@@ -61,14 +61,19 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 import FormData from 'form-data'
 import Alert from '../parts/AlertHandler.vue'
+import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+
 
 //Alert variables
+const router = useRouter()
 const showAlert = ref(false)
 const alertTitle = ref("")
 const alertText = ref("")
+const uzivatelStore = useUzivatelStore()
 
 //Image inpu
 let inputFile = null
@@ -76,7 +81,14 @@ const inputFileName = ref(null)
 const loadedImages = ref([])
 
 //On mount event
+
+
 onMounted(() => {
+  console.log(uzivatelStore)
+    if (!uzivatelStore.prihlasen || uzivatelStore.opravneni != 'administrator') {
+        router.push({path: '/'})
+    }
+
   loadImages()
 })
 
