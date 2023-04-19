@@ -396,9 +396,9 @@ function onClassSelect() {
         axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: tridaVybranaObjekt.value.zbrojVybava } })
         .then(queryResponse => {
           tridaVybava.value.zbroj = queryResponse.data
-
         })
-
+1
+        
       axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { owner: tridaVybrana.value } })
         .then(queryResponse => {
           tridaSchopnosti.value = queryResponse.data

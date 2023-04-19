@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <v-parallax src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+    <v-parallax src="../../../src/assets/images/landingpage.png">
       <div class="d-flex flex-column fill-height justify-center align-center text-white">
         <h1 class="text-h4 font-weight-thin mb-4">
           Rozděl a Panuj

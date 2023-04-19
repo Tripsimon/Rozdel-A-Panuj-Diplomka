@@ -35,6 +35,7 @@ router.get('/getMultipleByID', (req,res) =>{
 router.get('/getByOwner', (req,res) =>{
     AbilityModel.find({majitel: req.query.owner})
         .then(queryResponse => res.send(queryResponse))
+
 })
 
 

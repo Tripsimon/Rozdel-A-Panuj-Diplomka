@@ -7,6 +7,7 @@ const Schema = mongoose.Schema;
 const MonsterSchema = new Schema({
     jmeno: String,
     popis: String,
+    typ: String,
     velikostniSkupina: String,
 
     schopnosti: [{

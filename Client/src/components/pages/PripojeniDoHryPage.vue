@@ -7,12 +7,12 @@
       <v-card-title>
         <h4>Výběr serveru:</h4>
       </v-card-title>
-      <v-card-text v-if="sessions.value != null">
-        <v-form>
+      <v-card-text v-if="sessions.length != 0">
+        <v-form ref="form">
           <v-text-field color="secondary" variant="outlined" v-model="sessionPassword" type='password'
-            label="Heslo hry"></v-text-field>
-          <v-select color="secondary" variant="outlined" label="Výber herní postavy" :items="adventurerChoices"
-            v-model="chosenAdventurer"></v-select>
+            label="Heslo hry" :rules="rules.required" ></v-text-field>
+          <v-select color="secondary" variant="outlined" label="Výber herní postavy" :items="avaliableAdventurers"
+            :item-title="'trueName'" :item-value="'_id'" v-model="chosenAdventurer" :rules="rules.required"></v-select>
         </v-form>
         <v-table>
           <thead>
@@ -66,6 +66,7 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 
 const router = useRouter()
 
+
 const adventurerChoices = ref([])
 const avaliableAdventurers = ref([])
 const playerAdventurers = ref([])
@@ -79,6 +80,16 @@ const sessionData = ref(null)
 const sessionPassword = ref(null)
 const uzivatelStore = useUzivatelStore()
 
+const form = ref(false)
+const rules = {
+    required: [
+        value => {
+            if (value?.length > 0) return true
+            return 'Formulář není vyplněný'
+        },
+    ],
+};
+
 onMounted(() => {
 
   if (!uzivatelStore.prihlasen) {
@@ -91,8 +102,9 @@ onMounted(() => {
     .then((response) => {
       avaliableAdventurers.value = response.data
 
-      response.data.forEach(element => {
-        adventurerChoices.value.push(element.krestniJmeno + " '" + element.prezdivka + "' " + element.prijmeni)
+      avaliableAdventurers.value.forEach(element => {
+        element.trueName = element.krestniJmeno + ' ' + element.prezdivka +' ' + element.prijmeni
+      
       });
     })
 
@@ -106,24 +118,31 @@ onMounted(() => {
  * Připojení do sessionu
  */
 function joinSession(id) {
+  form.value?.validate()
+    .then(({ valid }) => {
+      if (valid) {
+        let adventurer = adventurerChoices.value.indexOf(chosenAdventurer, 0)
+        console.log(adventurer)
 
-  let adventurer = adventurerChoices.indexOf(chosenAdventurer, 0)
+        console.log(chosenAdventurer)
+        let body = {
+          "sessionID": id,
+          "password": sessionPassword.value,
 
-  console.log(chosenAdventurer)
-  let body = {
-    "sessionID": id,
-    "password": sessionPassword,
-
-    "adventurer": avaliableAdventurers[adventurer]._id,
-    "player": uzivatelStore._id
-  }
-  axios.post(axios.defaults.baseURL + '/sessions/joinSession', body)
-    .then(queryResponse => {
-      if (queryResponse.data == 'Wrong Password') {
-      } else {
-        router.push({ path: '/RaPSession', query: { sid: id } })
+          "adventurer": chosenAdventurer.value,
+          "player": uzivatelStore._id
+        }
+        axios.post(axios.defaults.baseURL + '/sessions/joinSession', body)
+          .then(queryResponse => {
+            if (queryResponse.data == 'Session Joined') {
+              router.push({ path: '/RaPSession', query: { sid: id } })
+            } else {
+              console.log("Problém při připojení")
+            }
+          })
       }
     })
+
 
 }
 
@@ -133,6 +152,7 @@ function joinSession(id) {
 function findSessions() {
   axios.get(axios.defaults.baseURL + '/sessions/openSessions')
     .then((queryResponse) => {
+
       sessions.value = queryResponse.data
     })
 }

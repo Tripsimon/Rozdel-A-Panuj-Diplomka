@@ -1,5 +1,7 @@
 <template>
   <div>
+
+
     <!-- Modal pro inventář -->
     <InventoryModal :toggle="inventarModal" :inventoryAdventurer="inventarDobrodruh"
       @resync-players="socketsResyncPlayers()" @close-modal="inventarModal = false" />
@@ -10,10 +12,10 @@
     <!-- Vlastní obsah-->
     <v-container class="mt-3">
       <v-row>
-        
+
         <!-- Mod pruzkumu -->
         <v-col v-if="battleModeSwitch == false" :cols="myIdentity == 'Owner' ? '9' : '12'">
-          <v-img  :src="axios.defaults.baseURL + '/backgrounds/' + vybranePozadi" max-width="100%">
+          <v-img :src="axios.defaults.baseURL + '/backgrounds/' + vybranePozadi" max-width="100%">
           </v-img>
         </v-col>
 
@@ -124,7 +126,7 @@
               Hod kostkou
             </v-card-title>
             <v-container>
-              {{ adventurer1 }}
+
               <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Volný hod'">
                 <v-col>
                   <v-card color="accent" align="center" justify="center">
@@ -290,9 +292,8 @@
                       {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="dataBoje.bojujiciDobrodruhVybava"
-                        v-model="dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
-                        label="Vyberte předmět"></v-select>
+                      <v-select :items="dataBoje.bojujiciDobrodruhVybava" v-model="dataBoje.bojujiciDobrodruhPredmet"
+                        item-title="jmeno" return-object label="Vyberte předmět"></v-select>
                       <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
                         <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Průraz: {{
                           dataBoje.bojujiciDobrodruhPredmet.pruraznost
@@ -353,9 +354,8 @@
                       {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="dataBoje.bojujiciDobrodruhVybava"
-                        v-model="dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
-                        label="Vyberte předmět"></v-select>
+                      <v-select :items="dataBoje.bojujiciDobrodruhVybava" v-model="dataBoje.bojujiciDobrodruhPredmet"
+                        item-title="jmeno" return-object label="Vyberte předmět"></v-select>
                       <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
                         <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Poškození: {{
                           dataBoje.bojujiciDobrodruhPredmet.poskozeni
@@ -476,9 +476,8 @@
                       {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
                     </v-card-title>
                     <v-card-text>
-                      <v-select :items="dataBoje.bojujiciDobrodruhVybava"
-                        v-model="dataBoje.bojujiciDobrodruhPredmet" item-title="jmeno" return-object
-                        label="Vyberte předmět"></v-select>
+                      <v-select :items="dataBoje.bojujiciDobrodruhVybava" v-model="dataBoje.bojujiciDobrodruhPredmet"
+                        item-title="jmeno" return-object label="Vyberte předmět"></v-select>
                       <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
                         <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbroj'">Obrana: {{
                           dataBoje.bojujiciDobrodruhPredmet.obrana
@@ -648,20 +647,21 @@
             </v-card-text>
           </v-card>
 
+          <!-- Změna pozadí -->
           <v-card v-if="battleModeSwitch == false" class="mt-3" color="primary" title="Pozadí">
             <v-card-text>
-              <v-select label="Výběr" :items="dostupnePozadi" variant="underlined"
-                v-model="vybranePozadi"></v-select>
+              <v-select label="Výběr" :items="dostupnePozadi" variant="underlined" v-model="vybranePozadi"></v-select>
             </v-card-text>
           </v-card>
 
-          <!-- Nastavení v boji -->
+          <!-- Nepřátelé -->
           <v-card v-if="battleModeSwitch == true" color="primary" title="Nepřátelé" class="mt-3">
             <v-card-text>
               <row>
-                <col>
-                <v-select color="secondary" variant="outlined" label="Výběr" :items="moznostiNepratel"
-                  v-model="vybranyNepritel"></v-select>
+                <v-select color="secondary" variant="outlined" label="Typ nepřítele" :items="enemyTypes"
+                  @update:modelValue="getEnemiesFromType()" v-model="enemyTypeChosen"></v-select>
+                <v-select color="secondary" variant="outlined" label="Výběr" :items="enemiesLoaded" :item-title="'jmeno'"
+                  v-model="enemyChosen" return-object></v-select>
               </row>
             </v-card-text>
             <v-card-actions>
@@ -669,7 +669,6 @@
             </v-card-actions>
           </v-card>
 
-          {{ dataBoje }}
           <!-- Typ hodu-->
           <v-card v-if="battleModeSwitch == true" color="primary" class="mt-3">
             <v-card-title>
@@ -795,7 +794,7 @@
   </div>
 </template>
 <script setup>
-import {ref, onMounted, onUnmounted} from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import InventoryModal from '../parts/gamepageParts/InventoryModalPart.vue'
 import DetailModal from '../parts/gamepageParts/DetailModalPart.vue'
 import AbilityCard from "../parts/AbilityCard.vue"
@@ -808,24 +807,25 @@ const uzivatelStore = useUzivatelStore()
 const webSocket = ref(null)
 const sid = ref(null)
 const myIdentity = ref(null)
-const battleModeSwitch = ref(false)
 
-const player1 = { owner : null, adventurer: null, adventurerID: null }
-const player2 = { owner : null, adventurer: null, adventurerID : null }
-const player3 = { owner : null, adventurer: null, adventurerID: null }
-
-//Herni pozadi pruzkumneho modu
+//Variables herního pozadí
 const dostupnePozadi = ref([])
 const vybranePozadi = ref(false)
-const detailAdventurer = ref(null)
 
+//Variables hráčů
+const player1 = reactive({ owner: null, adventurer: null, adventurerID: null })
+const player2 = reactive({ owner: null, adventurer: null, adventurerID: null })
+const player3 = reactive({ owner: null, adventurer: null, adventurerID: null })
 
-//Inventář
+//Herní state
+const battleModeSwitch = ref(false)
+
+//Variables pro inventář
 const inventarModal = ref(false)
 const inventarDobrodruh = ref(null)
 
-
 //Detail dobrodruha
+const detailAdventurer = ref(null)
 const detailModal = ref(false)
 const detailDobrodruh = ref(null)
 const detailLevelInput = ref(null)
@@ -834,21 +834,26 @@ const detailTridaShopnosti = ref([])
 const detailRasaSchopnosti = ref([])
 
 // Bojový mod
-const dataBoje = {
-  bojPorovnanyAtribut:  'Volný hod',
+const dataBoje = reactive({
+  bojPorovnanyAtribut: 'Volný hod',
   hozennaKostka: 0,
   bojujiciNepritel: null,
   bojujiciDobrodruh: null,
-  bojujiciDobrodruhVybava:[],
+  bojujiciDobrodruhVybava: [],
   bojujiciDobrodruhPredmet: null,
-  aktivniNepratele:[],
-  battleFront:[],
-  battleFrontInstance:[],
-  battleFrontInstanceAdventurers:[]
-}
+  aktivniNepratele: [],
+  battleFront: [],
+  battleFrontInstance: [],
+  battleFrontInstanceAdventurers: []
+})
 const battleFrontChosen = ref(null)
 
 // Nepřátelé
+const enemyTypes = ref([])
+const enemyTypeChosen = ref(null)
+const enemiesLoaded = ref([])
+const enemyChosen = ref(null)
+
 const dostupniNepratele = ref(null)
 const moznostiNepratel = ref([])
 const vybranyNepritel = ref(null)
@@ -880,7 +885,6 @@ onMounted(() => {
   axios.get(axios.defaults.baseURL + '/sessions/checkOwner', { params: { sid: sid.value, user: uzivatelStore._id } })
     .then(response => {
       if (response.data) {
-
         myIdentity.value = 'Owner'
       } else {
         socketsResyncPlayers();
@@ -914,19 +918,20 @@ onMounted(() => {
   /**
    * Načte možnosti nepřátel
    */
-  loadEnemies()
+  getEnemyTypes()
+  //loadEnemies()
 
   resyncPlayers()
 })
 
 
 
-  function getIdentity(entity) {
-    if (entity.jmeno) {
-      return `${entity.jmeno} - ${entity.identity}`;
-    }
-    return `${entity.krestniJmeno} - ${entity.prijmeni}`;
+function getIdentity(entity) {
+  if (entity.jmeno) {
+    return `${entity.jmeno} - ${entity.identity}`;
   }
+  return `${entity.krestniJmeno} - ${entity.prijmeni}`;
+}
 
 // SOCKETY
 /**
@@ -948,7 +953,7 @@ function socketsResyncPlayers() {
 /**
  * Resyncne herní mod
  */
- function socketsResyncGamemode() {
+function socketsResyncGamemode() {
   webSocket.value.emit('resyncGamemode', sid.value, battleModeSwitch)
 }
 
@@ -961,7 +966,7 @@ function socketsResyngBattle() {
  * Otevře inventář modal pro daného hráče
  * @param {int} hrac -> Cislo hrace v pořadí
  */
- function openInventory(hrac) {
+function openInventory(hrac) {
   switch (hrac) {
     case 1:
       inventarDobrodruh.value = player1.adventurer
@@ -972,7 +977,7 @@ function socketsResyngBattle() {
       break;
 
     case 3:
-      inventarDobrodruh .value= player3.adventurer
+      inventarDobrodruh.value = player3.adventurer
       break;
 
     default:
@@ -987,7 +992,7 @@ function socketsResyngBattle() {
  * Otevře detail hráčova dobrodruha
  * @param {*} hrac 
  */
- function openDetail(hrac) {
+function openDetail(hrac) {
   switch (hrac) {
     case 1:
       detailAdventurer.value = player1.adventurer
@@ -1013,46 +1018,46 @@ function socketsResyngBattle() {
  * Změní level a zkušenosti vybraného dobrodruha
  * Resync
  */
- function detailChangeLevelExperience() {
+function detailChangeLevelExperience() {
   axios.post(axios.defaults.baseURL + '/character/changeLevelAndExperience', { 'adventurer': detailDobrodruh.value._id, 'level': detailLevelInput.value, 'zkusenosti': detailExperienceInput.value })
     .then(responseQuery => {
       if (responseQuery) {
         detailModal.value = false
         detailLevelInput.value = null,
-        detailExperienceInput.value = null
+          detailExperienceInput.value = null
         socketsResyncPlayers()
       }
     })
 }
 
-// Nepřátelé
+// NEPŘÁTELÉ
 /**
- * Načte všechny dostupné nepřátelské entity
+ * Vybere typ nepřítele pro přidání
  */
- function loadEnemies() {
-  axios.get(axios.defaults.baseURL + '/monster/dump')
+function getEnemyTypes() {
+  axios.get(axios.defaults.baseURL + '/config/get', { params: { typ: 'typyNepratel' } })
     .then(queryResponse => {
-      dostupniNepratele.value = queryResponse.data,
-        queryResponse.data.forEach(enemy => {
-          moznostiNepratel.value.push(enemy.jmeno)
-        });
-
+      enemyTypes.value = queryResponse.data
     })
 }
+
+function getEnemiesFromType() {
+  axios.get(axios.defaults.baseURL + '/monster/byType', { params: { typ: enemyTypeChosen.value } })
+    .then(queryResponse => {
+      enemiesLoaded.value = queryResponse.data
+    })
+}
+
+
 
 /**
  * Přidá nepřítele do bojového pole
  * Resync
  */
- function addEnemy() {
-  let pozice = moznostiNepratel.value.indexOf(vybranyNepritel);
-  let vybrany = dostupniNepratele[pozice]
-  vybrany.realneZivoty = vybrany.value.zivoty
-  vybrany.identity = monsterIdentity
-  monsterIdentity.value++;
+function addEnemy() {
 
   // ! Zajimava obklika do bakalaá5ky
-  dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(vybrany)))
+  dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(enemyChosen.value)))
   battleFrontFillInstance()
   copyBattleFront()
   socketsResyngBattle()
@@ -1064,7 +1069,7 @@ function socketsResyngBattle() {
  * Resync
  */
 
- function fightAddLifeToEnemy(index) {
+function fightAddLifeToEnemy(index) {
   dataBoje.value.aktivniNepratele[index].realneZivoty = dataBoje.aktivniNepratele[index].realneZivoty + 1
   socketsResyngBattle()
 }
@@ -1074,7 +1079,7 @@ function socketsResyngBattle() {
  * @param {int} index Pozice nepřítele v bojovém poli
  * Resync
  */
- function fightRemoveLifeToEnemy(index) {
+function fightRemoveLifeToEnemy(index) {
   dataBoje.value.aktivniNepratele[index].realneZivoty = dataBoje.aktivniNepratele[index].realneZivoty - 1
   socketsResyngBattle()
 }
@@ -1083,7 +1088,7 @@ function socketsResyngBattle() {
  * Odebere nepřítele z bojiště
  * @param {int} index Pozice nepřítele na bojišti
  */
- function fightRemoveEnemy(index) {
+function fightRemoveEnemy(index) {
   dataBoje.value.aktivniNepratele.splice(index, 1)
   socketsResyngBattle()
 }
@@ -1094,7 +1099,7 @@ function socketsResyngBattle() {
  * Vybere dobrodruha pro boj
  * @param {int} adventurer : ID dobrodruha pro boj
  */
- function fightChoseAdventurer(adventurer) {
+function fightChoseAdventurer(adventurer) {
   switch (adventurer) {
     case 1:
       dataBoje.value.bojujiciDobrodruh = player1.adventurer
@@ -1121,34 +1126,34 @@ function socketsResyngBattle() {
  * Vybere nepřítele pro hod kostkou
  * @param {INT} enemy Pozice v poli aktivních nepřátel
  */
- function fightChoseEnemy(enemy) {
+function fightChoseEnemy(enemy) {
   dataBoje.value.bojujiciNepritel = dataBoje.aktivniNepratele[enemy]
   socketsResyngBattle()
 }
 
 
-function battleFrontFillInstance(){
-  dataBoje.value.battleFront = JSON.parse(JSON.stringify(dataBoje.aktivniNepratele))
+function battleFrontFillInstance() {
+  dataBoje.battleFront = JSON.parse(JSON.stringify(dataBoje.aktivniNepratele))
   if (player1.adventurer) {
-    dataBoje.battleFront.push(player1.adventurer)
+    dataBoje.value.battleFront.push(player1.adventurer)
   }
 
 }
 
-function copyBattleFront(){
-  dataBoje.value.battleFrontInstance = JSON.parse(JSON.stringify(dataBoje.battleFront))
+function copyBattleFront() {
+  dataBoje.battleFrontInstance = JSON.parse(JSON.stringify(dataBoje.battleFront))
 }
 
 
-function battleFrontFinish(){
-  dataBoje.value.battleFrontInstance.splice(battleFrontChosen, 1)
+function battleFrontFinish() {
+  dataBoje.battleFrontInstance.splice(battleFrontChosen, 1)
 }
 
 
 
 
 function throwDice() {
-  dataBoje.value.hozennaKostka = Math.floor((Math.random() * 6) + 1);
+  dataBoje.hozennaKostka = Math.floor((Math.random() * 6) + 1);
   socketsResyngBattle()
 }
 
@@ -1170,12 +1175,11 @@ function clearDice() {
 /**
  * Znovu načte data hráčů a jejich dobrodruhů z důvodu udržení sessiony
  */
- function resyncPlayers() {
+function resyncPlayers() {
   console.log("Proběhne resync hráčů")
   axios.get(axios.defaults.baseURL + '/sessions/sessionPlayers', { params: { sid: sid.value } })
     .then(response => {
 
-      console.log(response.data[0])
 
       player1.owner = response.data[0].owner
       player1.adventurerID = response.data[0].adventurer
@@ -1193,8 +1197,9 @@ function clearDice() {
           player3.adventurer = response.data[2]
 
         })
-
     })
+
+  console.log(player1)
 }
 
 </script>

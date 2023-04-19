@@ -16,6 +16,7 @@ router.post('/createMonster', (req, res) => {
 
         jmeno: req.body.name,
         popis: req.body.description,
+        typ: req.body.type,
         schopnosti: req.body.abilities,
 
         sila: req.body.strength,
@@ -48,8 +49,19 @@ router.get("/dump", (req, res) => {
 
 })
 
+router.get('/byType',(req,res) =>{
+    console.log(req.query.typ)
+    MonsterModel.find({'typ': req.query.typ})
+        .then(dbResponse => {
+            res.send(dbResponse)
+        })
+        .catch(error =>{
+            res.send('Error')
+            console.log(error)
+        })
+})
+
 router.delete("/removeMonster", (req,res) =>{
-    console.log(req.body)
     MonsterModel.deleteOne({'_id': req.body.id})
         .then(res.send('monsterDeleted'))
 })
