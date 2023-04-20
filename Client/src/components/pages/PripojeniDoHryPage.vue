@@ -1,6 +1,7 @@
 <template>
   <v-container>
 
+    <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText"/>
 
     <!-- Výběr serveru pro připojení-->
     <v-card color="primary" class="mt-4">
@@ -63,9 +64,14 @@ import axios from "axios";
 import { ref, onMounted } from 'vue'
 import { useRouter, } from 'vue-router'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+import Alert from '../parts/AlertHandler.vue'
 
 const router = useRouter()
 
+//ALERT
+const showAlert = ref(false)
+const alertTitulek = ref('text')
+const alertText = ref('text')
 
 const adventurerChoices = ref([])
 const avaliableAdventurers = ref([])
@@ -136,7 +142,9 @@ function joinSession(id) {
           .then(queryResponse => {
             if (queryResponse.data == 'Session Joined') {
               router.push({ path: '/RaPSession', query: { sid: id } })
-            } else {
+            } else if(queryResponse.data == "Name Taken"){
+
+            }else {
               console.log("Problém při připojení")
             }
           })

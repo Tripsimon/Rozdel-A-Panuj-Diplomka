@@ -1,4 +1,4 @@
-<template>
+<template >
   <div>
 
     <!-- Modal pro inventář -->
@@ -9,13 +9,21 @@
     <DetailModal :toggle="detailModal" :detailAdventurer="detailAdventurer" />
 
     <!-- Vlastní obsah-->
-    <v-container class="mt-3">
+    <v-container class="mt-3" style="background-image:url(../../../src/assets/images/landingpage.png);">
       <v-row>
 
         <!-- Mod pruzkumu -->
+
         <v-col v-if="battleModeSwitch == false" :cols="myIdentity == 'Owner' ? '9' : '12'">
-          <v-img :src="axios.defaults.baseURL + '/backgrounds/' + vybranePozadi" max-width="100%">
-          </v-img>
+          <v-card color="primary">
+            <v-card-title>
+              <h1 style="color: #cca000;" align='center'> Průzkum</h1>
+            </v-card-title>
+            <v-card-text>
+              <v-img :src="axios.defaults.baseURL + '/backgrounds/' + vybranePozadi" max-width="100%">
+              </v-img>
+            </v-card-text>
+          </v-card>
         </v-col>
 
         <!-- Mod boje -->
@@ -24,7 +32,7 @@
           <EnemiesPart :enemies="dataBoje.aktivniNepratele" />
 
           <!-- Bojová fronta-->
-          <v-card color="primary" class="mt-3">
+          <v-card v-if="dataBoje.battleFront.length > 0" color="primary" class="mt-3">
             <v-card-title style="color: #cca000;" align='center'>
               Bojová Fronta
             </v-card-title>
@@ -57,7 +65,7 @@
               Hod kostkou
             </v-card-title>
             <v-container>
-              {{dataBoje}}
+              {{ dataBoje }}
               <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Volný hod'">
                 <v-col>
                   <v-card color="accent" align="center" justify="center">
@@ -591,11 +599,11 @@
               <row>
                 <v-select color="secondary" variant="outlined" label="Typ nepřítele" :items="enemyTypes"
                   @update:modelValue="getEnemiesFromType()" v-model="enemyTypeChosen"></v-select>
-                <v-select v-if="enemiesLoaded.length > 0" color="secondary" variant="outlined" label="Výběr" :items="enemiesLoaded" :item-title="'jmeno'"
-                  v-model="enemyChosen" return-object></v-select>
+                <v-select v-if="enemiesLoaded.length > 0" color="secondary" variant="outlined" label="Výběr"
+                  :items="enemiesLoaded" :item-title="'jmeno'" v-model="enemyChosen" return-object></v-select>
               </row>
             </v-card-text>
-            <v-card-actions>
+            <v-card-actions  v-if="enemyChosen != null">
               <v-btn @click="addEnemy" color="secondary" variant="outlined">Přidat</v-btn>
             </v-card-actions>
           </v-card>
@@ -720,6 +728,21 @@
         </v-col>
       </v-row>
 
+      <v-card color="primary">
+        <v-card-title>
+          <h1 style="color: #cca000;" align='center'>
+            Herní log
+          </h1>
+          <v-btn @click="getLog()">
+            Refresh
+          </v-btn>
+          <v-divider></v-divider>
+        </v-card-title>
+        <v-card-text>
+          <p v-for="entry in sessionLog" :key="entry"> {{ entry }}</p>
+        </v-card-text>
+      </v-card>
+
     </v-container>
 
   </div>
@@ -739,6 +762,7 @@ const uzivatelStore = useUzivatelStore()
 const webSocket = ref(null)
 const sid = ref(null)
 const myIdentity = ref(null)
+let identityCounter = 0
 
 //Variables herního pozadí
 const dostupnePozadi = ref([])
@@ -786,10 +810,8 @@ const enemyTypeChosen = ref(null)
 const enemiesLoaded = ref([])
 const enemyChosen = ref(null)
 
-const dostupniNepratele = ref(null)
-const moznostiNepratel = ref([])
-const vybranyNepritel = ref(null)
-const monsterIdentity = ref(1)
+// Log
+const sessionLog = ref([])
 
 onUnmounted(() => {
   webSocket.value.emit('unMount', myIdentity)
@@ -986,8 +1008,11 @@ function getEnemiesFromType() {
 function addEnemy() {
 
   enemyChosen.value.realneZivoty = enemyChosen.value.zivoty
+  enemyChosen.value.identity = identityCounter;
+  identityCounter++;
   // ! Zajimava obklika do bakalaá5ky
   dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(enemyChosen.value)))
+  writeToLog("Přidán nepřítel: " + enemyChosen.value.jmeno + ' - ' +enemyChosen.value.identity)
   battleFrontFillInstance()
   copyBattleFront()
   socketsResyngBattle()
@@ -1109,8 +1134,6 @@ function resyncPlayers() {
   console.log("Proběhne resync hráčů")
   axios.get(axios.defaults.baseURL + '/sessions/sessionPlayers', { params: { sid: sid.value } })
     .then(response => {
-
-
       player1.owner = response.data[0].owner
       player1.adventurerID = response.data[0].adventurer
 
@@ -1128,8 +1151,32 @@ function resyncPlayers() {
 
         })
     })
+}
 
-  console.log(player1)
+
+//LOGOVÁNÍ
+/**
+ * Zapsání do session logu
+ */
+function writeToLog(text) {
+  const current = new Date();
+  const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
+  const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+  const logged = "[" + date +' '+ time + "] " + text ;
+  axios.post(axios.defaults.baseURL + '/sessions/postLogEntry',{'sessionID': sid.value, 'logEntry': logged})
+    .then()
+    .catch()
+}
+
+/**
+ * Získání session logu
+ */
+ function getLog() {
+  axios.get(axios.defaults.baseURL + '/sessions/getLog',{ params: {'sessionID': sid.value}})
+    .then(queryResponse =>{
+      sessionLog.value = queryResponse.data
+    })
+    .catch()
 }
 
 </script>

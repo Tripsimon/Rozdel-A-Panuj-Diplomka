@@ -85,7 +85,12 @@ function zalozeniHry() {
         //Odeslání požadavku
         axios.post(axios.defaults.baseURL + '/sessions/createSession', obsah)
           .then(queryResponse => {
-            if (queryResponse.data == null) {
+            if (queryResponse.data == "Name Taken") {
+              showAlert.value = true;
+              alertTitulek = "Využité jméno"
+              alertText = "Toto jméno sessionu je již zabrané. Prosím, vyberte jiné jméno"
+              return
+            }else if (queryResponse.data == null) {
               showAlert.value = true;
               alertTitle.value = "Chyba v komunikaci"
               alertText.value = "Komunikace se serverem se nezdařila. Prosím, zkuste akci znovu později"

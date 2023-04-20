@@ -21,7 +21,8 @@ const SessionSchema = new Schema({
     player3: {
             owner: String,
             adventurer: String
-        }
+        },
+    log: [String]
     
 }, {collection: "SessionsKolekce"})
 
