@@ -77,7 +77,7 @@ import { ref, toRefs, watch } from 'vue'
 const props = defineProps(['toggle', 'detailAdventurer'])
 
 const { toggle } = toRefs(props)
-const abilities = toRefs({})
+const abilities = ref({})
 
 const isShown = ref(false)
 watch(toggle, () => {

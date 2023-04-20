@@ -1,7 +1,6 @@
 <template>
   <div>
 
-
     <!-- Modal pro inventář -->
     <InventoryModal :toggle="inventarModal" :inventoryAdventurer="inventarDobrodruh"
       @resync-players="socketsResyncPlayers()" @close-modal="inventarModal = false" />
@@ -22,75 +21,7 @@
         <!-- Mod boje -->
         <v-col v-if="battleModeSwitch == true" :cols="myIdentity == 'Owner' ? '9' : '12'">
           <!-- Nepřátelé -->
-          <v-card color="primary" title="Nepřátelé">
-            <v-container>
-              <v-expansion-panels v-if="dataBoje.aktivniNepratele.length != 0">
-                <v-expansion-panel v-for=" (enemy, index, key) in dataBoje.aktivniNepratele" :key="key">
-                  <v-expansion-panel-title>{{ enemy.jmeno + " " + enemy.realneZivoty + " / " + enemy.zivoty + " - "
-                    + enemy.identity }}
-                  </v-expansion-panel-title>
-                  <v-expansion-panel-text>
-                    <v-card-subtitle>{{ enemy.popis }}</v-card-subtitle>
-                    {{ enemy }}
-                    <br>
-                    <v-row>
-                      <v-col>
-                        <h3> Síla: {{ enemy.sila }}</h3>
-                      </v-col>
-                      <v-col>
-                        <h3> Houževnatost: {{ enemy.houzevnatost }}</h3>
-                      </v-col>
-                      <v-col>
-                        <h3> Obratnost: {{ enemy.obratnost }}</h3>
-                      </v-col>
-                    </v-row>
-
-                    <v-divider></v-divider>
-
-                    <v-row>
-                      <v-col>
-                        <h3> Charisma: {{ enemy.charisma }}</h3>
-                      </v-col>
-                      <v-col>
-                        <h3> Inteligence: {{ enemy.inteligence }}</h3>
-                      </v-col>
-                      <v-col>
-                        <h3> Znalost: {{ enemy.znalost }}</h3>
-                      </v-col>
-                    </v-row>
-
-                    <v-divider></v-divider>
-
-                    <v-row>
-                      <v-col>
-                        <h3> Zbroj: {{ enemy.zbroj }}</h3>
-                      </v-col>
-                      <v-col>
-                        <h3> Pruraz: {{ enemy.pruraz }}</h3>
-                      </v-col>
-                      <v-col>
-                        <h3> Požkození: {{ enemy.poskozeni }}</h3>
-                      </v-col>
-                    </v-row>
-                  </v-expansion-panel-text>
-
-
-                  <v-expansion-panel-text>
-                    <v-row align="center" justify="space-around">
-
-                      <v-btn @click="fightChoseEnemy(index)">Vybrat pro boj</v-btn>
-                      <v-btn color="success" @click="fightAddLifeToEnemy(index)">Přidat život</v-btn>
-                      <v-btn color="error" @click="fightRemoveLifeToEnemy(index)">Odebrat život</v-btn>
-                      <v-btn color="error" @click="fightRemoveEnemy(index)">Odebrat z bojiště</v-btn>
-                    </v-row>
-                  </v-expansion-panel-text>
-
-                </v-expansion-panel>
-              </v-expansion-panels>
-              <h4 v-if="dataBoje.aktivniNepratele.length == 0">Nepřátelé nejsou vybráni pro boj</h4>
-            </v-container>
-
-          </v-card>
+          <EnemiesPart :enemies="dataBoje.aktivniNepratele" />
 
           <!-- Bojová fronta-->
           <v-card color="primary" class="mt-3">
@@ -126,7 +57,7 @@
               Hod kostkou
             </v-card-title>
             <v-container>
-
+              {{dataBoje}}
               <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Volný hod'">
                 <v-col>
                   <v-card color="accent" align="center" justify="center">
@@ -660,7 +591,7 @@
               <row>
                 <v-select color="secondary" variant="outlined" label="Typ nepřítele" :items="enemyTypes"
                   @update:modelValue="getEnemiesFromType()" v-model="enemyTypeChosen"></v-select>
-                <v-select color="secondary" variant="outlined" label="Výběr" :items="enemiesLoaded" :item-title="'jmeno'"
+                <v-select v-if="enemiesLoaded.length > 0" color="secondary" variant="outlined" label="Výběr" :items="enemiesLoaded" :item-title="'jmeno'"
                   v-model="enemyChosen" return-object></v-select>
               </row>
             </v-card-text>
@@ -677,7 +608,7 @@
             <v-card-text>
               <v-select label="Porovnávaný atribut" color="secondary" variant="outlined"
                 :items="['Volný hod', 'Atributy', 'Zásah', 'Průraz', 'Steč', 'Uhyb', 'Blokace', 'Výdrž']"
-                :v-model="dataBoje.bojPorovnanyAtribut" @update:modelValue="socketsResyngBattle()"></v-select>
+                v-model="dataBoje.bojPorovnanyAtribut" @update:modelValue="socketsResyngBattle()"></v-select>
             </v-card-text>
           </v-card>
 
@@ -798,6 +729,7 @@ import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import InventoryModal from '../parts/gamepageParts/InventoryModalPart.vue'
 import DetailModal from '../parts/gamepageParts/DetailModalPart.vue'
 import AbilityCard from "../parts/AbilityCard.vue"
+import EnemiesPart from '../parts/gamepageParts/EnemiesPart.vue'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import { io } from 'socket.io-client'
 import axios from 'axios'
@@ -1008,9 +940,6 @@ function openDetail(hrac) {
       break;
   }
 
-  /*
-
-    */
   detailModal.value = true
 }
 
@@ -1056,6 +985,7 @@ function getEnemiesFromType() {
  */
 function addEnemy() {
 
+  enemyChosen.value.realneZivoty = enemyChosen.value.zivoty
   // ! Zajimava obklika do bakalaá5ky
   dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(enemyChosen.value)))
   battleFrontFillInstance()
@@ -1127,7 +1057,7 @@ function fightChoseAdventurer(adventurer) {
  * @param {INT} enemy Pozice v poli aktivních nepřátel
  */
 function fightChoseEnemy(enemy) {
-  dataBoje.value.bojujiciNepritel = dataBoje.aktivniNepratele[enemy]
+  dataBoje.bojujiciNepritel = dataBoje.aktivniNepratele[enemy]
   socketsResyngBattle()
 }
 
