@@ -1,57 +1,73 @@
+//Importy
 const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const bodyParser = require('body-parser')
-const router = express.Router()
 const fs = require('fs');
+
+//Router
+const router = express.Router()
 router.use(bodyParser.json())
 
 //DB Model
 const ImageModel = require('../models/ImageModel.js')
 
-
+//Nastavení storage
 const storage = multer.diskStorage({
-    destination: function (req,file,callback) {
-        callback(null, __dirname+'/../files/backgrounds')
+    destination: function (req, file, callback) {
+        callback(null, __dirname + '/../files/backgrounds')
     },
-    filename: function(req,file,callback){
-        callback(null,file.originalname+'.jpg');
+    filename: function (req, file, callback) {
+        callback(null, file.originalname + '.jpg');
     }
 })
 
-const upload = multer({storage:storage})
+//Multer
+const upload = multer({ storage: storage })
 
-
-router.get("/", (req,res) =>{
+//Kontrola funkce
+router.get("/", (req, res) => {
     res.send("Práce s pozadím")
- })
+})
 
-router.post('/nahraniSouboru', upload.single('image') ,(req,res)=>{
+//Routa pro nahrání nového souboru
+router.post('/nahraniSouboru', upload.single('image'), (req, res) => {
     newImage = new ImageModel({
         name: req.file.filename
     })
+
     newImage.save()
-    res.send('fileUploaded')
+        .then(res.send('File Uploaded'))
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při nahrávání nového pozadí:', error)
+        })
 })
 
+//Routa pro smazání souboru
+router.delete('/smazaniSouboru/:fileName', async (req, res) => {
+    console.log(await ImageModel.deleteOne({ name: req.params.fileName }))
+    fs.unlink('files/backgrounds/' + req.params.fileName, (err) => {
+        if (err) { 
 
-router.delete('/smazaniSouboru/:fileName',async (req,res) =>{
-    console.log(await ImageModel.deleteOne({name: req.params.fileName}))
-    fs.unlink('files/backgrounds/'+req.params.fileName,(err)=>{
-        if(err){console.log(err)}else{
+                res.send('Error')
+                console.log('Vyskytla se chyba při mazání pozadí:', error)
+        } else {
             res.sendStatus(200)
         }
     })
 
 })
 
-router.get('/dump',async (req,res) =>{
+//Routa pro vrácení všech pozadí
+router.get('/dump', async (req, res) => {
     let pozadi = []
     const images = await ImageModel.find()
     images.forEach(element => {
-        console.log( pozadi.push( element.name))
+        console.log(pozadi.push(element.name))
     });
     res.send(pozadi)
 })
 
+//Export
 module.exports = router

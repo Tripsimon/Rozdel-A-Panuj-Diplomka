@@ -1,34 +1,42 @@
+//Importy
 const express = require('express')
 const bcrypt = require("bcrypt")
 
+//Router
 const router = express.Router()
 
 //DB Model
 const UserModel = require('../models/UserModel');
 const { exit } = require('process');
 
-router.get("/", (req,res) =>{
-    UserModel.findById('633f3ddd1e466bc5da8211f5')
-        .then(User => res.json(User))
-        .catch(err => console.log(err));;
+//Kontrola funkcionality
+router.get("/", (req, res) => {
+    res.send("Strom uživatelů")
 })
 
-router.post("/registrace", async (req,res) =>{
+/**
+ * Routa pro registraci nového uživatele
+ */
+router.post("/registrace", async (req, res) => {
 
-    let usedNick = await UserModel.exists({'prezdivka': req.body.prezdivka})
-    let usedMail = await UserModel.exists({'email': req.body.email})
-    
+    //Kontrola využití dat
+    let usedNick = await UserModel.exists({ 'prezdivka': req.body.prezdivka })
+    let usedMail = await UserModel.exists({ 'email': req.body.email })
+
+    //Enkripce hesla
     const salt = await bcrypt.genSalt(10);
-    hashovaneHeslo = await bcrypt.hash(req.body.heslo,salt);
+    hashovaneHeslo = await bcrypt.hash(req.body.heslo, salt);
 
     //Kontrola existence
-    if(usedMail != null ){
+    if (usedMail != null) {
         console.log('Sem to spadne mail')
         res.send('usedMail');
-    }else if(usedNick != null){
+        return
+    } else if (usedNick != null) {
         console.log('Sem to spadne nick')
         res.send('usedNick');
-    }else{
+        return
+    } else {
         console.log('Vytvářím ucet')
         const newUser = new UserModel({
             email: req.body.email,
@@ -37,41 +45,52 @@ router.post("/registrace", async (req,res) =>{
             opravneni: 'uzivatel'
         });
         newUser.save()
-            .then( queryData =>
-                {   
-                    res.status(201);
-                    res.send(queryData._id);
-                    console.log('Zalozen novy ucet');
-                })
-            
+            .then(queryData => {
+                res.status(201);
+                res.send(queryData._id);
+                console.log('Zalozen novy ucet');
+            })
+            .catch(error => {
+                res.send('Error')
+                console.log('Vyskytla se chyba při registraci nového uživatele:', error)
+            })
+
     }
 })
 
-router.post("/prihlaseni", async(req,res)=>{
+/**
+ * Routa pro přihlášení
+ */
+router.post("/prihlaseni", async (req, res) => {
+
     const salt = await bcrypt.genSalt(10);
     heslo = req.body.heslo
-    
-    UserModel.findOne({email:req.body.email})
-        .then(async User  =>
-            {
-                if(User == null){
-                    res.send('noUser'); 
-                }else{
 
-                const porovnej = await bcrypt.compare(heslo,User.heslo)
-                
-                if(porovnej){
+    UserModel.findOne({ email: req.body.email })
+        .then(async User => {
+            if (User == null) {
+                res.send('No User Found');
+            } else {
+
+                const porovnej = await bcrypt.compare(heslo, User.heslo)
+                if (porovnej) {
                     res.status(200);
                     res.json({
-                        prezdivka : User.prezdivka,
-                        _id : User._id,
+                        prezdivka: User.prezdivka,
+                        _id: User._id,
                         opravneni: User.opravneni
                     });
-                }else{
-                    res.send('wrongPass')
+                } else {
+                    res.send('Wrong Password')
                 }
             }
-    })
+        })
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při přihlášení uživatele:', error)
+        })
 
 })
+
+//Export
 module.exports = router

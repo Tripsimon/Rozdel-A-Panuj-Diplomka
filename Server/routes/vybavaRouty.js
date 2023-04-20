@@ -1,16 +1,19 @@
+//Importy
 const express = require('express')
 
+//Router
 const router = express.Router()
 
-// DB Model
+//DB Model
 const EquipmentModel = require('../models/EquipmentModel.js');
 
+//Kontrola funkcionality
 router.get("/", (req, res) => {
     res.send("Strom výbavy");
 })
 
 /**
- * Vytvoří nový předmět který je zbran
+ * Routa pro vytboření nové zbraně
  */
 router.post('/createWeapon',(req,res) =>{
     let newItem = new EquipmentModel({
@@ -26,13 +29,16 @@ router.post('/createWeapon',(req,res) =>{
     })
     newItem.save()
         .then( res.send("Uspesne zapsano"))
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při vytváření nové zbraně:', error)
+        })
 })
 
 /**
- * Vytvoří předmět, který je zbroj
+ * Routa pro vytvoření nové zbroje
  */
 router.post('/createArmor',(req,res) =>{
-
     let newItem = new EquipmentModel({
         jmeno: req.body.name,
         typ: req.body.type,
@@ -45,10 +51,14 @@ router.post('/createArmor',(req,res) =>{
 
     newItem.save()
         .then( res.send("Uspesne zapsano"))
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při vytváření nové zbroje:', error)
+        })
 })
 
 /**
- * Vytvoří předmět
+ * Routa pro vytvoření nového předmětu
  */
 router.post('/createItem',(req,res) =>{
 
@@ -63,34 +73,52 @@ router.post('/createItem',(req,res) =>{
 
     newItem.save()
         .then( res.send("Uspesne zapsano"))
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při vytváření nového předmětu:', error)
+        })
 })
 
+/**
+ * Routa pro smazání jednoho předmětu
+ */
 router.get('/removeItem',(req,res)=>{
     EquipmentModel.findByIdAndDelete({_id: req.query.itemID})
         .then(queryResponse =>{
             res.send(queryResponse)
         })
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při odebrání předmětu z DB:', error)
+        })
 })
 
 /**
- * Vrátí všechny předměty jednoho typu
+ * Routa pro vrácení všech předmětů jednoho typu
  * Zran, Zbroj, Předmět
  */
 router.get('/allType', (req,res) =>{
     EquipmentModel.find({typ: req.query.type})
         .then(queryResult => res.send(queryResult))
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při vracení předmětu jednoho typu:', error)
+        })
 })
 
 /**
- * Vrátí pole předmětů podle zadaného pole ID
- * 
+ * Routa pro navácení více předmětů
  */
 router.get('/multipleID', (req,res) =>{
     EquipmentModel.find({_id: {$in: req.query.items} })
         .then(queryResult => {
             res.send(queryResult);
         })
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při vrácení více předmětů:', error)
+        })
 })
 
-
+//Export
 module.exports = router

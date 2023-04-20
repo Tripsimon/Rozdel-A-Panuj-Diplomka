@@ -87,13 +87,13 @@ watch(toggle, () => {
 })
 
 function getAbilities() {
-    axios.get(axios.defaults.baseURL + '/schopnosti/byOwner', { params: { 'owner': props.detailAdventurer.trida } })
+    axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { 'owner': props.detailAdventurer.trida } })
         .then(queryResponse => {
           abilities.value = queryResponse.data
           console.log(abilities)
         })
 
-      axios.get(axios.defaults.baseURL + '/schopnosti/byOwner', { params: { 'owner': props.detailAdventurer.rasa } })
+      axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { 'owner': props.detailAdventurer.rasa } })
         .then(queryResponse => {
             abilities.value = queryResponse.data
         })
