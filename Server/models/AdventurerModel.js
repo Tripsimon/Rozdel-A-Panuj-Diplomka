@@ -14,7 +14,7 @@ const AdventurerSchema = new Schema({
     vek: Number,
     popis: String,
     pribeh: String,
-    atributy:{
+    atributy: {
         sila: Number,
         houzevnatost: Number,
         obratnost: Number,
@@ -22,12 +22,28 @@ const AdventurerSchema = new Schema({
         inteligence: Number,
         znalost: Number
     },
-    inventar: [String],
+    inventar: [{
+        jmeno: String,
+        typ: String,
+        popis: String,
+        schopnosti: [{
+            jmeno: String,
+            typ: String,
+            cd: Number,
+            schopnost: String,
+        }],
+        pruraznost: Number,
+        poskozeniZaklad: Number,
+        poskozeniZavaznost: Number,
+        obrana: Number,
+        vaha: Number,
+        poznamka: String,
+    }],
     penize: Number,
     level: Number,
     zkusenosti: Number,
 },
-    {collection: "DobrodruziKolekce"}
-    )
+    { collection: "DobrodruziKolekce" }
+)
 
-module.exports = Adventurer = mongoose.model("RozdelAPanuj_Adventurer",AdventurerSchema,"DobrodruziKolekce");
+module.exports = Adventurer = mongoose.model("RozdelAPanuj_Adventurer", AdventurerSchema, "DobrodruziKolekce");

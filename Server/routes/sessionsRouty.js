@@ -29,7 +29,7 @@ router.get("/openSessions", async (req, res) => {
  * Routa pro vytvoření nové sessiony
  */
 router.post("/createSession", async (req, res) => {
-    SessionModel.findOne({'sessionName': req.body.jmenoSessionu}).then(dbQuery => {
+    SessionModel.findOne({ 'sessionName': req.body.jmenoSessionu }).then(dbQuery => {
         console.log(dbQuery)
         if (dbQuery != null) {
             console.log("DSADS")
@@ -72,14 +72,19 @@ router.post("/createSession", async (req, res) => {
 })
 
 /**
- * Metoda pro kontrolu majitele sessioně
+ * Metoda pro jsištění identity usera
  */
-router.get("/checkOwner", async (req, res) => {
-    SessionModel.findOne({_id: req.query.sid}).then(queryResponse => {
-        if (queryResponse.owner == req.query.user) {
-            res.send(true)
-        } else {
-            res.send(false)
+router.get("/getIdentity", async (req, res) => {
+    SessionModel.findOne({ _id: req.query.sid }).then(dbQuery => {
+        console.log(dbQuery)
+        if (dbQuery.owner == req.query.user) {
+            res.send("Is Owner")
+        } else if (dbQuery.player1.owner == req.query.user) {
+            res.send('Player 1')
+        } else if (dbQuery.player2.owner == req.query.user) {
+            res.send('Player 2')
+        } else if (dbQuery.player3.owner == req.query.user) {
+            res.send('Player 3')
         }
     }).catch(error => {
         res.send('Error')
@@ -92,7 +97,7 @@ router.get("/checkOwner", async (req, res) => {
  * Navrátí Session
  */
 router.get("/returnSession", (req, res) => {
-    SessionModel.findOne({_id: req.query.sessionID}).then(result => {
+    SessionModel.findOne({ _id: req.query.sessionID }).then(result => {
         res.send(result);
     }).catch(error => {
         res.send('Error')
@@ -105,46 +110,47 @@ router.get("/returnSession", (req, res) => {
  */
 router.post("/joinSession", async (req, res) => {
 
-    let session = await SessionModel.findOne({_id: req.body.sessionID})
-        try {
-            if (session.password == req.body.password) {
-                if (session.player1.adventurer == null && session.player1.owner == null) {
-                    session.player1 = {
-                        owner: req.body.player,
-                        adventurer: req.body.adventurer
-                    }
-                    session.slots --;
-                    session.save();
-                    res.send('Session Joined')
-                } else if (session.player2.adventurer == null && session.player2.owner == null) {
-                    session.player2 = {
-                        owner: req.body.player,
-                        adventurer: req.body.adventurer
-                    }
-                    session.slots --;
-                    session.save();
-                    res.send('Session Joined')
-                } else if (session.player3.adventurer == null && session.player3.owner == null) {
-                    session.player3 = {
-                        owner: req.body.player,
-                        adventurer: req.body.adventurer
-                    }
-                    session.slots --;
-                    session.save();
-                    res.send('Session Joined')
+    let session = await SessionModel.findOne({ _id: req.body.sessionID })
+    try {
+        if (session.password == req.body.password) {
+            if (session.player1.adventurer == null && session.player1.owner == null) {
+                session.player1 = {
+                    owner: req.body.player,
+                    adventurer: req.body.adventurer
                 }
-
-            } else {
-                res.send('Wrong Password')
+                session.slots--;
+                session.save();
+                res.send('Session Joined')
+            } else if (session.player2.adventurer == null && session.player2.owner == null) {
+                session.player2 = {
+                    owner: req.body.player,
+                    adventurer: req.body.adventurer
+                }
+                session.slots--;
+                session.save();
+                res.send('Session Joined')
+            } else if (session.player3.adventurer == null && session.player3.owner == null) {
+                session.player3 = {
+                    owner: req.body.player,
+                    adventurer: req.body.adventurer
+                }
+                session.slots--;
+                session.save();
+                res.send('Session Joined')
             }
-        } catch {res.send('Error');console.log('Vyskytla se chyba při připojení do sessiony:')}}
+
+        } else {
+            res.send('Wrong Password')
+        }
+    } catch { res.send('Error'); console.log('Vyskytla se chyba při připojení do sessiony:') }
+}
 )
 
 /**
  * Vrátí seznam hráčů v sessioně
  */
 router.get('/sessionPlayers', (req, res) => {
-    SessionModel.findOne({_id: req.query.sid}).then(queryData => {
+    SessionModel.findOne({ _id: req.query.sid }).then(queryData => {
         res.send([queryData.player1, queryData.player2, queryData.player3])
     }).catch(error => {
         res.send('Error')
@@ -156,7 +162,7 @@ router.get('/sessionPlayers', (req, res) => {
  * Routa pro odpojení hráče z herní sessiony
  */
 router.get('/sessionDisconnect', async (req, res) => {
-    let session = await SessionModel.findOne({_id: req.query.sessionID})
+    let session = await SessionModel.findOne({ _id: req.query.sessionID })
     try {
         if (session.owner == req.query.userID) {
             session.delete();
@@ -194,14 +200,14 @@ router.get('/sessionDisconnect', async (req, res) => {
  * Metoda pro vyčištění celé kolekce sessionů
  */
 router.get('/sessionsClear', (req, res) => {
-    if (req.body.password == 'WnaBp$03^6iI') 
+    if (req.body.password == 'WnaBp$03^6iI')
         SessionModel.deleteMany({}).then(res.send('Session Cleared')).catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při vrácení vyčištění sessiony:', error)
         })
 
 
-    
+
 
 
 })
@@ -210,7 +216,7 @@ router.get('/sessionsClear', (req, res) => {
  * Routa pro přidání záznamu do logu
  */
 router.post('/postLogEntry', async (req, res) => {
-    let session = await SessionModel.findOne({_id: req.body.sessionID})
+    let session = await SessionModel.findOne({ _id: req.body.sessionID })
     session.log.push(req.body.logEntry)
     session.save().then(res.send('Log Updated')).catch(error => {
         res.send('Error')
@@ -224,11 +230,11 @@ router.post('/postLogEntry', async (req, res) => {
  */
 router.get('/getLog', (req, res) => {
     console.log("DSADS");
-    SessionModel.findOne({_id: req.query.sessionID}).then(dbResponse => res.send(dbResponse.log)).catch(error => {
+    SessionModel.findOne({ _id: req.query.sessionID }).then(dbResponse => res.send(dbResponse.log)).catch(error => {
         res.send('Error')
         console.log('Vyskytla se chyba při vrácení logu:', error)
     })
 })
 
 // Export
-    module.exports = router
+module.exports = router

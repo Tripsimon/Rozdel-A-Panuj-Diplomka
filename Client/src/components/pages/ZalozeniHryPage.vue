@@ -87,8 +87,8 @@ function zalozeniHry() {
           .then(queryResponse => {
             if (queryResponse.data == "Name Taken") {
               showAlert.value = true;
-              alertTitulek = "Využité jméno"
-              alertText = "Toto jméno sessionu je již zabrané. Prosím, vyberte jiné jméno"
+              alertTitulek.value = "Využité jméno"
+              alertText.value = "Toto jméno sessionu je již zabrané. Prosím, vyberte jiné jméno"
               return
             }else if (queryResponse.data == null) {
               showAlert.value = true;

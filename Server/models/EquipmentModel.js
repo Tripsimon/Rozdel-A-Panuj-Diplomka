@@ -19,7 +19,8 @@ const EquipmentSchema = new Schema({
     poskozeniZavaznost: Number,
     obrana: Number,
     vaha: Number,
-    poznamka: String,},
+    poznamka: String,
+},
 
     {collection: "VybavaKolekce"}
     )

@@ -1,16 +1,19 @@
 <template>
+
     <v-row justify="center">
+
         <v-dialog v-model="isShown.value" scrollable persistent>
+
             <v-card color="primary">
                 <v-card-title>
-                    Inventář: {{ inventoryWeight + " / " + (inventoryAdventurer.atributy.sila * 5) }}
+                    <h1>Inventář: {{ inventoryWeight + " / " + (inventoryAdventurer.atributy.sila * 5) }}</h1>
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text style="height: 80%;">
                     <v-card class="mt-3">
                         <v-card-title>
-                            <h3>Peníze: {{ inventoryMoney }}</h3>
-
+                            <h2>Peníze: {{ inventoryMoney }}</h2>
+                            <v-divider class="mb-3"></v-divider>
                             <v-text-field v-model="inputChangeMoney" type="number" single-line
                                 label="Nové množství"></v-text-field>
                         </v-card-title>
@@ -18,11 +21,12 @@
                             <v-btn @click="changeMoney()">Změnit</v-btn>
                         </v-card-actions>
                     </v-card>
-
                     <!-- Výpis předmětů-->
                     <v-expansion-panels class="mt-3" variant="accordion">
-                        <v-expansion-panel v-for="item in inventoryItems" :key="item.name">
-                            <v-expansion-panel-title>{{ item.jmeno + " - " + item.typ }}</v-expansion-panel-title>
+                        <v-expansion-panel v-for="item in props.inventoryAdventurer.inventar" :key="item.name">
+                            <v-expansion-panel-title>
+                                <h2>{{ item.jmeno + " - " + item.typ }}</h2>
+                            </v-expansion-panel-title>
 
                             <v-expansion-panel-text v-if="item.typ == 'Zbraň'">
                                 <v-row>
@@ -178,7 +182,7 @@
                                                         <th>{{ item.jmeno }}</th>
                                                         <th>{{ item.popis }}</th>
                                                         <th>{{ item.vaha }}</th>
-                                                        <th><v-btn @click="addItem(item._id)">Přidat</v-btn></th>
+                                                        <th><v-btn @click="addItem(item)">Přidat</v-btn></th>
                                                     </tr>
                                                 </tbody>
                                             </v-table>
@@ -225,14 +229,7 @@ const itemAddOptions = ref({})
 function reloadInventory() {
     inventoryMoney.value = props.inventoryAdventurer.penize
     inventoryWeight.value = 0
-    axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: props.inventoryAdventurer.inventar } })
-        .then(queryResponse => {
-            inventoryItems.value = JSON.parse(JSON.stringify(queryResponse.data))
-            queryResponse.data.forEach(item => {
-                inventoryWeight.value += item.vaha
-            });
-        })
-        .catch(err => { console.log(err) })
+
 }
 
 function getAddOptions() {

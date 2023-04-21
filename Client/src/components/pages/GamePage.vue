@@ -1,6 +1,5 @@
 <template >
   <div>
-
     <!-- Modal pro inventář -->
     <InventoryModal :toggle="inventarModal" :inventoryAdventurer="inventarDobrodruh"
       @resync-players="socketsResyncPlayers()" @close-modal="inventarModal = false" />
@@ -31,10 +30,12 @@
           <!-- Nepřátelé -->
           <EnemiesPart :enemies="dataBoje.aktivniNepratele" />
 
-          <!-- Bojová fronta-->
+          <!-- Bojová vřava-->
           <v-card v-if="dataBoje.battleFront.length > 0" color="primary" class="mt-3">
-            <v-card-title style="color: #cca000;" align='center'>
-              Bojová Fronta
+            <v-card-title>
+              <h2 style="color: #cca000;"> Bojová vřava</h2>
+              <v-divider></v-divider>
+
             </v-card-title>
             <v-card-text>
               <v-slide-group show-arrows>
@@ -62,10 +63,10 @@
           <!-- Hod kostkou-->
           <v-card color="primary" class="mt-3">
             <v-card-title>
-              Hod kostkou
+              <h2 style="color: #cca000;">Hod kostkou</h2>
+              <v-divider></v-divider>
             </v-card-title>
             <v-container>
-              {{ dataBoje }}
               <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Volný hod'">
                 <v-col>
                   <v-card color="accent" align="center" justify="center">
@@ -547,10 +548,13 @@
           </v-card>
 
           <!-- Dobrodruzi -->
-          <v-card v-if="dataBoje.bojujiciDobrodruh == null" color="primary" title="Dobrodruzi" class="mt-3">
+          <v-card v-if="dataBoje.bojujiciDobrodruh == null" color="primary" class="mt-3">
+            <v-card-title>
+              <h2 style="color: #cca000;"> Dobrodruzi</h2>
+              <v-divider></v-divider>
+            </v-card-title>
             <v-card-text>
               <div class="d-flex justify-space-around align-center flex-column flex-sm-row fill-height">
-                {{ p }}
                 <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary"
                   @click="fightChoseAdventurer(1)">
                   {{ player1.adventurer.krestniJmeno }}
@@ -574,15 +578,27 @@
         <!-- Přepínač herního modu-->
         <v-col v-if="myIdentity == 'Owner'" cols="3">
           <v-card color="primary">
-            <v-card-title v-if="battleModeSwitch">
-              <h3>Herní mod: Boj</h3>
-            </v-card-title>
-            <v-card-title v-else>
-              <h3>Herní mod: Pruzkum</h3>
+            <v-card-title>
+              <h3 style="color: #cca000;">Herní režim</h3>
+              <v-divider></v-divider>
             </v-card-title>
             <v-card-text>
-              <v-switch v-model="battleModeSwitch" @update:modelValue="socketsResyncGamemode()" :label="`Přepínač`">
-              </v-switch>
+              <v-row>
+                <v-col style="margin: auto;" >
+                  <h4>Půzkum</h4>
+                </v-col>
+                <v-col style="margin: auto;">
+                  <v-switch v-model="battleModeSwitch" @update:modelValue="socketsResyncGamemode()">
+                  </v-switch>
+                </v-col>
+                <v-col style="margin: auto;">
+                  <h4>Boj</h4>
+                </v-col>
+
+
+              </v-row>
+
+
             </v-card-text>
           </v-card>
 
@@ -594,16 +610,17 @@
           </v-card>
 
           <!-- Nepřátelé -->
-          <v-card v-if="battleModeSwitch == true" color="primary" title="Nepřátelé" class="mt-3">
+          <v-card v-if="battleModeSwitch == true" color="primary" title="Nepřátelé" class="mt-3"
+            style="background-image:url(../../../src/assets/images/enemies/Hruur_Warrior_02.jpg); background-repeat: no-repeat; background-size: 300px 300px;">
             <v-card-text>
               <row>
                 <v-select color="secondary" variant="outlined" label="Typ nepřítele" :items="enemyTypes"
-                  @update:modelValue="getEnemiesFromType()" v-model="enemyTypeChosen"></v-select>
+                  v-model="enemyTypeChosen" @update:modelValue="getEnemiesFromType()"></v-select>
                 <v-select v-if="enemiesLoaded.length > 0" color="secondary" variant="outlined" label="Výběr"
                   :items="enemiesLoaded" :item-title="'jmeno'" v-model="enemyChosen" return-object></v-select>
               </row>
             </v-card-text>
-            <v-card-actions  v-if="enemyChosen != null">
+            <v-card-actions v-if="enemyChosen != null">
               <v-btn @click="addEnemy" color="secondary" variant="outlined">Přidat</v-btn>
             </v-card-actions>
           </v-card>
@@ -627,7 +644,7 @@
       <!-- /Přepínač herního modu-->
 
       <!-- Kartu dobrodruhů-->
-      <v-row>
+      <v-row class="mb-3">
         <!-- Karta hráče 1 -->
         <v-col cols="4">
           <v-card color="primary" v-if="player1.adventurer != null">
@@ -836,14 +853,19 @@ onMounted(() => {
   })
   socketsJoinRoom();
 
-  axios.get(axios.defaults.baseURL + '/sessions/checkOwner', { params: { sid: sid.value, user: uzivatelStore._id } })
+  axios.get(axios.defaults.baseURL + '/sessions/getIdentity', { params: { sid: sid.value, user: uzivatelStore._id } })
     .then(response => {
-      if (response.data) {
+      if (response.data == "Is Owner") {
         myIdentity.value = 'Owner'
-      } else {
-        socketsResyncPlayers();
-        resyncPlayers();
+        return
+      } else if (response.data != null) {
+        myIdentity.value = response.data
       }
+      socketsResyncPlayers();
+      resyncPlayers();
+    })
+    .catch({
+
     })
 
 
@@ -1012,7 +1034,7 @@ function addEnemy() {
   identityCounter++;
   // ! Zajimava obklika do bakalaá5ky
   dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(enemyChosen.value)))
-  writeToLog("Přidán nepřítel: " + enemyChosen.value.jmeno + ' - ' +enemyChosen.value.identity)
+  writeToLog("Přidán nepřítel: " + enemyChosen.value.jmeno + ' - ' + enemyChosen.value.identity)
   battleFrontFillInstance()
   copyBattleFront()
   socketsResyngBattle()
@@ -1057,13 +1079,13 @@ function fightRemoveEnemy(index) {
 function fightChoseAdventurer(adventurer) {
   switch (adventurer) {
     case 1:
-      dataBoje.value.bojujiciDobrodruh = player1.adventurer
+      dataBoje.bojujiciDobrodruh = player1.adventurer
       break;
     case 2:
-      dataBoje.value.bojujiciDobrodruh = player2.adventurer
+      dataBoje.bojujiciDobrodruh = player2.adventurer
       break;
     case 3:
-      dataBoje.value.bojujiciDobrodruh = player3.adventurer
+      dataBoje.bojujiciDobrodruh = player3.adventurer
       break;
 
     default:
@@ -1090,7 +1112,7 @@ function fightChoseEnemy(enemy) {
 function battleFrontFillInstance() {
   dataBoje.battleFront = JSON.parse(JSON.stringify(dataBoje.aktivniNepratele))
   if (player1.adventurer) {
-    dataBoje.value.battleFront.push(player1.adventurer)
+    dataBoje.battleFront.push(player1.adventurer)
   }
 
 }
@@ -1160,10 +1182,10 @@ function resyncPlayers() {
  */
 function writeToLog(text) {
   const current = new Date();
-  const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
+  const date = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
   const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
-  const logged = "[" + date +' '+ time + "] " + text ;
-  axios.post(axios.defaults.baseURL + '/sessions/postLogEntry',{'sessionID': sid.value, 'logEntry': logged})
+  const logged = "[" + date + ' ' + time + "] " + text;
+  axios.post(axios.defaults.baseURL + '/sessions/postLogEntry', { 'sessionID': sid.value, 'logEntry': logged })
     .then()
     .catch()
 }
@@ -1171,9 +1193,9 @@ function writeToLog(text) {
 /**
  * Získání session logu
  */
- function getLog() {
-  axios.get(axios.defaults.baseURL + '/sessions/getLog',{ params: {'sessionID': sid.value}})
-    .then(queryResponse =>{
+function getLog() {
+  axios.get(axios.defaults.baseURL + '/sessions/getLog', { params: { 'sessionID': sid.value } })
+    .then(queryResponse => {
       sessionLog.value = queryResponse.data
     })
     .catch()

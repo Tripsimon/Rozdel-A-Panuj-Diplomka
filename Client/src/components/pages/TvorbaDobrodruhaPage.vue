@@ -599,7 +599,10 @@ function sendtoDB() {
     "atributes": atributes.value,
   })
 
+  console.log(obsah)
+  
   axios.post(axios.defaults.baseURL + '/character/characterCreation', obsah)
     .then(router.push({ path: '/' }))
+    
 }
 </script>
