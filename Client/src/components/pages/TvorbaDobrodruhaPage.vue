@@ -366,6 +366,7 @@ function onRaceSelect() {
       rasaSchopnosti.value = queryResponse.data
     })
   newAdventurer.value.race = rasaVybrana.value.jmeno
+  newAdventurer.value.class = null
 }
 
 /**

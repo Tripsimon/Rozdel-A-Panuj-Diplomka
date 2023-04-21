@@ -66,6 +66,7 @@
 
                         <h3 class="d-flex mt-3">Schopnosti:</h3>
                         <v-divider class="mb-3"></v-divider>
+                        {{ enemy.schopnosti }}
                         <AbilityCard class="mb-3" v-for="ability in enemy.schopnosti" :key="ability._id" :ability="ability" />
 
                     </v-expansion-panel-text>
@@ -73,10 +74,10 @@
                     <v-expansion-panel-text class="mb-3">
                         <v-row align="center" justify="space-around">
 
-                            <v-btn color="primary" @click="$emit(choseToFight,index) ">Vybrat pro boj</v-btn>
-                            <v-btn color="success" @click="fightAddLifeToEnemy(index)">Přidat život</v-btn>
-                            <v-btn color="error" @click="fightRemoveLifeToEnemy(index)">Odebrat život</v-btn>
-                            <v-btn color="error" @click="fightRemoveEnemy(index)">Odebrat z bojiště</v-btn>
+                            <v-btn color="primary" @click="$emit('choseToFight',index) ">Vybrat pro boj</v-btn>
+                            <v-btn color="success" @click="$emit('addLife',index)">Přidat život</v-btn>
+                            <v-btn color="error" @click="$emit('removeLife',index)">Odebrat život</v-btn>
+                            <v-btn color="error" @click="$emit('killOff',index)">Odebrat z bojiště</v-btn>
                         </v-row>
                     </v-expansion-panel-text>
 

@@ -28,7 +28,12 @@
         <!-- Mod boje -->
         <v-col v-if="battleModeSwitch == true" :cols="myIdentity == 'Owner' ? '9' : '12'">
           <!-- Nepřátelé -->
-          <EnemiesPart :enemies="dataBoje.aktivniNepratele" />
+          <EnemiesPart :enemies="dataBoje.aktivniNepratele" 
+          @chose-To-Fight="(index) =>fightChoseEnemy(index)" 
+          @add-Life="(index)=> fightAddLifeToEnemy(index)"
+          @remove-Life="(index)=> fightRemoveLifeToEnemy(index)"
+          @kill-Off ="(index) => fightRemoveEnemy(index)"
+          />
 
           <!-- Bojová vřava-->
           <v-card v-if="dataBoje.battleFront.length > 0" color="primary" class="mt-3">
@@ -584,7 +589,7 @@
             </v-card-title>
             <v-card-text>
               <v-row>
-                <v-col style="margin: auto;" >
+                <v-col style="margin: auto;">
                   <h4>Půzkum</h4>
                 </v-col>
                 <v-col style="margin: auto;">
@@ -771,11 +776,13 @@ import DetailModal from '../parts/gamepageParts/DetailModalPart.vue'
 import AbilityCard from "../parts/AbilityCard.vue"
 import EnemiesPart from '../parts/gamepageParts/EnemiesPart.vue'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+import { useRouter } from 'vue-router'
 import { io } from 'socket.io-client'
 import axios from 'axios'
 
 //Systémové variables
 const uzivatelStore = useUzivatelStore()
+const router = useRouter()
 const webSocket = ref(null)
 const sid = ref(null)
 const myIdentity = ref(null)
@@ -848,13 +855,16 @@ onMounted(() => {
 
   //WEBSOCKET
   //Připojení websocketu
-  webSocket.value.on('connect', () => {
-    console.log('Websocket servis připojen')
-  })
-  socketsJoinRoom();
+
+
 
   axios.get(axios.defaults.baseURL + '/sessions/getIdentity', { params: { sid: sid.value, user: uzivatelStore._id } })
     .then(response => {
+      console.log(response.data)
+      if (response.data == 'Session Lost') {
+        router.push({ path: '/pripojeni-do-hry' })
+        return
+      }
       if (response.data == "Is Owner") {
         myIdentity.value = 'Owner'
         return
@@ -868,6 +878,11 @@ onMounted(() => {
 
     })
 
+  webSocket.value.on('connect', () => {
+    console.log('Websocket servis připojen')
+  })
+
+  socketsJoinRoom();
 
   //Připojení hráče
   webSocket.value.on('resyncPlayers', () => {
@@ -1047,7 +1062,7 @@ function addEnemy() {
  */
 
 function fightAddLifeToEnemy(index) {
-  dataBoje.value.aktivniNepratele[index].realneZivoty = dataBoje.aktivniNepratele[index].realneZivoty + 1
+  dataBoje.aktivniNepratele[index].realneZivoty = dataBoje.aktivniNepratele[index].realneZivoty + 1
   socketsResyngBattle()
 }
 
@@ -1057,7 +1072,7 @@ function fightAddLifeToEnemy(index) {
  * Resync
  */
 function fightRemoveLifeToEnemy(index) {
-  dataBoje.value.aktivniNepratele[index].realneZivoty = dataBoje.aktivniNepratele[index].realneZivoty - 1
+  dataBoje.aktivniNepratele[index].realneZivoty = dataBoje.aktivniNepratele[index].realneZivoty - 1
   socketsResyngBattle()
 }
 
@@ -1066,7 +1081,7 @@ function fightRemoveLifeToEnemy(index) {
  * @param {int} index Pozice nepřítele na bojišti
  */
 function fightRemoveEnemy(index) {
-  dataBoje.value.aktivniNepratele.splice(index, 1)
+  dataBoje.aktivniNepratele.splice(index, 1)
   socketsResyngBattle()
 }
 
@@ -1104,6 +1119,7 @@ function fightChoseAdventurer(adventurer) {
  * @param {INT} enemy Pozice v poli aktivních nepřátel
  */
 function fightChoseEnemy(enemy) {
+  console.log(enemy)
   dataBoje.bojujiciNepritel = dataBoje.aktivniNepratele[enemy]
   socketsResyngBattle()
 }

@@ -76,15 +76,22 @@ router.post("/createSession", async (req, res) => {
  */
 router.get("/getIdentity", async (req, res) => {
     SessionModel.findOne({ _id: req.query.sid }).then(dbQuery => {
-        console.log(dbQuery)
+        if(dbQuery == null){
+            res.send("Session Lost")
+            return
+        }
         if (dbQuery.owner == req.query.user) {
             res.send("Is Owner")
+            return
         } else if (dbQuery.player1.owner == req.query.user) {
             res.send('Player 1')
+            return
         } else if (dbQuery.player2.owner == req.query.user) {
             res.send('Player 2')
+            return
         } else if (dbQuery.player3.owner == req.query.user) {
             res.send('Player 3')
+            return
         }
     }).catch(error => {
         res.send('Error')
@@ -163,6 +170,10 @@ router.get('/sessionPlayers', (req, res) => {
  */
 router.get('/sessionDisconnect', async (req, res) => {
     let session = await SessionModel.findOne({ _id: req.query.sessionID })
+    if(session == null){
+        res.send("Already Disconnected")
+        return
+    }
     try {
         if (session.owner == req.query.userID) {
             session.delete();
