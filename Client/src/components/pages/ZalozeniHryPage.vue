@@ -5,7 +5,7 @@
     <v-container>
       <v-card color="primary">
         <v-card-text>
-          <v-form ref="form" >
+          <v-form ref="form">
             <v-text-field color="secondary" variant="outlined" :rules="rules.required" v-model="jmenoSessionu"
               label="Jméno herní místnosti" required></v-text-field>
             <v-text-field color="secondary" variant="outlined" :rules="rules.required" v-model="heslo" label="Heslo"
@@ -58,11 +58,13 @@ const rules = {
   ],
 }
 
-
-onMounted(() =>{
-    if (!uzivatelStore.prihlasen) {
-        router.push({path: '/'})
-    }
+/**
+ * Metoda po načtení komponenty
+ */
+onMounted(() => {
+  if (!uzivatelStore.prihlasen) {
+    router.push({ path: '/' })
+  }
 })
 
 
@@ -85,22 +87,24 @@ function zalozeniHry() {
         //Odeslání požadavku
         axios.post(axios.defaults.baseURL + '/sessions/createSession', obsah)
           .then(queryResponse => {
-            if (queryResponse.data == "Name Taken") {
-              showAlert.value = true;
-              alertTitulek.value = "Využité jméno"
-              alertText.value = "Toto jméno sessionu je již zabrané. Prosím, vyberte jiné jméno"
-              return
-            }else if (queryResponse.data == null) {
+            console.log(queryResponse.data)
+            if (queryResponse.data === null) {
               showAlert.value = true;
               alertTitle.value = "Chyba v komunikaci"
               alertText.value = "Komunikace se serverem se nezdařila. Prosím, zkuste akci znovu později"
               return
+            } else if (queryResponse.data === "Name Taken") {
+              showAlert.value = true;
+              alertTitle.value = "Využité jméno"
+              alertText.value = "Toto jméno herní místnosti je již zabrané. Prosím, vyberte jiné jméno"
+              return
             }
+
             router.push({
               path: '/RaPSession', query: { sid: queryResponse.data }
             })
           })
-          .catch(err => {
+          .catch(error => {
             showAlert.value = true;
             alertTitle.value = "Chyba v komunikaci"
             alertText.value = "Komunikace se serverem se nezdařila. Prosím, zkuste akci znovu později"

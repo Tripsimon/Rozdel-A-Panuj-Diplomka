@@ -10,7 +10,9 @@ const ClassSchema = new Schema({
     bonusovaVybava: [String],
     hlavniVybava: [String],
     krajniVybava: [String],
-    zbrojVýbava: [String]
+    zbrojVýbava: [String],
+    role: String,
+    trueZbrane: String
     },
     {collection: "MonstraKolekce"}
     )

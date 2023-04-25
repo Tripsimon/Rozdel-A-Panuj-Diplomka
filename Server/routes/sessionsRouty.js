@@ -12,7 +12,7 @@ const SessionModel = require('../models/SessionModel');
  * Kontrola funkcionality
  */
 router.get("/", (req, res) => {
-    console.log("Strom Sessionu");
+    res.send("Strom Sessionu");
 })
 
 /**
@@ -30,9 +30,7 @@ router.get("/openSessions", async (req, res) => {
  */
 router.post("/createSession", async (req, res) => {
     SessionModel.findOne({ 'sessionName': req.body.jmenoSessionu }).then(dbQuery => {
-        console.log(dbQuery)
         if (dbQuery != null) {
-            console.log("DSADS")
             res.send("Name Taken")
             return
         } else {
@@ -207,21 +205,6 @@ router.get('/sessionDisconnect', async (req, res) => {
     }
 })
 
-/**
- * Metoda pro vyčištění celé kolekce sessionů
- */
-router.get('/sessionsClear', (req, res) => {
-    if (req.body.password == 'WnaBp$03^6iI')
-        SessionModel.deleteMany({}).then(res.send('Session Cleared')).catch(error => {
-            res.send('Error')
-            console.log('Vyskytla se chyba při vrácení vyčištění sessiony:', error)
-        })
-
-
-
-
-
-})
 
 /**
  * Routa pro přidání záznamu do logu

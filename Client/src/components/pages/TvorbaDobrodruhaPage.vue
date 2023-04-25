@@ -60,8 +60,23 @@
 
                 <!-- Karta pro popis vybraného povolání-->
                 <div v-if="tridaVybranaObjekt != null">
-                  <h3>{{ tridaVybranaObjekt.jmeno }}</h3>
+
+
+                  <v-row>
+                    <v-col cols="9">
+                      <h3>{{ tridaVybranaObjekt.jmeno }}</h3>
                   <v-card-subtitle class="mb-3">{{ tridaVybranaObjekt.popis }}</v-card-subtitle>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-col>
+                      <h4>Role: {{ tridaVybranaObjekt.role }}</h4>
+                    </v-col>
+                    <v-col>
+                      <h4>Povolené zbraně: {{ tridaVybranaObjekt.trueZbrane }}</h4>
+                    </v-col>
+                    </v-col>
+                  </v-row>
+
 
                   <h3>Bonusové schopnosti:</h3>
                   <v-divider class="mb-3" color="secondary"></v-divider>
@@ -367,6 +382,12 @@ function onRaceSelect() {
     })
   newAdventurer.value.race = rasaVybrana.value.jmeno
   newAdventurer.value.class = null
+  tridaVybranaObjekt.value = null
+  tridaSchopnosti.value = null
+  tridaVybava.value.zbroj = null
+  tridaVybava.value.bonusova = null
+  tridaVybava.value.sekundarni = null
+  tridaVybava.value.hlavni = null
 }
 
 /**

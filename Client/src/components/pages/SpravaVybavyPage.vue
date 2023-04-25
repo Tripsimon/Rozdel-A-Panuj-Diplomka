@@ -268,7 +268,7 @@ function updateAbility(ability, index) {
 }
 
 /**
- * ODebere novou schopnost
+ * Odebere novou schopnost
  * @param {int} index Pozice v poly
  */
 function removeAbility(index) {

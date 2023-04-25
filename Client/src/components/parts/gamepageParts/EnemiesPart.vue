@@ -73,8 +73,6 @@
 
                     <v-expansion-panel-text class="mb-3">
                         <v-row align="center" justify="space-around">
-
-                            <v-btn color="primary" @click="$emit('choseToFight',index) ">Vybrat pro boj</v-btn>
                             <v-btn color="success" @click="$emit('addLife',index)">Přidat život</v-btn>
                             <v-btn color="error" @click="$emit('removeLife',index)">Odebrat život</v-btn>
                             <v-btn color="error" @click="$emit('killOff',index)">Odebrat z bojiště</v-btn>

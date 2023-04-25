@@ -1,8 +1,12 @@
 <template>
     <v-row justify="center">
-        <v-dialog v-model="isShown" scrollable>
+
+
+        <v-dialog v-model="isShown.value" scrollable persistent>
             <v-card color="primary">
-                <v-card-title>Detail dobrodruha</v-card-title>
+                <v-card-title>
+                    <h1 style="color: #cca000;">{{ getAdventurerName() }}</h1>
+                </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text style="height: 80%;">
 
@@ -63,7 +67,7 @@
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
-                    <v-btn color="blue-darken-1" variant="text" @click="detailModal = false">
+                    <v-btn color="blue-darken-1" variant="text" @click="$emit('closeModal')">
                         Zavřít
                     </v-btn>
                 </v-card-actions>
@@ -80,9 +84,9 @@ const { toggle } = toRefs(props)
 const abilities = ref({})
 
 const isShown = ref(false)
+
 watch(toggle, () => {
     isShown.value = toggle
-    console.log(props.detailAdventurer)
     getAbilities()
 })
 
@@ -90,7 +94,6 @@ function getAbilities() {
     axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { 'owner': props.detailAdventurer.trida } })
         .then(queryResponse => {
           abilities.value = queryResponse.data
-          console.log(abilities)
         })
 
       axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { 'owner': props.detailAdventurer.rasa } })
@@ -98,4 +101,15 @@ function getAbilities() {
             abilities.value = queryResponse.data
         })
 }
+
+function getAdventurerName() {
+  let name = props.detailAdventurer.krestniJmeno
+  if (props.detailAdventurer.prezdivka != null) {
+    name = name + ' "' + props.detailAdventurer.prezdivka + '" '
+  }
+  name = name + props.detailAdventurer.prijmeni
+  return name
+}
+
+
 </script>

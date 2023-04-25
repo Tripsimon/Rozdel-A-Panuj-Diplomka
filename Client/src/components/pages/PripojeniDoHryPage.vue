@@ -1,7 +1,7 @@
 <template>
   <v-container>
 
-    <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText"/>
+    <Alert v-if="showAlert" type="error" :title="alertTitulek" :text="alertText" />
 
     <!-- Výběr serveru pro připojení-->
     <v-card color="primary" class="mt-4">
@@ -10,10 +10,19 @@
       </v-card-title>
       <v-card-text v-if="sessions.length != 0">
         <v-form ref="form">
-          <v-text-field color="secondary" variant="outlined" v-model="sessionPassword" type='password'
-            label="Heslo hry" :rules="rules.required" ></v-text-field>
           <v-select color="secondary" variant="outlined" label="Výber herní postavy" :items="avaliableAdventurers"
             :item-title="'trueName'" :item-value="'_id'" v-model="chosenAdventurer" :rules="rules.required"></v-select>
+          <v-row>
+            <v-col cols="11">
+              <v-text-field color="secondary" variant="outlined" v-model="sessionPassword" type='password'
+                label="Heslo hry" :rules="rules.required"></v-text-field>
+            </v-col>
+            <v-cols cols="1">
+              <v-btn class="mt-3" color="warning" :click="findSessions()" icon="mdi-refresh"></v-btn>
+            </v-cols>
+          </v-row>
+
+
         </v-form>
         <v-table>
           <thead>
@@ -49,7 +58,10 @@
         </v-table>
       </v-card-text>
       <v-card-text v-else>
-        <p>Žádný server není dostupný. Prosím, zkuste se přpojit později</p>
+        <p>Žádný server není dostupný. Prosím, zkuste se připojit později</p>
+        <v-cols cols="1">
+          <v-btn class="mt-3" color="warning" :click="findSessions()" icon="mdi-refresh"></v-btn>
+        </v-cols>
       </v-card-text>
     </v-card>
 
@@ -88,12 +100,12 @@ const uzivatelStore = useUzivatelStore()
 
 const form = ref(false)
 const rules = {
-    required: [
-        value => {
-            if (value?.length > 0) return true
-            return 'Formulář není vyplněný'
-        },
-    ],
+  required: [
+    value => {
+      if (value?.length > 0) return true
+      return 'Formulář není vyplněný'
+    },
+  ],
 };
 
 onMounted(() => {
@@ -109,8 +121,8 @@ onMounted(() => {
       avaliableAdventurers.value = response.data
 
       avaliableAdventurers.value.forEach(element => {
-        element.trueName = element.krestniJmeno + ' ' + element.prezdivka +' ' + element.prijmeni
-      
+        element.trueName = element.krestniJmeno + ' ' + element.prezdivka + ' ' + element.prijmeni
+
       });
     })
 
@@ -142,9 +154,9 @@ function joinSession(id) {
           .then(queryResponse => {
             if (queryResponse.data == 'Session Joined') {
               router.push({ path: '/RaPSession', query: { sid: id } })
-            } else if(queryResponse.data == "Name Taken"){
+            } else if (queryResponse.data == "Name Taken") {
 
-            }else {
+            } else {
               console.log("Problém při připojení")
             }
           })

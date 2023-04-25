@@ -10,13 +10,12 @@ const axios = require('axios');
 const {init} = require('./websocket.js');
 
 
-/**
- * Tvorba express serveru
- */
+//Tvorba express serveru
 const PORT = process.env.PORT || 3000;
 const app = express()
 const server = require('http').createServer(app)
 
+//Použití balíčků
 app.use(cors());
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
@@ -27,10 +26,7 @@ mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/l
     .catch(err =>console.log(err));
 
 
-
-
-
-
+//Definování routeru
 app.get("/",(req,res) => {
     res.send("Server je aktivní");
 })
@@ -65,11 +61,10 @@ app.use('/rasy',rasyRouter);
 const tridyRouter = require('./routes/tridaRouty.js');
 app.use('/tridy',tridyRouter);
 
-
+//Zpřístupnění serverových dat
 app.use(express.static(path.join(__dirname,'/files')))
-//img
 
-
+//Vývojářský režim
 const devMode = true;
 if (devMode) {
     axios.defaults.baseURL = 'http://localhost:3000'
@@ -77,7 +72,8 @@ if (devMode) {
 }else{
     axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
 }
-
+//Websockets
 init(server);
 
+//Inicializace serveru
 server.listen(PORT)

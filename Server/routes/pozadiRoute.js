@@ -30,7 +30,9 @@ router.get("/", (req, res) => {
     res.send("Práce s pozadím")
 })
 
-//Routa pro nahrání nového souboru
+/**
+ * Routa pro nahrání souboru
+ */
 router.post('/nahraniSouboru', upload.single('image'), (req, res) => {
     newImage = new ImageModel({
         name: req.file.filename
@@ -44,7 +46,9 @@ router.post('/nahraniSouboru', upload.single('image'), (req, res) => {
         })
 })
 
-//Routa pro smazání souboru
+/**
+ * Routa pro smazání souboru
+ */
 router.delete('/smazaniSouboru/:fileName', async (req, res) => {
     console.log(await ImageModel.deleteOne({ name: req.params.fileName }))
     fs.unlink('files/backgrounds/' + req.params.fileName, (err) => {
@@ -59,7 +63,9 @@ router.delete('/smazaniSouboru/:fileName', async (req, res) => {
 
 })
 
-//Routa pro vrácení všech pozadí
+/**
+ * Routa pro vrácení všech dostupných pozadí
+ */
 router.get('/dump', async (req, res) => {
     let pozadi = []
     const images = await ImageModel.find()

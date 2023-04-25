@@ -13,7 +13,9 @@ router.get("/", (req, res) => {
     res.send("Strom schopností");
 })
 
-//Routa pro vrácení všech dat schopností
+/**
+ * Routa pro vrácení všech schopností
+ */
 router.get("/dump", (req,res) =>{
     AbilityModel.find()
         .then(queryResponse => res.send(queryResponse))
@@ -23,10 +25,9 @@ router.get("/dump", (req,res) =>{
         })
 })
 
-
-
-
-//Routa, která vrát jednu schopnost podle ID
+/**
+ * Routa pro vrácení jedné schopnosti podle jejího ID
+ */
 router.get("/getByID",(req,res) =>{
     AbilityModel.findOne({'_id': req.query.id})
         .then(queryResponse => res.send(queryResponse) )
@@ -37,7 +38,9 @@ router.get("/getByID",(req,res) =>{
     
 })
 
-//Routa, která vrátí více schopností 
+/**
+ * Routa pro vrácení více schopností podle jejich ID
+ */
 router.get('/getMultipleByID', (req,res) =>{
     AbilityModel.find({_id: {$in: req.query.abilities}})
         .then(queryResponse => res.send(queryResponse))
@@ -47,7 +50,9 @@ router.get('/getMultipleByID', (req,res) =>{
         })
 })
 
-//Routa, která vrátí schopnosti podle majitele
+/**
+ * Routa pro navrácení schopností podle majitele
+ */
 router.get('/getByOwner', (req,res) =>{
     AbilityModel.find({majitel: req.query.owner})
         .then(queryResponse => res.send(queryResponse))

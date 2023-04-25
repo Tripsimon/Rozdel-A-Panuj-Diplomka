@@ -14,7 +14,7 @@
           <v-card-text>
 
             <v-file-input color="secondary" variant="outlined" v-model="inputFile" accept="image/jpeg"
-              label="Nové JPEG herní pozadí"></v-file-input>
+              label="Nové JPG herní pozadí"></v-file-input>
             <v-text-field color="secondary" variant="outlined" v-model="inputFileName" :counter="20" label="Jméno souboru"
               required></v-text-field>
 

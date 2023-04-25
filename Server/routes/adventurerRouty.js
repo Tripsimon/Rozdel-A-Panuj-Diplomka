@@ -1,7 +1,5 @@
 //Importy
 const express = require('express')
-const bodyParser = require('body-parser')
-const { response } = require('express');
 
 //Router
 const router = express.Router()
@@ -29,6 +27,7 @@ router.post("/characterCreation", (req, res) => {
         prijmeni: data.secondName,
         prezdivka: data.nickname,
         zivoty: (atributesInput.houzevnatost * 10),
+        aktualniZivoty:(atributesInput.houzevnatost * 10),
         rasa: data.race,
         trida: data.class,
         presvedceni: data.aligment,
@@ -50,7 +49,7 @@ router.post("/characterCreation", (req, res) => {
 
     })
     newAdventurer.save()
-        .then(res.send("Character Cretion"))
+        .then(res.send("Character Created"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při vytvoření nového dobrodruha:', error)
@@ -58,6 +57,9 @@ router.post("/characterCreation", (req, res) => {
 
 })
 
+/**
+ * Vrátí dobrodruhy jednoho hráče podle jeho _id
+ */
 router.get("/getCharacters", (req, res) => {
     AdventurerModel.find({ majitel: req.query.owner })
         .then(queryResponse => {
@@ -70,7 +72,9 @@ router.get("/getCharacters", (req, res) => {
 })
 
 
-//Metoda pro navrácení všech dobrodruhů při resincu sessionu
+/**
+ * Routa pro navrácení více dobrodruhů
+ */
 router.get('/getMultipleAdventurers', (req, res) => {
     AdventurerModel.find({ _id: { $in: req.query.adventurers } })
         .then(responseQuery => res.send(responseQuery))
@@ -108,7 +112,7 @@ router.post('/putIntoInventory', async (req, res) => {
     let adventurer = await AdventurerModel.findOne({ _id: req.body.adventurer })
     adventurer.inventar.push(req.body.item)
     adventurer.save()
-        .then(res.send(true))
+        .then(res.send("Item Added"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při přidání předmětu do inventáře:', error)
@@ -123,7 +127,7 @@ router.post('/removeFromInventory', async (req, res) => {
     let adventurer = await AdventurerModel.findOne({ _id: req.body.adventurer })
     adventurer.inventar.pull(req.body.item)
     adventurer.save()
-        .then(res.send(true))
+        .then(res.send("Item Removed"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při odebrání předmětu z inventáře:', error)
@@ -135,7 +139,7 @@ router.post('/removeFromInventory', async (req, res) => {
  */
 router.post('/changeMoney', (req, res) => {
     AdventurerModel.updateOne({ _id: req.body.adventurer }, { penize: req.body.money })
-        .then(res.send(true))
+        .then(res.send("Money Changed"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při změně peněz:', error)
@@ -158,7 +162,7 @@ router.post('/changeLevelAndExperience', async (req, res) => {
     }
 
     adventurer.save()
-        .then(res.send(true))
+        .then(res.send("Level and Experience Changed"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při změně levelu a zkušeností:', error)
@@ -166,11 +170,23 @@ router.post('/changeLevelAndExperience', async (req, res) => {
 })
 
 /**
+ * Změní počet aktuálních životů
+ */
+router.post('/changeActualLife', (req, res) =>{
+    AdventurerModel.findOneAndUpdate({_id: req.body.adventurer},{ aktualniZivoty: req.body.zivoty})
+    .then(res.send('Life Changed'))
+    .catch(error => {
+        res.send('Error')
+        console.log('Vyskytla se chyba při mazání charakteru:', error)
+    })
+})
+
+/**
  * Routa pro odebrání dobrodruha
  */
 router.delete('/deleteAdventurer', (req, res) => {
     AdventurerModel.deleteOne({ _id: req.body.adventurer })
-        .then(res.send('actionComplete'))
+        .then(res.send('Adventurer Deleted'))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při mazání charakteru:', error)

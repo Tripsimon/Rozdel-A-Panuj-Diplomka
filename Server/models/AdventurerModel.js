@@ -8,6 +8,7 @@ const AdventurerSchema = new Schema({
     prijmeni: String,
     prezdivka: String,
     zivoty: Number,
+    aktualniZivoty: Number,
     rasa: String,
     trida: String,
     presvedceni: String,

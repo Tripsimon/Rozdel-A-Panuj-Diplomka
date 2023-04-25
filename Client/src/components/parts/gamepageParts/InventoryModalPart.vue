@@ -1,18 +1,15 @@
 <template>
-
     <v-row justify="center">
-
         <v-dialog v-model="isShown.value" scrollable persistent>
-
             <v-card color="primary">
                 <v-card-title>
-                    <h1>Inventář: {{ inventoryWeight + " / " + (inventoryAdventurer.atributy.sila * 5) }}</h1>
+                    <h1 style="color: #cca000;">Inventář: {{ inventoryWeight + " / " + (inventoryAdventurer.atributy.sila * 5) }}</h1>
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text style="height: 80%;">
                     <v-card class="mt-3">
                         <v-card-title>
-                            <h2>Peníze: {{ inventoryMoney }}</h2>
+                            <h2 style="color: #cca000;">Peníze: {{ inventoryMoney }}</h2>
                             <v-divider class="mb-3"></v-divider>
                             <v-text-field v-model="inputChangeMoney" type="number" single-line
                                 label="Nové množství"></v-text-field>
@@ -25,7 +22,7 @@
                     <v-expansion-panels class="mt-3" variant="accordion">
                         <v-expansion-panel v-for="item in props.inventoryAdventurer.inventar" :key="item.name">
                             <v-expansion-panel-title>
-                                <h2>{{ item.jmeno + " - " + item.typ }}</h2>
+                                <h2 style="color: #cca000;">{{ item.jmeno + " - " + item.typ }}</h2>
                             </v-expansion-panel-title>
 
                             <v-expansion-panel-text v-if="item.typ == 'Zbraň'">
@@ -69,17 +66,14 @@
                     </v-expansion-panels>
 
                     <v-card class="mt-3">
-                        <v-card-title>Přidat předmět</v-card-title>
-                        <v-card-text>
-
-                            <v-tabs v-model="inputItemType" bg-color="primary">
+                        <v-card-title style="color: #cca000;">Přidat předmět</v-card-title>
+                        <v-tabs v-model="inputItemType" bg-color="primary">
                                 <v-tab value="weapons">Zbraně</v-tab>
                                 <v-tab value="armors">Zbroje</v-tab>
                                 <v-tab value="items">Předměty</v-tab>
                             </v-tabs>
-
+                        <v-card-text>
                             <v-card-text>
-                                <v-card-text>
 
                                     <v-window v-model="inputItemType">
                                         <v-window-item value="weapons">
@@ -111,15 +105,14 @@
                                                 </thead>
                                                 <tbody>
 
-                                                    <tr v-for="item in addItem.Weapons" :key="item.jmeno">
-
+                                                    <tr v-for="item in itemAddOptions.Weapons" :key="item.jmeno">
                                                         <th>{{ item.jmeno }}</th>
                                                         <th>{{ item.popis }}</th>
                                                         <th>{{ item.pruraznost }}</th>
-                                                        <th>{{ item.poskozeni }}</th>
+                                                        <th>{{ item.poskozeniZaklad }}</th>
                                                         <th>{{ item.poskozeni }}</th>
                                                         <th>{{ item.vaha }}</th>
-                                                        <th><v-btn @click="inventoryAddPush(item._id)">Přidat</v-btn></th>
+                                                        <th><v-btn @click="addItem(item)">Přidat</v-btn></th>
                                                     </tr>
                                                 </tbody>
 
@@ -153,7 +146,7 @@
                                                         <th>{{ item.popis }}</th>
                                                         <th>{{ item.obrana }}</th>
                                                         <th>{{ item.vaha }}</th>
-                                                        <th><v-btn @click="addItem(item._id)">Přidat</v-btn></th>
+                                                        <th><v-btn @click="addItem(item)">Přidat</v-btn></th>
                                                     </tr>
                                                 </tbody>
                                             </v-table>
@@ -188,7 +181,6 @@
                                             </v-table>
                                         </v-window-item>
                                     </v-window>
-                                </v-card-text>
                             </v-card-text>
                         </v-card-text>
                     </v-card>
@@ -222,7 +214,6 @@ watch(toggle, () => {
 const inputChangeMoney = ref(null)
 const inventoryMoney = ref(0)
 const inventoryWeight = ref(0)
-const inventoryItems = ref([])
 const inputItemType = ref("weapons")
 const itemAddOptions = ref({})
 
@@ -234,21 +225,29 @@ function reloadInventory() {
 
 function getAddOptions() {
     axios.get(axios.defaults.baseURL + '/vybava/allType', { params: { type: 'Zbraň' } })
-        .then(response => {
-            itemAddOptions.value.Weapons = response.data
-
+        .then(queryResponse => {
+            itemAddOptions.value.Weapons = queryResponse.data
         })
+        .catch(
+            console.log("Vyskytla se chyba při komunikaci se serverem")
+        )
 
     axios.get(axios.defaults.baseURL + '/vybava/allType', { params: { type: 'Zbroj' } })
-        .then(response => {
-            itemAddOptions.value.Armors = response.data
+        .then(queryResponse => {
+            itemAddOptions.value.Armors = queryResponse.data
         })
+        .catch(
+            console.log("Vyskytla se chyba při komunikaci se serverem")
+        )
 
     axios.get(axios.defaults.baseURL + '/vybava/allType', { params: { type: 'Předmět' } })
-        .then(response => {
-            itemAddOptions.value.Items = response.data
+        .then(queryResponse => {
+            itemAddOptions.value.Items = queryResponse.data
 
         })
+        .catch(
+            console.log("Vyskytla se chyba při komunikaci se serverem")
+        )
 }
 
 function changeMoney() {
@@ -258,9 +257,12 @@ function changeMoney() {
             inventoryMoney.value = inputChangeMoney.value;
             inputChangeMoney.value = null
             emit('resyncPlayers');
-
         })
+        .catch(
+            console.log("Vyskytla se chyba při komunikaci se serverem")
+        )
 }
+
 
 /**
 * 
@@ -273,6 +275,9 @@ function addItem(item) {
                 emit('resyncPlayers');
             }
         })
+        .catch(
+            console.log("Vyskytla se chyba při komunikaci se serverem")
+        )
 }
 
 /**
@@ -286,7 +291,9 @@ function invetoryRemove(item) {
                 emit('resyncPlayers');
             }
         })
-
+        .catch(
+            console.log("Vyskytla se chyba při komunikaci se serverem")
+        )
 }
 
 </script>

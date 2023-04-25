@@ -5,7 +5,7 @@
       @resync-players="socketsResyncPlayers()" @close-modal="inventarModal = false" />
 
     <!-- Modal pro detail -->
-    <DetailModal :toggle="detailModal" :detailAdventurer="detailAdventurer" />
+    <DetailModal :toggle="detailModal" :detailAdventurer="detailAdventurer" @close-modal=" detailModal = false" />
 
     <!-- Vlastní obsah-->
     <v-container class="mt-3" style="background-image:url(../../../src/assets/images/landingpage.png);">
@@ -28,12 +28,8 @@
         <!-- Mod boje -->
         <v-col v-if="battleModeSwitch == true" :cols="myIdentity == 'Owner' ? '9' : '12'">
           <!-- Nepřátelé -->
-          <EnemiesPart :enemies="dataBoje.aktivniNepratele" 
-          @chose-To-Fight="(index) =>fightChoseEnemy(index)" 
-          @add-Life="(index)=> fightAddLifeToEnemy(index)"
-          @remove-Life="(index)=> fightRemoveLifeToEnemy(index)"
-          @kill-Off ="(index) => fightRemoveEnemy(index)"
-          />
+          <EnemiesPart :enemies="dataBoje.aktivniNepratele" @add-Life="(index) => fightAddLifeToEnemy(index)"
+            @remove-Life="(index) => fightRemoveLifeToEnemy(index)" @kill-Off="(index) => fightRemoveEnemy(index)" />
 
           <!-- Bojová vřava-->
           <v-card v-if="dataBoje.battleFront.length > 0" color="primary" class="mt-3">
@@ -43,12 +39,16 @@
 
             </v-card-title>
             <v-card-text>
+
               <v-slide-group show-arrows>
                 <v-slide-group-item v-for="(entity, index) in dataBoje.battleFrontInstance" :key="index"
                   v-slot="{ isSelected, toggle }">
-                  <v-btn class="ma-2" :color="isSelected ? 'primary' : ('krestniJmeno' in entity ? 'success' : 'error')"
-                    @click="{ battleFrontChosen = index; toggle() }">
-                    {{ getIdentity(entity) }}
+                  <v-btn class="ma-2" :variant="battleFrontGetStatus(entity)"
+                    :color="entity.type == 'adventurer' ? 'success' : 'error'"
+                    @click="{ isSelected? battleFrontChosen = null : battleFrontChosen = index ; toggle() }"
+                    :prepend-icon="battleFrontGetPrepend(isSelected)"
+                    :append-icon="(entity.status == 'dazed' ? 'mdi-lightning-bolt-outline' : '')">
+                    {{ entity.name }}
                   </v-btn>
                 </v-slide-group-item>
 
@@ -56,528 +56,30 @@
               </v-slide-group>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="secondary" variant="outlined" @click="battleFrontFinish()">
-                Dokončit akci
-              </v-btn>
-              <v-btn color="secondary" variant="outlined" @click="copyBattleFront()">
+              <v-btn color="secondary" variant="outlined" @click="battleFrontNextRound()">
                 Dokončit bitevní kolo
               </v-btn>
+              <v-btn color="secondary" variant="outlined" @click="battleFrontChoseToFight()">
+                Vybrat pro boj
+              </v-btn>
+              <v-btn color="secondary" variant="outlined" @click="battleFrontExhaust()">
+                Unavit
+              </v-btn>
+              <v-btn color="secondary" variant="outlined" @click="battleFrontReady()">
+                Vrátit do boje
+              </v-btn>
+              <v-btn color="secondary" variant="outlined" @click="battleFrontStun()">
+                Omráčit
+              </v-btn>
+
+
             </v-card-actions>
           </v-card>
 
           <!-- Hod kostkou-->
-          <v-card color="primary" class="mt-3">
-            <v-card-title>
-              <h2 style="color: #cca000;">Hod kostkou</h2>
-              <v-divider></v-divider>
-            </v-card-title>
-            <v-container>
-              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Volný hod'">
-                <v-col>
-                  <v-card color="accent" align="center" justify="center">
-                    <v-card-title>Hození kostkou</v-card-title>
-
-                    <v-card-text>
-                      <v-expand-x-transition>
-                        <v-img v-if="dataBoje.hozennaKostka != 0"
-                          :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
-                          justify="center" max-height="250"></v-img>
-                      </v-expand-x-transition>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Hodit kostkou
-                      </v-btn>
-
-                      <v-btn color="blue-darken-1" variant="text" @click="clearDice">
-                        Vynulovat
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Atributy'">
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
-                    <v-card-title>Vyberte dobrodruha</v-card-title>
-                  </v-card>
-                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
-                    </v-card-title>
-                    <v-card-text>
-                      <v-row>
-                        <v-col>Síla: {{ dataBoje.bojujiciDobrodruh.atributy.sila }}</v-col>
-                        <v-col>Houževnastost: {{ dataBoje.bojujiciDobrodruh.atributy.houzevnatost }}</v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</v-col>
-                        <v-col>Charisma: {{ dataBoje.bojujiciDobrodruh.atributy.charisma }}</v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col>Inteligence: {{ dataBoje.bojujiciDobrodruh.atributy.inteligence }}</v-col>
-                        <v-col>Znalost: {{ dataBoje.bojujiciDobrodruh.atributy.znalost }}</v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-
-
-                <v-col>
-                  <v-card color="accent" align="center" justify="center">
-                    <v-card-title>Hození kostkou</v-card-title>
-                    <v-card-text>
-                      <v-img v-if="dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
-                        justify="center" max-height="250"></v-img>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Hodit kostkou
-                      </v-btn>
-
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Vyčistit
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciNepritel == null">
-                    <v-card-title>Vyberte nepřítele</v-card-title>
-                  </v-card>
-                  <v-card v-if="dataBoje.bojujiciNepritel != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciNepritel.jmeno }}
-                    </v-card-title>
-                    <v-card-text>
-                      <v-row>
-                        <v-col>Síla: {{ dataBoje.bojujiciNepritel.sila }}</v-col>
-                        <v-col>Houževnastost: {{ dataBoje.bojujiciNepritel.houzevnatost }}</v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col>Obratnost: {{ dataBoje.bojujiciNepritel.obratnost }}</v-col>
-                        <v-col>Charisma: {{ dataBoje.bojujiciNepritel.charisma }}</v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col>Inteligence: {{ dataBoje.bojujiciNepritel.inteligence }}</v-col>
-                        <v-col>Znalost: {{ dataBoje.bojujiciNepritel.znalost }}</v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Zásah'">
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
-                    <v-card-title>Vyberte dobrodruha</v-card-title>
-                  </v-card>
-                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-
-
-                <v-col>
-                  <v-card color="accent" align="center" justify="center">
-                    <v-card-title>Hození kostkou</v-card-title>
-                    <v-card-text>
-                      <v-img v-if="dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
-                        justify="center" max-height="250"></v-img>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Hodit kostkou
-                      </v-btn>
-
-                      <v-btn color="blue-darken-1" variant="text" @click="clearDice">
-                        Vynulovat
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciNepritel == null">
-                    <v-card-title>Vyberte nepřítele</v-card-title>
-                  </v-card>
-                  <v-card v-if="dataBoje.bojujiciNepritel != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciNepritel.jmeno }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Obratnost: {{ dataBoje.bojujiciNepritel.obratnost }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Průraz'">
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
-                    <v-card-title color="error">Vyberte dobrodruha</v-card-title>
-                  </v-card>
-                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
-                    </v-card-title>
-                    <v-card-text>
-                      <v-select :items="dataBoje.bojujiciDobrodruhVybava" v-model="dataBoje.bojujiciDobrodruhPredmet"
-                        item-title="jmeno" return-object label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
-                        <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Průraz: {{
-                          dataBoje.bojujiciDobrodruhPredmet.pruraznost
-                        }}</h3>
-                        <h3 v-else>Předmět nemá zadanou hodnotu pruraznosti</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-
-
-                <v-col>
-                  <v-card color="accent" align="center" justify="center">
-                    <v-card-title>Hození kostkou</v-card-title>
-                    <v-card-text>
-                      <v-img v-if="dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
-                        justify="center" max-height="250"></v-img>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Hodit kostkou
-                      </v-btn>
-
-                      <v-btn color="blue-darken-1" variant="text" @click="clearDice">
-                        Vynulovat
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciNepritel == null">
-                    <v-card-title>Vyberte nepřítele</v-card-title>
-                  </v-card>
-                  <v-card v-if="dataBoje.bojujiciNepritel != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciNepritel.jmeno }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Zbroj: {{ dataBoje.bojujiciNepritel.zbroj }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Steč'">
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
-                    <v-card-title color="error">Vyberte dobrodruha</v-card-title>
-                  </v-card>
-                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
-                    </v-card-title>
-                    <v-card-text>
-                      <v-select :items="dataBoje.bojujiciDobrodruhVybava" v-model="dataBoje.bojujiciDobrodruhPredmet"
-                        item-title="jmeno" return-object label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
-                        <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbraň'">Poškození: {{
-                          dataBoje.bojujiciDobrodruhPredmet.poskozeni
-                        }}</h3>
-                        <h3 v-else>Předmět nemá zadanou hodnotu poškození</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-
-
-                <v-col>
-                  <v-card color="accent" align="center" justify="center">
-                    <v-card-title>Hození kostkou</v-card-title>
-                    <v-card-text>
-                      <v-img v-if="dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
-                        justify="center" max-height="250"></v-img>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Hodit kostkou
-                      </v-btn>
-
-                      <v-btn color="blue-darken-1" variant="text" @click="clearDice">
-                        Vynulovat
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciNepritel == null">
-                    <v-card-title>Vyberte nepřítele</v-card-title>
-                  </v-card>
-                  <v-card v-if="dataBoje.bojujiciNepritel != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciNepritel.jmeno }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Zdraví: {{ dataBoje.bojujiciNepritel.realneZivoty + '/' +
-                          dataBoje.bojujiciNepritel.zivoty }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Uhyb'">
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
-                    <v-card-title>Vyberte dobrodruha</v-card-title>
-                  </v-card>
-                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-
-
-                <v-col>
-                  <v-card color="accent" align="center" justify="center">
-                    <v-card-title>Hození kostkou</v-card-title>
-                    <v-card-text>
-                      <v-img v-if="dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
-                        justify="center" max-height="250"></v-img>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Hodit kostkou
-                      </v-btn>
-
-                      <v-btn color="blue-darken-1" variant="text" @click="clearDice">
-                        Vynulovat
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciNepritel == null">
-                    <v-card-title>Vyberte nepřítele</v-card-title>
-                  </v-card>
-                  <v-card v-if="dataBoje.bojujiciNepritel != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciNepritel.jmeno }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Blokace'">
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
-                    <v-card-title>Vyberte dobrodruha</v-card-title>
-                  </v-card>
-                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
-                    </v-card-title>
-                    <v-card-text>
-                      <v-select :items="dataBoje.bojujiciDobrodruhVybava" v-model="dataBoje.bojujiciDobrodruhPredmet"
-                        item-title="jmeno" return-object label="Vyberte předmět"></v-select>
-                      <v-col v-if="!!dataBoje.bojujiciDobrodruhPredmet">
-                        <h3 v-if="dataBoje.bojujiciDobrodruhPredmet.typ == 'Zbroj'">Obrana: {{
-                          dataBoje.bojujiciDobrodruhPredmet.obrana
-                        }}</h3>
-                        <h3 v-else>Předmět nemá zadanou hodnotu obrany</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-
-
-                <v-col>
-                  <v-card color="accent" align="center" justify="center">
-                    <v-card-title>Hození kostkou</v-card-title>
-                    <v-card-text>
-                      <v-img v-if="dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
-                        justify="center" max-height="250"></v-img>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Hodit kostkou
-                      </v-btn>
-
-                      <v-btn color="blue-darken-1" variant="text" @click="clearDice">
-                        Vynulovat
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciNepritel == null">
-                    <v-card-title>Vyberte nepřítele</v-card-title>
-                  </v-card>
-                  <v-card v-if="dataBoje.bojujiciNepritel != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciNepritel.jmeno }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Průraznost: {{ dataBoje.bojujiciNepritel.pruraz }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row v-if="dataBoje.bojPorovnanyAtribut == 'Výdrž'">
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciDobrodruh == null">
-                    <v-card-title>Vyberte dobrodruha</v-card-title>
-                  </v-card>
-                  <v-card color="success" v-if="dataBoje.bojujiciDobrodruh != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciDobrodruh.krestniJmeno + " " + dataBoje.bojujiciDobrodruh.prijmeni }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.zivoty }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-
-
-                <v-col>
-                  <v-card color="accent" align="center" justify="center">
-                    <v-card-title>Hození kostkou</v-card-title>
-                    <v-card-text>
-                      <v-img v-if="dataBoje.hozennaKostka != 0"
-                        :src="'../../src/assets/images/dice/dice' + dataBoje.hozennaKostka + '.jpg'" align="center"
-                        justify="center" max-height="250"></v-img>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="blue-darken-1" variant="text" @click="throwDice">
-                        Hodit kostkou
-                      </v-btn>
-
-                      <v-btn color="blue-darken-1" variant="text" @click="clearDice">
-                        Vynulovat
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-
-                <v-col>
-                  <v-card v-if="dataBoje.bojujiciNepritel == null">
-                    <v-card-title>Vyberte nepřítele</v-card-title>
-                  </v-card>
-                  <v-card v-if="dataBoje.bojujiciNepritel != null">
-                    <v-card-title>
-                      {{ dataBoje.bojujiciNepritel.jmeno }}
-                    </v-card-title>
-                    <v-card-text>
-
-                      <v-col>
-                        <h3>Obratnost: {{ dataBoje.bojujiciDobrodruh.atributy.obratnost }}</h3>
-                      </v-col>
-
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-
-              <v-divider class="mt-3"></v-divider>
-
-              <v-card-subtitle>
-                <br>
-                1 = Vždy selže.
-                <br>
-                2 = Je zapotřebí 2x větší atribut.
-                <br>
-                3 = Je zapotřebí větší atribut.
-                <br>
-                4 = Je zapotřebí alespon stejný atribut
-                <br>
-                5 = Je zapotřebí atribut větší než 2x nepřátelského atributu
-                <br>
-                6 = Kritický uspěch
-              </v-card-subtitle>
-
-            </v-container>
-          </v-card>
-
-          <!-- Dobrodruzi -->
-          <v-card v-if="dataBoje.bojujiciDobrodruh == null" color="primary" class="mt-3">
-            <v-card-title>
-              <h2 style="color: #cca000;"> Dobrodruzi</h2>
-              <v-divider></v-divider>
-            </v-card-title>
-            <v-card-text>
-              <div class="d-flex justify-space-around align-center flex-column flex-sm-row fill-height">
-                <v-btn v-if="player1.adventurer != null" variant="flat" color="secondary"
-                  @click="fightChoseAdventurer(1)">
-                  {{ player1.adventurer.krestniJmeno }}
-                </v-btn>
-
-                <v-btn v-if="player2.adventurer != null" variant="flat" color="secondary"
-                  @click="fightChoseAdventurer(2)">
-                  {{ player2.adventurer.krestniJmeno }}
-                </v-btn>
-
-                <v-btn v-if="player3.adventurer != null" variant="flat" color="secondary"
-                  @click="fightChoseAdventurer(3)">
-                  {{ player3.adventurer.krestniJmeno }}
-                </v-btn>
-
-              </div>
-            </v-card-text>
-          </v-card>
+          <DiceThrowPart :throwType="dataBoje.bojPorovnanyAtribut" :enemy="dataBoje.bojujiciNepritel"
+            :adventurer="dataBoje.bojujiciDobrodruh" :adventurerItems="dataBoje.bojujiciDobrodruhVybava"
+            :dice="dataBoje.hozennaKostka" @throw-dice="throwDice()" @clear-dice="clearDice()" />
         </v-col>
 
         <!-- Přepínač herního modu-->
@@ -616,7 +118,7 @@
 
           <!-- Nepřátelé -->
           <v-card v-if="battleModeSwitch == true" color="primary" title="Nepřátelé" class="mt-3"
-            style="background-image:url(../../../src/assets/images/enemies/Hruur_Warrior_02.jpg); background-repeat: no-repeat; background-size: 300px 300px;">
+            >
             <v-card-text>
               <row>
                 <v-select color="secondary" variant="outlined" label="Typ nepřítele" :items="enemyTypes"
@@ -750,18 +252,20 @@
         </v-col>
       </v-row>
 
-      <v-card color="primary">
+      <v-card  color="primary">
         <v-card-title>
           <h1 style="color: #cca000;" align='center'>
             Herní log
           </h1>
-          <v-btn @click="getLog()">
-            Refresh
-          </v-btn>
           <v-divider></v-divider>
         </v-card-title>
         <v-card-text>
-          <p v-for="entry in sessionLog" :key="entry"> {{ entry }}</p>
+
+          <v-virtual-scroll :height="5" :items="sessionLog">
+            <v-virtual-scroll-item v-for="entry in sessionLog" :key="entry" >
+              <p>{{ entry }}</p>
+            </v-virtual-scroll-item>
+          </v-virtual-scroll>
         </v-card-text>
       </v-card>
 
@@ -773,8 +277,8 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import InventoryModal from '../parts/gamepageParts/InventoryModalPart.vue'
 import DetailModal from '../parts/gamepageParts/DetailModalPart.vue'
-import AbilityCard from "../parts/AbilityCard.vue"
 import EnemiesPart from '../parts/gamepageParts/EnemiesPart.vue'
+import DiceThrowPart from '../parts/gamepageParts/DiceThrowPart.vue'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import { useRouter } from 'vue-router'
 import { io } from 'socket.io-client'
@@ -887,15 +391,18 @@ onMounted(() => {
   //Připojení hráče
   webSocket.value.on('resyncPlayers', () => {
     resyncPlayers();
+    getLog()
   })
 
   //Změna herního modu
   webSocket.value.on('resyncGamemode', (mode) => {
     battleModeSwitch.value = mode;
+    getLog()
   })
 
   webSocket.value.on('resyncBattle', (data) => {
     dataBoje.value = data
+    getLog()
   })
 
 
@@ -918,10 +425,19 @@ onMounted(() => {
 
 
 function getIdentity(entity) {
-  if (entity.jmeno) {
-    return `${entity.jmeno} - ${entity.identity}`;
+  if (entity.type == 'monster') {
+    return `${entity.name} - ${entity.id}`;
   }
   return `${entity.krestniJmeno} - ${entity.prijmeni}`;
+}
+
+function getAdventurerName(adventurer) {
+  let name = adventurer.krestniJmeno
+  if (adventurer.prezdivka != null) {
+    name = name + ' "' + adventurer.prezdivka + '" '
+  }
+  name = name + adventurer.prijmeni
+  return name
 }
 
 // SOCKETY
@@ -938,6 +454,7 @@ function socketsJoinRoom() {
  */
 function socketsResyncPlayers() {
   webSocket.value.emit('resyncPlayers', sid.value)
+  getLog()
   resyncPlayers()
 }
 
@@ -945,11 +462,13 @@ function socketsResyncPlayers() {
  * Resyncne herní mod
  */
 function socketsResyncGamemode() {
-  webSocket.value.emit('resyncGamemode', sid.value, battleModeSwitch)
+  webSocket.value.emit('resyncGamemode', sid.value, battleModeSwitch.value)
+  getLog()
 }
 
 function socketsResyngBattle() {
-  webSocket.value.emit('resyncBattle', sid.value, dataBoje)
+  webSocket.value.emit('resyncBattle', sid.value, dataBoje.value)
+  getLog()
 }
 
 //Inventář
@@ -1047,6 +566,7 @@ function addEnemy() {
   enemyChosen.value.realneZivoty = enemyChosen.value.zivoty
   enemyChosen.value.identity = identityCounter;
   identityCounter++;
+
   // ! Zajimava obklika do bakalaá5ky
   dataBoje.aktivniNepratele.push(JSON.parse(JSON.stringify(enemyChosen.value)))
   writeToLog("Přidán nepřítel: " + enemyChosen.value.jmeno + ' - ' + enemyChosen.value.identity)
@@ -1106,29 +626,36 @@ function fightChoseAdventurer(adventurer) {
     default:
       break;
   }
-  axios.get(axios.defaults.baseURL + '/vybava/multipleID', { params: { items: dataBoje.value.bojujiciDobrodruh.inventar } })
-    .then(queryResponse => {
-      dataBoje.value.bojujiciDobrodruhVybava = queryResponse.data
-      socketsResyngBattle()
-    })
 
 }
 
-/**
- * Vybere nepřítele pro hod kostkou
- * @param {INT} enemy Pozice v poli aktivních nepřátel
- */
-function fightChoseEnemy(enemy) {
-  console.log(enemy)
-  dataBoje.bojujiciNepritel = dataBoje.aktivniNepratele[enemy]
-  socketsResyngBattle()
-}
 
 
 function battleFrontFillInstance() {
-  dataBoje.battleFront = JSON.parse(JSON.stringify(dataBoje.aktivniNepratele))
+  dataBoje.battleFront = [];
+  dataBoje.aktivniNepratele.forEach((element, index) => {
+    dataBoje.battleFront.push({
+      'position': index,
+      'name': element.jmeno,
+      'id': element.identity,
+      'type': "monster",
+      'status': 'ready'
+    })
+  });
   if (player1.adventurer) {
-    dataBoje.battleFront.push(player1.adventurer)
+    dataBoje.battleFront.push({
+      'position': dataBoje.battleFront.length,
+      'name': getAdventurerName(player1.adventurer),
+      'id': -1,
+      'type': "adventurer",
+      'status': 'ready'
+    })
+  }
+  if (player2.adventurer) {
+    dataBoje.battleFront.push(player2.adventurer)
+  }
+  if (player3.adventurer) {
+    dataBoje.battleFront.push(player3.adventurer)
   }
 
 }
@@ -1137,25 +664,104 @@ function copyBattleFront() {
   dataBoje.battleFrontInstance = JSON.parse(JSON.stringify(dataBoje.battleFront))
 }
 
+function battleFrontNextRound() {
+  dataBoje.battleFrontInstance.forEach((element) => {
+    element.status = 'ready'
+  })
+  socketsResyngBattle()
+}
+
 
 function battleFrontFinish() {
   dataBoje.battleFrontInstance.splice(battleFrontChosen, 1)
+  socketsResyngBattle()
+}
+
+function battleFrontGetStatus(entity) {
+  if (entity.status == 'ready') {
+    return "tonal"
+  } else if (entity.status == 'exhausted' || entity.status == 'dazed') {
+    return "outlined"
+  } else {
+    return 'tonal'
+  }
+}
+
+function battleFrontGetPrepend(selected) {
+  if (selected) {
+    return 'mdi-flag-triangle'
+  }
+
+}
+
+/**
+ * Unavý vybraného učastníka boje
+ */
+function battleFrontExhaust() {
+  if (battleFrontChosen.value == null) {
+    return
+  }
+  dataBoje.battleFrontInstance[battleFrontChosen.value].status = 'exhausted'
+  socketsResyngBattle()
+}
+
+function battleFrontReady() {
+  if (battleFrontChosen.value == null) {
+    return
+  }
+  dataBoje.battleFrontInstance[battleFrontChosen.value].status = 'ready'
+  socketsResyngBattle()
+}
+
+function battleFrontStun() {
+  if (battleFrontChosen.value == null) {
+    return
+  }
+  dataBoje.battleFrontInstance[battleFrontChosen.value].status = 'dazed'
+  socketsResyngBattle()
+}
+
+function battleFrontChoseToFight() {
+  if (battleFrontChosen.value == null) {
+    return
+  }
+
+  let chosen = dataBoje.battleFrontInstance[battleFrontChosen.value]
+  if (chosen.type == 'monster') {
+    let enemy = dataBoje.aktivniNepratele.filter(enemy => enemy.identity == dataBoje.battleFrontInstance[battleFrontChosen.value].id)
+    dataBoje.bojujiciNepritel = enemy[0]
+  } else if (chosen.type == 'adventurer') {
+    switch (chosen.id) {
+      case -1:
+        fightChoseAdventurer(1)
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  socketsResyngBattle()
 }
 
 
 
-
+/**
+ * Metoda pro hození henrí kostky
+ */
 function throwDice() {
+  dataBoje.hozennaKostka = 0
   dataBoje.hozennaKostka = Math.floor((Math.random() * 6) + 1);
+  writeToLog("Byla hozena kostka: " + dataBoje.hozennaKostka);
   socketsResyngBattle()
 }
 
 function clearDice() {
-  dataBoje.value.hozennaKostka = 0
-  dataBoje.value.bojujiciNepritel = null
-  dataBoje.value.bojujiciDobrodruh = null
-  dataBoje.value.bojujiciDobrodruhVybava = []
-  dataBoje.value.bojujiciDobrodruhPredmet = null
+  dataBoje.hozennaKostka = 0
+  dataBoje.bojujiciNepritel = null
+  dataBoje.bojujiciDobrodruh = null
+  dataBoje.bojujiciDobrodruhVybava = []
+  dataBoje.bojujiciDobrodruhPredmet = null
   socketsResyngBattle()
 }
 

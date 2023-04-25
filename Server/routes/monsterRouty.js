@@ -14,7 +14,9 @@ router.get("/", (req, res) => {
     res.send("Router monster")
 })
 
-//Routa pro vytvoření nového monstra
+/**
+ * Routa pro vytvoření nového monstra
+ */
 router.post('/createMonster', (req, res) => {
     let newMonster = new MonsterModel({
 
@@ -42,7 +44,7 @@ router.post('/createMonster', (req, res) => {
 
 
     newMonster.save()
-        .then(res.send("Uspesne zapsano"))
+        .then(res.send("Monster Created"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při uložení monstra:', error)

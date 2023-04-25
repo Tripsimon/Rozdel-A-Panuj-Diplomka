@@ -13,7 +13,10 @@ router.get("/", (req, res) => {
     res.send("Strom ras");
 })
 
-//Routa pro dump ras
+
+/**
+ * Routa, která vrátí všechny rasy v DB
+ */
 router.get('/dump', (req,res) =>{
     RaceModel.find()
         .then(queryResponse =>  res.send(queryResponse))
