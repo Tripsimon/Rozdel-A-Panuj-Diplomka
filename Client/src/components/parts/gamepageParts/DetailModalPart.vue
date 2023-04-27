@@ -8,13 +8,16 @@
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text style="height: 80%;">
-
-                    <v-card class="mt-3" title="Zkušenosti">
+                    <v-card class="mt-3">
+                        <v-card-title>
+                            <h2 style="color: #cca000;">Zkušenosti</h2>
+                            <v-divider class="mb-3"></v-divider>
+                        </v-card-title>
                         <v-card-text>
                             <v-row>
-                                <v-col cols="6"> <v-text-field v-model="detailLevelInput" type="number" single-line
+                                <v-col cols="6"> <v-text-field variant="outlined" color="secondary" v-model="detailLevelInput" type="number" single-line
                                         label="Level" :placeholder="props.detailAdventurer.level"></v-text-field></v-col>
-                                <v-col cols="6"> <v-text-field v-model="detailExperienceInput" type="number" single-line
+                                <v-col cols="6"> <v-text-field variant="outlined" color="secondary" v-model="detailExperienceInput" type="number" single-line
                                         label="Zkušenosti"
                                         :placeholder="props.detailAdventurer.zkusenosti"></v-text-field></v-col>
                             </v-row>
@@ -24,9 +27,13 @@
                         </v-card-actions>
                     </v-card>
 
-                    <v-card class="mt-3" title="Zdraví">
+                    <v-card class="mt-3">
+                        <v-card-title>
+                            <h2 style="color: #cca000;">Zdraví</h2>
+                            <v-divider class="mb-3"></v-divider>
+                        </v-card-title>
                         <v-card-text>
-                            <v-text-field v-model="detailLifeInput" type="number" single-line label="Zdraví"
+                            <v-text-field variant="outlined" color="secondary" v-model="detailLifeInput" type="number" single-line label="Zdraví"
                                 :placeholder="props.detailAdventurer.aktualniZivoty + ' / ' + props.detailAdventurer.zivoty"></v-text-field>
                         </v-card-text>
                         <v-card-actions>
@@ -34,7 +41,11 @@
                         </v-card-actions>
                     </v-card>
 
-                    <v-card class="mt-3" title="Atributy">
+                    <v-card class="mt-3">
+                        <v-card-title>
+                            <h2 style="color: #cca000;">Atributy</h2>
+                            <v-divider class="mb-3"></v-divider>
+                        </v-card-title>
                         <v-card-text>
                             <v-row>
                                 <v-col>
@@ -63,11 +74,19 @@
                         </v-card-text>
                     </v-card>
 
-                    <v-card class="mt-3" title="Schopnosti rasy" v-if="abilitiesRace != null">
+                    <v-card class="mt-3"  v-if="abilitiesRace != null">
+                        <v-card-title>
+                            <h2 style="color: #cca000;">Schopnosti rasy</h2>
+                            <v-divider class="mb-3"></v-divider>
+                        </v-card-title>
                         <AbilityCard v-for="ability in  abilitiesRace" :key="ability" :ability="ability" />
                     </v-card>
 
-                    <v-card class="mt-3" title="Schopnosti třídy" v-if="abilitiesClass != null">
+                    <v-card class="mt-3"  v-if="abilitiesClass != null">
+                        <v-card-title>
+                            <h2 style="color: #cca000;">Schopnosti povolání</h2>
+                            <v-divider class="mb-3"></v-divider>
+                        </v-card-title>
                         <AbilityCard v-for="ability in  abilitiesClass" :key="ability" :ability="ability" />
                     </v-card>
 

@@ -50,7 +50,7 @@
               <th>{{ (3 - session.slots) }}/3</th>
               <th>
                 <v-btn color="success" @click="joinSession(session._id)"
-                  icon="mdi-arrow-right-thin-circle-outline"></v-btn>
+                  variant="outlined">Připojit</v-btn>
               </th>
             </tr>
           </tbody>
@@ -58,9 +58,8 @@
       </v-card-text>
       <v-card-text v-else>
         <p>Žádný server není dostupný. Prosím, zkuste se připojit později</p>
-        <v-col cols="1">
           <v-btn class="mt-3" color="warning" :click="findSessions()" icon="mdi-refresh"></v-btn>
-        </v-col>
+
       </v-card-text>
     </v-card>
 
@@ -140,6 +139,7 @@ function joinSession(id) {
           "adventurer": chosenAdventurer.value,
           "player": uzivatelStore._id
         }
+
         axios.post(axios.defaults.baseURL + '/sessions/joinSession', body)
           .then(queryResponse => {
             if (queryResponse.data == 'Session Joined') {

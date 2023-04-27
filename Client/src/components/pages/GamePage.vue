@@ -1,6 +1,4 @@
 <template >
-
-
   <div>
 
     <!-- Modal pro inventář -->
@@ -8,12 +6,12 @@
       @resync-players="socketsResyncPlayers()" @close-modal="inventarModal = false" />
 
     <!-- Modal pro detail -->
-    <DetailModal :toggle="detailModal" :detailAdventurer="detailAdventurer"  @resync-players="socketsResyncPlayers()" @close-modal="detailModal = false" />
+    <DetailModal :toggle="detailModal" :detailAdventurer="detailAdventurer" @resync-players="socketsResyncPlayers()"
+      @close-modal="detailModal = false" />
 
     <!-- Vlastní obsah-->
     <v-container class="mt-3" style="background-image:url(../../../src/assets/images/landingpage.png);">
       <v-row>
-
         <!-- Mod pruzkumu -->
 
         <v-col v-if="battleModeSwitch == false" :cols="myIdentity == 'Owner' ? '9' : '12'">
@@ -31,27 +29,28 @@
         <!-- Mod boje -->
         <v-col v-if="battleModeSwitch == true" :cols="myIdentity == 'Owner' ? '9' : '12'">
           <!-- Nepřátelé -->
-          <EnemiesPart :enemies="dataBoje.aktivniNepratele" :rights="myIdentity" @add-Life="(index) => fightAddLifeToEnemy(index)"
-            @remove-Life="(index) => fightRemoveLifeToEnemy(index)" @kill-Off="(index) => fightRemoveEnemy(index)" />
+          <EnemiesPart :enemies="dataBoje.aktivniNepratele" :rights="myIdentity"
+            @add-Life="(index) => fightAddLifeToEnemy(index)" @remove-Life="(index) => fightRemoveLifeToEnemy(index)"
+            @kill-Off="(index) => fightRemoveEnemy(index)" />
 
           <!-- Bojová vřava-->
           <v-card v-if="dataBoje.battleFront.length > 0" color="primary" class="mt-3">
             <v-card-title>
-              <h2 style="color: #cca000;"> Bojová vřava</h2>
+              <h2 style="color: #cca000;"> Bojová vřava - Bojové kolo: {{ dataBoje.battleFrontNumber }}</h2>
               <v-divider></v-divider>
 
             </v-card-title>
             <v-card-text>
 
               <v-slide-group show-arrows>
-                <v-slide-group-item v-for="(entity, index) in dataBoje.battleFrontInstance" :key="index"
+                <v-slide-group-item v-for="(entity, index) in dataBoje.battleFront" :key="index"
                   v-slot="{ isSelected, toggle }">
                   <v-btn class="ma-2" :variant="battleFrontGetStatus(entity)"
                     :color="entity.type == 'adventurer' ? 'success' : 'error'"
                     @click="{ isSelected? battleFrontChosen = null : battleFrontChosen = index ; toggle() }"
                     :prepend-icon="battleFrontGetPrepend(isSelected)"
                     :append-icon="(entity.status == 'dazed' ? 'mdi-lightning-bolt-outline' : '')">
-                    {{ entity.name }}
+                    {{ entity.name }} {{ entity.id > -1 ? " - " + entity.id : '' }}
                   </v-btn>
                 </v-slide-group-item>
 
@@ -98,7 +97,8 @@
                   <h4>Půzkum</h4>
                 </v-col>
                 <v-col style="margin: auto;">
-                  <v-switch v-model="battleModeSwitch" @update:modelValue="socketsResyncGamemode()">
+                  <v-switch v-model="battleModeSwitch"
+                    @update:modelValue="() => { socketsResyncGamemode(), dataBoje.battleFrontNumber = 1 }">
                   </v-switch>
                 </v-col>
                 <v-col style="margin: auto;">
@@ -113,7 +113,7 @@
           </v-card>
 
           <!-- Změna pozadí -->
-          <v-card v-if="battleModeSwitch == false" class="mt-3" color="primary" >
+          <v-card v-if="battleModeSwitch == false" class="mt-3" color="primary">
             <v-card-title>
               <h3 style="color: #cca000;">Pozadí</h3>
               <v-divider></v-divider>
@@ -124,18 +124,20 @@
           </v-card>
 
           <!-- Nepřátelé -->
-          <v-card v-if="battleModeSwitch == true" color="primary"  class="mt-3">
+          <v-card v-if="battleModeSwitch == true" color="primary" class="mt-3">
             <v-card-title>
               <h3 style="color: #cca000;">Nepřátelé</h3>
               <v-divider></v-divider>
             </v-card-title>
             <v-card-text>
-              <row>
-                <v-select color="secondary" variant="outlined" label="Typ nepřítele" :items="enemyTypes"
-                  v-model="enemyTypeChosen" @update:modelValue="getEnemiesFromType()"></v-select>
-                <v-select v-if="enemiesLoaded.length > 0" color="secondary" variant="outlined" label="Výběr"
-                  :items="enemiesLoaded" :item-title="'jmeno'" v-model="enemyChosen" return-object></v-select>
-              </row>
+
+              <v-select color="secondary" variant="outlined" label="Typ nepřítele" :items="enemyTypes"
+                v-model="enemyTypeChosen" @update:modelValue="getEnemiesFromType()"></v-select>
+
+
+              <v-select v-if="enemiesLoaded.length > 0" color="secondary" variant="outlined" label="Výběr"
+                :items="enemiesLoaded" :item-title="'jmeno'" v-model="enemyChosen" return-object></v-select>
+
             </v-card-text>
             <v-card-actions v-if="enemyChosen != null">
               <v-btn @click="addEnemy" color="secondary" variant="outlined">Přidat</v-btn>
@@ -267,11 +269,11 @@
 
         <v-card-text>
           <v-expansion-panels>
-            <v-expansion-panel >
+            <v-expansion-panel>
               <v-expansion-panel-title>
                 <h1 style="color: #cca000;" align='center'>
-            Herní log
-          </h1>
+                  Herní log
+                </h1>
 
               </v-expansion-panel-title>
               <v-expansion-panel-text>
@@ -343,6 +345,7 @@ const dataBoje = ref({
   bojujiciDobrodruhPredmet: null,
   aktivniNepratele: [],
   battleFront: [],
+  battleFrontNumber: 1,
   battleFrontInstance: [],
   battleFrontInstanceAdventurers: []
 })
@@ -358,7 +361,7 @@ const enemyChosen = ref(null)
 const sessionLog = ref([])
 
 onUnmounted(() => {
-  webSocket.value.emit('unMount', myIdentity)
+  webSocket.value.emit('unMount', myIdentity.value)
 })
 
 onMounted(() => {
@@ -376,18 +379,23 @@ onMounted(() => {
   //WEBSOCKET
   //Připojení websocketu
 
-
-
   axios.get(axios.defaults.baseURL + '/sessions/getIdentity', { params: { sid: sid.value, user: uzivatelStore._id } })
     .then(response => {
       if (response.data == 'Session Lost') {
         router.push({ path: '/pripojeni-do-hry' })
         return
       }
+
+      if (response.data == "Not In Session") {
+        router.push({ path: '/pripojeni-do-hry' })
+      }
+
       if (response.data == "Is Owner") {
         myIdentity.value = 'Owner'
         return
-      } else if (response.data != null) {
+      }
+
+      if (response.data != null) {
         myIdentity.value = response.data
       }
       socketsResyncPlayers();
@@ -407,6 +415,27 @@ onMounted(() => {
   webSocket.value.on('resyncPlayers', () => {
     resyncPlayers();
     getLog()
+  })
+
+  webSocket.value.on('disconnectedUser', (identity) => {
+    if (identity == "Owner") {
+      router.push({ path: '/' })
+      return
+    }
+    if (identity != undefined && myIdentity.value == "Owner"){
+      writeToLog("Odpojil se hráč: " + identity)
+      getLog()
+    }
+
+    resyncPlayers()
+  })
+
+  webSocket.value.on('connectedUser', () => {
+    if (myIdentity.value == "Owner"){
+      writeToLog("Připojil se nový hráč: ")
+      getLog()
+    }
+    resyncPlayers()
   })
 
   //Změna herního modu
@@ -563,7 +592,8 @@ function addEnemy() {
   dataBoje.value.aktivniNepratele.push(JSON.parse(JSON.stringify(enemyChosen.value)))
   writeToLog("Přidán nepřítel: " + enemyChosen.value.jmeno + ' - ' + enemyChosen.value.identity)
   battleFrontFillInstance()
-  copyBattleFront()
+
+  getLog()
   socketsResyngBattle()
 }
 
@@ -593,7 +623,12 @@ function fightRemoveLifeToEnemy(index) {
  * @param {int} index Pozice nepřítele na bojišti
  */
 function fightRemoveEnemy(index) {
+
+  writeToLog("Nepřítel " + dataBoje.value.aktivniNepratele[index].identity + " byl odebrán z boje")
   dataBoje.value.aktivniNepratele.splice(index, 1)
+  var filteredArray = dataBoje.value.battleFront.filter(function (entity) { return entity.position !== index })
+  dataBoje.value.battleFront = filteredArray
+  getLog()
   socketsResyngBattle()
 }
 
@@ -621,8 +656,10 @@ function fightChoseAdventurer(adventurer) {
 
 }
 
-
-
+//BOJOVÁ VŘAVA
+/**
+ * Metoda pro naplnění bojové vřavy
+ */
 function battleFrontFillInstance() {
   dataBoje.value.battleFront = [];
   dataBoje.value.aktivniNepratele.forEach((element, index) => {
@@ -644,28 +681,31 @@ function battleFrontFillInstance() {
     })
   }
   if (player2.adventurer) {
-    dataBoje.value.battleFront.push(player2.adventurer)
+    dataBoje.value.battleFront.push({
+      'position': dataBoje.value.battleFront.length,
+      'name': getAdventurerName(player2.adventurer),
+      'id': -1,
+      'type': "adventurer",
+      'status': 'ready'
+    })
   }
   if (player3.adventurer) {
-    dataBoje.value.battleFront.push(player3.adventurer)
+    dataBoje.value.battleFront.push({
+      'position': dataBoje.value.battleFront.length,
+      'name': getAdventurerName(player3.adventurer),
+      'id': -1,
+      'type': "adventurer",
+      'status': 'ready'
+    })
   }
 
-}
-
-function copyBattleFront() {
-  dataBoje.value.battleFrontInstance = JSON.parse(JSON.stringify(dataBoje.value.battleFront))
 }
 
 function battleFrontNextRound() {
-  dataBoje.value.battleFrontInstance.forEach((element) => {
+  dataBoje.value.battleFront.forEach((element) => {
     element.status = 'ready'
   })
-  socketsResyngBattle()
-}
-
-
-function battleFrontFinish() {
-  dataBoje.value.battleFrontInstance.splice(battleFrontChosen, 1)
+  dataBoje.value.battleFrontNumber += 1
   socketsResyngBattle()
 }
 
@@ -693,15 +733,18 @@ function battleFrontExhaust() {
   if (battleFrontChosen.value == null) {
     return
   }
-  dataBoje.value.battleFrontInstance[battleFrontChosen.value].status = 'exhausted'
+  dataBoje.value.battleFront[battleFrontChosen.value].status = 'exhausted'
   socketsResyngBattle()
 }
 
+/**
+ * Připravý celou bojovou frontu
+ */
 function battleFrontReady() {
   if (battleFrontChosen.value == null) {
     return
   }
-  dataBoje.value.battleFrontInstance[battleFrontChosen.value].status = 'ready'
+  dataBoje.value.battleFront[battleFrontChosen.value].status = 'ready'
   socketsResyngBattle()
 }
 
@@ -709,7 +752,7 @@ function battleFrontStun() {
   if (battleFrontChosen.value == null) {
     return
   }
-  dataBoje.value.battleFrontInstance[battleFrontChosen.value].status = 'dazed'
+  dataBoje.value.battleFront[battleFrontChosen.value].status = 'dazed'
   socketsResyngBattle()
 }
 
@@ -718,9 +761,9 @@ function battleFrontChoseToFight() {
     return
   }
 
-  let chosen = dataBoje.value.battleFrontInstance[battleFrontChosen.value]
+  let chosen = dataBoje.value.battleFront[battleFrontChosen.value]
   if (chosen.type == 'monster') {
-    let enemy = dataBoje.value.aktivniNepratele.filter(enemy => enemy.identity == dataBoje.value.battleFrontInstance[battleFrontChosen.value].id)
+    let enemy = dataBoje.value.aktivniNepratele.filter(enemy => enemy.identity == dataBoje.value.battleFront[battleFrontChosen.value].id)
     dataBoje.value.bojujiciNepritel = enemy[0]
   } else if (chosen.type == 'adventurer') {
     switch (chosen.id) {
@@ -744,11 +787,13 @@ function battleFrontChoseToFight() {
 function throwDice() {
   dataBoje.value.hozennaKostka = 0
   dataBoje.value.hozennaKostka = Math.floor((Math.random() * 6) + 1);
-  writeToLog("Byla hozena kostka: " + dataBoje.hozennaKostka);
+  writeToLog("Byla hozena kostka: " + dataBoje.value.hozennaKostka);
   socketsResyngBattle()
+  getLog()
 }
 
 function clearDice() {
+  dataBoje.value.bojPorovnanyAtribut = 'Volný hod'
   dataBoje.value.hozennaKostka = 0
   dataBoje.value.bojujiciNepritel = null
   dataBoje.value.bojujiciDobrodruh = null
@@ -784,7 +829,7 @@ function resyncPlayers() {
           player1.adventurer = response.data[0]
           player2.adventurer = response.data[1]
           player3.adventurer = response.data[2]
-
+          getLog()
         })
     })
 }

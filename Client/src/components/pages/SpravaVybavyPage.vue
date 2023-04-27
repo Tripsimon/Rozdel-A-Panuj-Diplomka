@@ -215,7 +215,6 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
-import { getCurrentInstance } from 'vue'
 import Alert from '../parts/AlertHandler.vue'
 import AbilityCreation from '../parts/spravaParts/abilityCreationPart.vue'
 import ConfirmDialog from '../parts/ConfirmDialog.vue'
@@ -337,7 +336,7 @@ function uploadWeapon() {
             'weight': chosenWeight.value
         })
         .then(queryResponse => {
-            if (queryResponse.reponse == "Uspesne zapsano") {
+            if (queryResponse.reponse == "Item Created") {
                 updateData()
             }
         })
@@ -357,7 +356,7 @@ function uploadArmor() {
             'weight': chosenWeight.value
         })
         .then(queryResponse => {
-            if (queryResponse.reponse == "Uspesne zapsano") {
+            if (queryResponse.reponse == "Item Created") {
                 updateData()
             }
         })
@@ -377,8 +376,9 @@ function uploadItem() {
             'weight': chosenWeight.value
         })
         .then(queryResponse => {
-            if (queryResponse.reponse == "Uspesne zapsano") {
+            if (queryResponse.reponse == "Item Created") {
                 updateData()
+                chosenType.value = null
             }
         })
 }

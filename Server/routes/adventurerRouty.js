@@ -190,7 +190,6 @@ router.delete('/deleteAdventurer', (req, res) => {
     AdventurerModel.deleteOne({ _id: req.body.adventurer })
         .then(res.send('Adventurer Deleted'))
         .catch(error => {
-            res.send('Error')
             console.log('Vyskytla se chyba při mazání charakteru:', error)
         })
 

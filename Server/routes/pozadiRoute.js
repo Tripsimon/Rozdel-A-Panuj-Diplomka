@@ -70,7 +70,7 @@ router.get('/dump', async (req, res) => {
     let pozadi = []
     const images = await ImageModel.find()
     images.forEach(element => {
-        console.log(pozadi.push(element.name))
+       pozadi.push(element.name)
     });
     res.send(pozadi)
 })

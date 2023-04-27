@@ -90,6 +90,9 @@ router.get("/getIdentity", async (req, res) => {
         } else if (dbQuery.player3.owner == req.query.user) {
             res.send('Player 3')
             return
+        } else{
+            res.send('Not In Session')
+            return
         }
     }).catch(error => {
         res.send('Error')
@@ -189,14 +192,14 @@ router.get('/sessionDisconnect', async (req, res) => {
             session.player2.adventurer = null;
             session.slots = session.slots + 1
             session.save();
-            res.send('Player 1 Disconnected')
+            res.send('Player 2 Disconnected')
             return
         } else if (session.player3.owner == req.query.userID) {
             session.player1.owner = null;
             session.player2.adventurer = null;
             session.slots = session.slots + 1
             session.save();
-            res.send('Player 1 Disconnected')
+            res.send('Player 3 Disconnected')
             return
         }
     } catch (error) {
@@ -223,7 +226,6 @@ router.post('/postLogEntry', async (req, res) => {
  * Routa pro vrácení session logu
  */
 router.get('/getLog', (req, res) => {
-    console.log("DSADS");
     SessionModel.findOne({ _id: req.query.sessionID }).then(dbResponse => res.send(dbResponse.log)).catch(error => {
         res.send('Error')
         console.log('Vyskytla se chyba při vrácení logu:', error)

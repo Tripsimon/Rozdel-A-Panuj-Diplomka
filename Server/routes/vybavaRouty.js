@@ -29,7 +29,7 @@ router.post('/createWeapon',(req,res) =>{
         mazatelnost: true,
     })
     newItem.save()
-        .then( res.send("Uspesne zapsano"))
+        .then( res.send("Item Created"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při vytváření nové zbraně:', error)
@@ -52,7 +52,7 @@ router.post('/createArmor',(req,res) =>{
     })
 
     newItem.save()
-        .then( res.send("Uspesne zapsano"))
+        .then( res.send("Item Created"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při vytváření nové zbroje:', error)
@@ -75,7 +75,7 @@ router.post('/createItem',(req,res) =>{
     })
 
     newItem.save()
-        .then( res.send("Uspesne zapsano"))
+        .then( res.send("Item Created"))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při vytváření nového předmětu:', error)

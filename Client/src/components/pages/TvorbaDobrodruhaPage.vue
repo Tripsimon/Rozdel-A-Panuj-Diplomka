@@ -358,7 +358,7 @@ const atributes = ref({
   'inteligence': 8,
   'znalost': 8,
 })
-const volneAtributy = ref(10)
+const volneAtributy = ref(8)
 
 /**
  * Funkce po načtení komponenty
@@ -544,7 +544,7 @@ function resetujAtributy() {
   atributes.value.charisma = 8;
   atributes.value.inteligence = 8;
   atributes.value.znalost = 8;
-  volneAtributy.value = 10;
+  volneAtributy.value = 8;
 }
 
 /**

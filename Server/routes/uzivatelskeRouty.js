@@ -29,11 +29,9 @@ router.post("/registrace", async (req, res) => {
 
     //Kontrola existence
     if (usedMail != null) {
-        console.log('Sem to spadne mail')
         res.send('usedMail');
         return
     } else if (usedNick != null) {
-        console.log('Sem to spadne nick')
         res.send('usedNick');
         return
     } else {

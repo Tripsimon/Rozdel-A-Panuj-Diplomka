@@ -68,7 +68,6 @@ router.get("/dump", (req, res) => {
  * Routa pro vrácení monster podle typu
  */
 router.get('/byType', (req, res) => {
-    console.log(req.query.typ)
     MonsterModel.find({ 'typ': req.query.typ })
         .then(dbResponse => {
             res.send(dbResponse)
