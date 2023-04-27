@@ -4,7 +4,7 @@
         <div id="content">
             <v-card v-if="avaliableAdventurers.length > 0" v-for="adventurer in avaliableAdventurers"
                 :key="adventurer._id" color="primary" class="mt-3">
-                <v-card-title>{{ adventurer.krestniJmeno + ' "' + adventurer.prezdivka + '" ' + adventurer.prijmeni
+                <v-card-title style="color: #cca000;">{{ adventurer.krestniJmeno + ' "' + adventurer.prezdivka + '" ' + adventurer.prijmeni
                 }}</v-card-title>
                 <v-card-subtitle>Popis: {{ adventurer.popis }}</v-card-subtitle>
                 <v-card-subtitle>Příběh: {{ adventurer.pribeh }}</v-card-subtitle>
