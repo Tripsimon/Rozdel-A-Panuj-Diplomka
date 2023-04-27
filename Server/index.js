@@ -1,6 +1,4 @@
-/**
- * Importy
- */
+//Importy
 const express = require('express')
 const cors = require('cors');
 const bp = require('body-parser')

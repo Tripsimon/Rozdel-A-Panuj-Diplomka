@@ -1,4 +1,3 @@
-
 <template>
     <v-container class="mt-3">
         <confirm-dialog :toggle="dialogToggle" @close-dialog="closeDialog"></confirm-dialog>
@@ -76,19 +75,25 @@
     </v-container>
 </template>
 <script setup>
+//Importy
 import { ref,onMounted} from 'vue'
 import ConfirmDialog from '../parts/ConfirmDialog.vue'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import { useRouter, } from 'vue-router'
 import axios from 'axios'
 
+//Systémové variables
 const router = useRouter()
 const uzivatelStore = useUzivatelStore()
-const avaliableAdventurers = ref([])
 const dialogToggle = ref(false)
 
+//Dobrodruzi
+const avaliableAdventurers = ref([])
 const adventurerToDelete = ref(null)
 
+/**
+ * Funkce po načtení komponenty
+ */
 onMounted(() =>{
     if (!uzivatelStore.prihlasen) {
         router.push({path: '/'})
@@ -96,6 +101,9 @@ onMounted(() =>{
     getAdventurers()
 })
 
+/**
+ * Získá dostupné dobrodruhy
+ */
 function getAdventurers() {
     axios.get(axios.defaults.baseURL + '/character/getCharacters', { params: { owner: uzivatelStore._id } })
         .then((response) => {
@@ -103,11 +111,17 @@ function getAdventurers() {
         })
 }
 
+/**
+ * Smaže dobrodruha z databáze
+ */
 function smazDobrodruha(id) {
     dialogToggle.value = true
     adventurerToDelete.value = id
 }
 
+/**
+ * Práce s dialogem
+ */
 function closeDialog(answer) {
     dialogToggle.value = false
     if (answer && adventurerToDelete != null) {

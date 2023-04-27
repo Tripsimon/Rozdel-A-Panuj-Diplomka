@@ -1,7 +1,6 @@
 <template>
     <v-row justify="center">
 
-
         <v-dialog v-model="isShown.value" scrollable persistent>
             <v-card color="primary">
                 <v-card-title>
@@ -20,9 +19,18 @@
                                         :placeholder="props.detailAdventurer.zkusenosti"></v-text-field></v-col>
                             </v-row>
                         </v-card-text>
-
                         <v-card-actions>
                             <v-btn @click="detailChangeLevelExperience">Změnit</v-btn>
+                        </v-card-actions>
+                    </v-card>
+
+                    <v-card class="mt-3" title="Zdraví">
+                        <v-card-text>
+                            <v-text-field v-model="detailLifeInput" type="number" single-line label="Zdraví"
+                                :placeholder="props.detailAdventurer.aktualniZivoty + ' / ' + props.detailAdventurer.zivoty"></v-text-field>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn @click="detailChangeLife">Změnit</v-btn>
                         </v-card-actions>
                     </v-card>
 
@@ -54,14 +62,13 @@
                             </v-row>
                         </v-card-text>
                     </v-card>
-                    {{ abilities.value }}
 
-                    <v-card class="mt-3" title="Schopnosti rasy" v-if="this.detailRasaSchopnosti != null">
-                        <AbilityCard v-for="ability in this.detailTridaShopnosti" :ability="ability" />
+                    <v-card class="mt-3" title="Schopnosti rasy" v-if="abilitiesRace != null">
+                        <AbilityCard v-for="ability in  abilitiesRace" :key="ability" :ability="ability" />
                     </v-card>
 
-                    <v-card class="mt-3" title="Schopnosti třídy" v-if="this.detailTridaShopnosti != null">
-                        <AbilityCard v-for="ability in this.detailTridaShopnosti" :ability="ability" />
+                    <v-card class="mt-3" title="Schopnosti třídy" v-if="abilitiesClass != null">
+                        <AbilityCard v-for="ability in  abilitiesClass" :key="ability" :ability="ability" />
                     </v-card>
 
                 </v-card-text>
@@ -76,40 +83,92 @@
     </v-row>
 </template>
 <script setup>
+
+//Importy
 import axios from 'axios'
 import { ref, toRefs, watch } from 'vue'
-const props = defineProps(['toggle', 'detailAdventurer'])
+import AbilityCard from '../AbilityCard.vue';
 
+//Systémové variables
+const props = defineProps(['toggle', 'detailAdventurer'])
+const emit = defineEmits(['closeModal', 'resyncPlayers'])
 const { toggle } = toRefs(props)
-const abilities = ref({})
+
+//Data rasy a tříd
+const abilitiesRace = ref({})
+const abilitiesClass = ref({})
 
 const isShown = ref(false)
-
 watch(toggle, () => {
     isShown.value = toggle
     getAbilities()
 })
 
+//Formulář
+const detailLevelInput = ref(null)
+const detailExperienceInput = ref(null)
+const detailLifeInput = ref(null)
+
+/**
+ * Získá ability dobrodruha
+ */
 function getAbilities() {
     axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { 'owner': props.detailAdventurer.trida } })
         .then(queryResponse => {
-          abilities.value = queryResponse.data
+            abilitiesRace.value = queryResponse.data
         })
 
-      axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { 'owner': props.detailAdventurer.rasa } })
+    axios.get(axios.defaults.baseURL + '/schopnosti/getByOwner', { params: { 'owner': props.detailAdventurer.rasa } })
         .then(queryResponse => {
-            abilities.value = queryResponse.data
+            abilitiesClass.value = queryResponse.data
         })
 }
 
+/**
+ * Získá jméno dobrodruha
+ */
 function getAdventurerName() {
-  let name = props.detailAdventurer.krestniJmeno
-  if (props.detailAdventurer.prezdivka != null) {
-    name = name + ' "' + props.detailAdventurer.prezdivka + '" '
-  }
-  name = name + props.detailAdventurer.prijmeni
-  return name
+    let name = props.detailAdventurer.krestniJmeno
+    if (props.detailAdventurer.prezdivka != null) {
+        name = name + ' "' + props.detailAdventurer.prezdivka + '" '
+    }
+    name = name + props.detailAdventurer.prijmeni
+    return name
 }
 
+/**
+ * Změní level a zkušenosti vybraného dobrodruha
+ */
+function detailChangeLevelExperience() {
+    axios.post(axios.defaults.baseURL + '/character/changeLevelAndExperience', { 'adventurer': props.detailAdventurer._id, 'level': detailLevelInput.value, 'zkusenosti': detailExperienceInput.value })
+        .then(responseQuery => {
+            if (responseQuery) {
+                emit('resyncPlayers')
+                emit('closeModal')
+                detailLevelInput.value = null,
+                    detailExperienceInput.value = null
+                socketsResyncPlayers()
+            }
+        })
+        .catch(
+            console.log("Vyskytla se chyba při komunikaci se serverem")
+        )
+}
 
+/**
+ * Změní aktuální životy
+ */
+function detailChangeLife() {
+    axios.post(axios.defaults.baseURL + '/character/changeActualLife', { 'adventurer': props.detailAdventurer._id, 'zivoty': detailLifeInput.value })
+        .then(responseQuery => {
+            if (responseQuery) {
+                emit('resyncPlayers')
+                emit('closeModal')
+                detailLifeInput.value = null
+            }
+        })
+        .catch(
+            console.log("Vyskytla se chyba při komunikaci se serverem")
+        )
+}
 </script>

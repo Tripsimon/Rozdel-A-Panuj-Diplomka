@@ -2,7 +2,8 @@
     <v-container>
         <v-card color="primary" class="mt-5">
             <v-card-title>
-                <h1 align="center" class="ma-3">Tvorba nepřítele</h1>
+                <h1 style="color: #cca000;" align="center" class="ma-3">Tvorba nepřítele</h1>
+                    <v-divider></v-divider>
             </v-card-title>
 
             <v-card-text>
@@ -10,6 +11,7 @@
                 <v-form ref="form" @submit.prevent="submit">
                     <!-- Základní informace-->
                     <h2 class="mt-3">Základní informace</h2>
+                    
                     <v-divider class="mb-3"></v-divider>
                     <v-row>
                         <v-col>
@@ -17,7 +19,7 @@
                                 label="Jméno nepřítele" required>
                             </v-text-field>
 
-                            <v-select color="secondary" variant="outlined" label="Typ nepřítele"
+                            <v-select color="secondary" v-model="chosenType" variant="outlined" label="Typ nepřítele"
                                 :items="avaliableMonsterTypes.data" :rules="rules.required">
                             </v-select>
 
@@ -176,7 +178,8 @@
 
         <v-card color="primary" class="mt-5">
             <v-card-title>
-                <h1 align="center" class="ma-3">Dostupná monstra</h1>
+                <h1 style="color: #cca000;" align="center" class="ma-3">Dostupní nepřátelé</h1>
+                    <v-divider></v-divider>
             </v-card-title>
 
             <v-card-text v-if="loadedMonsters == ''">
@@ -245,26 +248,38 @@
                 </v-table>
             </v-card-text>
         </v-card>
-
-
-
     </v-container>
 </template>
 
 <script setup>
+//Importy
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 import axios from 'axios'
-const form = ref(null);
+
+//Systémové vriable
 const router = useRouter()
 const uzivatelStore = useUzivatelStore()
 
+//Monstra
 const loadedMonsters = ref([]);
 const avaliableMonsterTypes = ref(["Data se nepodařilo načíst"])
 
+//Formulář
+const form = ref(null);
+const rules = {
+    required: [
+        value => {
+            if (value?.length > 0) return true
+            return 'Formulář není vyplněný'
+        },
+    ],
+};
+
 const chosenName = ref(null);
 const chosenDescription = ref(null);
+const chosenType = ref(null)
 
 const abilityNumber = ref(0)
 const chosenAbilities = ref([]);
@@ -278,15 +293,6 @@ const chosenKnowledge = ref(null);
 
 
 
-const rules = {
-    required: [
-        value => {
-            if (value?.length > 0) return true
-            return 'Formulář není vyplněný'
-        },
-    ],
-};
-
 const chosenArmor = ref(null);
 const chosenLife = ref(null);
 const chosenPierce = ref(null);
@@ -295,11 +301,10 @@ const chosenDamageSeverity = ref(null);
 
 const chosenSizeGroup = ref('Lidská');
 
-
-
+/**
+ * Metoda, která se zavolá při nasazení komponenty
+ */
 onMounted(() => {
-
-    console.log(uzivatelStore)
     if (!uzivatelStore.prihlasen || uzivatelStore.opravneni != 'administrator') {
         router.push({path: '/'})
     }
@@ -309,6 +314,9 @@ onMounted(() => {
 })
 
 
+/*
+ * Dotaz na server ohledně dostupnách typů monster
+ */
 function getMonsterTypes() {
     axios.get(axios.defaults.baseURL + '/config/get', { params: { typ: 'typyNepratel' } })
         .then(queryResponse => avaliableMonsterTypes.value = queryResponse)
@@ -322,11 +330,18 @@ function getMonsters() {
         .then(queryResponse => loadedMonsters.value = queryResponse.data)
 }
 
+/**
+ * Odebere schopnost zadanou ve formuláři
+ * @param {int} index identifikátor v poli schopností
+ */
 function removeAbility(index) {
     this.abilityNumber--;
     chosenAbilities.value.splice(index, 1)
 }
 
+/**
+ * Odešle požadavek o zapsání na server
+ */
 function submit() {
     form.value?.validate()
         .then(({ valid }) => {
@@ -336,6 +351,7 @@ function submit() {
                         'name': chosenName.value,
                         'description': chosenDescription.value,
                         'abilities': chosenAbilities.value,
+                        'type': chosenType.value,
 
                         'strength': chosenStrength.value,
                         'constitution': chosenConstitution.value,
@@ -347,6 +363,7 @@ function submit() {
                         'armor': chosenArmor.value,
                         'life': chosenLife.value,
 
+
                         'pierce': chosenPierce.value,
                         'damageBase': chosenDamageBase.value,
                         'damageSeverity': chosenDamageSeverity.value,
@@ -355,9 +372,8 @@ function submit() {
                     }
                 ).then(response => { getMonsters() })
             }
-
-        }).catch((nvm) => {
-            console.log(nvm);
+        }).catch((error) => {
+            console.log("Vyskytkla se chyba");
         })
 
 }
@@ -370,8 +386,10 @@ function submit() {
 function removeMonster(id) {
     axios.delete(axios.defaults.baseURL + '/monster/removeMonster', { data: { 'id': id } })
         .then(queryResponse => {
-            if (queryResponse.data == 'monsterDeleted') { this.getMonsters() }
+            if (queryResponse.data == 'Monster Deleted') { getMonsters() }
 
+        }).catch((error) => {
+            console.log("Vyskytkla se chyba");
         })
 }
 

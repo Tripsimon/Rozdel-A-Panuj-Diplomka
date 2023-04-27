@@ -4,7 +4,8 @@
     <v-container>
       <v-card class="pa-md-4" max-width="95%" color="primary">
         <v-card-title class="text-h6 font-weight-regular justify-space-between">
-          <h1 align="center">Tvorba dobrodruha</h1>
+          <h1 style="color: #cca000;" align='center'> Tvorba dobrodruha</h1>
+        <v-divider></v-divider>
         </v-card-title>
 
         <v-window v-model="step">
@@ -12,7 +13,7 @@
           <v-window-item :value="1">
             <v-form ref="form1">
               <v-card-text>
-                <h2 class="d-flex">Pilíře Dobrodruha</h2>
+                <h2 style="color: #cca000;" class="d-flex">Pilíře Dobrodruha</h2>
                 <v-divider class="mb-3"></v-divider>
 
                 <v-text-field color="secondary" variant="outlined" :rules="rules.required" label="Křestní jméno"
@@ -32,7 +33,7 @@
                       <v-card-subtitle>{{ rasaVybrana.popis }}</v-card-subtitle>
                     </v-col>
                     <v-col cols="3">
-                      <h3>Bonusové statistiky: </h3>
+                      <h3 style="color: #cca000;">Bonusové statistiky: </h3>
                       <p v-if="rasaVybrana.bonusoveAtributy.sila">Síla: {{ rasaVybrana.bonusoveAtributy.sila }}</p>
                       <p v-if="rasaVybrana.bonusoveAtributy.houzevnatost">Houževnatost: {{
                         rasaVybrana.bonusoveAtributy.houzevnatost }}</p>
@@ -47,7 +48,7 @@
                     </v-col>
                   </v-row>
 
-                  <h3>Bonusové schopnosti:</h3>
+                  <h3 style="color: #cca000;">Bonusové schopnosti:</h3>
                   <v-divider class="mb-3" color="secondary"></v-divider>
                   <AbilityCard class="mb-3" v-for="ability in rasaSchopnosti" :key="ability._id" :ability="ability"
                     color="" />
@@ -78,7 +79,7 @@
                   </v-row>
 
 
-                  <h3>Bonusové schopnosti:</h3>
+                  <h3 style="color: #cca000;">Bonusové schopnosti:</h3>
                   <v-divider class="mb-3" color="secondary"></v-divider>
 
                   <AbilityCard class="mb-3" v-for="ability in tridaSchopnosti" :key="ability._id" :ability="ability" />
@@ -93,7 +94,7 @@
           <v-window-item :value="2">
             <v-form ref="form2">
               <v-card-text>
-                <h2 class="d-flex">Atributy dobrodruha</h2>
+                <h2 style="color: #cca000;" class="d-flex">Atributy dobrodruha</h2>
                 <v-divider class="mb-3"></v-divider>
 
                 <v-banner lines="one" icon="mdi-arrow-up-bold" color="secondary" class="my-4">
@@ -133,7 +134,7 @@
                   </v-col>
                 </v-row>
 
-                <h2 class="d-flex mt-3">Výbava</h2>
+                <h2 style="color: #cca000;" class="d-flex mt-3">Výbava</h2>
                 <v-divider class="mb-3"></v-divider>
 
                 <v-select color="secondary" variant="outlined" label="Hlavní výzbroj" v-model="newAdventurer.mainGear"
@@ -159,7 +160,7 @@
           <!-- Třetí krok-->
           <v-window-item :value="3">
             <v-form ref="form3">
-              <h2 class="d-flex">Povaha dobrodruha</h2>
+              <h2 style="color: #cca000;" class="d-flex">Povaha dobrodruha</h2>
               <v-divider class="mb-3"></v-divider>
 
               <v-select color="secondary" variant="outlined"
@@ -278,6 +279,7 @@
 </template>
   
 <script setup>
+//Importy
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AbilityCard from '../parts/AbilityCard.vue'
@@ -359,7 +361,7 @@ const atributes = ref({
 const volneAtributy = ref(10)
 
 /**
- * Funkce po mountnutí komponenty
+ * Funkce po načtení komponenty
  */
 onMounted(() => {
   if (!uzivatelStore.prihlasen) {
@@ -391,7 +393,7 @@ function onRaceSelect() {
 }
 
 /**
- * Metoda pro bybrání nové rasy
+ * Metoda pro vybrání nové rasy
  */
 function onClassSelect() {
   newAdventurer.value.class = tridaVybrana
@@ -430,7 +432,7 @@ function onClassSelect() {
 
 /**
  * Odebere atribut
- * @param {string} stat Jméno statistiky
+ * @param {string} stat Jméno atributu
  */
 function decrement(stat) {
   switch (stat) {
@@ -620,8 +622,6 @@ function sendtoDB() {
     "owner": uzivatelStore._id,
     "atributes": atributes.value,
   })
-
-  console.log(obsah)
   
   axios.post(axios.defaults.baseURL + '/character/characterCreation', obsah)
     .then(router.push({ path: '/' }))

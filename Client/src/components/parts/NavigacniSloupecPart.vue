@@ -1,4 +1,5 @@
 <script setup>
+//Pozn. Stále Options API způsob Vue Zápisu
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
 </script>
 
@@ -62,15 +63,12 @@ import { useUzivatelStore } from "../../stores/uzivatelStore.js"
       <v-btn v-if="!uzivatelStore.prihlasen" color="secondary" variant="text" to="/registrace"> Registrace</v-btn>
       <v-btn v-if="!uzivatelStore.prihlasen" color="secondary" variant="text" to="/prihlaseni"> Přihlásit se</v-btn>
       <v-btn v-if="uzivatelStore.prihlasen" color="secondary" variant="text"
-        @click="{ uzivatelStore.odhlasUzivatele(); this.$router.push({ path: '/' }) }"> ODhlásit se</v-btn>
+        @click="{ uzivatelStore.odhlasUzivatele(); this.$router.push({ path: '/' }) }"> Odhlásit se</v-btn>
 
     </v-app-bar>
   </div>
 </template>
   
-
-
-
 <script>
 export default {
   data: () => ({

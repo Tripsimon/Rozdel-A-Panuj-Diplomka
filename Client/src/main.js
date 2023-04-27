@@ -14,9 +14,8 @@ pinia.use(piniaPluginPersistedstate)
 
 loadFonts()
 
-// Konstanty
 
-
+//Mód developování
 const devMode = true
 if(devMode){
   axios.defaults.baseURL ='http://localhost:3000'

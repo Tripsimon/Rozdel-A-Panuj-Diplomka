@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//Vytvoření schéma pro práci s uživateli
+//Vytvoření schéma pro práci s povoláním
 const ClassSchema = new Schema({
     jmeno: String,
     popis: String,

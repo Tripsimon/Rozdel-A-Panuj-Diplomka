@@ -72,16 +72,19 @@
               <v-divider></v-divider>
             </v-card-title>
             <v-card-text>
-              <v-select :items="props.adventurer.inventar" v-model="chosenItem" item-title="jmeno" return-object
-                label="Vyberte předmět"></v-select>
+
               <v-col v-if="!!chosenItem">
                 <h3 v-if="chosenItem.typ == 'Zbraň'">Průraz: {{
                   chosenItem.pruraznost
                 }}</h3>
-                <h3 v-else>Předmět nemá zadanou hodnotu pruraznosti</h3>
+                <h3 v-else>Předmět nemá žadanou hodnotu půraznosti</h3>
               </v-col>
 
             </v-card-text>
+            <v-card-actions>
+              <v-select variant="outlined" :items="props.adventurer.inventar" v-model="chosenItem" item-title="jmeno" return-object
+                label="Vyberte předmět"></v-select>
+            </v-card-actions>
           </v-card>
         </v-col>
 
@@ -106,14 +109,13 @@
                 <h3 v-if="chosenItem.typ == 'Zbraň'">
                 Závažnost poškození: {{chosenItem.poskozeniZavaznost}}
                 </h3>
-                <h3 v-else>Předmět nemá zadanou hodnotu poškození</h3>
+                <h3 v-else>Předmět nemá žadanou hodnotu poškození</h3>
               </v-col>
 
             </v-card-text>
             <v-card-actions>
               <v-select variant="outlined" :items="props.adventurer.inventar" v-model="chosenItem" item-title="jmeno"
                 return-object label="Vyberte předmět"></v-select>
-
             </v-card-actions>
           </v-card>
         </v-col>
@@ -153,16 +155,19 @@
               <v-divider></v-divider>
             </v-card-title>
             <v-card-text>
-              <v-select :items="props.adventurerVybava" v-model="chosenItem" item-title="jmeno" return-object
-                label="Vyberte předmět"></v-select>
+
               <v-col v-if="!!chosenItem">
                 <h3 v-if="chosenItem.typ == 'Zbroj'">Obrana: {{
                   chosenItem.obrana
                 }}</h3>
-                <h3 v-else>Předmět nemá zadanou hodnotu obrany</h3>
+                <h3 v-else>Předmět nemá žadanou hodnotu obrany</h3>
               </v-col>
 
             </v-card-text>
+            <v-card-actions>
+              <v-select variant="outlined" :items="props.adventurer.inventar" v-model="chosenItem" item-title="jmeno" return-object
+                label="Vyberte předmět"></v-select>
+            </v-card-actions>
           </v-card>
         </v-col>
 
@@ -175,10 +180,10 @@
           </v-card>
           <v-card  v-if="props.adventurer != null">
             <v-card-title>
-              {{ props.adventurer.krestniJmeno + " " + props.adventurer.prijmeni }}
-            </v-card-title>
+              <h3 style="color:#90EE90"> {{ getAdventurerName() }}</h3>
+              <v-divider></v-divider>
+              </v-card-title>
             <v-card-text>
-              {{ props.adventurer }}
               <v-col>
                 <h3>Životy: {{ props.adventurer.zivoty }} / {{ props.adventurer.zivoty }}</h3>
               </v-col>
@@ -368,7 +373,9 @@
             <v-card-text>
 
               <v-col>
-                <h3>Obratnost: {{ props.enemy.poskozeniZaklad }}</h3>
+                <h3>Základ poškození: {{ props.enemy.poskozeniZaklad }}</h3>
+                <v-divider></v-divider>
+                <h3>Závažnost poškození: {{ props.enemy.poskozeniZavaznost }}</h3>
               </v-col>
 
             </v-card-text>
@@ -401,11 +408,15 @@
   </v-card>
 </template>
 <script setup>
+
+//Importy
 import { ref } from 'vue'
 
+//Možnosti hodu
 const props = defineProps(['throwType', 'enemy', 'adventurer', 'adventurerItems', 'dice'])
 const chosenItem = ref(null)
 
+//Získání správného jména
 function getAdventurerName() {
   let name = props.adventurer.krestniJmeno
   if (props.adventurer.prezdivka != null) {

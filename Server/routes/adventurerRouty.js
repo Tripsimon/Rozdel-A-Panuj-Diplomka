@@ -84,6 +84,9 @@ router.get('/getMultipleAdventurers', (req, res) => {
         })
 })
 
+/**
+ * Vrátí dobrodruhy v herní místnosti
+ */
 router.get('/sessionAdventurers', (req, res) => {
 
     let queryData = []
@@ -176,7 +179,6 @@ router.post('/changeActualLife', (req, res) =>{
     AdventurerModel.findOneAndUpdate({_id: req.body.adventurer},{ aktualniZivoty: req.body.zivoty})
     .then(res.send('Life Changed'))
     .catch(error => {
-        res.send('Error')
         console.log('Vyskytla se chyba při mazání charakteru:', error)
     })
 })

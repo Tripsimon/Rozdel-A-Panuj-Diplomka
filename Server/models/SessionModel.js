@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
-// Vytvoření schéma pro práci s uživateli
+// Vytvoření schéma pro práci s herními místnostmi
 const SessionSchema = new Schema({
     owner: String,
     ownerName: String,

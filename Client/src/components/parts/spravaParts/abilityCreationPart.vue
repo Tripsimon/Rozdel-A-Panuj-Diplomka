@@ -30,9 +30,12 @@
 </template>
 
 <script setup>
+
 //Importy
 import { ref,watch } from 'vue'
+const emit = defineEmits(['updatedAbility','removeAbility']);
 
+//Props
 const props = defineProps(
     {
         int: Number,
@@ -40,7 +43,7 @@ const props = defineProps(
     }
 )
 const ability = ref(props.abilityProp);
-const emit = defineEmits(['updatedAbility','removeAbility']);
+
 const rules = {
     required: [
         value => {
@@ -50,14 +53,17 @@ const rules = {
     ],
 };
 
+/**
+ * Emit změny u schopnosti
+ */
 function change() {
     emit('updatedAbility', ability.value ,props.int)
 }
 
+/**
+ * Sledování změn
+ */
 watch(() => props.abilityProp, (val) => {
     ability.value = val;
 })
-
-
-
 </script>

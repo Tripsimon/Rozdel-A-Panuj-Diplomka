@@ -5,7 +5,8 @@
         <v-card color="primary">
             <v-form ref="form" @submit.prevent="submit">
                 <v-card-title>
-                    <h1 align="center" class="ma-3">Správa výbavy</h1>
+                    <h1 style="color: #cca000;" align="center" class="ma-3">Správa výbavy</h1>
+                    <v-divider></v-divider>
                 </v-card-title>
 
                 <!-- Výběr typu -->
@@ -164,8 +165,8 @@
                             <th>{{ item.poskozeniZaklad }}</th>
                             <th>{{ item.poskozeniZavaznost }}</th>
                             <th>{{ item.vaha }}</th>
-                            <!-- TODO: Asi ikonka -->
-                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
+                            <th><v-btn v-if="item.mazatelnost == true" icon="mdi-close-box-outline" color="error"
+                                    @click="removeItem(item._id)"></v-btn>
                             </th>
                         </tr>
                     </tbody>
@@ -180,7 +181,8 @@
                             </th>
                             <th>{{ item.obrana }}</th>
                             <th>{{ item.vaha }}</th>
-                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
+                            <th><v-btn v-if="item.mazatelnost == true" icon="mdi-close-box-outline" color="error"
+                                    @click="removeItem(item._id)"></v-btn>
                             </th>
                         </tr>
                     </tbody>
@@ -195,7 +197,8 @@
                                 <p v-if="item.schopnosti == null"> Žádné schopnosti</p>
                             </th>
                             <th>{{ item.vaha }}</th>
-                            <th><v-btn icon="mdi-close-box-outline" color="error" @click="removeItem(item._id)"></v-btn>
+                            <th><v-btn v-if="item.mazatelnost == true" icon="mdi-close-box-outline" color="error"
+                                    @click="removeItem(item._id)"></v-btn>
                             </th>
                         </tr>
                     </tbody>
@@ -210,8 +213,9 @@
 <script setup>
 //Importy
 import { ref, onMounted } from 'vue'
-import { useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useUzivatelStore } from "../../stores/uzivatelStore.js"
+import { getCurrentInstance } from 'vue'
 import Alert from '../parts/AlertHandler.vue'
 import AbilityCreation from '../parts/spravaParts/abilityCreationPart.vue'
 import ConfirmDialog from '../parts/ConfirmDialog.vue'
@@ -224,6 +228,8 @@ const alertText = ref("")
 const dialogToggle = ref(false)
 const router = useRouter()
 const uzivatelStore = useUzivatelStore()
+
+//Dialog mazání
 let toDelete = null;
 
 //Data předmětů z DB
@@ -251,10 +257,12 @@ const rules = {
     ],
 };
 
-onMounted(() =>{
-    console.log(uzivatelStore)
+/**
+ * Metoda při nasazení komponenty
+ */
+onMounted(() => {
     if (!uzivatelStore.prihlasen || uzivatelStore.opravneni != 'administrator') {
-        router.push({path: '/'})
+        router.push({ path: '/' })
     }
 })
 
@@ -314,7 +322,7 @@ function submit() {
 }
 
 /**
- * Odešle zbran
+ * Odešle Zbraň
  */
 function uploadWeapon() {
     axios.post(axios.defaults.baseURL + '/vybava/createWeapon',
@@ -329,7 +337,7 @@ function uploadWeapon() {
             'weight': chosenWeight.value
         })
         .then(queryResponse => {
-            if (queryResponse.status == 200) {
+            if (queryResponse.reponse == "Uspesne zapsano") {
                 updateData()
             }
         })
@@ -349,14 +357,14 @@ function uploadArmor() {
             'weight': chosenWeight.value
         })
         .then(queryResponse => {
-            if (queryResponse.status == 200) {
+            if (queryResponse.reponse == "Uspesne zapsano") {
                 updateData()
             }
         })
 }
 
 /**
- * Odešle předmět
+ * Odešle Předmět
  */
 function uploadItem() {
 
@@ -369,9 +377,8 @@ function uploadItem() {
             'weight': chosenWeight.value
         })
         .then(queryResponse => {
-            if (queryResponse.status == 200) {
+            if (queryResponse.reponse == "Uspesne zapsano") {
                 updateData()
-                clearInputs()
             }
         })
 }
@@ -397,15 +404,16 @@ function removeItem(itemID) {
 }
 
 /**
- * Smaže item z databáze předmětů
+ * Smaže výbavu z databáze předmětů
  */
 function removeItemConfirmed(answer) {
     dialogToggle.value = false
     if (answer) {
         axios.get(axios.defaults.baseURL + '/vybava/removeItem', { params: { itemID: toDelete } })
             .then(queryResponse => {
-                if (queryResponse.status == 200) {
+                if (queryResponse.data == "Item Deleted") {
                     updateData()
+
                 }
             })
     } else {
@@ -418,7 +426,7 @@ function removeItemConfirmed(answer) {
  * Vyčistí formulář 
  */
 function clearInputs() {
-    chosenName.value = null,
+        chosenName.value = null,
         chosenDescription.value = null,
         chosenAbilities.value = null,
         chosenPierce.value = null,

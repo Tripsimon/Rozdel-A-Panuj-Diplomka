@@ -26,6 +26,7 @@ router.post('/createWeapon',(req,res) =>{
         poskozeniZavaznost: req.body.damageSeverity,
         vaha: req.body.weight,
         poznamka: null,
+        mazatelnost: true,
     })
     newItem.save()
         .then( res.send("Uspesne zapsano"))
@@ -47,6 +48,7 @@ router.post('/createArmor',(req,res) =>{
         obrana: req.body.obrana,
         vaha: req.body.weight,
         poznamka: null,
+        mazatelnost: true,
     })
 
     newItem.save()
@@ -69,6 +71,7 @@ router.post('/createItem',(req,res) =>{
         schopnosti: req.body.abilities,
         vaha: req.body.weight,
         poznamka: null,
+        mazatelnost: true,
     })
 
     newItem.save()
@@ -85,7 +88,7 @@ router.post('/createItem',(req,res) =>{
 router.get('/removeItem',(req,res)=>{
     EquipmentModel.findByIdAndDelete({_id: req.query.itemID})
         .then(queryResponse =>{
-            res.send(queryResponse)
+            res.send("Item Deleted")
         })
         .catch(error => {
             res.send('Error')

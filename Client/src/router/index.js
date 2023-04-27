@@ -13,6 +13,7 @@ import spravaNepratel from  '../components/pages/SpravaNepratelPage.vue'
 import pravidlaPage from '../components/pages/PravidlaPage.vue'
 import podekovaniPage from '../components/pages/CreditsPage.vue'
 
+//Definice navigace
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

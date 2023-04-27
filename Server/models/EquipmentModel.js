@@ -20,6 +20,7 @@ const EquipmentSchema = new Schema({
     obrana: Number,
     vaha: Number,
     poznamka: String,
+    mazatelnost: Boolean,
 },
 
     {collection: "VybavaKolekce"}

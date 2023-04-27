@@ -28,6 +28,8 @@
     </v-col>
 </template>
 <script setup>
+
+//Props
 const props = defineProps(['atribute','name'])
 
 </script>

@@ -1,4 +1,3 @@
-<!-- Refaktored-->
 <template>
   <div id="content">
     <Alert type="error" style="z-index:2000" :title="alertTitle" :text="alertText" v-model="showAlert" />
@@ -87,7 +86,6 @@ function zalozeniHry() {
         //Odeslání požadavku
         axios.post(axios.defaults.baseURL + '/sessions/createSession', obsah)
           .then(queryResponse => {
-            console.log(queryResponse.data)
             if (queryResponse.data === null) {
               showAlert.value = true;
               alertTitle.value = "Chyba v komunikaci"

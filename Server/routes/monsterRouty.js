@@ -84,7 +84,7 @@ router.get('/byType', (req, res) => {
  */
 router.delete("/removeMonster", (req, res) => {
     MonsterModel.deleteOne({ '_id': req.body.id })
-        .then(res.send('monsterDeleted'))
+        .then(res.send('Monster Deleted'))
         .catch(error => {
             res.send('Error')
             console.log('Vyskytla se chyba při smazání monstra:', error)

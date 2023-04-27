@@ -6,10 +6,9 @@
 
 <script setup>
 
-//Zajímavá syntaxe od martina
-
+//Props a import
+//Pozn. Tato komponenta byla první přesunuta na Composition API z Options API
 const emit = defineEmits(['update:modelValue']);
-
 const props = defineProps({
     title: String,
     type: String,

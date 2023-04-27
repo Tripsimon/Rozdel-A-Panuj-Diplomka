@@ -31,7 +31,10 @@
                                         <h4>Průraznost: {{ item.pruraznost }}</h4>
                                     </v-col>
                                     <v-col>
-                                        <h4>Poškození: {{ item.poskozeni }}</h4>
+                                        <h4>Poškození základ: {{ item.poskozeniZaklad }}</h4>
+                                    </v-col>
+                                    <v-col>
+                                        <h4>Poškození závažnost: {{ item.poskozeniZavaznost }}</h4>
                                     </v-col>
                                     <v-col>Váha: {{ item.vaha }}</v-col>
                                 </v-row>
@@ -220,6 +223,11 @@ const itemAddOptions = ref({})
 function reloadInventory() {
     inventoryMoney.value = props.inventoryAdventurer.penize
     inventoryWeight.value = 0
+    console.log(inventoryAdventurer.value.inventar)
+
+    inventoryAdventurer.value.inventar.forEach(element => {
+        inventoryWeight.value += element.vaha
+    });
 
 }
 
@@ -271,12 +279,16 @@ function changeMoney() {
 function addItem(item) {
     axios.post(axios.defaults.baseURL + '/character/putIntoInventory', { "item": item, 'adventurer': inventoryAdventurer.value._id })
         .then(responseQuery => {
-            if (responseQuery.data == true) {
+            console.log(responseQuery.data)
+            if (responseQuery.data == "Item Added") {
                 emit('resyncPlayers');
+                emit('closeModal')
             }
         })
-        .catch(
-            console.log("Vyskytla se chyba při komunikaci se serverem")
+        .catch( error =>{
+            console.log(error)
+        }
+            //console.log("Vyskytla se chyba při komunikaci se serverem")
         )
 }
 
@@ -287,11 +299,12 @@ function addItem(item) {
 function invetoryRemove(item) {
     axios.post(axios.defaults.baseURL + '/character/removeFromInventory', { "item": item, 'adventurer': inventoryAdventurer.value._id })
         .then(responseQuery => {
-            if (responseQuery.data == true) {
+            if (responseQuery.data == "Item Deleted") {
                 emit('resyncPlayers');
+                emit('closeModal')
             }
         })
-        .catch(
+        .catch( 
             console.log("Vyskytla se chyba při komunikaci se serverem")
         )
 }

@@ -13,7 +13,6 @@ router.get("/", (req, res) => {
     res.send("Strom ras");
 })
 
-
 /**
  * Routa, která vrátí všechny rasy v DB
  */

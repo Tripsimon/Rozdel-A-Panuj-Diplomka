@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 
+//Store dat přihlášeného uživatele. Důležitá persistence !
 export const useUzivatelStore = defineStore('uzivatelStore',{
     state: () => {
         return {

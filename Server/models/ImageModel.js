@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+//Schéma pro obrázek
 const ImageSchema = mongoose.Schema({
     name: String
 })

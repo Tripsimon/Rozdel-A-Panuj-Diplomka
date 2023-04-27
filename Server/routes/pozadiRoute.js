@@ -50,14 +50,14 @@ router.post('/nahraniSouboru', upload.single('image'), (req, res) => {
  * Routa pro smazání souboru
  */
 router.delete('/smazaniSouboru/:fileName', async (req, res) => {
-    console.log(await ImageModel.deleteOne({ name: req.params.fileName }))
+    await ImageModel.deleteOne({ name: req.params.fileName })
     fs.unlink('files/backgrounds/' + req.params.fileName, (err) => {
         if (err) { 
 
                 res.send('Error')
                 console.log('Vyskytla se chyba při mazání pozadí:', error)
         } else {
-            res.sendStatus(200)
+            res.send("File Deleted")
         }
     })
 

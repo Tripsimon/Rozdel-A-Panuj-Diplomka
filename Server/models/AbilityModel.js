@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
-
-//Vytvoření schéma pro práci s uživateli
+//Vytvoření schéma pro práci s Schopnostmi
 const AbilitySchema = new Schema({
     jmeno: String,
     typPouziti: String,
