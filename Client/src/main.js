@@ -16,7 +16,7 @@ loadFonts()
 
 
 //Mód developování
-const devMode = true
+const devMode = false
 if(devMode){
   axios.defaults.baseURL ='http://localhost:3000'
 }else{
