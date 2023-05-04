@@ -8,7 +8,7 @@ import vuetify from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  publicPath: '/dist',
+  publicPath: '/dist/',
   plugins: [
 		vue(),
 		vuetify({ autoImport: true,}),
