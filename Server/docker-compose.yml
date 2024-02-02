@@ -6,6 +6,7 @@ services:
   mongo:
     image: mongo:6
     container_name: mongo-db
+    env_file: .env-mongo
     restart: always
     ports:
       - 3002:27017
@@ -14,4 +15,4 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: Aa123456
       MONGO_INITDB_DATABASE: Rozdel-A-Panuj-DB
     volumes:
-      - "./db/:/docker-entrypoint-initdb.d"
+      - ./db:/docker-entrypoint-initdb.d

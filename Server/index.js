@@ -19,7 +19,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
-mongoose.connect('mongodb://lesak:aeynV3pVQJhrAmCdgfr1Scofn@46.36.40.226:27017/lesak?authMechanism=DEFAULT&directConnection=true&authSource=lesak&tls=false&readPreference=primary')
+mongoose.connect('mongodb://root:Aa123456@localhost:3002/?directConnection=true')
     .then(() => console.log("Server připojen k databázi"))
     .catch(err =>console.log(err));
 
@@ -63,7 +63,7 @@ app.use('/tridy',tridyRouter);
 app.use(express.static(path.join(__dirname,'/files')))
 
 //Vývojářský režim
-const devMode = false;
+const devMode = true;
 if (devMode) {
     axios.defaults.baseURL = 'http://localhost:3000'
 
