@@ -20,7 +20,10 @@ app.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
 mongoose.connect('mongodb://root:Aa123456@localhost:3002/?directConnection=true')
-    .then(() => console.log("Server připojen k databázi"))
+    .then(() => {
+        console.log("Server připojen k databázi");
+        mongoose.connection.useDb('db_rozdel_a_panuj');
+    })
     .catch(err =>console.log(err));
 
 
