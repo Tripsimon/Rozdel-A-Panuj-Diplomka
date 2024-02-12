@@ -44,7 +44,7 @@ const AdventurerSchema = new Schema({
     level: Number,
     zkusenosti: Number,
 },
-    { collection: "DobrodruziKolekce" }
+    { collection: "adventurers" }
 )
 
-module.exports = Adventurer = mongoose.model("RozdelAPanuj_Adventurer", AdventurerSchema, "DobrodruziKolekce");
+module.exports = Adventurer = mongoose.model("db_rozdel_a_panuj_adventurers", AdventurerSchema, "adventurers");

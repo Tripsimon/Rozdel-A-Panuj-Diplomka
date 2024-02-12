@@ -18,7 +18,7 @@ const RaceSchema = new Schema({
     dostupneTridy:[String],
 
     },
-    {collection: "MonstraKolekce"}
+    {collection: "races"}
     )
 
-module.exports = Rasa = mongoose.model("RozdelAPanuj_Rasy",RaceSchema,"RasyKolekce");
+module.exports = Rasa = mongoose.model("db_rozdel_a_panuj_races",RaceSchema,"races");

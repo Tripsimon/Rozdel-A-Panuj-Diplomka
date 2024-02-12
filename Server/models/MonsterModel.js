@@ -32,7 +32,7 @@ const MonsterSchema = new Schema({
 
 
     },
-    {collection: "MonstraKolekce"}
+    {collection: "monsters"}
     )
 
-module.exports = Monstrum = mongoose.model("RozdelAPanuj_Monstra",MonsterSchema,"MonstraKolekce");
+module.exports = Monstrum = mongoose.model("db_rozdel_a_panuj_monsters",MonsterSchema,"monsters");

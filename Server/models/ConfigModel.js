@@ -5,6 +5,6 @@ const Schema = mongoose.Schema;
 const ConfigSchema = new Schema({
     typ: String,
     hodnota: [String]
-},{collection: "Konfigurace"})
+},{collection: "config"})
 
-module.exports = Ability = mongoose.model("RozdelAPanuj_Config",ConfigSchema,"Konfigurace");
+module.exports = Ability = mongoose.model("db_rozdel_a_panuj_config",ConfigSchema,"config");

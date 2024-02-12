@@ -1,26 +1,20 @@
-db.createUser(
-    {
-      user: "bpalmer",
-      pwd: "password",
-      roles: [
-        {
-          role: "readWrite",
-          db: "testdb"
-        }
-      ]
-    }
-  );
 
-  db.createCollection('users');
 
-db.users.insertOne(
+db.createUser({
+  user: 'root',
+  pwd: 'Aa123456',
+  roles: [
+      {
+          role: 'readWrite',
+          db: 'db_rozdel_a_panuj',
+      },
+  ],
+});
+
+
+
+db.races.insertOne(
   {
-    name: 'Bill Palmer'
+    name: 'Rasa'
   }
-);
-
-db.games.insertOne(
-{
-    name: "Nejakablbost"
-}
 );

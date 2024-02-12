@@ -5,4 +5,4 @@ const ImageSchema = mongoose.Schema({
     name: String
 })
 
-module.exports = ImageModel = mongoose.model("ImageModel",ImageSchema,"PozadiKolekce")
+module.exports = ImageModel = mongoose.model("db_rozdel_a_panuj_backgrounds",ImageSchema,"backgrounds")

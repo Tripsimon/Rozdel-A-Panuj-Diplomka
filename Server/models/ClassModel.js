@@ -14,7 +14,7 @@ const ClassSchema = new Schema({
     role: String,
     trueZbrane: String
     },
-    {collection: "MonstraKolekce"}
+    {collection: "classes"}
     )
 
-module.exports = Trida = mongoose.model("RozdelAPanuj_Tridy",ClassSchema,"TridyKolekce");
+module.exports = Trida = mongoose.model("db_rozdel_a_panuj_classes",ClassSchema,"classes");

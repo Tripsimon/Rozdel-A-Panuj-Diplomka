@@ -23,6 +23,6 @@ const SessionSchema = new Schema({
         },
     log: [String]
     
-}, {collection: "SessionsKolekce"})
+}, {collection: "sessions"})
 
-module.exports = User = mongoose.model("SessionsKolekce", SessionSchema, "SessionsKolekce");
+module.exports = User = mongoose.model("db_rozdel_a_panuj_sessions", SessionSchema, "sessions");

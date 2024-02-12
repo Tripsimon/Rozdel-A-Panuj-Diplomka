@@ -11,7 +11,7 @@ const AbilitySchema = new Schema({
     popisFluff:String,
     popisSchopnosti:String},
 
-    {collection: "VybavaKolekce"}
+    {collection: "abilities"}
     )
 
-module.exports = Ability = mongoose.model("RozdelAPanuj_Schopnosti",AbilitySchema,"SchopnostiKolekce");
+module.exports = Ability = mongoose.model("db_rozdel_a_panuj_abilities",AbilitySchema,"abilities");

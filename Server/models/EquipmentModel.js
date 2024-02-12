@@ -23,7 +23,7 @@ const EquipmentSchema = new Schema({
     mazatelnost: Boolean,
 },
 
-    {collection: "VybavaKolekce"}
+    {collection: "equipments"}
     )
 
-module.exports = Equipment = mongoose.model("RozdelAPanuj_Vybava",EquipmentSchema,"VybavaKolekce");
+module.exports = Equipment = mongoose.model("db_rozdel_a_panuj_equipments",EquipmentSchema,"equipments");

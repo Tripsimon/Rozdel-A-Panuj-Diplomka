@@ -8,7 +8,7 @@ const UserSchema = new Schema({
     prezdivka: String,
     opravneni: String,
     },
-    {collection: "UzivateleKolekce"}
+    {collection: "users"}
     )
 
-module.exports = User = mongoose.model("lesak",UserSchema,"UzivateleKolekce");
+module.exports = User = mongoose.model("db_rozdel_a_panuj_users",UserSchema,"users");
