@@ -14,7 +14,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: Aa123456
       MONGO_INITDB_DATABASE: db_rozdel_a_panuj
     volumes:
-      - ./db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
   mongo-express:
     image: mongo-express:1.0.0-20
