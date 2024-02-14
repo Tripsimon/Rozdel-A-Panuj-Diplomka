@@ -6,7 +6,7 @@ db = db.getSiblingDB('db_rozdel_a_panuj');
 // Administrátor
 db.users.insertOne({
   email: 'admin@rap.cz',
-  heslo: 'Aa123456',
+  heslo: '$2b$10$0t0jRRL3sDcb4XGMA4MNJ.aaBR6yW.Gz350eFtmtgSToK2N7f/VBq',
   prezdivka: 'admin',
   opravneni: 'administrator',
 })

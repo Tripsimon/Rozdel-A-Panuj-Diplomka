@@ -60,16 +60,17 @@ router.post("/registrace", async (req, res) => {
  * Routa pro přihlášení
  */
 router.post("/prihlaseni", async (req, res) => {
+    console.log("Požadavek na server: Přihlášení uživatele")
 
     const salt = await bcrypt.genSalt(10);
     heslo = req.body.heslo
 
     UserModel.findOne({ email: req.body.email })
         .then(async User => {
+
             if (User == null) {
                 res.send('No User Found');
             } else {
-
                 const porovnej = await bcrypt.compare(heslo, User.heslo)
                 if (porovnej) {
                     res.status(200);
