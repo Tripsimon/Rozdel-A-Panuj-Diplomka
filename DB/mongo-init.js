@@ -11,7 +11,28 @@ db.users.insertOne({
   opravneni: 'administrator',
 })
 
-vec = db.races.insertMany([
+//Clovek Ability
+legionAilities = db.abilities.insertMany([
+  {
+  jmeno: "Aktivka",
+  typPouziti: "Active",
+  pocetPouziti: 5,
+  cd: 5,
+  majitel:'Říšský člověk',
+  popisFluff:'Říšský člověk',
+  popisSchopnosti:'Říšský člověk'
+  },
+  {
+    jmeno: "Aktivka",
+    typPouziti: "Passive",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel:'Říšský člověk',
+    popisFluff:'Říšský člověk',
+    popisSchopnosti:'Říšský člověk'}
+  ])
+legionAilitiesID = Object.values(legionAilities['insertedIds'])
+rasy = db.races.insertMany([
   {
     jmeno: 'Říšský člověk',
     popis: "Popis",
@@ -23,7 +44,7 @@ vec = db.races.insertMany([
       inteligence: 5,
       znalost: 5
   },
-  schopnosti:["String","IDCEK"],
+  schopnosti: legionAilitiesID,
   dostupneTridy:["String","IDCEK"],
   },
   {
@@ -84,7 +105,4 @@ vec = db.races.insertMany([
   }
 ]);
 
-db.ungabunga.insertOne({
-  dsa: vec
-})
 
