@@ -194,7 +194,7 @@ rasy = db.races.insertMany([
       inteligence: 5,
       znalost: 5
     },
-    schopnosti: ["String", "IDCEK"],
+    schopnosti: inuimAbilitiesID,
     dostupneTridy: ["String", "IDCEK"],
   }
 ]);
