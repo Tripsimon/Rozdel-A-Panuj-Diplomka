@@ -55,30 +55,76 @@ grobrAbilities = db.abilities.insertMany([
     popisSchopnosti: 'Grobr'
   }
 ])
-grobrAbilitiesID = Object.values(legionAilities['insertedIds'])
+grobrAbilitiesID = Object.values(grobrAbilities['insertedIds'])
 
 //Hruurský člověk Ability
-grobrAbilities = db.abilities.insertMany([
+hruurAbilities = db.abilities.insertMany([
   {
     jmeno: "Aktivka",
     typPouziti: "Active",
     pocetPouziti: 5,
     cd: 5,
-    majitel: 'Grobr',
-    popisFluff: 'Grobr',
-    popisSchopnosti: 'Grobr'
+    majitel: 'Hruurský člověk',
+    popisFluff: 'Hruurský člověk',
+    popisSchopnosti: 'Hruurský člověk'
   },
   {
     jmeno: "Pasivka",
     typPouziti: "Passive",
     pocetPouziti: 5,
     cd: 5,
-    majitel: 'Grobr',
-    popisFluff: 'Grobr',
-    popisSchopnosti: 'Grobr'
+    majitel: 'Hruurský člověk',
+    popisFluff: 'Hruurský člověk',
+    popisSchopnosti: 'Hruurský člověk'
   }
 ])
-grobrAbilitiesID = Object.values(legionAilities['insertedIds'])
+hruurAbilitiesID = Object.values(hruurAbilities['insertedIds'])
+
+//Orc Ability
+orcAbilities = db.abilities.insertMany([
+  {
+    jmeno: "Aktivka",
+    typPouziti: "Active",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Orc',
+    popisFluff: 'Orc',
+    popisSchopnosti: 'Orc'
+  },
+  {
+    jmeno: "Pasivka",
+    typPouziti: "Passive",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Orc',
+    popisFluff: 'Orc',
+    popisSchopnosti: 'Orc'
+  }
+])
+orcAbilitiesID = Object.values(orcAbilities['insertedIds'])
+
+//Inu-Im Ability
+inuimAbilities = db.abilities.insertMany([
+  {
+    jmeno: "Aktivka",
+    typPouziti: "Active",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Inu-Im',
+    popisFluff: 'Inu-Im',
+    popisSchopnosti: 'Inu-Im'
+  },
+  {
+    jmeno: "Pasivka",
+    typPouziti: "Passive",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Inu-Im',
+    popisFluff: 'Inu-Im',
+    popisSchopnosti: 'Inu-Im'
+  }
+])
+inuimAbilitiesID = Object.values(inuimAbilities['insertedIds'])
 
 rasy = db.races.insertMany([
   {
@@ -120,7 +166,7 @@ rasy = db.races.insertMany([
       inteligence: 5,
       znalost: 5
     },
-    schopnosti: ["String", "IDCEK"],
+    schopnosti: hruurAbilitiesID,
     dostupneTridy: ["String", "IDCEK"],
   },
   {
@@ -134,7 +180,7 @@ rasy = db.races.insertMany([
       inteligence: 5,
       znalost: 5
     },
-    schopnosti: ["String", "IDCEK"],
+    schopnosti: orcAbilitiesID,
     dostupneTridy: ["String", "IDCEK"],
   },
   {
