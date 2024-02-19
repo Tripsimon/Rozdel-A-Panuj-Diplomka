@@ -11,97 +11,122 @@ db.users.insertOne({
   opravneni: 'administrator',
 })
 
-//Clovek Ability
+//Človek Ability
 legionAilities = db.abilities.insertMany([
   {
-  jmeno: "Aktivka",
-  typPouziti: "Active",
-  pocetPouziti: 5,
-  cd: 5,
-  majitel:'Říšský člověk',
-  popisFluff:'Říšský člověk',
-  popisSchopnosti:'Říšský člověk'
+    jmeno: "Aktivka",
+    typPouziti: "Active",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Říšský člověk',
+    popisFluff: 'Říšský člověk',
+    popisSchopnosti: 'Říšský člověk'
   },
   {
-    jmeno: "Aktivka",
+    jmeno: "Pasivka",
     typPouziti: "Passive",
     pocetPouziti: 5,
     cd: 5,
-    majitel:'Říšský člověk',
-    popisFluff:'Říšský člověk',
-    popisSchopnosti:'Říšský člověk'}
-  ])
+    majitel: 'Říšský člověk',
+    popisFluff: 'Říšský člověk',
+    popisSchopnosti: 'Říšský člověk'
+  }
+])
 legionAilitiesID = Object.values(legionAilities['insertedIds'])
+
+//Grobr Ability
+grobrAbilities = db.abilities.insertMany([
+  {
+    jmeno: "Aktivka",
+    typPouziti: "Active",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Grobr',
+    popisFluff: 'Grobr',
+    popisSchopnosti: 'Grobr'
+  },
+  {
+    jmeno: "Pasivka",
+    typPouziti: "Passive",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Grobr',
+    popisFluff: 'Grobr',
+    popisSchopnosti: 'Grobr'
+  }
+])
+grobrAbilitiesID = Object.values(legionAilities['insertedIds'])
+
 rasy = db.races.insertMany([
   {
     jmeno: 'Říšský člověk',
     popis: "Popis",
-    bonusoveAtributy:{
+    bonusoveAtributy: {
       sila: 5,
       houzevnatost: 5,
       obratnost: 5,
       charisma: 5,
       inteligence: 5,
       znalost: 5
-  },
-  schopnosti: legionAilitiesID,
-  dostupneTridy:["String","IDCEK"],
+    },
+    schopnosti: legionAilitiesID,
+    dostupneTridy: ["String", "IDCEK"],
   },
   {
     jmeno: 'Grobr',
     popis: "Popis",
-    bonusoveAtributy:{
+    bonusoveAtributy: {
       sila: 5,
       houzevnatost: 5,
       obratnost: 5,
       charisma: 5,
       inteligence: 5,
       znalost: 5
-  },
-  schopnosti:["String","IDCEK"],
-  dostupneTridy:["String","IDCEK"],
+    },
+    schopnosti: grobrAbilitiesID,
+    dostupneTridy: ["String", "IDCEK"],
   },
   {
     jmeno: 'Hruurský člověk',
     popis: "Popis",
-    bonusoveAtributy:{
+    bonusoveAtributy: {
       sila: 5,
       houzevnatost: 5,
       obratnost: 5,
       charisma: 5,
       inteligence: 5,
       znalost: 5
-  },
-  schopnosti:["String","IDCEK"],
-  dostupneTridy:["String","IDCEK"],
+    },
+    schopnosti: ["String", "IDCEK"],
+    dostupneTridy: ["String", "IDCEK"],
   },
   {
     jmeno: 'Ork',
     popis: "Popis",
-    bonusoveAtributy:{
+    bonusoveAtributy: {
       sila: 5,
       houzevnatost: 5,
       obratnost: 5,
       charisma: 5,
       inteligence: 5,
       znalost: 5
-  },
-  schopnosti:["String","IDCEK"],
-  dostupneTridy:["String","IDCEK"],
+    },
+    schopnosti: ["String", "IDCEK"],
+    dostupneTridy: ["String", "IDCEK"],
   },
   {
     jmeno: 'Inu-Im',
     popis: "Popis",
-    bonusoveAtributy:{
+    bonusoveAtributy: {
       sila: 5,
       houzevnatost: 5,
       obratnost: 5,
       charisma: 5,
       inteligence: 5,
       znalost: 5
-  },
-  schopnosti:["String","IDCEK"],
-  dostupneTridy:["String","IDCEK"],
+    },
+    schopnosti: ["String", "IDCEK"],
+    dostupneTridy: ["String", "IDCEK"],
   }
 ]);
 
