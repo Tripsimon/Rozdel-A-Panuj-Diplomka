@@ -57,6 +57,29 @@ grobrAbilities = db.abilities.insertMany([
 ])
 grobrAbilitiesID = Object.values(legionAilities['insertedIds'])
 
+//Hruurský člověk Ability
+grobrAbilities = db.abilities.insertMany([
+  {
+    jmeno: "Aktivka",
+    typPouziti: "Active",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Grobr',
+    popisFluff: 'Grobr',
+    popisSchopnosti: 'Grobr'
+  },
+  {
+    jmeno: "Pasivka",
+    typPouziti: "Passive",
+    pocetPouziti: 5,
+    cd: 5,
+    majitel: 'Grobr',
+    popisFluff: 'Grobr',
+    popisSchopnosti: 'Grobr'
+  }
+])
+grobrAbilitiesID = Object.values(legionAilities['insertedIds'])
+
 rasy = db.races.insertMany([
   {
     jmeno: 'Říšský člověk',

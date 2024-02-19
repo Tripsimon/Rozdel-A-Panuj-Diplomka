@@ -20,13 +20,14 @@ app.use(bp.urlencoded({ extended: true }))
 
 //Připojení k DB 
 mongoose.set('strictQuery',true);
-mongoose.connect('mongodb://root:Aa123456@localhost:3002/db_rozdel_a_panuj?directConnection=true',{
-    authSource:'admin'
-})
+mongoose.connect('mongodb://root:Aa123456@localhost:3002/db_rozdel_a_panuj?directConnection=true',{authSource:'admin'})
     .then(() => {
         console.log("Server připojen k databázi");
     })
-    .catch(err =>console.log(err));
+    .catch(err =>{
+        console.log("Nepodařilo se připojit k DB containeru")
+        console.log(err)
+    });
 
 
 //Definování routeru
