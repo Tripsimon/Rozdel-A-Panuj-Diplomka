@@ -1,3 +1,5 @@
+const { db } = require("../Server/models/ClassModel");
+
 // Autentifikace
 db = db.getSiblingDB('admin');
 db.auth("root", "Aa123456");
@@ -10,6 +12,8 @@ db.users.insertOne({
   prezdivka: 'admin',
   opravneni: 'administrator',
 })
+
+//*****SCHOPNOSTI
 
 //Človek Ability
 legionAilities = db.abilities.insertMany([
@@ -125,6 +129,24 @@ inuimAbilities = db.abilities.insertMany([
   }
 ])
 inuimAbilitiesID = Object.values(inuimAbilities['insertedIds'])
+
+//***** /SCHOPNOSTI */
+
+//***** Tridy */
+db.classes.insert({
+  jmeno: 'Bojovnik',
+  popis: 'String',
+  pasivniSchopnost: 'String',
+  schopnosti: ['String'],
+  bonusovaVybava: ['String'],
+  hlavniVybava: ['String'],
+  krajniVybava: ['String'],
+  zbrojVýbava: ['String'],
+  role: 'String',
+  trueZbrane: 'String'
+})
+
+
 
 rasy = db.races.insertMany([
   {
