@@ -1,18 +1,6 @@
-const { db } = require("../Server/models/ClassModel");
 
-// Autentifikace
-db = db.getSiblingDB('admin');
-db.auth("root", "Aa123456");
-db = db.getSiblingDB('db_rozdel_a_panuj');
 
-// Administrátor
-db.users.insertOne({
-  email: 'admin@rap.cz',
-  heslo: '$2b$10$0t0jRRL3sDcb4XGMA4MNJ.aaBR6yW.Gz350eFtmtgSToK2N7f/VBq',
-  prezdivka: 'admin',
-  opravneni: 'administrator',
-})
-
+print("ZACINAM INIT")
 //*****SCHOPNOSTI
 
 //Človek Ability
@@ -221,4 +209,4 @@ rasy = db.races.insertMany([
   }
 ]);
 
-
+print("KONCIM INIT")
