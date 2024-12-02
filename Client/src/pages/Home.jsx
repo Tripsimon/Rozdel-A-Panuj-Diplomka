@@ -2,7 +2,9 @@ import React from 'react'
 
 function Home() {
   return (
-    <div className='h-[200vh]'>Home</div>
+    <div className='h-[200vh]'>
+      
+    </div>
   )
 }
 
