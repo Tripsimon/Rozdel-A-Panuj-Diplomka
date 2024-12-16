@@ -10,6 +10,9 @@ import ThanksPage from './pages/Thanks.jsx'
 import RegisterPage from './pages/Register.jsx'
 import LoginPage from './pages/Login.jsx'
 
+import LoginModal from './components/LoginModal.jsx'
+import RegisterModal from './components/RegisterModal.jsx'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,13 +20,15 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navbar></Navbar>
 
+      <LoginModal></LoginModal>
+      <RegisterModal></RegisterModal>
+
+      <Navbar></Navbar>
         <Routes>
           <Route index path='/' element={<HomePage></HomePage>} />
           <Route index path='/rules' element={<RulesPage></RulesPage>} />
           <Route index path='/thanks' element={<ThanksPage></ThanksPage>} />
-
           <Route index path='/register' element={<RegisterPage></RegisterPage>} />
           <Route index path='/login' element={<LoginPage></LoginPage>} />
         </Routes>

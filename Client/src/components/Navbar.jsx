@@ -9,16 +9,16 @@ function Navbar() {
     }
 
     return (
-        <div className="navbar bg-primary rounded-md w-full p-0">
+        <div className="navbar bg-secondary rounded-md w-full p-0 sticky top-0">
             <div className="navbar-start">
                 <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn bg-secondary btn-ghost lg:hidden">
+                    <div tabIndex={0} role="button" className="btn bg-primary btn-ghost lg:hidden">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5"
                             fill="none"
                             viewBox="0 0 24 24"
-                            stroke="secondary">
+                            stroke="primary">
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -40,26 +40,26 @@ function Navbar() {
                         <li><a>Item 3</a></li>
                     </ul>
                 </div>
-                <a onClick={() => handleNavigation('/')} className="btn btn-ghost text-xl text-secondary">Rozděl a Panuj</a>
+                <a onClick={() => handleNavigation('/')} className="btn btn-ghost text-xl text-primary">Rozděl a Panuj</a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    <li><a className='text-secondary'>Item 1</a></li>
+                    <li><a className='text-primary'>Item 1</a></li>
                     <li>
                         <details>
-                            <summary className='text-secondary'>Informace</summary>
-                            <ul className="p-2 text-secondary">
+                            <summary className='text-primary'>Informace</summary>
+                            <ul className="p-2 text-primary">
                                 <li><a onClick={() => handleNavigation('/rules')}>Pravidla</a></li>
                                 <li><a onClick={() => handleNavigation('/thanks')}>Poděkování</a></li>
                             </ul>
                         </details>
                     </li>
-                    <li><a className='text-secondary'>Item 3</a></li>
+                    <li><a className='text-primary'>Item 3</a></li>
                 </ul>
             </div>
             <div className="navbar-end">
-                <a onClick={() => handleNavigation('/register')} className="btn btn-outline uppercase m-2 text-secondary hover:bg-secondary hover:text-primary hover:border-backdrop">Registrace</a>
-                <a onClick={() => handleNavigation('/login')} className="btn btn-outline uppercase m-2 text-secondary hover:bg-secondary hover:text-primary hover:border-backdrop">Přihlásit se</a>
+                <a onClick={() => document.getElementById('registerModal').showModal()} className="btn btn-outline uppercase m-2 text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Registrace</a>
+                <a onClick={() => document.getElementById('loginModal').showModal()} className="btn btn-outline uppercase m-2 text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Přihlásit se</a>
             </div>
         </div>
     )

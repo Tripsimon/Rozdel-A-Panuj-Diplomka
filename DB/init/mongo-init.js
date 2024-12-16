@@ -1,7 +1,14 @@
-
-
 print("ZACINAM INIT")
-//*****SCHOPNOSTI
+
+// ==================
+// Schopnosti
+// ==================
+
+db.createCollection("users");
+
+// ==================
+// Schopnosti
+// ==================
 
 //Človek Ability
 legionAilities = db.abilities.insertMany([
@@ -118,9 +125,14 @@ inuimAbilities = db.abilities.insertMany([
 ])
 inuimAbilitiesID = Object.values(inuimAbilities['insertedIds'])
 
-//***** /SCHOPNOSTI */
+// ==================
+// /Schopnosti
+// ==================
 
-//***** Tridy */
+// ==================
+// Tridy
+// ==================
+
 db.classes.insert({
   jmeno: 'Bojovnik',
   popis: 'String',
@@ -208,5 +220,9 @@ rasy = db.races.insertMany([
     dostupneTridy: ["String", "IDCEK"],
   }
 ]);
+
+// ==================
+// /Tridy
+// ==================
 
 print("KONCIM INIT")
