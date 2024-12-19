@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import axios from 'axios'
 
-import Navbar from './components/Navbar.jsx'
 
 import HomePage from './pages/Home.jsx'
 import RulesPage from './pages/Rules.jsx'
@@ -10,11 +10,22 @@ import ThanksPage from './pages/Thanks.jsx'
 import RegisterPage from './pages/Register.jsx'
 import LoginPage from './pages/Login.jsx'
 
+import Navbar from './components/Navbar.jsx'
 import LoginModal from './components/LoginModal.jsx'
 import RegisterModal from './components/RegisterModal.jsx'
 
 
 function App() {
+
+  //Axios nastaveni
+//Mód developování
+  const devMode = true
+  if(devMode){
+    axios.defaults.baseURL ='http://localhost:3000'
+  }else{
+    axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
+  }
+
   const [count, setCount] = useState(0)
 
   return (
