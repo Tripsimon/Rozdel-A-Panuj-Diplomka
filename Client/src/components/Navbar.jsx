@@ -57,7 +57,7 @@ function Navbar() {
             </div>
             <div className="hidden navbar-center lg:flex">
                 <ul className="px-1 menu menu-horizontal">
-                    <li><a className='text-primary'>Item 1</a></li>
+
                     <li>
                         <details>
                             <summary className='text-primary'>Informace</summary>
@@ -67,7 +67,9 @@ function Navbar() {
                             </ul>
                         </details>
                     </li>
-                    <li><a className='text-primary'>Item 3</a></li>
+                    <li><a className='text-primary'>Správa dobrodruhů</a></li>
+                    <li><a className='text-primary'>Připojit se</a></li>
+                    <li><a className='text-primary'>Vytvořit dobrodružství</a></li>
                 </ul>
             </div>
             {renderUnloggedUser()}
