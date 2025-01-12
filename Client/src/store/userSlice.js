@@ -8,11 +8,14 @@ export const userSlice = createSlice({
     reducers: {
         loginUser: (state) =>{
           state.isLoggedIn = true;
+        },
+        logoutUser: (state) =>{
+          state.isLoggedIn = false;
         }
       }
 })
 
-export const { loginUser } = userSlice.actions
+export const { loginUser, logoutUser } = userSlice.actions
 
 export const reduxIsLoggedIn = (state) => state.user.isLoggedIn
 

@@ -45,8 +45,7 @@ function RegisterModal() {
      * Funkce, která po odeslání požadavku zajistí registraci uživatele
      */
     function register() {
-        dispatch(loginUser())
-        console.log(isLoggedIn)
+
 
         axios.post(axios.defaults.baseURL + "/uzivatel/registrace", { 'email': emailState, 'prezdivka': prezdivkaState, 'heslo': hesloState })
             .then(queryResponse => {
@@ -65,12 +64,9 @@ function RegisterModal() {
 
                     default:
                         if (queryResponse.status == 201 || queryResponse.data != null) {
-                            uzivatelStore.$patch({
-                                prihlasen: true,
-                                prezdivka: this.prezdivka,
-                                _id: queryResponse.data
-                            })
-                            router.push({ path: '/' })
+                            dispatch(loginUser())
+                            console.log(isLoggedIn)
+
                         }
                         break;
                 }
