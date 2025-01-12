@@ -67,7 +67,7 @@ function Navbar() {
                             </ul>
                         </details>
                     </li>
-                    <li><a className='text-primary'>Správa dobrodruhů</a></li>
+                    <li><a onClick={() => handleNavigation('/adventurers')} className='text-primary'>Správa dobrodruhů</a></li>
                     <li><a className='text-primary'>Připojit se</a></li>
                     <li><a className='text-primary'>Vytvořit dobrodružství</a></li>
                 </ul>
