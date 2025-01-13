@@ -1,8 +1,12 @@
 import React from 'react'
+import AdventurerManagementChoice from '../components/AdventurerManagementChoice'
 
 function AdventurerManagement() {
   return (
-    <div>AdventurerManagement</div>
+    <div>
+      
+      <AdventurerManagementChoice></AdventurerManagementChoice>
+    </div>
   )
 }
 
