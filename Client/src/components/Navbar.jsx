@@ -18,6 +18,11 @@ function Navbar() {
                 <a onClick={() => document.getElementById('registerModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Registrace</a>
                 <a onClick={() => document.getElementById('loginModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Přihlásit se</a>
             </div>)
+        } else {
+            return (<div className="navbar-end">
+                Přihlášený uživatel: 
+                <a onClick={() => document.getElementById('registerModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Odhlasit</a>
+            </div>)
         }
     }
 
