@@ -4,7 +4,7 @@ function AdventurerManagementChoice() {
   return (
     <div>
       <div className="card bg-neutral text-neutral-content w-[90%] ml-[5%]">
-        <div className="card-body items-center text-center">
+        <div className="items-center text-center card-body">
           <h2 className="card-title"> Seznam dobrodruhů</h2>
           <div className="overflow-x-auto">
             <table className="table">
@@ -42,7 +42,7 @@ function AdventurerManagementChoice() {
               </tbody>
             </table>
           </div>
-          <div className="card-actions justify-end">
+          <div className="justify-end card-actions">
             <button className="btn btn-primary">Accept</button>
             <button className="btn btn-ghost">Deny</button>
           </div>
