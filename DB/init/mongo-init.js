@@ -1,10 +1,7 @@
 print("ZACINAM INIT")
 
-// ==================
-// Schopnosti
-// ==================
-
 db.createCollection("users");
+
 
 // ==================
 // Schopnosti
@@ -148,6 +145,10 @@ db.classes.insert({
 
 
 
+// ==================
+// RASY
+// ==================
+
 rasy = db.races.insertMany([
   {
     jmeno: 'Říšský člověk',
@@ -220,6 +221,10 @@ rasy = db.races.insertMany([
     dostupneTridy: ["String", "IDCEK"],
   }
 ]);
+
+// ==================
+// //RAS
+// ==================
 
 // ==================
 // /Tridy

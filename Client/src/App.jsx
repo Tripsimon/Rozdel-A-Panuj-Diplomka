@@ -12,6 +12,7 @@ import AdventurerManagementPage from './pages/AdventurerManagement.jsx'
 import Navbar from './components/Navbar.jsx'
 import LoginModal from './components/LoginModal.jsx'
 import RegisterModal from './components/RegisterModal.jsx'
+import AdventurerCreateModal from './components/AdventurerCreateModal.jsx'
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
 
       <LoginModal></LoginModal>
       <RegisterModal></RegisterModal>
+      <AdventurerCreateModal></AdventurerCreateModal>
 
       <Navbar></Navbar>
         <Routes>
