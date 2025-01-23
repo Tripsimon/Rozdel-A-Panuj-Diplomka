@@ -47,7 +47,7 @@ function LoginModal() {
         <dialog id="loginModal" className="modal">
             <div className="modal-box">
                 <AlertDriver className="mb-5" show={false} type="error"></AlertDriver>
-                <h3 className="mb-7 text-lg font-bold text-primary">Přihlášení</h3>
+                <h3 className="text-lg font-bold mb-7 text-primary">Přihlášení</h3>
 
                 <input type="text" placeholder="Email" onChange={(event) => { setEmailState(event.target.value); }} className="w-full mb-5 input input-bordered " />
                 <input type="text" placeholder="Heslo" onChange={(event) => { setPasswordState(event.target.value); }} className="w-full mb-5 input input-bordered" />
