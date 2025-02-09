@@ -8,6 +8,7 @@ import HomePage from './pages/Home.jsx'
 import RulesPage from './pages/Rules.jsx'
 import ThanksPage from './pages/Thanks.jsx'
 import AdventurerManagementPage from './pages/AdventurerManagement.jsx'
+import Game from './pages/Game.jsx'
 
 import Navbar from './components/Navbar.jsx'
 import LoginModal from './components/LoginModal.jsx'
@@ -42,7 +43,7 @@ function App() {
           <Route index path='/rules' element={<RulesPage></RulesPage>} />
           <Route index path='/thanks' element={<ThanksPage></ThanksPage>} />
           <Route index path='/adventurers' element={<AdventurerManagementPage/>} />
-          
+          <Route index path='/game' element={<Game></Game>} />
         </Routes>
       </BrowserRouter>
     </>

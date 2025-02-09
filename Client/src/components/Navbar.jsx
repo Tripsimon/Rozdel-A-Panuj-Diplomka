@@ -1,10 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { reduxIsLoggedIn } from '../store/userSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { reduxIsLoggedIn, logoutUser } from '../store/userSlice';
+
 
 function Navbar() {
     const isLoggedIn = useSelector(reduxIsLoggedIn)
+    const dispatch = useDispatch()
     const navigate = useNavigate();
 
     const handleNavigation = (destination) => {
@@ -21,9 +23,13 @@ function Navbar() {
         } else {
             return (<div className="navbar-end">
                 Přihlášený uživatel: 
-                <a onClick={() => document.getElementById('registerModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Odhlasit</a>
+                <a onClick={() => dispatch(logoutUser())} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Odhlasit</a>
             </div>)
         }
+    }
+
+    const logOffUser = () =>{
+        dispatch(logoutUser)
     }
 
     return (
