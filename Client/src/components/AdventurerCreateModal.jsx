@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 import AdventurerCreateStepTwo from './AdventurerCreateStepTwo';
+import AdventurerCreateModalStepOne from './AdventurerCreateModalStepOne';
 
 function AdventurerCreateModal() {
 
@@ -59,46 +60,11 @@ function AdventurerCreateModal() {
     }
 
 
-    function renderRaceSelect() {
-        return(
-                <select className="w-full max-w-xs select select-bordered">
-                    {racesChoiceState.map((race) => <option disabled selected> {race.jmeno}</option>)}
-                </select>
-        )
-    }
+
 
     function renderFirstStep() {
         return (
-            <div className="modal-box">
-
-                <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
-                <form method="dialog">
-                    <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">✕</button>
-                </form>
-
-                <ul className="steps steps-vertical lg:steps-horizontal">
-                    <li className="step step-primary">Základ dobrodruha</li>
-                    <li className="step">Atributy</li>
-                    <li className="step">Příběh</li>
-                    <li className="step">Shrnutí</li>
-                </ul>
-
-                <input type="text" placeholder="Křestní jméno" className="w-full mb-5 input input-bordered " />
-                <input type="text" placeholder="Přezdívka" className="w-full mb-5 input input-bordered " />
-                <input type="text" placeholder="Příjmení" className="w-full mb-5 input input-bordered " />
-
-                {renderRaceSelect()}
-
-                <select className="w-full max-w-xs select select-bordered">
-                    <option disabled selected> Třída ?</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
-
-                <div className="modal-action">
-                    <button className="btn text-primary" onClick={() => { changeStep(+1) }}>Další krok</button>
-                </div>
-            </div>
+            <AdventurerCreateModalStepOne racesChoice={racesChoiceState}></AdventurerCreateModalStepOne>
         )
     }
 

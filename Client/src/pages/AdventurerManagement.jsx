@@ -21,7 +21,7 @@ function AdventurerManagement() {
 
     axios.get(axios.defaults.baseURL + '/character/getCharacters', { params: { owner: isLoggedIn } })
       .then((response) => {
-        console.log(response)
+        setLoadedAdventurersState(response.data)
       })
 
   }
@@ -29,8 +29,7 @@ function AdventurerManagement() {
 
   return (
     <div>
-      <a onClick={() => document.getElementById('createAdventurerModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Vytvořit nového</a>
-      <AdventurerManagementChoice></AdventurerManagementChoice>
+      <AdventurerManagementChoice adventurers={loadedAdventurersState} ></AdventurerManagementChoice>
     </div>
   )
 }
