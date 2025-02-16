@@ -130,7 +130,7 @@ inuimAbilitiesID = Object.values(inuimAbilities['insertedIds'])
 // Tridy
 // ==================
 
-db.classes.insert({
+fighterClass =  db.classes.insert({
   jmeno: 'Bojovnik',
   popis: 'String',
   pasivniSchopnost: 'String',
@@ -143,7 +143,10 @@ db.classes.insert({
   trueZbrane: 'String'
 })
 
+fighterClassID = Object.values(fighterClass['insertedIds'])
 
+var humanClasses = []
+humanClasses.push(fighterClassID[0])
 
 // ==================
 // RASY
@@ -162,7 +165,7 @@ rasy = db.races.insertMany([
       znalost: 5
     },
     schopnosti: legionAilitiesID,
-    dostupneTridy: ["String", "IDCEK"],
+    dostupneTridy: humanClasses,
   },
   {
     jmeno: 'Grobr',
@@ -176,7 +179,7 @@ rasy = db.races.insertMany([
       znalost: 5
     },
     schopnosti: grobrAbilitiesID,
-    dostupneTridy: ["String", "IDCEK"],
+    dostupneTridy: humanClasses,
   },
   {
     jmeno: 'Hruurský člověk',
@@ -190,7 +193,7 @@ rasy = db.races.insertMany([
       znalost: 5
     },
     schopnosti: hruurAbilitiesID,
-    dostupneTridy: ["String", "IDCEK"],
+    dostupneTridy: humanClasses,
   },
   {
     jmeno: 'Ork',
@@ -204,7 +207,7 @@ rasy = db.races.insertMany([
       znalost: 5
     },
     schopnosti: orcAbilitiesID,
-    dostupneTridy: ["String", "IDCEK"],
+    dostupneTridy: humanClasses,
   },
   {
     jmeno: 'Inu-Im',
@@ -218,7 +221,7 @@ rasy = db.races.insertMany([
       znalost: 5
     },
     schopnosti: inuimAbilitiesID,
-    dostupneTridy: ["String", "IDCEK"],
+    dostupneTridy: humanClasses,
   }
 ]);
 
