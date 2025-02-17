@@ -143,6 +143,32 @@ fighterClass =  db.classes.insert({
   trueZbrane: 'String'
 })
 
+rangerClass =  db.classes.insert({
+  jmeno: 'Hraničář',
+  popis: 'String',
+  pasivniSchopnost: 'String',
+  schopnosti: ['String'],
+  bonusovaVybava: ['String'],
+  hlavniVybava: ['String'],
+  krajniVybava: ['String'],
+  zbrojVýbava: ['String'],
+  role: 'String',
+  trueZbrane: 'String'
+})
+
+fighterClass =  db.classes.insert({
+  jmeno: 'Mág',
+  popis: 'String',
+  pasivniSchopnost: 'String',
+  schopnosti: ['String'],
+  bonusovaVybava: ['String'],
+  hlavniVybava: ['String'],
+  krajniVybava: ['String'],
+  zbrojVýbava: ['String'],
+  role: 'String',
+  trueZbrane: 'String'
+})
+
 fighterClassID = Object.values(fighterClass['insertedIds'])
 
 var humanClasses = []
