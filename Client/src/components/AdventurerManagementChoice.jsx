@@ -6,7 +6,7 @@ function AdventurerManagementChoice(props) {
     return(
       <tr className="hover">
       <th>1</th>
-      <td>Cy Ganderton</td>
+      <td>      {props.adventurers}</td>
       <td>Quality Control Specialist</td>
       <td>Blue</td>
     </tr>
