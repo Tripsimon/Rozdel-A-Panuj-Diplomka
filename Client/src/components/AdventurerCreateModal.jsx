@@ -10,6 +10,7 @@ function AdventurerCreateModal() {
     const [stepState, setStepState] = useState(1);
 
     const [racesChoiceState, setRacesChoiceState] = useState([]);
+    const [selectedRaceState, setSelectedRaceState] = useState([])
 
     const [atributesState, setAtributesState] = useState({
         freeAtributes: 8,
@@ -20,6 +21,10 @@ function AdventurerCreateModal() {
         inteligenceAtributes: 8,
         znalostAtributes: 8
     });
+
+    useEffect(() => {
+        loadRaces();
+    }, []);
 
     const changeStep = (amount) => {
         setStepState(stepState + amount)
@@ -34,10 +39,24 @@ function AdventurerCreateModal() {
             })
     }
 
+    const selectRace = (event) => {
+        setSelectedRaceState(event.target.value)
+        loadClasses()
+    }
 
-    useEffect(() => {
-        loadRaces();
-    }, []);
+
+    const loadClasses = () =>{
+        console.log("DSDSADSA")
+        axios.get(axios.defaults.baseURL + '/tridy/getMultipleByID',{
+            params:{
+                classes: selectedRaceState.dostupneTridy
+            }
+        })
+        .then(responseQuery => {
+            console.log(responseQuery.data)
+        })
+    }
+
 
     function renderForm() {
 
@@ -64,7 +83,7 @@ function AdventurerCreateModal() {
 
     function renderFirstStep() {
         return (
-            <AdventurerCreateModalStepOne racesChoice={racesChoiceState}></AdventurerCreateModalStepOne>
+            <AdventurerCreateModalStepOne racesChoice={racesChoiceState} selectRace={selectRace}></AdventurerCreateModalStepOne>
         )
     }
 

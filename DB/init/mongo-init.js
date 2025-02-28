@@ -142,6 +142,7 @@ fighterClass =  db.classes.insert({
   role: 'String',
   trueZbrane: 'String'
 })
+fighterClassID = Object.values(fighterClass['insertedIds'])
 
 rangerClass =  db.classes.insert({
   jmeno: 'Hraničář',
@@ -155,8 +156,9 @@ rangerClass =  db.classes.insert({
   role: 'String',
   trueZbrane: 'String'
 })
+rangerClassID = Object.values(rangerClass['insertedIds'])
 
-fighterClass =  db.classes.insert({
+mageClass =  db.classes.insert({
   jmeno: 'Mág',
   popis: 'String',
   pasivniSchopnost: 'String',
@@ -169,10 +171,12 @@ fighterClass =  db.classes.insert({
   trueZbrane: 'String'
 })
 
-fighterClassID = Object.values(fighterClass['insertedIds'])
+mageClassId = Object.values(mageClass['insertedIds'])
 
 var humanClasses = []
 humanClasses.push(fighterClassID[0])
+//humanClasses.push(rangerClassID[0])
+//humanClasses.push(mageClassID[0])
 
 // ==================
 // RASY

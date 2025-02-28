@@ -4,8 +4,8 @@ function AdventurerCreateModalStepOne(props) {
 
     function renderRaceSelect() {
         return(
-                <select className="w-full max-w-xs select select-bordered">
-                    {props.racesChoice.map((race) => <option> {race.jmeno}</option>)}
+                <select onChange={(event) => props.selectRace(event)} className="w-full max-w-xs select select-bordered">
+                    {props.racesChoice.map((race) => <option key={race.jmeno}> {race.jmeno}</option>)}
                 </select>
         )
     }
@@ -31,8 +31,7 @@ function AdventurerCreateModalStepOne(props) {
 
             {renderRaceSelect()}
 
-            <select className="w-full max-w-xs select select-bordered">
-                <option disabled selected> Třída ?</option>
+            <select defaultValue={"DADSA"} className="w-full max-w-xs select select-bordered">
                 <option>Han Solo</option>
                 <option>Greedo</option>
             </select>
