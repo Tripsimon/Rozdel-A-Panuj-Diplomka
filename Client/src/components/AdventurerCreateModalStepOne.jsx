@@ -5,7 +5,7 @@ function AdventurerCreateModalStepOne(props) {
     function renderRaceSelect() {
         return(
                 <select onChange={(event) => props.selectRace(event)} className="w-full max-w-xs select select-bordered">
-                    {props.racesChoice.map((race) => <option key={race.jmeno}> {race.jmeno}</option>)}
+                    {props.racesChoice.map((race) => <option value={race} key={race.jmeno}> {race.jmeno}</option>)}
                 </select>
         )
     }

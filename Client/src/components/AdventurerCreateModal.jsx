@@ -35,18 +35,19 @@ function AdventurerCreateModal() {
         axios.get(axios.defaults.baseURL + '/rasy/dump')
             .then(responseQuery => {
                 setRacesChoiceState(responseQuery.data);
-                console.log(responseQuery.data)
+
             })
     }
 
     const selectRace = (event) => {
         setSelectedRaceState(event.target.value)
+        console.log(selectedRaceState)
         loadClasses()
     }
 
 
     const loadClasses = () =>{
-        console.log("DSDSADSA")
+        console.log(selectedRaceState)
         axios.get(axios.defaults.baseURL + '/tridy/getMultipleByID',{
             params:{
                 classes: selectedRaceState.dostupneTridy
