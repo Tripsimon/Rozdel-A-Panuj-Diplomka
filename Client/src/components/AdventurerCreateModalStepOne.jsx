@@ -5,7 +5,15 @@ function AdventurerCreateModalStepOne(props) {
     function renderRaceSelect() {
         return(
                 <select onChange={(event) => props.selectRace(event)} className="w-full max-w-xs select select-bordered">
-                    {props.racesChoice.map((race) => <option value={race} key={race.jmeno}> {race.jmeno}</option>)}
+                    {props.racesChoice.map((race, index) => <option value={index} key={race.jmeno}> {race.jmeno}</option>)}
+                </select>
+        )
+    }
+
+    function renderClassSelect() {
+        return(
+                <select onChange={(event) => props.selectClass(event)} className="w-full max-w-xs select select-bordered">
+                    {props.loadedClassesState.map((classs, index) => <option value={index} key={classs.jmeno}> {classs.jmeno}</option>)}
                 </select>
         )
     }
@@ -31,10 +39,7 @@ function AdventurerCreateModalStepOne(props) {
 
             {renderRaceSelect()}
 
-            <select defaultValue={"DADSA"} className="w-full max-w-xs select select-bordered">
-                <option>Han Solo</option>
-                <option>Greedo</option>
-            </select>
+            {renderClassSelect()}
 
             <div className="modal-action">
                 <button className="btn text-primary" onClick={() => { changeStep(+1) }}>Další krok</button>
