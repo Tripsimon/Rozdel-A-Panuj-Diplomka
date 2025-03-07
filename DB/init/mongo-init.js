@@ -171,12 +171,12 @@ mageClass =  db.classes.insert({
   trueZbrane: 'String'
 })
 
-mageClassId = Object.values(mageClass['insertedIds'])
+mageClassID = Object.values(mageClass['insertedIds'])
 
 var humanClasses = []
 humanClasses.push(fighterClassID[0])
-//humanClasses.push(rangerClassID[0])
-//humanClasses.push(mageClassID[0])
+humanClasses.push(rangerClassID[0])
+humanClasses.push(mageClassID[0])
 
 // ==================
 // RASY

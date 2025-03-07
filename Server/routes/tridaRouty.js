@@ -18,10 +18,9 @@ router.get("/", (req, res) => {
 
 router.get('/getMultipleByID', (req, res) => {
     console.log(req.query)
-    ClassModel.find({ _id: [('67c1ab9cf6d2fd2c1e544cb1')] })
+    ClassModel.find({ _id: {$in: req.query.classes} })
         .then((response) => {
-            console.log(response)
-            res.send("YEET")
+            res.send(response)
         })
 })
 /**

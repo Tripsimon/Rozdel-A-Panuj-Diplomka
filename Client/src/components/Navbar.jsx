@@ -78,9 +78,10 @@ function Navbar() {
                             </ul>
                         </details>
                     </li>
+                    {isLoggedIn?<>
                     <li><a onClick={() => handleNavigation('/adventurers')} className='text-primary'>Správa dobrodruhů</a></li>
                     <li><a className='text-primary'>Připojit se</a></li>
-                    <li><a className='text-primary'>Vytvořit dobrodružství</a></li>
+                    </>:""}
                 </ul>
             </div>
             {renderUnloggedUser()}

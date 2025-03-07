@@ -12,6 +12,9 @@ function AdventurerCreateModal() {
     const [racesChoiceState, setRacesChoiceState] = useState([]);
     const [selectedRaceState, setSelectedRaceState] = useState([])
 
+    const [loadedClasses, setLoadedClasses] = useState([]);
+    const [selectedClass, setSelectedClass] = useState([])
+
     const [atributesState, setAtributesState] = useState({
         freeAtributes: 8,
         silaAtributes: 8,
@@ -40,21 +43,19 @@ function AdventurerCreateModal() {
     }
 
     const selectRace = (event) => {
-        setSelectedRaceState(event.target.value)
-        console.log(selectedRaceState)
+        setSelectedRaceState(racesChoiceState[event.target.value])
         loadClasses()
     }
 
 
     const loadClasses = () =>{
-        console.log(selectedRaceState)
         axios.get(axios.defaults.baseURL + '/tridy/getMultipleByID',{
             params:{
                 classes: selectedRaceState.dostupneTridy
             }
         })
         .then(responseQuery => {
-            console.log(responseQuery.data)
+            setLoadedClasses(responseQuery.data)
         })
     }
 
@@ -84,7 +85,7 @@ function AdventurerCreateModal() {
 
     function renderFirstStep() {
         return (
-            <AdventurerCreateModalStepOne racesChoice={racesChoiceState} selectRace={selectRace}></AdventurerCreateModalStepOne>
+            <AdventurerCreateModalStepOne racesChoice={racesChoiceState} selectRace={selectRace} loadedClasses={loadedClasses}></AdventurerCreateModalStepOne>
         )
     }
 
