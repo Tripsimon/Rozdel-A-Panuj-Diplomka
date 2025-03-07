@@ -47,6 +47,10 @@ function AdventurerCreateModal() {
         loadClasses()
     }
 
+    const selectClass = (event) => {
+        setSelectedRaceState(racesChoiceState[event.target.value])
+    }
+
 
     const loadClasses = () =>{
         axios.get(axios.defaults.baseURL + '/tridy/getMultipleByID',{
