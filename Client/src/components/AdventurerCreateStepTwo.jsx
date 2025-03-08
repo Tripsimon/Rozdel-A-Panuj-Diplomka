@@ -12,13 +12,21 @@ function AdventurerCreateStepTwo() {
                 <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">✕</button>
             </form>
 
+
+            <ul className="steps steps-vertical lg:steps-horizontal">
+                <li className="step step-primary">Základ dobrodruha</li>
+                <li className="step step-primary">Atributy</li>
+                <li className="step">Příběh</li>
+                <li className="step">Shrnutí</li>
+            </ul>
+
             <div>
-            <button>-</button>
-            <p>Volné atributy: {freeAtributesState}</p>
-            <button>+</button>
+                <button>-</button>
+                <p>Volné atributy: {freeAtributesState}</p>
+                <button>+</button>
             </div>
 
-            
+
             <input type="text" placeholder="Křestní jméno" className="w-full mb-5 input input-bordered " />
             <input type="text" placeholder="Přezdívka" className="w-full mb-5 input input-bordered " />
             <input type="text" placeholder="Příjmení" className="w-full mb-5 input input-bordered " />

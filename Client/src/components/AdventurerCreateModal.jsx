@@ -30,6 +30,7 @@ function AdventurerCreateModal() {
     }, []);
 
     const changeStep = (amount) => {
+
         setStepState(stepState + amount)
     }
 
@@ -38,7 +39,6 @@ function AdventurerCreateModal() {
         axios.get(axios.defaults.baseURL + '/rasy/dump')
             .then(responseQuery => {
                 setRacesChoiceState(responseQuery.data);
-
             })
     }
 
@@ -47,9 +47,6 @@ function AdventurerCreateModal() {
         loadClasses()
     }
 
-    const selectClass = (event) => {
-        setSelectedRaceState(racesChoiceState[event.target.value])
-    }
 
 
     const loadClasses = () =>{
@@ -63,6 +60,13 @@ function AdventurerCreateModal() {
         })
     }
 
+    const selectClass = (event) => {
+        setSelectedRaceState(loadedClasses[event.target.value])
+    }
+
+    const submitForm = () => {
+        
+    }
 
     function renderForm() {
 
@@ -89,7 +93,7 @@ function AdventurerCreateModal() {
 
     function renderFirstStep() {
         return (
-            <AdventurerCreateModalStepOne racesChoice={racesChoiceState} selectRace={selectRace} loadedClasses={loadedClasses}></AdventurerCreateModalStepOne>
+            <AdventurerCreateModalStepOne racesChoice={racesChoiceState} selectRace={selectRace} loadedClasses={loadedClasses} selectClass={selectClass} changeStep={changeStep} ></AdventurerCreateModalStepOne>
         )
     }
 
@@ -173,7 +177,7 @@ function AdventurerCreateModal() {
 
                 <div className="modal-action">
                     <button className="mx-5 btn text-primary" onClick={() => { changeStep(-1) }}>Předešlí krok</button>
-                    <button className="btn text-primary" >Vytvořit</button>
+                    <button onClick={() => submitForm()} className="btn text-primary" >Vytvořit</button>
                 </div>
             </div>
         )

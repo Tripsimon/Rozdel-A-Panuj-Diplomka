@@ -18,6 +18,10 @@ function AdventurerCreateModalStepOne(props) {
         )
     }
 
+    function handleNextStep(){
+        props.changeStep(1)
+    }
+
     return (
         <div className="modal-box">
 
@@ -39,12 +43,12 @@ function AdventurerCreateModalStepOne(props) {
 
             {renderRaceSelect()}
 
-            <select defaultValue={"DADSA"} className="w-full max-w-xs select select-bordered">
+            <select onChange={(event) => selectClass(event)} defaultValue={"DADSA"} className="w-full max-w-xs select select-bordered">
             {renderClassSelect()}
             </select>
 
             <div className="modal-action">
-                <button className="btn text-primary" onClick={() => { changeStep(+1) }}>Další krok</button>
+                <button className="btn text-primary" onClick={() => { handleNextStep() }}>Další krok</button>
             </div>
         </div>
     )
