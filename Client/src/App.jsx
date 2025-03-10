@@ -43,7 +43,13 @@ function App() {
           <Route index path='/rules' element={<RulesPage></RulesPage>} />
           <Route index path='/thanks' element={<ThanksPage></ThanksPage>} />
           <Route index path='/adventurers' element={<AdventurerManagementPage/>} />
-          <Route index path='/game' element={<Game></Game>} />
+
+
+          <Route   element={<ProtectedRoutes></ProtectedRoutes>}>
+                        <Route index element={<LoginPage></LoginPage>}/>
+                        <Route index path='/game' element={<Game></Game>} />
+                    </Route>
+
         </Routes>
       </BrowserRouter>
     </>

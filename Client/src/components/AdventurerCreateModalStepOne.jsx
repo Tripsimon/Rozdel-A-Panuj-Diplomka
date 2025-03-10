@@ -3,22 +3,35 @@ import React, { useState } from 'react'
 function AdventurerCreateModalStepOne(props) {
 
     function renderRaceSelect() {
-        return(
-                <select onChange={(event) => props.selectRace(event)} className="w-full max-w-xs select select-bordered">
-                    {props.racesChoice.map((race,index) => <option value={index} key={race.jmeno}> {race.jmeno}</option>)}
-                </select>
+        return (
+            <details className='z-50'>
+                <summary className="btn btn-ghost w-full text-lg text-white uppercase font-dm font-normal hover:bg-primary active:!bg-primary-200">
+                    RASY
+                </summary>
+                <ul className="bg-primary w-full rounded-none relative !p-0">
+                    {props.racesChoice.map((race, index) => <li key={race.jmeno}><a key={race.jmeno} onClick={() => props.selectRace(index)} className='text-white text-lg  font-dm font-normal flex text-center !justify-center border-b-2 rounded-none active:!bg-primary'>{race.jmeno}</a></li>)}
+                </ul>
+            </details>
         )
     }
 
     function renderClassSelect() {
         console.log(props.loadedClasses)
-        return(
-                    props.loadedClasses.map((trida,index) => <option value={index} key={trida.jmeno}> {trida.jmeno}</option>)
+        return (
+
+            < details className = 'z-50' >
+            <summary className="btn btn-ghost w-full text-lg text-white uppercase font-dm font-normal hover:bg-primary active:!bg-primary-200">
+                Classy
+            </summary>
+            <ul className="bg-primary w-full rounded-none relative !p-0">
+                {props.loadedClasses.map((trida, index) => <li key={trida.jmeno}><a key={trida.jmeno} onClick={() => props.selectClass(index)} className='text-white text-lg  font-dm font-normal flex text-center !justify-center border-b-2 rounded-none active:!bg-primary'>{trida.jmeno}</a></li>)}
+            </ul>
+        </details >
 
         )
     }
 
-    function handleNextStep(){
+    function handleNextStep() {
         props.changeStep(1)
     }
 
@@ -42,10 +55,7 @@ function AdventurerCreateModalStepOne(props) {
             <input type="text" placeholder="Příjmení" className="w-full mb-5 input input-bordered " />
 
             {renderRaceSelect()}
-
-            <select onChange={(event) => selectClass(event)} defaultValue={"DADSA"} className="w-full max-w-xs select select-bordered">
-            {renderClassSelect()}
-            </select>
+                {renderClassSelect()}
 
             <div className="modal-action">
                 <button className="btn text-primary" onClick={() => { handleNextStep() }}>Další krok</button>
