@@ -15,10 +15,25 @@ function AdventurerCreateModal() {
     const [loadedClasses, setLoadedClasses] = useState([]);
     const [selectedClass, setSelectedClass] = useState([])
 
+    const [adventurerState, setNewAdventurerState] = useState({
+        name: null,
+        secondName: null,
+        nickname: null,
+        race: null,
+        class: null,
+        mainGear: null,
+        secondaryGear: null,
+        bonusGear: null,
+        aligment: null,
+        age: null,
+        description: "Nezjištěno",
+        story: "Nezjištěno",
+      })
+
     const [atributesState, setAtributesState] = useState({
-        freeAtributes: 8,
-        silaAtributes: 8,
-        houzevnatostAtributes: 8,
+        free: 8,
+        sila: 8,
+        houzevnatost: 8,
         obratnostAtributes: 8,
         charismaAtributes: 8,
         inteligenceAtributes: 8,
@@ -49,24 +64,22 @@ function AdventurerCreateModal() {
 
 
 
-    const loadClasses = () =>{
-        axios.get(axios.defaults.baseURL + '/tridy/getMultipleByID',{
-            params:{
+    const loadClasses = () => {
+        axios.get(axios.defaults.baseURL + '/tridy/getMultipleByID', {
+            params: {
                 classes: selectedRaceState.dostupneTridy
             }
         })
-        .then(responseQuery => {
-            setLoadedClasses(responseQuery.data)
-        })
+            .then(responseQuery => {
+                setLoadedClasses(responseQuery.data)
+            })
     }
 
     const selectClass = (event) => {
         setSelectedRaceState(loadedClasses[event.target.value])
     }
 
-    const submitForm = () => {
-        
-    }
+
 
     function renderForm() {
 
@@ -99,7 +112,7 @@ function AdventurerCreateModal() {
 
     function renderSecondStep() {
         return (
-            <AdventurerCreateStepTwo></AdventurerCreateStepTwo>
+            <AdventurerCreateStepTwo atributesState={atributesState} setAtributesState={setAtributesState} changeStep={changeStep}></AdventurerCreateStepTwo>
         )
     }
 
@@ -184,6 +197,16 @@ function AdventurerCreateModal() {
     }
 
 
+    const submitForm = () => {
+        let obsah = ({
+            "newAdventurer": adventurerState,
+            "owner": 10,
+            "atributes": atributesState,
+        })
+
+        axios.post(axios.defaults.baseURL + '/character/characterCreation', obsah)
+            .then(router.push({ path: '/' }))
+    }
 
     return (
         <dialog id="createAdventurerModal" className="modal">

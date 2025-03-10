@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-function AdventurerCreateStepTwo() {
+function AdventurerCreateStepTwo(props) {
 
-    const [freeAtributesState, setFreeAtributesState] = useState(8);
+
 
     return (
         <div className="modal-box">
@@ -20,32 +20,26 @@ function AdventurerCreateStepTwo() {
                 <li className="step">Shrnutí</li>
             </ul>
 
-            <div>
-                <button>-</button>
-                <p>Volné atributy: {freeAtributesState}</p>
-                <button>+</button>
+
+            <div className='grid grid-cols-2'>
+                <div className='grid grid-cols-3'>
+                    <button onClick={() => { props.setAtributesState({ ...props.atributesState, sila: props.atributesState.sila-1, free: props.atributesState.free+1})}}>-</button>
+                    <p>Síla: {props.atributesState.sila}</p>
+                    <button onClick={() => { props.setAtributesState({ ...props.atributesState, sila: props.atributesState.sila+1, free: props.atributesState.free-1})}}>+</button>
+                </div>
+
+                <div className='grid grid-cols-3'>
+                    <button onClick={() => { props.setAtributesState({ ...props.atributesState, houzevnatost: props.atributesState.houzevnatost-1, free: props.atributesState.free+1})}}>-</button>
+                    <p>Houževnatost: {props.atributesState.houzevnatost}</p>
+                    <button onClick={() => { props.setAtributesState({ ...props.atributesState, houzevnatost: props.atributesState.houzevnatost+1, free: props.atributesState.free-1})}}>+</button>
+                </div>
             </div>
 
 
-            <input type="text" placeholder="Křestní jméno" className="w-full mb-5 input input-bordered " />
-            <input type="text" placeholder="Přezdívka" className="w-full mb-5 input input-bordered " />
-            <input type="text" placeholder="Příjmení" className="w-full mb-5 input input-bordered " />
-
-            <select className="w-full max-w-xs select select-bordered">
-                <option disabled selected> Rasa ?</option>
-                <option>Han Solo</option>
-                <option>Greedo</option>
-            </select>
-
-            <select className="w-full max-w-xs select select-bordered">
-                <option disabled selected> Třída ?</option>
-                <option>Han Solo</option>
-                <option>Greedo</option>
-            </select>
 
             <div className="modal-action">
-                <button className="mx-5 btn text-primary" onClick={() => { changeStep(-1) }}>Předešlí krok</button>
-                <button className="btn text-primary" onClick={() => { changeStep(+1) }}>Další krok</button>
+                <button className="mx-5 btn text-primary" onClick={() => { props.changeStep(-1) }}>Předešlí krok</button>
+                <button className="btn text-primary" onClick={() => { props.changeStep(+1) }}>Další krok</button>
             </div>
         </div>
     )
