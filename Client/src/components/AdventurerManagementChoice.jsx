@@ -19,6 +19,8 @@ function AdventurerManagementChoice(props) {
         <div className="items-center text-center card-body">
           <h1 className="card-title"> Seznam dobrodruhů</h1>
           <div className="overflow-x-auto">
+            {}
+            <h2>žádný dobrodruh není vytvořen</h2>
             <table className="table">
               {/* head */}
               <thead>

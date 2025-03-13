@@ -1,11 +1,13 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { reduxIsLoggedIn, logoutUser } from '../store/userSlice';
+import { reduxIsLoggedIn, logoutUser, reduxReturnUser } from '../store/userSlice';
 
 
 function Navbar() {
     const isLoggedIn = useSelector(reduxIsLoggedIn)
+    const loggedUser = useSelector(reduxReturnUser)
+    console.log(loggedUser)
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
@@ -22,7 +24,7 @@ function Navbar() {
             </div>)
         } else {
             return (<div className="navbar-end">
-                Přihlášený uživatel: 
+                Přihlášený uživatel: {loggedUser.userName}
                 <a onClick={() => dispatch(logoutUser())} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Odhlasit</a>
             </div>)
         }

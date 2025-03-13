@@ -24,5 +24,6 @@ export const userSlice = createSlice({
 export const { loginUser, logoutUser } = userSlice.actions
 
 export const reduxIsLoggedIn = (state) => state.user.isLoggedIn
+export const reduxReturnUser = (state) => state.user
 
 export default userSlice.reducer

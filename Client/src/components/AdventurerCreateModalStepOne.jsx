@@ -16,7 +16,6 @@ function AdventurerCreateModalStepOne(props) {
     }
 
     function renderClassSelect() {
-        console.log(props.loadedClasses)
         return (
 
             < details className = 'z-50' >
