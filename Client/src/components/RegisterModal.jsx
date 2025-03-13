@@ -64,9 +64,7 @@ function RegisterModal() {
 
                     default:
                         if (queryResponse.status == 201 || queryResponse.data != null) {
-                            dispatch(loginUser())
-                            console.log(isLoggedIn)
-
+                            dispatch(loginUser({id:queryResponse.data, opravneni: 'uzivatel', }))
                         }
                         break;
                 }

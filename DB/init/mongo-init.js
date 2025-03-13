@@ -3,6 +3,13 @@ print("ZACINAM INIT")
 db.createCollection("users");
 
 
+adminUser = db.users.insert({
+  email: "admin",
+  heslo: "$2b$10$P.XON4PqAETDBDxEJDeFF.TsNLj0kKeZX2shdDWkD4Oy.ZXjAK5f.",
+  prezdivka: "admin",
+  
+})
+
 // ==================
 // Schopnosti
 // ==================

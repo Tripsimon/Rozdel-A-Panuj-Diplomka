@@ -35,7 +35,7 @@ function LoginModal() {
 
                     default:
                         if (queryResponse.status == 200 || queryResponse.data != null) {
-                            dispatch(loginUser())
+                            dispatch(loginUser({id: queryResponse.data._id, opravneni: queryResponse.data.opravneni, name: queryResponse.data.prezdivka}))
                         }
                         break;
                 }
