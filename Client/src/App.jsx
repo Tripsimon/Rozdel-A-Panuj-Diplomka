@@ -14,11 +14,15 @@ import ThanksPage from './pages/Thanks.jsx'
 import AdventurerManagementPage from './pages/AdventurerManagement.jsx'
 import Game from './pages/Game.jsx'
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx'
+import ProtectedAdminRoutes from './utils/ProtectedAdminRoutes.jsx';
 
 import Navbar from './components/Navbar.jsx'
 import LoginModal from './components/LoginModal.jsx'
 import RegisterModal from './components/RegisterModal.jsx'
 import AdventurerCreateModal from './components/AdventurerCreateModal.jsx'
+import MonsterManagement from './pages/MonsterManagement.jsx';
+import MapManagement from './pages/MapManagement.jsx';
+import ItemsManagement from './pages/ItemsManagement.jsx';
 
 
 function App() {
@@ -52,6 +56,13 @@ function App() {
           <Route element={<ProtectedRoutes></ProtectedRoutes>}>
             <Route index path='/adventurers' element={<AdventurerManagementPage />} />
           </Route>
+
+          <Route element={<ProtectedAdminRoutes></ProtectedAdminRoutes>} >
+            <Route index path='/admin/monsters' element={<MonsterManagement></MonsterManagement>} />
+            <Route index path='/admin/maps' element={<MapManagement></MapManagement>} />
+            <Route index path='/admin/items' element={<ItemsManagement></ItemsManagement>} />
+          </Route>
+
 
         </Routes>
       </BrowserRouter>
