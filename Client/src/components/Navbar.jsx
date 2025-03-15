@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { reduxIsLoggedIn, logoutUser, reduxReturnUser } from '../store/userSlice';
+import { reduxIsLoggedIn, logoutUser, reduxReturnUser, reduxReturnUserAuthority } from '../store/userSlice';
 
 
 function Navbar() {
@@ -70,7 +70,6 @@ function Navbar() {
             </div>
             <div className="hidden navbar-center lg:flex">
                 <ul className="px-1 menu menu-horizontal">
-
                     <li>
                         <details>
                             <summary className='text-primary'>Informace</summary>
@@ -84,6 +83,17 @@ function Navbar() {
                     <li><a onClick={() => handleNavigation('/adventurers')} className='text-primary'>Správa dobrodruhů</a></li>
                     <li><a className='text-primary'>Připojit se</a></li>
                     </>:""}
+                    {loggedUser.userAuthority == "admin" ? <li>
+                        <details>
+                            <summary className='text-primary'>Administrace</summary>
+                            <ul className="p-2 text-primary">
+                                <li><a onClick={() => handleNavigation('/admin/monsters')}>Sprava monster</a></li>
+                                <li><a onClick={() => handleNavigation('/admin/items')}>Sprava predmetu</a></li>
+                                <li><a onClick={() => handleNavigation('/admin/maps')}>Sprava lokalit</a></li>
+                            </ul>
+                        </details>
+                    </li>
+                        : ""}
                 </ul>
             </div>
             {renderUnloggedUser()}
