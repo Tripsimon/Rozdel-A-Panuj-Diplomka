@@ -10,10 +10,10 @@ function AdventurerCreateModal() {
     const [stepState, setStepState] = useState(1);
 
     const [racesChoiceState, setRacesChoiceState] = useState([]);
-    const [selectedRaceState, setSelectedRaceState] = useState([])
+    const [selectedRaceState, setSelectedRaceState] = useState(false)
 
     const [loadedClasses, setLoadedClasses] = useState([]);
-    const [selectedClass, setSelectedClass] = useState([])
+    const [selectedClassState, setSelectedClassState] = useState(false)
 
     const [adventurerState, setNewAdventurerState] = useState({
         name: null,
@@ -75,8 +75,9 @@ function AdventurerCreateModal() {
             })
     }
 
-    const selectClass = (event) => {
-        setSelectedRaceState(loadedClasses[event.target.value])
+    const selectClass = (index) => {
+        setSelectedClassState(loadedClasses[index])
+
     }
 
 
@@ -106,7 +107,7 @@ function AdventurerCreateModal() {
 
     function renderFirstStep() {
         return (
-            <AdventurerCreateModalStepOne racesChoice={racesChoiceState} selectRace={selectRace} loadedClasses={loadedClasses} selectClass={selectClass} changeStep={changeStep} ></AdventurerCreateModalStepOne>
+            <AdventurerCreateModalStepOne racesChoice={racesChoiceState} selectedRaceState={selectedRaceState} selectRace={selectRace} loadedClasses={loadedClasses} selectedClassState={selectedClassState} selectClass={selectClass} changeStep={changeStep} ></AdventurerCreateModalStepOne>
         )
     }
 
