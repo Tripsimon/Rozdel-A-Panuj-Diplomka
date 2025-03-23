@@ -4,8 +4,11 @@ import axios from 'axios'
 import AdventurerCreateStepTwo from './AdventurerCreateStepTwo';
 import AdventurerCreateModalStepOne from './AdventurerCreateModalStepOne';
 
-function AdventurerCreateModal() {
+import { reduxReturnUser } from '../store/userSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
+function AdventurerCreateModal() {
+    const loggedUser = useSelector(reduxReturnUser)
 
     const [stepState, setStepState] = useState(1);
 
@@ -107,7 +110,7 @@ function AdventurerCreateModal() {
 
     function renderFirstStep() {
         return (
-            <AdventurerCreateModalStepOne racesChoice={racesChoiceState} selectedRaceState={selectedRaceState} selectRace={selectRace} loadedClasses={loadedClasses} selectedClassState={selectedClassState} selectClass={selectClass} changeStep={changeStep} ></AdventurerCreateModalStepOne>
+            <AdventurerCreateModalStepOne racesChoiceState={racesChoiceState} selectedRaceState={selectedRaceState} selectRace={selectRace} loadedClasses={loadedClasses} selectedClassState={selectedClassState} selectClass={selectClass} changeStep={changeStep} ></AdventurerCreateModalStepOne>
         )
     }
 
@@ -201,7 +204,7 @@ function AdventurerCreateModal() {
     const submitForm = () => {
         let obsah = ({
             "newAdventurer": adventurerState,
-            "owner": 10,
+            "owner": loggedUser.userID,
             "atributes": atributesState,
         })
 

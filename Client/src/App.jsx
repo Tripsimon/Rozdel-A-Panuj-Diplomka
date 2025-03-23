@@ -31,7 +31,7 @@ function App() {
   //Mód developování
   const devMode = true
   if (devMode) {
-    axios.defaults.baseURL = 'http://localhost:3000'
+    axios.defaults.baseURL = 'http://localhost:3001'
   } else {
     axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
   }

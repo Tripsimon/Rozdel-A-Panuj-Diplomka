@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 function AdventurerCreateModalStepOne(props) {
 
@@ -9,7 +10,7 @@ function AdventurerCreateModalStepOne(props) {
                     {props.selectedRaceState != false ? props.selectedRaceState.jmeno : "Vyberte rasu"}
                 </summary>
                 <ul className="bg-primary w-full rounded-none relative !p-0">
-                    {props.racesChoice.map((race, index) => <li key={race.jmeno}><a key={race.jmeno} onClick={() => props.selectRace(index)} className='text-white text-lg  font-dm font-normal flex text-center !justify-center border-b-2 rounded-none active:!bg-primary'>{race.jmeno}</a></li>)}
+                    {props.racesChoiceState.map((race, index) => <li key={race.jmeno}><a key={race.jmeno} onClick={() => props.selectRace(index)} className='text-white text-lg  font-dm font-normal flex text-center !justify-center border-b-2 rounded-none active:!bg-primary'>{race.jmeno}</a></li>)}
                 </ul>
             </details>
         )
