@@ -64,7 +64,7 @@ function RegisterModal() {
 
                     default:
                         if (queryResponse.status == 201 || queryResponse.data != null) {
-                            dispatch(loginUser({id:queryResponse.data, opravneni: 'uzivatel', }))
+                            dispatch(loginUser({id:queryResponse.data, opravneni: 'uzivatel', name: prezdivkaState }))
                         }
                         break;
                 }

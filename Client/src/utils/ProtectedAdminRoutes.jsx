@@ -8,7 +8,12 @@ import { reduxIsLoggedIn  } from '../store/userSlice';
 
 const ProtectedAdminRoutes = () =>{
     const isLoggedIn = useSelector(reduxIsLoggedIn)
-    return isLoggedIn ? <Outlet></Outlet> : <Navigate to="/" />
+    const userAuthority = useSelector(reduxReturnUserAuthority)
+    if(userAuthority == "admin" && isLoggedIn){
+        return <Outlet></Outlet>
+    }else{
+        return <Navigate to={"/"}/>
+    }
 }
 
 export default ProtectedAdminRoutes
