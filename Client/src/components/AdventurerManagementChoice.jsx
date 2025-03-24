@@ -1,28 +1,35 @@
-import React, {useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 function AdventurerManagementChoice(props) {
+
+  const [loadedCharactersState, setLoadedCharactersState] = useState([])
 
   useEffect(() => {
     loadCharacters();
   }, []);
 
   const loadCharacters = () => {
-    axios.get(axios.defaults.baseURL + '/character/getCharacters')
-      .then(responseQuery => {
-        console.log(responseQuery.data);
+    axios.get(axios.defaults.baseURL + '/character/getCharacters', { params: { owner: 10 } })
+      .then(payload => {
+        setLoadedCharactersState(payload.data)
+        console.log(payload.data)
       })
   }
 
-  const renderAdventurersTableEntry = () => {
-    return (
-      <tr className="hover">
-        <th>1</th>
-        <td>      {props.adventurers}</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-      </tr>
-    )
+  const renderAdventurersTable = () => {
+    if (loadedCharactersState.length == 0) {
+      return (<h2>žádný dobrodruh není vytvořen</h2>)
+    } else {
+      return loadedCharactersState.map((vec) =>
+        <tr key={vec._id} className="hover">
+          <td>{vec.majitel}</td>
+          <td>{props.adventurers}</td>
+          <td>Quality Control Specialist</td>
+          <td>Blue</td>
+        </tr>)
+
+    }
   }
 
   return (
@@ -31,20 +38,19 @@ function AdventurerManagementChoice(props) {
         <div className="items-center text-center card-body">
           <h1 className="card-title"> Seznam dobrodruhů</h1>
           <div className="overflow-x-auto">
-            { }
-            <h2>žádný dobrodruh není vytvořen</h2>
+
             <table className="table">
               {/* head */}
               <thead>
                 <tr>
-                  <th></th>
+                  <th>dsa</th>
                   <th>Name</th>
                   <th>Job</th>
                   <th>Favorite Color</th>
                 </tr>
               </thead>
               <tbody>
-                {renderAdventurersTableEntry()}
+                {renderAdventurersTable()}
               </tbody>
             </table>
           </div>
