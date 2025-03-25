@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { reduxIsLoggedIn, logoutUser, reduxReturnUser, reduxReturnUserAuthority } from '../store/userSlice';
 import axios from 'axios'
 
 function AdventurerManagementChoice(props) {
+      const loggedUser = useSelector(reduxReturnUser)
 
   const [loadedCharactersState, setLoadedCharactersState] = useState([])
 
@@ -10,10 +13,9 @@ function AdventurerManagementChoice(props) {
   }, []);
 
   const loadCharacters = () => {
-    axios.get(axios.defaults.baseURL + '/character/getCharacters', { params: { owner: 10 } })
+    axios.get(axios.defaults.baseURL + '/character/getCharacters', { params: { owner: loggedUser.userID } })
       .then(payload => {
         setLoadedCharactersState(payload.data)
-        console.log(payload.data)
       })
   }
 
@@ -23,10 +25,11 @@ function AdventurerManagementChoice(props) {
     } else {
       return loadedCharactersState.map((vec) =>
         <tr key={vec._id} className="hover">
-          <td>{vec.majitel}</td>
-          <td>{props.adventurers}</td>
-          <td>Quality Control Specialist</td>
-          <td>Blue</td>
+          <td>{vec.krestniJmeno}</td>
+          <td>{vec.prijmeni}</td>
+          <td>{vec.prezdivka}</td>
+          <td>{vec.rasa}</td>
+          <td>{vec.trida}</td>
         </tr>)
 
     }
@@ -43,10 +46,11 @@ function AdventurerManagementChoice(props) {
               {/* head */}
               <thead>
                 <tr>
-                  <th>dsa</th>
-                  <th>Name</th>
-                  <th>Job</th>
-                  <th>Favorite Color</th>
+                  <th>Křestní jméno</th>
+                  <th>Příjmení</th>
+                  <th>Přezdívka</th>
+                  <th>Rasa</th>
+                  <th>Třída</th>
                 </tr>
               </thead>
               <tbody>
@@ -56,8 +60,6 @@ function AdventurerManagementChoice(props) {
           </div>
           <div className="justify-end card-actions">
             <a onClick={() => document.getElementById('createAdventurerModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Vytvořit nového</a>
-            <button className="btn btn-primary">Accept</button>
-            <button className="btn btn-ghost">Deny</button>
           </div>
         </div>
       </div>

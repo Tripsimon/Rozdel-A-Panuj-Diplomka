@@ -37,10 +37,10 @@ function AdventurerCreateModal() {
         free: 8,
         sila: 8,
         houzevnatost: 8,
-        obratnostAtributes: 8,
-        charismaAtributes: 8,
-        inteligenceAtributes: 8,
-        znalostAtributes: 8
+        obratnost: 8,
+        charisma: 8,
+        inteligence: 8,
+        znalost: 8
     });
 
     useEffect(() => {
@@ -136,22 +136,10 @@ function AdventurerCreateModal() {
                     <li className="step step-primary">Příběh</li>
                     <li className="step">Shrnutí</li>
                 </ul>
+                <div className="divider divider-primary"></div>
 
-                <input type="text" placeholder="Křestní jméno" className="w-full mb-5 input input-bordered " />
-                <input type="text" placeholder="Přezdívka" className="w-full mb-5 input input-bordered " />
-                <input type="text" placeholder="Příjmení" className="w-full mb-5 input input-bordered " />
-
-                <select className="w-full max-w-xs select select-bordered">
-                    <option disabled selected> Rasa ?</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
-
-                <select className="w-full max-w-xs select select-bordered">
-                    <option disabled selected> Třída ?</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
+                <textarea value={adventurerState.description} onChange={(event) => setAdventurerState({...adventurerState, description: event.target.value})} className="textarea" placeholder="Popis"></textarea>
+                <textarea value={adventurerState.story} onChange={(event) => setAdventurerState({...adventurerState, story: event.target.value})} className="textarea" placeholder="Příběh"></textarea>
 
                 <div className="modal-action">
                     <button className="mx-5 btn text-primary" onClick={() => { changeStep(-1) }}>Předešlí krok</button>
@@ -172,26 +160,12 @@ function AdventurerCreateModal() {
 
                 <ul className="steps steps-vertical lg:steps-horizontal">
                     <li className="step step-primary">Základ dobrodruha</li>
-                    <li className="step step-primary">Atributy</li>
+                    <li className="step step-primary ">Atributy</li>
                     <li className="step step-primary">Příběh</li>
-                    <li className="step step-primary">Shrnutí</li>
+                    <li className="step">Shrnutí</li>
                 </ul>
-
-                <input type="text" placeholder="Křestní jméno" className="w-full mb-5 input input-bordered " />
-                <input type="text" placeholder="Přezdívka" className="w-full mb-5 input input-bordered " />
-                <input type="text" placeholder="Příjmení" className="w-full mb-5 input input-bordered " />
-
-                <select className="w-full max-w-xs select select-bordered">
-                    <option disabled selected> Rasa ?</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
-
-                <select className="w-full max-w-xs select select-bordered">
-                    <option disabled selected> Třída ?</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
+                <div className="divider divider-primary"></div>
+               <h3>SOUHRN</h3>
 
                 <div className="modal-action">
                     <button className="mx-5 btn text-primary" onClick={() => { changeStep(-1) }}>Předešlí krok</button>

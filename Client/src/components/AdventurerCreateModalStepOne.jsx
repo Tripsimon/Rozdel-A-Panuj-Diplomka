@@ -52,6 +52,7 @@ function AdventurerCreateModalStepOne(props) {
                 <li className="step">Příběh</li>
                 <li className="step">Shrnutí</li>
             </ul>
+            <div className="divider divider-primary"></div>
 
             <input type="text" value={props.adventurerState.name} onChange={(event) => props.setAdventurerState({...props.adventurerState, name: event.target.value})} placeholder="Křestní jméno" className="w-full mb-5 text-white input border-primary active:border-secondary input-bordered " />
             <input type="text" value={props.adventurerState.nickname} onChange={(event) => props.setAdventurerState({...props.adventurerState, nickname: event.target.value})} placeholder="Přezdívka" className="w-full mb-5 text-white border-primary active:border-secondary input input-bordered " />
