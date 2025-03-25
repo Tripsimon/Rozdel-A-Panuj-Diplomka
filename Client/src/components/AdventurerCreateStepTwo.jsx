@@ -22,16 +22,16 @@ function AdventurerCreateStepTwo(props) {
 
 
             <div className='grid grid-cols-2'>
-                <div className='grid grid-cols-3'>
-                    <button onClick={() => { props.setAtributesState({ ...props.atributesState, sila: props.atributesState.sila-1, free: props.atributesState.free+1})}}>-</button>
-                    <p>Síla: {props.atributesState.sila}</p>
-                    <button onClick={() => { props.setAtributesState({ ...props.atributesState, sila: props.atributesState.sila+1, free: props.atributesState.free-1})}}>+</button>
+                <div className='flex items-center justify-center border-2 border-primary rounded-xl '>
+                    <button className='text-primary select-none font-bold text-lg pr-[15%]' onClick={() => { props.setAtributesState({ ...props.atributesState, sila: props.atributesState.sila-1, free: props.atributesState.free+1})}}>-</button>
+                    <p className='justify-center text-lg font-bold text-primary' >Síla: {props.atributesState.sila}</p>
+                    <button className='text-primary select-none font-bold text-lg pl-[15%]' onClick={() => { props.setAtributesState({ ...props.atributesState, sila: props.atributesState.sila+1, free: props.atributesState.free-1})}}>+</button>
                 </div>
 
-                <div className='grid grid-cols-3'>
-                    <button onClick={() => { props.setAtributesState({ ...props.atributesState, houzevnatost: props.atributesState.houzevnatost-1, free: props.atributesState.free+1})}}>-</button>
-                    <p>Houževnatost: {props.atributesState.houzevnatost}</p>
-                    <button onClick={() => { props.setAtributesState({ ...props.atributesState, houzevnatost: props.atributesState.houzevnatost+1, free: props.atributesState.free-1})}}>+</button>
+                <div className='flex items-center justify-center border-2 border-primary rounded-xl '>
+                    <button className='text-primary select-none font-bold text-lg pr-[15%]' onClick={() => { props.setAtributesState({ ...props.atributesState, sila: props.atributesState.sila-1, free: props.atributesState.free+1})}}>-</button>
+                    <p className='justify-center text-lg font-bold text-primary' >Síla: {props.atributesState.sila}</p>
+                    <button className='text-primary select-none font-bold text-lg pl-[15%]' onClick={() => { props.setAtributesState({ ...props.atributesState, sila: props.atributesState.sila+1, free: props.atributesState.free-1})}}>+</button>
                 </div>
             </div>
 

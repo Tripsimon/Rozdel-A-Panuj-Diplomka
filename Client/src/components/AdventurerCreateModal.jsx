@@ -18,10 +18,10 @@ function AdventurerCreateModal() {
     const [loadedClasses, setLoadedClasses] = useState([]);
     const [selectedClassState, setSelectedClassState] = useState(false)
 
-    const [adventurerState, setNewAdventurerState] = useState({
-        name: null,
-        secondName: null,
-        nickname: null,
+    const [adventurerState, setAdventurerState] = useState({
+        name: "",
+        secondName: "",
+        nickname: "",
         race: null,
         class: null,
         mainGear: null,
@@ -63,6 +63,7 @@ function AdventurerCreateModal() {
     const selectRace = (index) => {
         setSelectedRaceState(racesChoiceState[index])
         loadClasses(racesChoiceState[index].dostupneTridy)
+        setAdventurerState({...adventurerState, race: racesChoiceState[index].jmeno})
     }
 
 
@@ -80,7 +81,7 @@ function AdventurerCreateModal() {
 
     const selectClass = (index) => {
         setSelectedClassState(loadedClasses[index])
-
+        setAdventurerState({...adventurerState, class: loadedClasses[index].jmeno})
     }
 
 
@@ -110,7 +111,7 @@ function AdventurerCreateModal() {
 
     function renderFirstStep() {
         return (
-            <AdventurerCreateModalStepOne racesChoiceState={racesChoiceState} selectedRaceState={selectedRaceState} selectRace={selectRace} loadedClasses={loadedClasses} selectedClassState={selectedClassState} selectClass={selectClass} changeStep={changeStep} ></AdventurerCreateModalStepOne>
+            <AdventurerCreateModalStepOne adventurerState={adventurerState} setAdventurerState={setAdventurerState} racesChoiceState={racesChoiceState} selectedRaceState={selectedRaceState} selectRace={selectRace} loadedClasses={loadedClasses} selectedClassState={selectedClassState} selectClass={selectClass} changeStep={changeStep} ></AdventurerCreateModalStepOne>
         )
     }
 
@@ -202,6 +203,7 @@ function AdventurerCreateModal() {
 
 
     const submitForm = () => {
+        console.log(adventurerState)
         let obsah = ({
             "newAdventurer": adventurerState,
             "owner": loggedUser.userID,
