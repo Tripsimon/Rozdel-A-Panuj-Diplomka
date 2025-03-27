@@ -27,9 +27,8 @@ function MapCreateModal() {
     const squares = [];
     squaresState.forEach((heightItem,indexi) => {
       const row = [];
-      console.log(heightItem)
       heightItem.forEach((rowItem,indexj) => {
-        row.push(<div key={`${indexi}-${indexj}`} id={"place-" + indexi + "-" + indexj} className='bg-red-50 w-[25px] h-[25px] m-0.5'></div>);
+        row.push(<div key={`${indexi}-${indexj}`} id={"place-" + indexi + "-" + indexj} onClick={() => localityClick(indexi,indexj)} className='bg-red-50 w-[25px] h-[25px] m-0.5'></div>);
       })
       squares.push(
         <div key={indexi} className='flex'>
@@ -39,6 +38,11 @@ function MapCreateModal() {
     });
        
 
+    const localityClick = (i,j) =>{
+      var mapHolder = squaresState;
+      mapHolder[i][j] = 1
+      console.log(mapHolder)
+    }
 
     return squares;
   }
