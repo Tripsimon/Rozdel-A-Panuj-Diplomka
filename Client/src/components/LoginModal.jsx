@@ -17,9 +17,6 @@ function LoginModal() {
     function prihlaseni() {
         axios.post(axios.defaults.baseURL + '/uzivatel/prihlaseni', { 'email': emailState, 'heslo': passwordState })
             .then(queryResponse => {
-
-                console.log(queryResponse);
-
                 switch (queryResponse.data) {
                     case 'No User Found':
                         alertTitle.value = "Učet nenalezen",

@@ -177,7 +177,6 @@ function AdventurerCreateModal() {
 
 
     const submitForm = () => {
-        console.log(adventurerState)
         let obsah = ({
             "newAdventurer": adventurerState,
             "owner": loggedUser.userID,

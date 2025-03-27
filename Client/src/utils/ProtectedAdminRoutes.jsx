@@ -9,7 +9,6 @@ import { reduxIsLoggedIn, reduxReturnUser  } from '../store/userSlice';
 const ProtectedAdminRoutes = () =>{
     const isLoggedIn = useSelector(reduxIsLoggedIn)
     const loggedUser = useSelector(reduxReturnUser)
-    console.log(loggedUser)
     if(loggedUser.userAuthority == "admin" && isLoggedIn){
         return <Outlet></Outlet>
     }else{
