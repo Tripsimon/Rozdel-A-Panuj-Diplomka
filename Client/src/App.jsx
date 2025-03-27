@@ -23,6 +23,7 @@ import AdventurerCreateModal from './components/AdventurerCreateModal.jsx'
 import MonsterManagement from './pages/MonsterManagement.jsx';
 import MapManagement from './pages/MapManagement.jsx';
 import ItemsManagement from './pages/ItemsManagement.jsx';
+import MapCreateModal from './components/MapCreateModal.jsx';
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <LoginModal></LoginModal>
         <RegisterModal></RegisterModal>
         <AdventurerCreateModal></AdventurerCreateModal>
+        <MapCreateModal></MapCreateModal>
 
         <Navbar></Navbar>
         <Routes>
@@ -55,6 +57,7 @@ function App() {
 
           <Route element={<ProtectedRoutes></ProtectedRoutes>}>
             <Route index path='/adventurers' element={<AdventurerManagementPage />} />
+            <Route index path='/game' element={<Game></Game>} />
           </Route>
 
           <Route element={<ProtectedAdminRoutes></ProtectedAdminRoutes>} >

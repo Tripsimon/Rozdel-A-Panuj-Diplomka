@@ -67,7 +67,6 @@ router.post("/prihlaseni", async (req, res) => {
 
     UserModel.findOne({ email: req.body.email })
         .then(async User => {
-
             if (User == null) {
                 res.send('No User Found');
             } else {

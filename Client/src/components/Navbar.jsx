@@ -7,6 +7,7 @@ import { reduxIsLoggedIn, logoutUser, reduxReturnUser, reduxReturnUserAuthority 
 function Navbar() {
     const isLoggedIn = useSelector(reduxIsLoggedIn)
     const loggedUser = useSelector(reduxReturnUser)
+    console.log(loggedUser)
     const dispatch = useDispatch()
     const navigate = useNavigate();
 

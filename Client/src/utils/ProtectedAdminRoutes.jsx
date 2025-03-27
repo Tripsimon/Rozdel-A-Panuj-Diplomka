@@ -1,15 +1,16 @@
 import { Outlet, Navigate} from "react-router-dom";
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { reduxIsLoggedIn  } from '../store/userSlice';
+import { useSelector } from 'react-redux';
+import { reduxIsLoggedIn, reduxReturnUser  } from '../store/userSlice';
 
 
 
 const ProtectedAdminRoutes = () =>{
     const isLoggedIn = useSelector(reduxIsLoggedIn)
-    const userAuthority = useSelector(reduxReturnUserAuthority)
-    if(userAuthority == "admin" && isLoggedIn){
+    const loggedUser = useSelector(reduxReturnUser)
+    console.log(loggedUser)
+    if(loggedUser.userAuthority == "admin" && isLoggedIn){
         return <Outlet></Outlet>
     }else{
         return <Navigate to={"/"}/>

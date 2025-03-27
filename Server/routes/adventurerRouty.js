@@ -20,8 +20,6 @@ router.get("/", (req, res) => {
 router.post("/characterCreation", (req, res) => {
     data = req.body.newAdventurer
     atributesInput = req.body.atributes
-
-    console.log(data)
     const newAdventurer = new AdventurerModel({
         majitel: req.body.owner,
         krestniJmeno: data.name,
