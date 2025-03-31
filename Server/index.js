@@ -50,6 +50,9 @@ app.use('/sessions',sessionsRouty)
 const pozadiRouter = require('./routes/pozadiRoute.js')
 app.use('/pozadi',pozadiRouter);
 
+const localityRouter = require("./routes/localityRouty.js")
+app.use('/locality',localityRouter)
+
 const vybavaRouter = require('./routes/vybavaRouty.js')
 app.use('/vybava',vybavaRouter);
 

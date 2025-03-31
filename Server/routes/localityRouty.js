@@ -5,7 +5,7 @@ const express = require('express')
 const router = express.Router()
 
 // DB Model
-const LocalitySchema = require('../models/LocalityModel.js');
+const LocalityModel = require('../models/LocalityModel.js');
 
 /**
  * Kontrola funkce
@@ -14,6 +14,23 @@ router.get("/", (req, res) => {
     res.send("Strom lokalit");
 })
 
+router.post("/createLocality", (req,res) =>{
+    console.log("Tvorba lokality")
+
+    let newLocality = new LocalityModel({
+        name: req.body.localityName,
+        height: req.body.localityHeight,
+        width: req.body.localityWidth,
+        map: req.body.locality,
+        owner: req.body.owner
+    })
+    newLocality.save()
+    .then(() =>{
+        res.send("Success")
+    }).catch(() =>{
+        console.log("Problem při tvorbě lokality")
+    })
+})
 /**
  * Navrátí config data
  */

@@ -7,6 +7,7 @@ const LocalitySchema = new Schema({
     width: String,
     height: String,
     map: [[Number]],
+    owner: String,
     },
     {collection: "locality"}
     )

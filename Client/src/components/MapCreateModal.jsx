@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { use } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import {reduxReturnUser } from '../store/userSlice';
 
 function MapCreateModal() {
-
+  const loggedUser = useSelector(reduxReturnUser)
+    
   const [localityName, setLocalityName] = useState("")
   const [localityWidthState, setLocalityWidthState] = useState(10)
   const [localityHeightState, setLocalityHeightState] = useState(10)
@@ -81,6 +85,20 @@ function MapCreateModal() {
     setLocalityClickState(chosenType)
   }
 
+  const submitForm = () =>{
+    let obsah = ({
+      "localityName": localityName,
+      "localityHeight": localityHeightState,
+      "localityWidth": localityHeightState,
+      "locality": squaresState,
+      "owner": loggedUser.userID
+
+  })
+
+  axios.post(axios.defaults.baseURL + '/locality/createLocality', obsah)
+      .then()
+  }
+
   return (
     <dialog id="createMapModal" className="modal">
       <div className="modal-box w-[90%] max-w-[90%]">
@@ -103,7 +121,7 @@ function MapCreateModal() {
 
         <div className="modal-action">
           <form method="dialog">
-            <button onClick={() => { register() }} className="mx-5 btn text-primary">Uložit lokalitu</button>
+            <button onClick={() => { submitForm() }} className="mx-5 btn text-primary">Uložit lokalitu</button>
             <button className="btn text-primary">Zavřít</button>
           </form>
         </div>
