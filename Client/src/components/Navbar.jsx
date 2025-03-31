@@ -88,7 +88,8 @@ function Navbar() {
                             <ul className="p-2 text-primary">
                                 <li><a onClick={() => handleNavigation('/admin/monsters')}>Sprava monster</a></li>
                                 <li><a onClick={() => handleNavigation('/admin/items')}>Sprava predmetu</a></li>
-                                <li><a onClick={() => handleNavigation('/admin/maps')}>Sprava lokalit</a></li>
+                                <li><a onClick={() => handleNavigation('/admin/maps')}>Sprava map</a></li>
+                                <li><a onClick={() => handleNavigation('/admin/localities')}>Sprava lokalit</a></li>
                             </ul>
                         </details>
                     </li>
