@@ -7,7 +7,7 @@ function GameMap() {
                 <figure>
                     <img
                     className='w-[90%] h-[90%]'
-                        src="http://localhost:3001/backgrounds/Mapa.jpg"
+                        src="../../public/mapa.png"
                         alt="Shoes" />
                 </figure>
                 <div className="card-body">
