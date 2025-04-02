@@ -1,12 +1,14 @@
 import React from 'react'
 import Icon from '@mdi/react';
-import { mdiSwapHorizontal, mdiMapLegend } from '@mdi/js';
+import { mdiSwapHorizontal, mdiMapLegend, mdiAlertCircleOutline } from '@mdi/js';
 import GameHudSlovotepecMapModal from './GameHudSlovotepecMapModal';
+import GameHudSlovotepecLocalityModal from './GameHudSlovotepecLocalityModal';
 
 function GameHudSlovotepec(props) {
     return (
         <>
-        <GameHudSlovotepecMapModal setGameAdventureMapState={props.setGameAdventureMapState}></GameHudSlovotepecMapModal>
+            <GameHudSlovotepecLocalityModal></GameHudSlovotepecLocalityModal>
+            <GameHudSlovotepecMapModal setGameAdventureMapState={props.setGameAdventureMapState}></GameHudSlovotepecMapModal>
             <div className="fixed bottom-0 flex w-[100%] flex-row-nav justify-around bg-secondary ">
 
 
@@ -27,23 +29,16 @@ function GameHudSlovotepec(props) {
                 </button>
 
                 <button>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                    <span className="btm-nav-label">Inventář</span>
+                    <Icon path={mdiAlertCircleOutline} size={1} />
+                    <span className="text-primary">Nepřátelé</span>
                 </button>
                 <button onClick={() => document.getElementById('GameHudSlovotepecMapModal').showModal()} >
                     <Icon path={mdiMapLegend} size={1} />
-                    <span  className="text-primary">Mapy</span>
+                    <span className="text-primary">Mapy</span>
+                </button>
+                <button onClick={() => document.getElementById('GameHudSlovotepecLocalityModal').showModal()} >
+                    <Icon path={mdiMapLegend} size={1} />
+                    <span className="text-primary">Lokality</span>
                 </button>
                 <button onClick={() => props.swapGameMode()}>
                     <Icon path={mdiSwapHorizontal} size={1} />
