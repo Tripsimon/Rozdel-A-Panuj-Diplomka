@@ -34,7 +34,7 @@ function Navbar() {
     }
 
     return (
-        <div className="sticky top-0 w-full p-0 rounded-md navbar bg-secondary">
+        <div className="sticky top-0 w-full p-0 rounded-md z-1 navbar bg-secondary">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn bg-primary btn-ghost lg:hidden">

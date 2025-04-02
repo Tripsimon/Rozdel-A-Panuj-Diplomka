@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import GameHud from '../components/GameHud'
+import GameHudAdventurer from '../components/GameHudAdventurer'
+import GameHudSlovotepec from '../components/GameHudSlovotepec'
 import GameMap from "../components/GameMap"
 import GameBattleLocality  from "../components/GameBattleLocality"
 import GameBattleSequencer from '../components/GameBattleSequencer'
+import GameAdventurersDisplay from '../components/GameAdventurersDisplay'
 
 function Game() {
 
     const [gameModeState, setGameModeState] = useState('adventure')
+    const [gameAdverureMapState, setGameAdventureMapState] = useState("mapa.jpg")
 
     const swapGameMode = () =>{
         switch (gameModeState) {
@@ -29,8 +32,22 @@ function Game() {
                 return(<><GameBattleSequencer></GameBattleSequencer><GameBattleLocality></GameBattleLocality></>)
         
             case 'adventure':
-                return(<><GameMap></GameMap></>)
+                return(<><GameMap gameAdverureMapState={gameAdverureMapState}></GameMap></>)
         
+            default:
+                break;
+        }
+    }
+
+    const renderHUD = () => {
+        switch (false) {
+            case true:
+                return(<GameHudAdventurer></GameHudAdventurer>)
+                break;
+        
+            case false:
+                return(<GameHudSlovotepec setGameAdventureMapState={setGameAdventureMapState} swapGameMode={swapGameMode}></GameHudSlovotepec>)
+                break;
             default:
                 break;
         }
@@ -38,10 +55,12 @@ function Game() {
 
     return (
         <div>
-                        <button onClick={() =>swapGameMode()}>swap</button>
+
             {renderGameMode()}
 
-            <GameHud></GameHud>
+            <GameAdventurersDisplay></GameAdventurersDisplay>
+
+            {renderHUD()}
         </div>
     )
 }

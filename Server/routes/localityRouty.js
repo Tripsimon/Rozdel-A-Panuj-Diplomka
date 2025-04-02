@@ -31,6 +31,15 @@ router.post("/createLocality", (req,res) =>{
         console.log("Problem při tvorbě lokality")
     })
 })
+
+router.get("/getLocalities", (req,res) =>{
+    console.log("Tvorba lokality")
+
+    LocalityModel.find()
+    .then(payload =>{
+        res.send(payload)
+    })
+})
 /**
  * Navrátí config data
  */

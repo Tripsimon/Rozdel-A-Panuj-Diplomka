@@ -1,24 +1,22 @@
 import React from 'react'
 
-function GameMap() {
+function GameMap(props) {
+
+    const generateMapLink = () =>{
+        console.log(props.gameAdverureMapState)
+        return "http://localhost:3001/backgrounds/"+props.gameAdverureMapState
+    }
+
     return (
-        <div className='mb-[10%]'>
-            <div className=" shadow-xl px-[5%] bg-secondary h-[90%] card card-compact bg-base-100">
+        <div className='z-0 p-8'>
+            <div className=" shadow-xl px-[5%] py-5 bg-secondary h-[90%] card card-compact bg-base-100">
                 <figure>
                     <img
                     className='w-[90%] h-[90%]'
-                        src="http://localhost:3001/backgrounds/Mapa.jpg"
-                        alt="Shoes" />
+                        src={generateMapLink()}
+                        alt="Herní mapa" />
                 </figure>
-                <div className="card-body">
-                    <h2 className="card-title">Ovládací panel</h2>
-                    <p>//TODO, Bojové akce?</p>
-                    <div className=" card-actions">
-                        <button className="btn btn-error">Utéct z boje</button>
-                        <button className="btn btn-warning">Začít boj</button>
-                        <button className="btn btn-success">Akce 3</button>
-                    </div>
-                </div>
+
             </div>
         </div>
     )
