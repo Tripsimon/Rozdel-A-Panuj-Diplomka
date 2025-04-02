@@ -5,7 +5,7 @@ function MapManagement() {
     <div>
       <div className="card bg-neutral text-neutral-content w-[90%] ml-[5%]">
         <div className="items-center text-center card-body">
-          <h1 className="card-title"> Seznam dobrodruhů</h1>
+          <h1 className="card-title"> Seznam vytvořených lokalit</h1>
           <div className="overflow-x-auto">
 
             <table className="table">
