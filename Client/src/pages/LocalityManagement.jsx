@@ -1,6 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from "axios"
+
 
 function MapManagement() {
+  const [loadedLocalitiesState, setLoadedLocalitiesState] = useState([])
+
+  useEffect(() => {
+    loadLocalities()
+  }, [])
+
+  const loadLocalities = () => {
+    axios.get(axios.defaults.baseURL + '/locality/getLocalities')
+      .then(response => {
+        setLoadedLocalitiesState(response.data)
+      })
+  }
+
+  const renderLocalitiesTable = () =>{
+    return loadedLocalitiesState.map(locality =><tr key={locality.name} value={locality.name}><td>{locality.name}</td><td>{locality.height}</td><td>{locality.width}</td></tr>)
+}
+
   return (
     <div>
       <div className="card bg-neutral text-neutral-content w-[90%] ml-[5%]">
@@ -12,14 +31,13 @@ function MapManagement() {
               {/* head */}
               <thead>
                 <tr>
-                  <th>Křestní jméno</th>
-                  <th>Příjmení</th>
-                  <th>Přezdívka</th>
-                  <th>Rasa</th>
-                  <th>Třída</th>
+                  <th>Jméno</th>
+                  <th>Výška</th>
+                  <th>Šířka</th>
                 </tr>
               </thead>
               <tbody>
+                {renderLocalitiesTable()}
               </tbody>
             </table>
           </div>
