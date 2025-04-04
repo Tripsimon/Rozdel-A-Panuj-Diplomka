@@ -17,16 +17,15 @@ router.get("/", (req, res) => {
  */
 router.post('/createWeapon',(req,res) =>{
     let newItem = new EquipmentModel({
-        jmeno: req.body.name,
+        name: req.body.name,
         typ: req.body.type,
-        popis: req.body.description,
-        schopnosti: req.body.abilities,
-        pruraznost: req.body.pierce,
-        poskozeniZaklad: req.body.damageBase,
-        poskozeniZavaznost: req.body.damageSeverity,
-        vaha: req.body.weight,
-        poznamka: null,
-        mazatelnost: true,
+        description: req.body.description,
+        abilities: req.body.abilities,
+        pierce: req.body.pierce,
+        damageBase: req.body.damageBase,
+        damageSeverity: req.body.damageSeverity,
+        weight: req.body.weight,
+        deletable: true,
     })
     newItem.save()
         .then( res.send("Item Created"))

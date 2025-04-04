@@ -5,22 +5,21 @@ const Schema = mongoose.Schema;
  * Schéma pro předměty dobrodruhů
  */
 const EquipmentSchema = new Schema({
-    jmeno: String,
+    name: String,
     typ: String,
-    popis: String,
-    schopnosti: [{
+    description: String,
+    abilities: [{
         jmeno:String,
         typ: String,
         cd: Number,
         schopnost: String,
     }],
-    pruraznost: Number,
-    poskozeniZaklad: Number,
-    poskozeniZavaznost: Number,
+    pierce: Number,
+    damageBase: Number,
+    damageSeverity: Number,
     obrana: Number,
-    vaha: Number,
-    poznamka: String,
-    mazatelnost: Boolean,
+    weight: Number,
+    deletable: Boolean,
 },
 
     {collection: "equipments"}

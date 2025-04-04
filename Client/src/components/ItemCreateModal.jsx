@@ -4,20 +4,21 @@ import axios from 'axios'
 
 function ItemCreateModal() {
 
-    const [typState, setTypState] = useState("item")
+    const [typState, setTypState] = useState("Vyberte typ předmětu")
     const [itemNameState, setItemNameState] = useState("")
     const [itemDescriptionState, setItemDescriptionState] = useState("")
-    const [itemWeightState, setItemWeightState] = useState()
+    const [itemWeightState, setItemWeightState] = useState("")
     const [itemPierceState, setItemPierceState] = useState()
     const [itemDamageBaseState, setItemDamageBaseState] = useState()
     const [itemDamageCriticalState, setItemDamageCriticalState] = useState()
+    const [itemDefenceState, setItemDefenceState] = useState()
 
     const renderForm = () => {
         switch (typState) {
             case "weapon":
                 return renderWeaponForm()
 
-            case "armour":
+            case "armor":
                 return renderArmor()
 
             default:
@@ -39,14 +40,7 @@ function ItemCreateModal() {
 
     const renderArmor = () => {
         return (<div>
-            <select value={typState} onChange={(event) => { setTypState(event.target.value) }} className="w-full mb-5 input-bordered select">
-                <option disabled={true}>Typ zbroje</option>
-                <option>Zbroj</option>
-                <option>Výbava</option>
-                <option>Předmět</option>
-            </select>
-            <input type="number" placeholder="Zbroj" onChange={(event) => { setEmailState(event.target.value); }} className="w-full mb-5 input input-bordered " />
-
+            <input type="number" placeholder="Zbroj" value={itemDefenceState} onChange={(event) => { setItemDefenceState(event.target.value); }} className="w-full mb-5 input input-bordered " />
         </div>)
     }
 
@@ -56,7 +50,15 @@ function ItemCreateModal() {
             case "weapon":
                 uploadWeapon()
                 break;
-        
+
+            case "armor":
+                uploadArmor()
+                break;
+
+            case "item":
+                uploadItem()
+                break;
+
             default:
                 break;
         }
@@ -77,7 +79,7 @@ function ItemCreateModal() {
                 'pierce': itemPierceState,
                 'damageBase': itemDamageBaseState,
                 'damageSeverity': itemDamageCriticalState,
-                
+
             })
             .then(queryResponse => {
                 console.log(queryResponse.data)
@@ -92,16 +94,17 @@ function ItemCreateModal() {
     function uploadArmor() {
         axios.post(axios.defaults.baseURL + '/vybava/createArmor',
             {
-                'name': chosenName.value,
-                'type': chosenType.value,
-                'description': chosenDescription.value,
-                'abilities': chosenAbilities.value,
-                'obrana': chosenArmor.value,
-                'weight': chosenWeight.value
+                'name': itemNameState,
+                'type': typState,
+                'description': itemDescriptionState,
+                'abilities': [],
+                'obrana': itemDefenceState,
+                'weight': itemWeightState
             })
             .then(queryResponse => {
+                console.log(queryResponse.data)
                 if (queryResponse.reponse == "Item Created") {
-                    updateData()
+                    
                 }
             })
     }
@@ -113,16 +116,14 @@ function ItemCreateModal() {
 
         axios.post(axios.defaults.baseURL + '/vybava/createItem',
             {
-                'name': chosenName.value,
-                'type': chosenType.value,
-                'description': chosenDescription.value,
-                'abilities': chosenAbilities.value,
-                'weight': chosenWeight.value
+                'name': itemNameState,
+                'type': typState,
+                'description': itemDescriptionState,
+                'abilities': [],
+                'weight': itemWeightState
             })
             .then(queryResponse => {
                 if (queryResponse.reponse == "Item Created") {
-                    updateData()
-                    chosenType.value = null
                 }
             })
     }
@@ -140,8 +141,8 @@ function ItemCreateModal() {
                     <option disabled={true}>Vyberte typ předmětu</option>
                     <option value={"weapon"} >Zbraň</option>
                     <option value={"armor"}>Zbroj</option>
-                    <option value={"consumable"}>Výbava</option>
                     <option value={"item"}>Předmět</option>
+                    <option disabled={true} value={"consumable"}>Výbava</option>
                 </select>
 
                 {renderForm()}

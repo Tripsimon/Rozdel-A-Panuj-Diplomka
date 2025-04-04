@@ -18,7 +18,7 @@ function ItemsManagement() {
 }
 
 const renderItemsTable = () =>{
-  return loadedItemsState.map((item) =><tr key={item._id}><td>{item.jmeno}</td><td>{item.description}</td><td>{item.type}</td></tr>)
+  return loadedItemsState.map((item) =><tr key={item._id}><td>{item.name}</td><td>{item.typ}</td><td>{item.description}</td><td>{item.weight}</td></tr>)
 }
 
   return (
@@ -34,11 +34,10 @@ const renderItemsTable = () =>{
                 {/* head */}
                 <thead>
                   <tr>
-                    <th>Křestní jméno</th>
-                    <th>Příjmení</th>
-                    <th>Přezdívka</th>
-                    <th>Rasa</th>
-                    <th>Třída</th>
+                    <th>Jméno předmětu</th>
+                    <th>Typ</th>
+                    <th>Popis</th>
+                    <th>Váha</th>
                   </tr>
                 </thead>
                 <tbody>
