@@ -26,6 +26,7 @@ import ItemsManagement from './pages/ItemsManagement.jsx';
 import MapManagement from './pages/MapManagement.jsx';
 import LocalityCreateModal from './components/LocalityCreateModal.jsx';
 import MapCreateModal from './components/MapCreateModal.jsx';
+import GameBrowser from './pages/GameBrowser.jsx';
 
 
 
@@ -62,6 +63,7 @@ function App() {
           <Route element={<ProtectedRoutes></ProtectedRoutes>}>
             <Route index path='/adventurers' element={<AdventurerManagementPage />} />
             <Route index path='/game' element={<Game></Game>} />
+            <Route index path='/gameBrowse' element={<GameBrowser></GameBrowser>}></Route>
           </Route>
 
           <Route element={<ProtectedAdminRoutes></ProtectedAdminRoutes>} >

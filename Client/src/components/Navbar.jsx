@@ -80,7 +80,7 @@ function Navbar() {
                     </li>
                     {isLoggedIn?<>
                     <li><a onClick={() => handleNavigation('/adventurers')} className='text-primary'>Správa dobrodruhů</a></li>
-                    <li><a className='text-primary'>Připojit se</a></li>
+                    <li><a onClick={() => handleNavigation('/gameBrowse')} className='text-primary'>Začít hrát</a></li>
                     </>:""}
                     {loggedUser.userAuthority == "admin" ? <li>
                         <details>
