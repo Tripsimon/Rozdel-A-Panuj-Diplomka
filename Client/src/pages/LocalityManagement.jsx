@@ -42,7 +42,7 @@ function MapManagement() {
             </table>
           </div>
           <div className="justify-end card-actions">
-            <a onClick={() => document.getElementById('createLocalityModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Vytvořit novou mapu</a>
+            <a onClick={() => document.getElementById('createLocalityModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Vytvořit novou lokalitu</a>
           </div>
         </div>
       </div>

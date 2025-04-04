@@ -20,33 +20,34 @@ router.get("/", (req, res) => {
 router.post('/createMonster', (req, res) => {
     let newMonster = new MonsterModel({
 
-        jmeno: req.body.name,
-        popis: req.body.description,
+        name: req.body.name,
+        description: req.body.description,
         typ: req.body.type,
-        schopnosti: req.body.abilities,
+        abilities: req.body.abilities,
 
-        sila: req.body.strength,
-        houzevnatost: req.body.constitution,
-        obratnost: req.body.agility,
+        strength: req.body.strength,
+        constitution: req.body.constitution,
+        agility: req.body.agility,
         charisma: req.body.charisma,
         inteligence: req.body.inteligence,
-        znalost: req.body.knowledge,
+        knowledge: req.body.knowledge,
 
-        zbroj: req.body.armor,
-        zivoty: req.body.life,
+        armor: req.body.armor,
+        life: req.body.life,
 
-        pruraz: req.body.pierce,
-        poskozeniZaklad: req.body.damageBase,
-        poskozeniZavaznost: req.body.damageSeverity,
+        pierce: req.body.pierce,
+        damageBase: req.body.damageBase,
+        damageSeverity: req.body.damageSeverity,
 
-        velikostniSkupina: req.body.sizeGroup
+        sizeGroup: req.body.sizeGroup
     })
+
+    console.log(req.body.abilities)
 
 
     newMonster.save()
         .then(res.send("Monster Created"))
         .catch(error => {
-            res.send('Error')
             console.log('Vyskytla se chyba při uložení monstra:', error)
         })
 })

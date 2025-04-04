@@ -3,31 +3,31 @@ const Schema = mongoose.Schema;
 
 //Vytvoření schéma pro práci s nepřáteli
 const MonsterSchema = new Schema({
-    jmeno: String,
-    popis: String,
+    name: String,
+    description: String,
     typ: String,
-    velikostniSkupina: String,
+    sizeGroup: String,
 
-    schopnosti: [{
-        jmeno:String,
+    abilities: [{
+        name: String,
         typ: String,
-        cd: Number,
-        schopnost: String,
+        cooldown: Number,
+        effect: String,
     }],
 
-    sila: Number,
-    houzevnatost: Number,
-    obratnost: Number,
+    strength: Number,
+    constitution: Number,
+    agility: Number,
     charisma: Number,
     inteligence: Number,
-    znalost: Number,
+    knowledge: Number,
 
-    zbroj: Number,
-    zivoty: Number,
+    armor: Number,
+    life: Number,
 
-    pruraz: Number,
-    poskozeniZaklad: Number,
-    poskozeniZavaznost: Number,
+    pierce: Number,
+    damageBase: Number,
+    damageSeverity: Number,
 
 
 
