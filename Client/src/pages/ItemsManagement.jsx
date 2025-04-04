@@ -1,7 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ItemCreateModal from '../components/ItemCreateModal'
+import axios from 'axios';
 
 function ItemsManagement() {
+  const [loadedItemsState, setLoadedItemsState] = useState([])
+
+    useEffect(() => {
+      loadItems();
+    }, []);
+
+  function loadItems() {
+    axios.get(axios.defaults.baseURL + '/vybava/allType' ,{params: { type: "weapon" }})
+        .then(response => {
+          console.log(response)
+          setLoadedItemsState( response.data)
+        })
+}
+
+const renderItemsTable = () =>{
+  return loadedItemsState.map((item) =><tr key={item._id}><td>{item.jmeno}</td><td>{item.description}</td><td>{item.type}</td></tr>)
+}
+
   return (
     <>
     <ItemCreateModal></ItemCreateModal>
@@ -23,6 +42,7 @@ function ItemsManagement() {
                   </tr>
                 </thead>
                 <tbody>
+                  {renderItemsTable()}
                 </tbody>
               </table>
             </div>
