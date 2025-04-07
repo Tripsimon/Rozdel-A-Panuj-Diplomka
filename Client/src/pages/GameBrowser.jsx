@@ -3,6 +3,7 @@ import GameBrowserCreateRoomModal from '../components/GameBrowserCreateRoomModal
 import axios from 'axios'
 import GameBrowserJoinModal from '../components/GameBrowserJoinModal'
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { reduxIsLoggedIn, logoutUser, reduxReturnUser, reduxReturnUserAuthority } from '../store/userSlice';
 
 function GameBrowser() {
@@ -11,14 +12,18 @@ function GameBrowser() {
     const [selectedSessionState, setSelectedSessionState] = useState(false)
 
     const loggedUser = useSelector(reduxReturnUser)
-    
+    const navigate = useNavigate();
+
+
     useEffect(() => {
         findSessions()
         getAdventurers()
     }, [])
 
+
+
     const renderSessionsTable = () => {
-        return loadedSessionsState.map((session) => <tr key={session._id}><td>{session.sessionName}</td><td>{session.slots}</td><td><button onClick={() => {document.getElementById('gameBrowserJoinModal').showModal(); setSelectedSessionState(session._id)}} >Připojit</button></td></tr>)
+        return loadedSessionsState.map((session) => <tr key={session._id}><td>{session.sessionName}</td><td>{session.slots}</td><td><button onClick={() => { document.getElementById('gameBrowserJoinModal').showModal(); setSelectedSessionState(session._id) }} >Připojit</button></td></tr>)
     }
 
     const getAdventurers = () => {
@@ -46,16 +51,16 @@ function GameBrowser() {
             "player": loggedUser.userID
         }
 
-        console.log(body)
 
         axios.post(axios.defaults.baseURL + '/sessions/joinSession', body)
             .then(queryResponse => {
                 if (queryResponse.data == 'Session Joined') {
+                    navigate("/game?session="+ selectedSessionState)
                     router.push({ path: '/RaPSession', query: { sid: id } })
                 } else if (queryResponse.data == "Name Taken") {
 
                 } else {
-                    console.log(queryResponse)
+
                     console.log("Problém při připojení")
                 }
             })

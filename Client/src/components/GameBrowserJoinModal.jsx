@@ -6,11 +6,10 @@ function GameBrowserJoinModal(props) {
     const [selectedAdventurerState, setSelectedAdventurerState] = useState("Vyberte dobrodruha")
     const [passwordState, setPasswordState] = useState("")
 
-    console.log(selectedAdventurerState)
 
 
     const renderAdventurersOptions = () => {
-        return props.loadedAdventurersState.map(adventurer => <option key={adventurer._id} value={adventurer.name}>{adventurer.krestniJmeno + " " +adventurer.prijmeni} </option>)
+        return props.loadedAdventurersState.map(adventurer => <option key={adventurer._id} value={adventurer._id}>{adventurer.krestniJmeno + " " +adventurer.prijmeni} </option>)
     }
     return (
         <dialog id="gameBrowserJoinModal" className="modal">
@@ -26,7 +25,7 @@ function GameBrowserJoinModal(props) {
                 <input type="password" placeholder="Heslo" value={passwordState} onChange={(event) => { setPasswordState(event.target.value); }} className="w-full mb-5 input input-bordered" />
                 <div className="modal-action">
                     <form method="dialog">
-                        <button className="mx-5 btn text-primary" onClick={() => { props.joinSession(selectedAdventurerState._id, passwordState ) }}>Přihlásit</button>
+                        <button className="mx-5 btn text-primary" onClick={() => { props.joinSession(selectedAdventurerState, passwordState ) }}>Přihlásit</button>
                         <button className="btn text-primary">Zavřít</button>
                     </form>
                 </div>

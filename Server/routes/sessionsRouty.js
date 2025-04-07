@@ -119,6 +119,7 @@ router.get("/returnSession", (req, res) => {
 router.post("/joinSession", async (req, res) => {
 
     let session = await SessionModel.findOne({ _id: req.body.sessionID })
+
     try {
         if (session.password == req.body.password) {
             if (session.player1.adventurer == null && session.player1.owner == null) {
