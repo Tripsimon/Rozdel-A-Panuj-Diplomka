@@ -55,7 +55,7 @@ function GameBrowser() {
         axios.post(axios.defaults.baseURL + '/sessions/joinSession', body)
             .then(queryResponse => {
                 if (queryResponse.data == 'Session Joined') {
-                    navigate("/game?session="+ selectedSessionState)
+                    navigate("/game?sid="+ selectedSessionState)
                     router.push({ path: '/RaPSession', query: { sid: id } })
                 } else if (queryResponse.data == "Name Taken") {
 

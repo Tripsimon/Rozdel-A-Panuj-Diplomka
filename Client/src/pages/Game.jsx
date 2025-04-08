@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { reduxIsLoggedIn, logoutUser, reduxReturnUser, reduxReturnUserAuthority } from '../store/userSlice';
 import GameHudAdventurer from '../components/GameHudAdventurer'
 import GameHudSlovotepec from '../components/GameHudSlovotepec'
 import GameMap from "../components/GameMap"
@@ -6,7 +8,20 @@ import GameBattleLocality from "../components/GameBattleLocality"
 import GameBattleSequencer from '../components/GameBattleSequencer'
 import GameAdventurersDisplay from '../components/GameAdventurersDisplay'
 
+import axios from 'axios'
+
 function Game() {
+    const loggedUser = useSelector(reduxReturnUser)
+
+    let urlParams = new URLSearchParams(window.location.search)
+    const sid = urlParams.get('sid')
+
+    const [userIdentityState, setUserIdentityState] = useState('user')
+
+    const [player1State, setPlayer1State] = useState({ owner: null, adventurer: null, adventurerID: null })
+    const [player2State, setPlayer2State] = useState({ owner: null, adventurer: null, adventurerID: null })
+    const [player3State, setPlayer3State] = useState({ owner: null, adventurer: null, adventurerID: null })
+
 
     const [gameModeState, setGameModeState] = useState('adventure')
     const [gameAdverureMapState, setGameAdventureMapState] = useState("mapa.jpg")
@@ -16,9 +31,8 @@ function Game() {
         width: '10',
         height: '10',
         map: [
-            [ 0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,
-                0,
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0,
                 0,
                 0,
                 0,
@@ -126,6 +140,59 @@ function Game() {
         __v: 0
     })
 
+    useEffect(() => {
+
+        let urlParams = new URLSearchParams(window.location.search)
+        const sid = urlParams.get('sid')
+
+        axios.get(axios.defaults.baseURL + '/sessions/getIdentity', { params: { sid: sid, user: loggedUser.userID } })
+            .then(response => {
+                console.log(response)
+                if (response.data == 'Session Lost') {
+                    router.push({ path: '/pripojeni-do-hry' })
+                    return
+                }
+
+                if (response.data == "Not In Session") {
+                    router.push({ path: '/pripojeni-do-hry' })
+                }
+
+                if (response.data == "Is Owner") {
+                    setUserIdentityState("Owner")
+                    return
+                }
+
+                if (response.data != null) {
+                    setUserIdentityState(response.data)
+                }
+
+                //socketsResyncPlayers();
+                resyncPlayers();
+            })
+            .catch({})
+
+
+
+    }, [])
+
+    //Nejak prefaktorovat
+    function resyncPlayers() {
+        console.log("Proběhne resync hráčů")
+        axios.get(axios.defaults.baseURL + '/sessions/sessionPlayers', { params: { sid: sid } })
+            .then(response => {
+                setPlayer1State({ ...player1State, owner: response.data[0].owner, adventurerID: response.data[0].adventurer })
+                axios.get(axios.defaults.baseURL + '/character/sessionAdventurers', { params: { adventurer1: response.data[0].adventurer, adventurer2: response.data[1].adventurer, adventurer3: response.data[2].adventurer } })
+                    .then(response => {
+                        setPlayer1State({ ...player1State, adventurer: response.data[0] })
+                        console.log(response)
+                        setPlayer1State({ ...player1State, adventurer: response.data[0] })
+                        setPlayer1State({ ...player1State, adventurer: response.data[0] })
+                        //getLog()
+                    })
+            })
+    }
+
+
     const swapGameMode = () => {
         switch (gameModeState) {
             case 'fight':
@@ -173,7 +240,7 @@ function Game() {
 
             {renderGameMode()}
 
-            <GameAdventurersDisplay></GameAdventurersDisplay>
+            <GameAdventurersDisplay player1State={player1State} ></GameAdventurersDisplay>
 
             {renderHUD()}
         </div>

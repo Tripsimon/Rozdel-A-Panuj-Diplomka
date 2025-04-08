@@ -1,6 +1,9 @@
 import React from 'react'
 
-function GameAdventurersDisplay() {
+function GameAdventurersDisplay(props) {
+
+  console.log(props)
+
   return (
     <div className='flex flex-row justify-around'>
       <div className="card card-dash bg-secondary w-96">

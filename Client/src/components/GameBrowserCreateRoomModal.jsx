@@ -19,7 +19,7 @@ function GameBrowserCreateRoomModal() {
     const createSession = () => {
         //Naplnění obsahu
         let obsah = {
-            "majitel": loggedUser._id,
+            "majitel": loggedUser.userID,
             "jmenoMajitele": loggedUser.name,
             "jmenoSessionu": sessionNameState,
             "heslo": sessionPasswordState
@@ -44,7 +44,7 @@ function GameBrowserCreateRoomModal() {
                     return
                 }
 
-                handleNavigation("/game")
+                handleNavigation("/game?sid="+queryResponse.data)
             })
             .catch(error => {
                 showAlert.value = true;
@@ -60,11 +60,11 @@ function GameBrowserCreateRoomModal() {
                 <AlertDriver className="mb-5" show={false} type="error"></AlertDriver>
                 <h3 className="text-lg font-bold mb-7 text-primary">Vytvoření hry</h3>
 
-                <input type="text" placeholder="Email" value={sessionNameState} onChange={(event) => { setSessionNameState(event.target.value); }} className="w-full mb-5 input input-bordered " />
+                <input type="text" placeholder="Jméno herní místnosti" value={sessionNameState} onChange={(event) => { setSessionNameState(event.target.value); }} className="w-full mb-5 input input-bordered " />
                 <input type="password" placeholder="Heslo" value={sessionPasswordState} onChange={(event) => { setSessionPasswordState(event.target.value); }} className="w-full mb-5 input input-bordered" />
                 <div className="modal-action">
                     <form method="dialog">
-                        <button className="mx-5 btn text-primary" onClick={() => { createSession() }}>Přihlásit</button>
+                        <button className="mx-5 btn text-primary" onClick={() => { createSession() }}>Vytvořit</button>
                         <button className="btn text-primary">Zavřít</button>
                     </form>
                 </div>
