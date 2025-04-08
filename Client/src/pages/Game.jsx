@@ -27,6 +27,7 @@ function Game() {
     const [player1State, setPlayer1State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [player2State, setPlayer2State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [player3State, setPlayer3State] = useState({ owner: null, adventurer: null, adventurerID: null })
+    const [activeMonstersState, setActiveMonstersState] = useState([])
 
     const [sessionLogState, setSessionLogState] = useState("")
 
@@ -297,7 +298,7 @@ function Game() {
                 break;
 
             case false:
-                return (<GameHudSlovotepec setGameAdventureMapState={setGameAdventureMapState} swapGameMode={swapGameMode}></GameHudSlovotepec>)
+                return (<GameHudSlovotepec activeMonstersState={activeMonstersState} setActiveMonstersState={setActiveMonstersState} setGameAdventureMapState={setGameAdventureMapState} swapGameMode={swapGameMode}></GameHudSlovotepec>)
                 break;
             default:
                 break;

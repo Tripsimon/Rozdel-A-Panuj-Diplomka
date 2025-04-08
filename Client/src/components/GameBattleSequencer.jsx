@@ -1,5 +1,9 @@
 import React from 'react'
 
+const calculateadventurerIniciative = (houzevnatost) =>{
+    return (-3.33*houzevnatost+86.67)
+}
+
 function GameBattleSequencer() {
     return (
         <div className=" shadow-xl px-[5%] h-[90%] card card-compact bg-base-100">

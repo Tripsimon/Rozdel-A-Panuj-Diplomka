@@ -3,10 +3,12 @@ import Icon from '@mdi/react';
 import { mdiSwapHorizontal, mdiMapLegend, mdiAlertCircleOutline, mdiPostOutline } from '@mdi/js';
 import GameHudSlovotepecMapModal from './GameHudSlovotepecMapModal';
 import GameHudSlovotepecLocalityModal from './GameHudSlovotepecLocalityModal';
+import GameHudSlovotepecMonsterModal from './GameHudSlovotepecMonsterModal';
 
 function GameHudSlovotepec(props) {
     return (
         <>
+            <GameHudSlovotepecMonsterModal activeMonstersState={props.activeMonstersState} setActiveMonstersState={props.setActiveMonstersState}></GameHudSlovotepecMonsterModal>
             <GameHudSlovotepecLocalityModal></GameHudSlovotepecLocalityModal>
             <GameHudSlovotepecMapModal setGameAdventureMapState={props.setGameAdventureMapState}></GameHudSlovotepecMapModal>
             <div className="fixed bottom-0 flex w-[100%] flex-row-nav justify-around bg-secondary ">
@@ -17,7 +19,7 @@ function GameHudSlovotepec(props) {
                     <span className="btm-nav-label">Log</span>
                 </button>
 
-                <button>
+                <button onClick={() => document.getElementById('GameHudSlovotepecMonsterModal').showModal()} >
                     <Icon path={mdiAlertCircleOutline} size={1} />
                     <span className="text-primary">Nepřátelé</span>
                 </button>
