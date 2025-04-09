@@ -22,6 +22,8 @@ function MonsterCreateModal() {
     const [monsterDamageBase, setMonsterDamageBase] = useState(false)
     const [monsterDamageSeverity, setMonsterDamageSeverity] = useState(false)
 
+    const [monsterIniciative, setMonsterIniciative] = useState(false)
+
     const addAbility = () => {
         setMonsterAbilitiesState(monsterAbilitiesState => [...monsterAbilitiesState, {}])
     }
@@ -76,6 +78,7 @@ function MonsterCreateModal() {
                 'damageBase': monsterDamageBase,
                 'damageSeverity': monsterDamageSeverity,
 
+                'iniciative' : monsterIniciative
 
             }
         ).then(response => { console.log(response) })
@@ -135,7 +138,7 @@ function MonsterCreateModal() {
                     <input type="number" placeholder="Průraznost" onChange={(event) => { setMonsterPierceState(event.target.value); }} className="w-full mb-5 input input-bordered " />
                 </div>
 
-
+                <input type="number" placeholder="Iniciativa" value={monsterIniciative} onChange={(event) => { setMonsterIniciative(event.target.value); }} className="w-full mb-5 input input-bordered " />
 
                 <div className="modal-action">
                     <form method="dialog">

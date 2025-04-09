@@ -1,102 +1,103 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Icon from '@mdi/react';
+import { mdiCheckCircle } from '@mdi/js';
 
-const calculateadventurerIniciative = (houzevnatost) =>{
-    return (-3.33*houzevnatost+86.67)
-}
 
-function GameBattleSequencer() {
+function GameBattleSequencer(props) {
+    const [battlefieldState, setBattleFieldState] = useState([])
+
+    useEffect(() => {
+        prepareBattlefieldRound()
+    }, [])
+
+    const prepareBattlefieldRound = () => {
+
+        var prepareField = []
+        props.adventurers.map((player) => {
+            if (player.adventurer != null) {
+                player.adventurer.iniciative = calculateadventurerIniciative(player.adventurer.atributy.houzevnatost)
+                player.adventurer.typ = "adventurer"
+                player.adventurer.active = true
+                player.adventurer.selected = false
+
+                prepareField.push(player.adventurer)
+            }
+        })
+
+        console.log()
+
+        props.activeMonstersState.map((monster) => {
+            var monsterHolder = {...monster}
+            monsterHolder.active = true
+            monsterHolder.selected = false
+
+            prepareField.push(monsterHolder)
+        })
+
+        prepareField.sort((a, b) => b.iniciative - a.iniciative);
+
+        setBattleFieldState(prepareField)
+
+    }
+
+    const selectEntry = (index) => {
+        
+
+        console.log(index)
+
+        var holderarray = [...battlefieldState]
+
+        holderarray.forEach(vec =>{
+            vec.selected = false
+        })
+
+        holderarray[index].selected = true
+        setBattleFieldState(holderarray)
+    }
+
+    const fatigueSelected = () => {
+        var holderarray = [...battlefieldState]
+
+        holderarray.forEach(vec =>{
+            if (vec.selected) {
+                vec.active = false
+            }
+        })
+
+        setBattleFieldState(holderarray)
+    }
+
+
+    const renderBattlefield = () => {
+        return battlefieldState.map((entry, index) => <li onClick={() => selectEntry(index)} key={index}>
+            <hr />
+            <div className={`${entry.typ == "adventurer" ? "bg-green-600" : "bg-red-600"} ${entry.selected ? "border-2 border-primary  " : " "} text-secondary  timeline-start timeline-box`}>{entry.typ == "adventurer" ? entry.krestniJmeno : entry.name}</div>
+            <div className="timeline-middle">
+                <Icon className={`${entry.active ? "text-green-600" : "text-yellow-600"}`} path={mdiCheckCircle} size={1} />
+            </div>
+            <hr />
+        </li>)
+    }
+
+    const calculateadventurerIniciative = (houzevnatost) => {
+        return (-3.33 * houzevnatost + 86.67)
+    }
+
+
     return (
-        <div className=" shadow-xl px-[5%] h-[90%] card card-compact bg-base-100">
-            <div className="card-body">
-                <h2 className="justify-center card-title">Bojová vřava</h2>
+        <div className=" shadow-xl mx-[5%] my-5 bg-secondary h-[90%] card card-compact bg-base-100">
+            <div className="card-body ">
+                <h2 className="justify-center card-title text-primary">Bojová vřava</h2>
                 <ul className="justify-center timeline">
-                    <li>
-                        <div className="bg-green-200 timeline-start timeline-box">Dobrodruh 1</div>
-                        <div className="timeline-middle">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="w-5 h-5">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                    clipRule="evenodd" />
-                            </svg>
-                        </div>
-                        <hr />
-                    </li>
-                    <li>
-                        <hr />
-                        <div className="bg-red-200 timeline-start timeline-box">Zlobr</div>
-                        <div className="timeline-middle">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="w-5 h-5">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                    clipRule="evenodd" />
-                            </svg>
-                        </div>
-                        <hr />
-                    </li>
-                    <li>
-                        <hr />
-                        <div className="bg-red-200 timeline-start timeline-box">Goblin</div>
-                        <div className="timeline-middle">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="w-5 h-5">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                    clipRule="evenodd" />
-                            </svg>
-                        </div>
-                        <hr />
-                    </li>
-                    <li>
-                        <hr />
-                        <div className="bg-green-200 timeline-start timeline-box">Dobrodruh 2</div>
-                        <div className="timeline-middle">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="w-5 h-5">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                    clipRule="evenodd" />
-                            </svg>
-                        </div>
-                        <hr />
-                    </li>
-                    <li>
-                        <hr />
-                        <div className="bg-green-200 timeline-start timeline-box">Dobrodruh 3</div>
-                        <div className="timeline-middle">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="w-5 h-5">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                    clipRule="evenodd" />
-                            </svg>
-                        </div>
-                    </li>
+                    {renderBattlefield()}
 
-                    
                 </ul>
-
+                <div className="modal-action">
+                    <form method="dialog">
+                        <button onClick={() => fatigueSelected()} className="gap-5 btn text-primary"> Vyčerpat</button>
+                        <button onClick={() => prepareBattlefieldRound()} className="btn text-primary">Nové kolo</button>
+                    </form>
+                </div>
             </div>
         </div>
     )

@@ -15,12 +15,12 @@ function GameHudSlovotepecMonsterModal(props) {
             })
     }
 
-    const addEnemyAsActive = () =>{
+    const addEnemyAsActive = () => {
         var enemyToAdd = loadedMonstersState[selectedMonsterState]
         enemyToAdd.activeLife = enemyToAdd.life
 
-        props.setActiveMonstersState([...props.activeMonstersState, enemyToAdd]); 
-        console.log(props.activeMonstersState) 
+        props.setActiveMonstersState([...props.activeMonstersState, enemyToAdd]);
+        console.log(props.activeMonstersState)
     }
 
     const renderChooseOptions = () => {
@@ -30,7 +30,7 @@ function GameHudSlovotepecMonsterModal(props) {
     const renderActiveMonsters = () => {
         return props.activeMonstersState.map((monster) =>
             <tr key={monster._id} className="hover">
-              <td>{monster.name}</td>
+                <td>{monster.name}</td>
             </tr>)
 
     }
@@ -59,7 +59,7 @@ function GameHudSlovotepecMonsterModal(props) {
 
                 </div>
 
-                {selectedMonsterState != "Vyber monstrum" ? <button onClick={() => {addEnemyAsActive()}} className='w-full btn btn-success'>Přidat do bojové vřavy</button> : ""}
+                {selectedMonsterState != "Vyber monstrum" ? <button onClick={() => { addEnemyAsActive() }} className='w-full btn btn-success'>Přidat do bojové vřavy</button> : ""}
 
                 <div className="divider divider-primary"></div>
                 <h2>Aktivní monstra:
@@ -79,6 +79,12 @@ function GameHudSlovotepecMonsterModal(props) {
                         </table>
                     </div>
                 </h2>
+
+                <div className="modal-action">
+                    <form method="dialog">
+                        <button className="btn text-primary">Zavřít</button>
+                    </form>
+                </div>
 
             </div>
         </dialog>

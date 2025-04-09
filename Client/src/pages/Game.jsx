@@ -281,7 +281,7 @@ function Game() {
     const renderGameMode = () => {
         switch (gameModeState) {
             case 'fight':
-                return (<><GameBattleSequencer></GameBattleSequencer><GameBattleLocality gameFightLocalityState={gameFightLocalityState}></GameBattleLocality></>)
+                return (<><GameBattleSequencer adventurers={[player1State,player2State,player3State]} activeMonstersState={activeMonstersState}></GameBattleSequencer><GameBattleLocality gameFightLocalityState={gameFightLocalityState}></GameBattleLocality></>)
 
             case 'adventure':
                 return (<><GameMap gameAdverureMapState={gameAdverureMapState}></GameMap></>)
