@@ -13,6 +13,7 @@ import { io } from "socket.io-client";
 
 import axios from 'axios'
 import GameLogModal from '../components/GameLogModal';
+import GameActiveEnemiesDisplay from '../components/GameActiveEnemiesDisplay';
 
 function Game() {
     const loggedUser = useSelector(reduxReturnUser)
@@ -281,7 +282,7 @@ function Game() {
     const renderGameMode = () => {
         switch (gameModeState) {
             case 'fight':
-                return (<><GameBattleSequencer adventurers={[player1State,player2State,player3State]} activeMonstersState={activeMonstersState}></GameBattleSequencer><GameBattleLocality gameFightLocalityState={gameFightLocalityState}></GameBattleLocality></>)
+                return (<><GameBattleSequencer adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleSequencer><GameBattleLocality gameFightLocalityState={gameFightLocalityState}></GameBattleLocality></>)
 
             case 'adventure':
                 return (<><GameMap gameAdverureMapState={gameAdverureMapState}></GameMap></>)
@@ -320,10 +321,10 @@ function Game() {
         <>
             <GameLogModal sessionLogState={sessionLogState} ></GameLogModal>
             <div className='pb-[5%]'>
-
+                <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} ></GameAdventurersDisplay>
                 {renderGameMode()}
 
-                <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} ></GameAdventurersDisplay>
+                <GameActiveEnemiesDisplay activeMonstersState={activeMonstersState}></GameActiveEnemiesDisplay>
 
                 {renderHUD()}
             </div>

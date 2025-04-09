@@ -1,5 +1,6 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { uid } from 'uid';
 
 
 function GameHudSlovotepecMonsterModal(props) {
@@ -15,16 +16,20 @@ function GameHudSlovotepecMonsterModal(props) {
             })
     }
 
+    useEffect(()=>{
+        loadEnemies()
+    }, [selectedMonsterTypeState])
+
     const addEnemyAsActive = () => {
-        var enemyToAdd = loadedMonstersState[selectedMonsterState]
+        var enemyToAdd = {...loadedMonstersState[selectedMonsterState]}
         enemyToAdd.activeLife = enemyToAdd.life
+        enemyToAdd.uid = uid()
 
         props.setActiveMonstersState([...props.activeMonstersState, enemyToAdd]);
-        console.log(props.activeMonstersState)
     }
 
     const renderChooseOptions = () => {
-        return loadedMonstersState.map((monster, index) => <option value={index}>{monster.name}</option>)
+        return loadedMonstersState.map((monster, index) => <option key={monster.uid} value={index}>{monster.name}</option>)
     }
 
     const renderActiveMonsters = () => {
