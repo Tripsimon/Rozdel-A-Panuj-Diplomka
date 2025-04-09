@@ -3,10 +3,12 @@ import React from 'react'
 
 function GameActiveEnemiesDisplay(props) {
 
-    console.log(props.activeMonstersState)
+    const selectMonster = () => {
+
+    }
 
     const renderActiveMonsters = () =>{
-        return props.activeMonstersState.map((monster) =><div key={monster.uid} >{monster.name}</div>
+        return props.activeMonstersState.map((monster) =><div className='bg-red-400' onClick={() => selectMonster()} key={monster.uid} >{monster.name}</div>
             
         )
     }
