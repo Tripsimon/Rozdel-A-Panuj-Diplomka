@@ -36,6 +36,8 @@ function GameBattleSequencer(props) {
 
         prepareField.sort((a, b) => b.iniciative - a.iniciative);
 
+        console.log(prepareField)
+
         setBattleFieldState(prepareField)
 
     }
@@ -80,7 +82,12 @@ function GameBattleSequencer(props) {
     }
 
     const calculateadventurerIniciative = (houzevnatost) => {
-        return (-3.33 * houzevnatost + 86.67)
+        var vypocet = -3.33 * houzevnatost + 86.67
+
+        if (vypocet < 20) {
+            return 20
+        }
+        return (vypocet)
     }
 
 
