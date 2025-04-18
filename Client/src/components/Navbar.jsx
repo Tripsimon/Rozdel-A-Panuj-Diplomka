@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { reduxIsLoggedIn, logoutUser, reduxReturnUser, reduxReturnUserAuthority } from '../store/userSlice';
+import raplogo from './../assets/images/navbar/raplogo.png'
 
 
 function Navbar() {
@@ -34,8 +35,8 @@ function Navbar() {
     }
 
     return (
-        <div className="sticky top-0 w-full p-0 rounded-md z-1 navbar bg-secondary">
-            <div className="navbar-start">
+        <div className="sticky top-0 z-50 w-full p-0 rounded-b-md navbar bg-secondary">
+            <div className="pl-5 navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn bg-primary btn-ghost lg:hidden">
                         <svg
@@ -65,7 +66,8 @@ function Navbar() {
                         <li><a>Item 3</a></li>
                     </ul>
                 </div>
-                <a onClick={() => handleNavigation('/')} className="text-xl btn btn-ghost text-primary">Rozděl a Panuj</a>
+                <img src={raplogo} className='w-10 h-10'></img>
+                <a onClick={() => handleNavigation('/')} className="text-xl btn btn-ghost text-primary">Rozděl  a Panuj</a>
             </div>
             <div className="hidden navbar-center lg:flex">
                 <ul className="px-1 menu menu-horizontal">

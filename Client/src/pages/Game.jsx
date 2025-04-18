@@ -323,9 +323,10 @@ function Game() {
             <GameLogModal sessionLogState={sessionLogState} ></GameLogModal>
             <div className='pb-[5%]'>
                 <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} ></GameAdventurersDisplay>
+                { activeMonstersState.length > 0 ? <GameActiveEnemiesDisplay activeMonstersState={activeMonstersState}></GameActiveEnemiesDisplay>:""}
                 {renderGameMode()}
 
-                <GameActiveEnemiesDisplay activeMonstersState={activeMonstersState}></GameActiveEnemiesDisplay>
+
 
                 {renderHUD()}
             </div>
