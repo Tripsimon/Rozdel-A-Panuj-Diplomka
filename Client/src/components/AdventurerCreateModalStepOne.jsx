@@ -22,7 +22,7 @@ function AdventurerCreateModalStepOne(props) {
             <div className="card-body">
                 <h2 className="text-xl uppercase card-title text-primary">Schopnosti rasy</h2>
                 <div className="mt-0 divider divider-warning"></div>
-                { props.selectedRaceState.schopnosti.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}
+                <div className='grid grid-cols-3'>{ props.selectedRaceState.schopnosti.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
             </div>
         </div>)
     }
@@ -52,7 +52,7 @@ function AdventurerCreateModalStepOne(props) {
             <div className="card-body">
                 <h2 className="text-xl uppercase card-title text-primary">Schopnosti rasy</h2>
                 <div className="mt-0 divider divider-warning"></div>
-                { props.selectedClassState.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}
+                <div className='grid grid-cols-3'>{ props.selectedClassState.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
             </div>
         </div>)
     }
@@ -62,7 +62,7 @@ function AdventurerCreateModalStepOne(props) {
     }
 
     return (
-        <div className="modal-box">
+        <div className="modal-box w-[90%] max-w-[90%]">
 
             <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
             <form method="dialog">
@@ -71,7 +71,7 @@ function AdventurerCreateModalStepOne(props) {
 
             <ul className="steps steps-vertical lg:steps-horizontal">
                 <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
-                <li className="text-lg step text-primary ">Atributy</li>
+                <li className="text-lg step text-primary ">Atributy a předměty</li>
                 <li className="text-lg step text-primary ">Příběh</li>
                 <li className="text-lg step text-primary ">Shrnutí</li>
             </ul>
@@ -98,7 +98,7 @@ function AdventurerCreateModalStepOne(props) {
             {renderRaceSelect()}
             { props.selectedRaceState != false ? renderRaceAbilities():""}
             {renderClassSelect()}
-            { props.selectedClassState != false ? renderRaceAbilities():""}
+            { props.selectedClassState != false ? renderClassAbilities():""}
 
             <div className="modal-action">
                 <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { handleNextStep() }}>Další krok</button>

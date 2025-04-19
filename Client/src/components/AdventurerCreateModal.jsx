@@ -123,7 +123,7 @@ function AdventurerCreateModal() {
 
     function renderThirdStep() {
         return (
-            <div className="modal-box ">
+            <div className="w-[90%] max-w-[90%] modal-box">
 
                 <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
                 <form method="dialog">
@@ -132,7 +132,7 @@ function AdventurerCreateModal() {
 
                 <ul className="steps steps-vertical lg:steps-horizontal">
                     <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
-                    <li className="text-lg step step-warning text-primary ">Atributy</li>
+                    <li className="text-lg step step-warning text-primary ">Atributy a předměty</li>
                     <li className="text-lg step step-warning text-primary ">Příběh</li>
                     <li className="text-lg step text-primary ">Shrnutí</li>
                 </ul>
@@ -151,7 +151,7 @@ function AdventurerCreateModal() {
 
     function renderFourthStep() {
         return (
-            <div className="modal-box">
+            <div className="modal-box w-[90%] max-w-[90%]">
 
                 <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
                 <form method="dialog">
@@ -160,7 +160,7 @@ function AdventurerCreateModal() {
 
                 <ul className="steps steps-vertical lg:steps-horizontal">
                     <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
-                    <li className="text-lg step step-warning text-primary ">Atributy</li>
+                    <li className="text-lg step step-warning text-primary ">Atributy a předměty</li>
                     <li className="text-lg step step-warning text-primary ">Příběh</li>
                     <li className="text-lg step step-warning text-primary ">Shrnutí</li>
                 </ul>
