@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 import AdventurerCreateStepTwo from './AdventurerCreateStepTwo';
 import AdventurerCreateModalStepOne from './AdventurerCreateModalStepOne';
 
 import { reduxReturnUser } from '../store/userSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 function AdventurerCreateModal() {
+    const navigate = useNavigate();
+
+    const handleNavigation = (destination) => {
+        navigate(destination);
+    }
     const loggedUser = useSelector(reduxReturnUser)
 
     const [stepState, setStepState] = useState(1);
@@ -28,9 +34,9 @@ function AdventurerCreateModal() {
         nickname: "",
         race: null,
         class: null,
-        mainGear: null,
-        secondaryGear: null,
-        bonusGear: null,
+        mainEquipment: null,
+        armorEquipment: null,
+        bonusEquipment: null,
         aligment: null,
         age: null,
         description: "Nezjištěno",
@@ -142,9 +148,20 @@ function AdventurerCreateModal() {
                 </ul>
                 <div className="divider divider-warning"></div>
 
-                <textarea value={adventurerState.description} onChange={(event) => setAdventurerState({ ...adventurerState, description: event.target.value })} className="textarea" placeholder="Popis"></textarea>
-                <textarea value={adventurerState.story} onChange={(event) => setAdventurerState({ ...adventurerState, story: event.target.value })} className="textarea" placeholder="Příběh"></textarea>
+                <div className='grid grid-cols-2 gap-5'>
+                    <fieldset className="fieldset">
+                        <legend className="mb-2 text-lg fieldset-legend text-primary">Popis dobrodruha</legend>
+                        <textarea value={adventurerState.description} onChange={(event) => setAdventurerState({ ...adventurerState, description: event.target.value })} className="w-full h-32 textarea text-primary textarea-warning bg-secondary" placeholder="Popis"></textarea>
+                        <p className="label"></p>
+                    </fieldset>
 
+                    <fieldset className="fieldset">
+                        <legend className="mb-2 text-lg fieldset-legend text-primary">Příběh</legend>
+                        <textarea value={adventurerState.story} onChange={(event) => setAdventurerState({ ...adventurerState, story: event.target.value })} className="w-full h-32 text-primary textarea textarea-warning bg-secondary" placeholder="Příběh"></textarea>
+                        <p className="label"></p>
+                    </fieldset>
+
+                </div>
                 <div className="modal-action">
                     <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { changeStep(-1) }}>Předešlý krok</button>
                     <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { changeStep(+1) }}>Další krok</button>
@@ -187,8 +204,15 @@ function AdventurerCreateModal() {
             "atributes": atributesState,
         })
 
+        obsah.newAdventurer.mainEquipment = selectedMainEquipment;
+        obsah.newAdventurer.armorEquipment = selectedArmorEquipment;
+        obsah.newAdventurer.bonusEquipment = selectedBonusEquipment;
+
         axios.post(axios.defaults.baseURL + '/character/characterCreation', obsah)
-            .then(router.push({ path: '/' }))
+            .then(() => {
+                navigate(0)
+                document.getElementById('createAdventurerModal').close()
+            })
     }
 
     return (

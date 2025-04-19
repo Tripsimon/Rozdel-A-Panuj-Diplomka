@@ -172,15 +172,17 @@ function Game() {
 
                 if (response.data == "Is Owner") {
                     setUserIdentityState("Owner")
+                    resyncPlayers()
                     return
                 }
 
                 if (response.data != null) {
                     setUserIdentityState(response.data)
+                    resyncPlayers()
                     return
                 }
 
-                //socketsResyncPlayers();
+
 
             }).catch((err) => { console.log("Chyba při získání identity:", err) })
 
@@ -229,7 +231,6 @@ function Game() {
             getLog()
         })
 
-        socketsResyncPlayers()
 
 
     }, [])
@@ -257,8 +258,8 @@ function Game() {
                 axios.get(axios.defaults.baseURL + '/character/sessionAdventurers', { params: { adventurer1: response.data[0].adventurer, adventurer2: response.data[1].adventurer, adventurer3: response.data[2].adventurer } })
                     .then(response => {
                         setPlayer1State({ ...player1State, adventurer: response.data[0] })
-                        setPlayer1State({ ...player1State, adventurer: response.data[0] })
-                        setPlayer1State({ ...player1State, adventurer: response.data[0] })
+                        setPlayer2State({ ...player2State, adventurer: response.data[1] })
+                        setPlayer3State({ ...player3State, adventurer: response.data[2] })
                         //getLog()
                     })
             })

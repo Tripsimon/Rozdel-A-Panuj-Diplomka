@@ -17,7 +17,7 @@ const EquipmentSchema = new Schema({
     pierce: Number,
     damageBase: Number,
     damageSeverity: Number,
-    obrana: Number,
+    armor: Number,
     weight: Number,
     deletable: Boolean,
 },
