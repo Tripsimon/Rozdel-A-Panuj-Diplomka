@@ -13,7 +13,7 @@ function AdventurerCreateStepTwo(props) {
             </form>
 
 
-            <ul className="steps steps-vertical lg:steps-horizontal">
+            <ul className="w-full steps steps-vertical lg:steps-horizontal">
                 <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
                 <li className="text-lg step step-warning text-primary ">Atributy a předměty</li>
                 <li className="text-lg step text-primary ">Příběh</li>
@@ -23,7 +23,7 @@ function AdventurerCreateStepTwo(props) {
 
 
             <div className='flex justify-center w-full'>
-                <h3 className='text-xl font-bold text-primary'>Dostupné atributy: {props.atributesState.free}</h3>
+                <h3 className='px-5 text-xl font-bold uppercase border-2 text-primary border-primary bg-secondary rounded-xl'>Dostupné atributy: {props.atributesState.free}</h3>
             </div>
 
 

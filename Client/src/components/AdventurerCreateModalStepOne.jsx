@@ -52,7 +52,7 @@ function AdventurerCreateModalStepOne(props) {
             <div className="card-body">
                 <h2 className="text-xl uppercase card-title text-primary">Schopnosti rasy</h2>
                 <div className="mt-0 divider divider-warning"></div>
-                <div className='grid grid-cols-3'>{ props.selectedClassState.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
+                <div className='grid grid-cols-3 '>{ props.selectedClassState.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
             </div>
         </div>)
     }
@@ -69,7 +69,7 @@ function AdventurerCreateModalStepOne(props) {
                 <button className="absolute text-lg btn btn-sm btn-circle btn-ghost right-2 top-2 text-primary">✕</button>
             </form>
 
-            <ul className="steps steps-vertical lg:steps-horizontal">
+            <ul className="w-full steps steps-vertical lg:steps-horizontal">
                 <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
                 <li className="text-lg step text-primary ">Atributy a předměty</li>
                 <li className="text-lg step text-primary ">Příběh</li>

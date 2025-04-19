@@ -130,7 +130,7 @@ function AdventurerCreateModal() {
                     <button className="absolute text-lg btn btn-sm btn-circle btn-ghost right-2 top-2 text-primary">✕</button>
                 </form>
 
-                <ul className="steps steps-vertical lg:steps-horizontal">
+                <ul className="w-full steps steps-vertical lg:steps-horizontal">
                     <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
                     <li className="text-lg step step-warning text-primary ">Atributy a předměty</li>
                     <li className="text-lg step step-warning text-primary ">Příběh</li>
@@ -153,12 +153,12 @@ function AdventurerCreateModal() {
         return (
             <div className="modal-box w-[90%] max-w-[90%]">
 
-                <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
+                <h3 className="w-full mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
                 <form method="dialog">
                     <button className="absolute text-lg btn btn-sm btn-circle btn-ghost right-2 top-2 text-primary">✕</button>
                 </form>
 
-                <ul className="steps steps-vertical lg:steps-horizontal">
+                <ul className="w-full steps steps-vertical lg:steps-horizontal">
                     <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
                     <li className="text-lg step step-warning text-primary ">Atributy a předměty</li>
                     <li className="text-lg step step-warning text-primary ">Příběh</li>
