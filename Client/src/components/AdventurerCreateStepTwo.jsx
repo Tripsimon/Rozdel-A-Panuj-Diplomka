@@ -9,18 +9,18 @@ function AdventurerCreateStepTwo(props) {
 
             <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
             <form method="dialog">
-                <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">✕</button>
+                <button className="absolute text-lg btn btn-sm btn-circle btn-ghost right-2 top-2 text-primary">✕</button>
             </form>
 
 
             <ul className="steps steps-vertical lg:steps-horizontal">
-                <li className="step step-primary">Základ dobrodruha</li>
-                <li className="step step-primary">Atributy</li>
-                <li className="step">Příběh</li>
-                <li className="step">Shrnutí</li>
+                <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
+                <li className="text-lg step step-warning text-primary ">Atributy</li>
+                <li className="text-lg step text-primary ">Příběh</li>
+                <li className="text-lg step text-primary ">Shrnutí</li>
             </ul>
+            <div className="divider divider-warning"></div>
 
-            <div className="divider divider-primary"></div>
 
             <div className='flex justify-center w-full'>
                 <h3 className='text-xl font-bold text-primary'>Dostupné atributy: {props.atributesState.free}</h3>
@@ -74,8 +74,8 @@ function AdventurerCreateStepTwo(props) {
 
 
             <div className="modal-action">
-                <button className="mx-5 btn text-primary" onClick={() => { props.changeStep(-1) }}>Předešlí krok</button>
-                <button className="btn text-primary" onClick={() => { props.changeStep(+1) }}>Další krok</button>
+                <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { props.changeStep(-1) }}>Předešlý krok</button>
+                <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { props.changeStep(+1) }}>Další krok</button>
             </div>
         </div>
     )

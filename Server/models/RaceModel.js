@@ -14,7 +14,16 @@ const RaceSchema = new Schema({
         inteligence: Number,
         znalost: Number
     },
-    schopnosti:[String],
+    schopnosti:[{
+        name: String,
+        abilityTyp: String,
+        numberOfUses: Number,
+        cd: String,
+        owner: String,
+        descriptionLore: String,
+        descriptionAbility: String,
+        requiredLevel: Number
+    }],
     dostupneTridy:[String],
 
     },

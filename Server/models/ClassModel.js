@@ -5,8 +5,16 @@ const Schema = mongoose.Schema;
 const ClassSchema = new Schema({
     jmeno: String,
     popis: String,
-    pasivniSchopnost: String,
-    schopnosti: [String],
+    abilities:[{
+        name: String,
+        abilityTyp: String,
+        numberOfUses: Number,
+        cd: String,
+        owner: String,
+        descriptionLore: String,
+        descriptionAbility: String,
+        requiredLevel: Number
+    }],
     bonusovaVybava: [String],
     hlavniVybava: [String],
     krajniVybava: [String],

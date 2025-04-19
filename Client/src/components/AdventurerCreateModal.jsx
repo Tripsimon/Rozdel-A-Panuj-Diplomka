@@ -31,7 +31,7 @@ function AdventurerCreateModal() {
         age: null,
         description: "Nezjištěno",
         story: "Nezjištěno",
-      })
+    })
 
     const [atributesState, setAtributesState] = useState({
         free: 8,
@@ -63,7 +63,7 @@ function AdventurerCreateModal() {
     const selectRace = (index) => {
         setSelectedRaceState(racesChoiceState[index])
         loadClasses(racesChoiceState[index].dostupneTridy)
-        setAdventurerState({...adventurerState, race: racesChoiceState[index].jmeno})
+        setAdventurerState({ ...adventurerState, race: racesChoiceState[index].jmeno })
     }
 
 
@@ -81,7 +81,7 @@ function AdventurerCreateModal() {
 
     const selectClass = (index) => {
         setSelectedClassState(loadedClasses[index])
-        setAdventurerState({...adventurerState, class: loadedClasses[index].jmeno})
+        setAdventurerState({ ...adventurerState, class: loadedClasses[index].jmeno })
     }
 
 
@@ -123,27 +123,27 @@ function AdventurerCreateModal() {
 
     function renderThirdStep() {
         return (
-            <div className="modal-box">
+            <div className="modal-box ">
 
                 <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
                 <form method="dialog">
-                    <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">✕</button>
+                    <button className="absolute text-lg btn btn-sm btn-circle btn-ghost right-2 top-2 text-primary">✕</button>
                 </form>
 
                 <ul className="steps steps-vertical lg:steps-horizontal">
-                    <li className="step step-primary">Základ dobrodruha</li>
-                    <li className="step step-primary ">Atributy</li>
-                    <li className="step step-primary">Příběh</li>
-                    <li className="step">Shrnutí</li>
+                    <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
+                    <li className="text-lg step step-warning text-primary ">Atributy</li>
+                    <li className="text-lg step step-warning text-primary ">Příběh</li>
+                    <li className="text-lg step text-primary ">Shrnutí</li>
                 </ul>
-                <div className="divider divider-primary"></div>
+                <div className="divider divider-warning"></div>
 
-                <textarea value={adventurerState.description} onChange={(event) => setAdventurerState({...adventurerState, description: event.target.value})} className="textarea" placeholder="Popis"></textarea>
-                <textarea value={adventurerState.story} onChange={(event) => setAdventurerState({...adventurerState, story: event.target.value})} className="textarea" placeholder="Příběh"></textarea>
+                <textarea value={adventurerState.description} onChange={(event) => setAdventurerState({ ...adventurerState, description: event.target.value })} className="textarea" placeholder="Popis"></textarea>
+                <textarea value={adventurerState.story} onChange={(event) => setAdventurerState({ ...adventurerState, story: event.target.value })} className="textarea" placeholder="Příběh"></textarea>
 
                 <div className="modal-action">
-                    <button className="mx-5 btn text-primary" onClick={() => { changeStep(-1) }}>Předešlí krok</button>
-                    <button className="btn text-primary" onClick={() => { changeStep(+1) }}>Další krok</button>
+                    <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { changeStep(-1) }}>Předešlý krok</button>
+                    <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { changeStep(+1) }}>Další krok</button>
                 </div>
             </div>
         )
@@ -155,21 +155,21 @@ function AdventurerCreateModal() {
 
                 <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
                 <form method="dialog">
-                    <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">✕</button>
+                    <button className="absolute text-lg btn btn-sm btn-circle btn-ghost right-2 top-2 text-primary">✕</button>
                 </form>
 
                 <ul className="steps steps-vertical lg:steps-horizontal">
-                    <li className="step step-primary">Základ dobrodruha</li>
-                    <li className="step step-primary ">Atributy</li>
-                    <li className="step step-primary">Příběh</li>
-                    <li className="step">Shrnutí</li>
+                    <li className="text-lg step step-warning text-primary ">Základ dobrodruha</li>
+                    <li className="text-lg step step-warning text-primary ">Atributy</li>
+                    <li className="text-lg step step-warning text-primary ">Příběh</li>
+                    <li className="text-lg step step-warning text-primary ">Shrnutí</li>
                 </ul>
-                <div className="divider divider-primary"></div>
-               <h3>SOUHRN</h3>
+                <div className="divider divider-warning"></div>
+                <h3>SOUHRN</h3>
 
                 <div className="modal-action">
-                    <button className="mx-5 btn text-primary" onClick={() => { changeStep(-1) }}>Předešlí krok</button>
-                    <button onClick={() => submitForm()} className="btn text-primary" >Vytvořit</button>
+                    <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { changeStep(-1) }}>Předešlý krok</button>
+                    <button onClick={() => submitForm()} className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" >Vytvořit</button>
                 </div>
             </div>
         )

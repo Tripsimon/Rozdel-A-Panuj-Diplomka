@@ -37,7 +37,7 @@ function AdventurerManagementChoice(props) {
 
   return (
     <div>
-      <div className="card bg-neutral text-neutral-content w-[90%] ml-[5%]">
+      <div className="card bg-secondary mt-10 text-neutral-content w-[90%] ml-[5%]">
         <div className="items-center text-center card-body">
           <h1 className="card-title"> Seznam dobrodruhů</h1>
           <div className="overflow-x-auto">
@@ -59,7 +59,7 @@ function AdventurerManagementChoice(props) {
             </table>
           </div>
           <div className="justify-end card-actions">
-            <a onClick={() => document.getElementById('createAdventurerModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Vytvořit nového</a>
+            <a onClick={() => document.getElementById('createAdventurerModal').showModal()} className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Vytvořit nového</a>
           </div>
         </div>
       </div>
