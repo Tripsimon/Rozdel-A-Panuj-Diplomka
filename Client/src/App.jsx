@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import axios from 'axios'
 
@@ -34,7 +33,7 @@ function App() {
   //Mód developování
   const devMode = true
   if (devMode) {
-    axios.defaults.baseURL = 'http://localhost:3001'
+    axios.defaults.baseURL = import.meta.env.VITE_SERVER_ADRESS
   } else {
     axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
   }
