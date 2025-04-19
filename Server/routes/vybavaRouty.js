@@ -40,14 +40,13 @@ router.post('/createWeapon',(req,res) =>{
  */
 router.post('/createArmor',(req,res) =>{
     let newItem = new EquipmentModel({
-        jmeno: req.body.name,
+        name: req.body.name,
         typ: req.body.type,
-        popis: req.body.description,
-        schopnosti: req.body.abilities,
-        obrana: req.body.obrana,
-        vaha: req.body.weight,
-        poznamka: null,
-        mazatelnost: true,
+        description: req.body.description,
+        abilities: req.body.abilities,
+        armor: req.body.obrana,
+        weight: req.body.weight,
+        deletable: true,
     })
 
     newItem.save()
@@ -64,13 +63,12 @@ router.post('/createArmor',(req,res) =>{
 router.post('/createItem',(req,res) =>{
 
     let newItem = new EquipmentModel({
-        jmeno: req.body.name,
+        name: req.body.name,
         typ: req.body.type,
-        popis: req.body.description,
-        schopnosti: req.body.abilities,
-        vaha: req.body.weight,
-        poznamka: null,
-        mazatelnost: true,
+        description: req.body.description,
+        abilities: req.body.abilities,
+        weight: req.body.weight,
+        deletable: true,
     })
 
     newItem.save()

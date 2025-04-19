@@ -20,9 +20,7 @@ function AdventurerManagementChoice(props) {
   }
 
   const renderAdventurersTable = () => {
-    if (loadedCharactersState.length == 0) {
-      return (<h2>žádný dobrodruh není vytvořen</h2>)
-    } else {
+
       return loadedCharactersState.map((vec) =>
         <tr key={vec._id} className="hover">
           <td>{vec.krestniJmeno}</td>
@@ -32,7 +30,7 @@ function AdventurerManagementChoice(props) {
           <td>{vec.trida}</td>
         </tr>)
 
-    }
+    
   }
 
   return (
@@ -41,8 +39,8 @@ function AdventurerManagementChoice(props) {
         <div className="items-center text-center card-body">
           <h1 className="card-title"> Seznam dobrodruhů</h1>
           <div className="overflow-x-auto">
+          {loadedCharactersState.length == 0 ? <h2>žádný dobrodruh není vytvořen</h2> : <table className="table">
 
-            <table className="table">
               {/* head */}
               <thead>
                 <tr>
@@ -56,7 +54,8 @@ function AdventurerManagementChoice(props) {
               <tbody>
                 {renderAdventurersTable()}
               </tbody>
-            </table>
+
+            </table>}
           </div>
           <div className="justify-end card-actions">
             <a onClick={() => document.getElementById('createAdventurerModal').showModal()} className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Vytvořit nového</a>

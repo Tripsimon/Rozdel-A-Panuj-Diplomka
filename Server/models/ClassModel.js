@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const ClassSchema = new Schema({
     jmeno: String,
     popis: String,
-    abilities:[{
+    abilities: [{
         name: String,
         abilityTyp: String,
         numberOfUses: Number,
@@ -15,14 +15,40 @@ const ClassSchema = new Schema({
         descriptionAbility: String,
         requiredLevel: Number
     }],
-    bonusovaVybava: [String],
-    hlavniVybava: [String],
-    krajniVybava: [String],
+    mainEquipment: [{
+
+        "name": String,
+        "typ": String,
+        "description": String,
+        "abilities": [String],
+        "pierce": Number,
+        "damageBase": Number,
+        "damageSeverity": Number,
+        "weight": Number,
+        "note": String
+
+    }],
+    armorEquipment: [
+        {
+        "name": String,
+        "typ": String,
+        "description": String,
+        "abilities": [String],
+        "weight": Number,
+      }],
+    bonusEquipment: [{
+        "name": String,
+        "typ": String,
+        "description": String,
+        "abilities": [String],
+        "weight": Number,
+        "deletable": Boolean,
+      }],
     zbrojVýbava: [String],
     role: String,
     trueZbrane: String
-    },
-    {collection: "classes"}
-    )
+},
+    { collection: "classes" }
+)
 
-module.exports = Trida = mongoose.model("db_rozdel_a_panuj_classes",ClassSchema,"classes");
+module.exports = Trida = mongoose.model("db_rozdel_a_panuj_classes", ClassSchema, "classes");

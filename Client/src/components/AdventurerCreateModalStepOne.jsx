@@ -1,8 +1,15 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import AbilityCard from './AbilityCard'
+import AlertDriver from './AlertDriver'
 
 function AdventurerCreateModalStepOne(props) {
+
+    //Upozorneni
+    const [alertState, setAlertState] = useState({
+        showAlert: false,
+        alertTyp: "",
+        alertText: ""
+    })
 
     function renderRaceSelect() {
         return (
@@ -22,7 +29,7 @@ function AdventurerCreateModalStepOne(props) {
             <div className="card-body">
                 <h2 className="text-xl uppercase card-title text-primary">Schopnosti rasy</h2>
                 <div className="mt-0 divider divider-warning"></div>
-                <div className='grid grid-cols-3'>{ props.selectedRaceState.schopnosti.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
+                <div className='grid grid-cols-3'>{props.selectedRaceState.schopnosti.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
             </div>
         </div>)
     }
@@ -52,17 +59,27 @@ function AdventurerCreateModalStepOne(props) {
             <div className="card-body">
                 <h2 className="text-xl uppercase card-title text-primary">Schopnosti rasy</h2>
                 <div className="mt-0 divider divider-warning"></div>
-                <div className='grid grid-cols-3 '>{ props.selectedClassState.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
+                <div className='grid grid-cols-3 '>{props.selectedClassState.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
             </div>
         </div>)
     }
 
     function handleNextStep() {
+
+        if (props.selectedRaceState == false || props.selectedClassState == false || props.adventurerState.name == "" || props.adventurerState.nickname == "" || props.adventurerState.secondName == "") {
+            setAlertState({
+                showAlert: true,
+                alertTyp: "error",
+                alertText: "Všechna pole musí být vyplněna"
+            }) 
+            return
+        }
         props.changeStep(1)
+        
     }
 
     return (
-        <div className="modal-box w-[90%] max-w-[90%]">
+        <div className="modal-box w-[90%] h-[90vh] max-w-[90%]">
 
             <h3 className="mb-10 text-lg font-bold text-primary">Tvorba dobrodruha</h3>
             <form method="dialog">
@@ -76,6 +93,7 @@ function AdventurerCreateModalStepOne(props) {
                 <li className="text-lg step text-primary ">Shrnutí</li>
             </ul>
             <div className="divider divider-warning"></div>
+            {alertState.showAlert ? <AlertDriver alertState={alertState}></AlertDriver> : ""}
 
             <fieldset className="fieldset">
                 <legend className="mb-2 text-lg fieldset-legend text-primary">Křestní jméno</legend>
@@ -96,11 +114,11 @@ function AdventurerCreateModalStepOne(props) {
             </fieldset>
 
             {renderRaceSelect()}
-            { props.selectedRaceState != false ? renderRaceAbilities():""}
+            {props.selectedRaceState != false ? renderRaceAbilities() : ""}
             {renderClassSelect()}
-            { props.selectedClassState != false ? renderClassAbilities():""}
+            {props.selectedClassState != false ? renderClassAbilities() : ""}
 
-            <div className="modal-action">
+            <div className=" modal-action">
                 <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { handleNextStep() }}>Další krok</button>
             </div>
         </div>

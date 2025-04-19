@@ -18,6 +18,10 @@ function AdventurerCreateModal() {
     const [loadedClasses, setLoadedClasses] = useState([]);
     const [selectedClassState, setSelectedClassState] = useState(false)
 
+    const [selectedMainEquipment, setSelectedMainEquipment] = useState(null);
+    const [selectedArmorEquipment, setSelectedArmorEquipment] = useState(null);
+    const [selectedBonusEquipment, setSelectedBonusEquipment] = useState(null)
+
     const [adventurerState, setAdventurerState] = useState({
         name: "",
         secondName: "",
@@ -117,7 +121,7 @@ function AdventurerCreateModal() {
 
     function renderSecondStep() {
         return (
-            <AdventurerCreateStepTwo atributesState={atributesState} setAtributesState={setAtributesState} changeStep={changeStep}></AdventurerCreateStepTwo>
+            <AdventurerCreateStepTwo atributesState={atributesState} setAtributesState={setAtributesState} selectedClassState={selectedClassState} selectedMainEquipment={selectedMainEquipment} setSelectedMainEquipment={setSelectedMainEquipment} selectedArmorEquipment={selectedArmorEquipment} setSelectedArmorEquipment={setSelectedArmorEquipment} selectedBonusEquipment={selectedBonusEquipment} setSelectedBonusEquipment={setSelectedBonusEquipment} changeStep={changeStep}></AdventurerCreateStepTwo>
         )
     }
 

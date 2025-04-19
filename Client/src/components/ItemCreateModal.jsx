@@ -15,10 +15,10 @@ function ItemCreateModal() {
 
     const renderForm = () => {
         switch (typState) {
-            case "weapon":
+            case "Weapon":
                 return renderWeaponForm()
 
-            case "armor":
+            case "Armor":
                 return renderArmor()
 
             default:
@@ -47,15 +47,15 @@ function ItemCreateModal() {
 
     const handleSubmit = () => {
         switch (typState) {
-            case "weapon":
+            case "Weapon":
                 uploadWeapon()
                 break;
 
-            case "armor":
+            case "Armor":
                 uploadArmor()
                 break;
 
-            case "item":
+            case "Item":
                 uploadItem()
                 break;
 
@@ -139,9 +139,9 @@ function ItemCreateModal() {
                 <input type="text" placeholder="Popis" value={itemDescriptionState} onChange={(event) => { setItemDescriptionState(event.target.value); }} className="w-full mb-5 input input-bordered " />
                 <select value={typState} onChange={(event) => { setTypState(event.target.value) }} className="w-full mb-5 input-bordered select">
                     <option disabled={true}>Vyberte typ předmětu</option>
-                    <option value={"weapon"} >Zbraň</option>
-                    <option value={"armor"}>Zbroj</option>
-                    <option value={"item"}>Předmět</option>
+                    <option value={"Weapon"} >Zbraň</option>
+                    <option value={"Armor"}>Zbroj</option>
+                    <option value={"Item"}>Předmět</option>
                     <option disabled={true} value={"consumable"}>Výbava</option>
                 </select>
 
