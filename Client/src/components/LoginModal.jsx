@@ -11,6 +11,13 @@ function LoginModal() {
     const [emailState, setEmailState] = useState("");
     const [passwordState, setPasswordState] = useState("")
 
+    //Upozorneni
+    const [alertState, setAlertState] = useState({
+        showAlert: false,
+        alertTyp: "",
+        alertText: ""
+    })
+
     /**
      * Metoda pro přihlášení uživatele
      */
@@ -19,9 +26,11 @@ function LoginModal() {
             .then(queryResponse => {
                 switch (queryResponse.data) {
                     case 'No User Found':
-                        alertTitle.value = "Učet nenalezen",
-                            alertText.value = 'Nebyl nalezen učet s tímto E-Mailem. Prosím, zkontroluje zadaná data'
-                        showAlert.value = true
+                        setAlertState({
+                            showAlert: true,
+                            alertTyp: "error",
+                            alertText: "Uživatel s těmito informacemi nebyl nalezen. Prosím zkuste operaci znovu."
+                        })
                         break;
 
                     case 'Wrong Password':
@@ -32,7 +41,7 @@ function LoginModal() {
 
                     default:
                         if (queryResponse.status == 200 || queryResponse.data != null) {
-                            dispatch(loginUser({id: queryResponse.data._id, opravneni: queryResponse.data.opravneni, name: queryResponse.data.prezdivka}))
+                            dispatch(loginUser({ id: queryResponse.data._id, opravneni: queryResponse.data.opravneni, name: queryResponse.data.prezdivka }))
                         }
                         break;
                 }
@@ -43,15 +52,28 @@ function LoginModal() {
     return (
         <dialog id="loginModal" className="modal">
             <div className="modal-box">
-                <AlertDriver className="mb-5" show={false} type="error"></AlertDriver>
                 <h3 className="text-lg font-bold text-primary">Přihlášení</h3>
                 <div className="mb-10 divider divider-warning"></div>
-                <input type="text" placeholder="Email" onChange={(event) => { setEmailState(event.target.value); }} className="w-full mb-5 input input-bordered " />
-                <input type="password" placeholder="Heslo" onChange={(event) => { setPasswordState(event.target.value); }} className="w-full mb-5 input input-bordered" />
+                {alertState.showAlert ? <AlertDriver alertState={alertState}></AlertDriver> : ""}
+                <fieldset className="fieldset">
+                    <legend className="mb-2 text-lg fieldset-legend text-primary">Email</legend>
+                    <input type="email" onChange={(event) => { setEmailState(event.target.value); }} className="w-full input input-bordered input-warning text-primary bg-secondary" />
+                    <p className="label"></p>
+                </fieldset>
+
+                <fieldset className="fieldset">
+                    <legend className="mb-2 text-lg fieldset-legend text-primary">Heslo</legend>
+                    <input type="password" onChange={(event) => { setPasswordState(event.target.value); }} className="w-full input input-bordered input-warning text-primary bg-secondary" />
+                    <p className="label"></p>
+                </fieldset>
+
+
                 <div className="modal-action">
                     <form method="dialog">
+
+
                         <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { prihlaseni() }}>Přihlásit</button>
-                        <button className="uppercase  btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Zavřít</button>
+                        <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Zavřít</button>
                     </form>
                 </div>
             </div>
