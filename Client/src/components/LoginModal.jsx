@@ -50,8 +50,8 @@ function LoginModal() {
                 <input type="password" placeholder="Heslo" onChange={(event) => { setPasswordState(event.target.value); }} className="w-full mb-5 input input-bordered" />
                 <div className="modal-action">
                     <form method="dialog">
-                        <button className="mx-5 btn text-primary" onClick={() => { prihlaseni() }}>Přihlásit</button>
-                        <button className="btn text-primary">Zavřít</button>
+                        <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { prihlaseni() }}>Přihlásit</button>
+                        <button className="uppercase  btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Zavřít</button>
                     </form>
                 </div>
             </div>

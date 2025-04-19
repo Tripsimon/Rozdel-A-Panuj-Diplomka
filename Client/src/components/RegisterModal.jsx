@@ -82,8 +82,8 @@ function RegisterModal() {
                 <input type="password" placeholder="Opakovat heslo" className="w-full mb-5 input input-bordered" />
                 <div className="modal-action">
                     <form method="dialog">
-                        <button onClick={() => { register() }} className="mx-5 btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Registrovat</button>
-                        <button className=" btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Zavřít</button>
+                        <button onClick={() => { register() }} className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Registrovat</button>
+                        <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Zavřít</button>
                     </form>
                 </div>
             </div>

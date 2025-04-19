@@ -11,6 +11,8 @@ function LexiconModal() {
     ];
 
     const handleChangeText = (value) => {
+        setSelectedTitle("")
+        setSelectedText("")
         switch (value) {
             case "prehod":
                 setSelectedTitle("Přehod kostky")
@@ -73,16 +75,19 @@ function LexiconModal() {
                     onChange={(e) => { setSelectedOption(e.value); handleChangeText(e.value) }}
                     options={options}
                 />
-                <div className="w-full px-5 mt-10 shadow-sm bg-secondary card">
-
+                {selectedTitle != "" ? <div className="w-full px-5 mt-10 shadow-sm bg-secondary card">
                     <div className="items-center text-center card-body">
                         <h2 className="text-2xl card-title text-primary">{selectedTitle}</h2>
                         <div className="mb-5 divider divider-warning"></div>
                         <p className='text-lg'>{selectedText}</p>
                     </div>
+                </div>: ""}
+
+                <div className="!relative !bottom-5 mt-10 modal-action">
+                    <form method="dialog">
+                    <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Zavřít</button>
+                    </form>
                 </div>
-
-
             </div>
         </dialog>
     )
