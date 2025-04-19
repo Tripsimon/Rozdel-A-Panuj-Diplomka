@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import axios from 'axios'
 
-
-
 import HomePage from './pages/Home.jsx'
 import RulesPage from './pages/Rules.jsx'
 import ThanksPage from './pages/Thanks.jsx'
@@ -29,13 +27,7 @@ import LexiconModal from './components/LexiconModal.jsx';
 function App() {
 
   //Axios nastaveni
-  //Mód developování
-  const devMode = true
-  if (devMode) {
-    axios.defaults.baseURL = import.meta.env.VITE_SERVER_ADRESS
-  } else {
-    axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
-  }
+  axios.defaults.baseURL = import.meta.env.VITE_SERVER_ADRESS
 
 
 

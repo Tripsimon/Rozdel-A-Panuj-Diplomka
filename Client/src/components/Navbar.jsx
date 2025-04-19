@@ -68,7 +68,7 @@ function Navbar() {
                     </ul>
                 </div>
                 <img src={raplogo} className='w-10 h-10 select-none'></img>
-                <a onClick={() => handleNavigation('/')} className="text-xl btn btn-ghost text-primary">Rozděl  a Panuj</a>
+                <a onClick={() => handleNavigation('/')} className="text-xl btn btn-ghost hover:bg-secondary text-primary">Rozděl  a Panuj</a>
             </div>
             <div className="hidden navbar-center lg:flex">
                 <ul className="px-1 menu menu-horizontal">
