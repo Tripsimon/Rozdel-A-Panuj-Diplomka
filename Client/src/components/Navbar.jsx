@@ -19,13 +19,14 @@ function Navbar() {
 
         if (!isLoggedIn) {
             return (<div className="navbar-end">
-                <a onClick={() => document.getElementById('registerModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Registrace</a>
-                <a onClick={() => document.getElementById('loginModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Přihlásit se</a>
+                <a onClick={() => document.getElementById('registerModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Registrace</a>
+                <a onClick={() => document.getElementById('loginModal').showModal()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Přihlásit se</a>
             </div>)
         } else {
             return (<div className="navbar-end">
-                Přihlášený uživatel: {loggedUser.userName}
-                <a onClick={() => dispatch(logoutUser())} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-primary hover:border-backdrop">Odhlasit</a>
+                <p className='pr-2 uppercase select-none text-primary'>Přihlášený uživatel:  </p> 
+                <p className='pr-2 uppercase select-none text-primary' >{loggedUser.userName}</p>
+                <a onClick={() => dispatch(logoutUser())} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Odhlasit</a>
             </div>)
         }
     }
@@ -66,7 +67,7 @@ function Navbar() {
                         <li><a>Item 3</a></li>
                     </ul>
                 </div>
-                <img src={raplogo} className='w-10 h-10'></img>
+                <img src={raplogo} className='w-10 h-10 select-none'></img>
                 <a onClick={() => handleNavigation('/')} className="text-xl btn btn-ghost text-primary">Rozděl  a Panuj</a>
             </div>
             <div className="hidden navbar-center lg:flex">
@@ -80,6 +81,7 @@ function Navbar() {
                             </ul>
                         </details>
                     </li>
+                    <li><a onClick={() => document.getElementById('lexiconModal').showModal()} className='text-primary'>Lexikon</a></li>
                     {isLoggedIn?<>
                     <li><a onClick={() => handleNavigation('/adventurers')} className='text-primary'>Správa dobrodruhů</a></li>
                     <li><a onClick={() => handleNavigation('/gameBrowse')} className='text-primary'>Začít hrát</a></li>

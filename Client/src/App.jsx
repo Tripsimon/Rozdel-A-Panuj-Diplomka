@@ -3,9 +3,6 @@ import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import axios from 'axios'
 
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { reduxIsLoggedIn, logoutUser } from './store/userSlice.js';
 
 
 import HomePage from './pages/Home.jsx'
@@ -27,6 +24,7 @@ import MapManagement from './pages/MapManagement.jsx';
 import LocalityCreateModal from './components/LocalityCreateModal.jsx';
 import MapCreateModal from './components/MapCreateModal.jsx';
 import GameBrowser from './pages/GameBrowser.jsx';
+import LexiconModal from './components/LexiconModal.jsx';
 
 
 
@@ -41,7 +39,7 @@ function App() {
     axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
   }
 
-  const [count, setCount] = useState(0)
+
 
   return (
     <>
@@ -52,6 +50,7 @@ function App() {
         <AdventurerCreateModal></AdventurerCreateModal>
         <LocalityCreateModal></LocalityCreateModal>
         <MapCreateModal></MapCreateModal>
+        <LexiconModal></LexiconModal>
 
         <Navbar></Navbar>
         <Routes>
