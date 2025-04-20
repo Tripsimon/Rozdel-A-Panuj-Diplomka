@@ -228,55 +228,61 @@ function GameAdventurerInventoryModal(props) {
                     </div>
                 </div>
 
-                <h3 className="mt-10 text-lg font-bold text-primary">Menu slovotepce</h3>
-                <div className="mb-10 divider divider-warning"></div>
-
-                <fieldset className="fieldset">
-                    <legend className="mb-2 text-lg fieldset-legend text-primary">Přidat předmět</legend>
-                    <div className='grid grid-cols-2 gap-5'>
-                        <div>
-                            <Select
-                                styles={selectStyles}
-                                className='text-primary'
-                                defaultValue={selectedItemType}
-                                onChange={(e) => { getOptions(e) }}
-                                options={weaponTypes}
-                                placeholder={"Typ předmětu"}
-                            />
-                        </div>
-                        <div>
-                            <Select
-                                styles={selectStyles}
-                                className='text-primary'
-                                defaultValue={selectedItem}
-                                onChange={(e) => { setSelectedItem(e.value) }}
-                                options={loadedOptions}
-                                placeholder={"Typ předmětu"}
-                            />
-                        </div>
-                    </div>
-                    { selectedItem != null ? <a onClick={() => {addItem(); }} className="w-full mt-5 uppercase btn bg-secondary btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Přidat předmět</a>:""}
-
-                </fieldset>
-
-                <fieldset className="mt-10 fieldset">
-                    <legend className="mb-2 text-lg fieldset-legend text-primary">Peníze</legend>
-                    <div className='grid'>
-                        <input type="number" onChange={(event) => { setMoneyChangeState(event.target.value)}} className="w-full input input-bordered input-warning text-primary bg-secondary" />
-                    </div>
-                    { moneyChangeState != null ? <a onClick={() => {changeMoney(); }} className="w-full mt-5 uppercase btn bg-secondary btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Změnit peníze</a>:""}
-                    <p className="label"></p>
-                </fieldset>
-
-                <div className="modal-action">
+                {props.userIdentityState == "Owner" ? <div>
+                    <h3 className="mt-10 text-lg font-bold text-primary">Menu slovotepce</h3>
                     <form method="dialog">
-
-
-                        <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { prihlaseni() }}>Přihlásit</button>
-                        <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Zavřít</button>
+                        <button className="absolute text-lg btn btn-sm btn-circle btn-ghost right-2 top-2 text-primary">✕</button>
                     </form>
-                </div>
+                    <div className="mb-10 divider divider-warning"></div>
+
+                    <fieldset className="fieldset">
+                        <legend className="mb-2 text-lg fieldset-legend text-primary">Přidat předmět</legend>
+                        <div className='grid grid-cols-2 gap-5'>
+                            <div>
+                                <Select
+                                    styles={selectStyles}
+                                    className='text-primary'
+                                    defaultValue={selectedItemType}
+                                    onChange={(e) => { getOptions(e) }}
+                                    options={weaponTypes}
+                                    placeholder={"Typ předmětu"}
+                                />
+                            </div>
+                            <div>
+                                <Select
+                                    styles={selectStyles}
+                                    className='text-primary'
+                                    defaultValue={selectedItem}
+                                    onChange={(e) => { setSelectedItem(e.value) }}
+                                    options={loadedOptions}
+                                    placeholder={"Typ předmětu"}
+                                />
+                            </div>
+                        </div>
+                        {selectedItem != null ? <a onClick={() => { addItem(); }} className="w-full mt-5 uppercase btn bg-secondary btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Přidat předmět</a> : ""}
+
+                    </fieldset>
+
+                    <fieldset className="mt-10 fieldset">
+                        <legend className="mb-2 text-lg fieldset-legend text-primary">Peníze</legend>
+                        <div className='grid'>
+                            <input type="number" onChange={(event) => { setMoneyChangeState(event.target.value) }} className="w-full input input-bordered input-warning text-primary bg-secondary" />
+                        </div>
+                        {moneyChangeState != null ? <a onClick={() => { changeMoney(); }} className="w-full mt-5 uppercase btn bg-secondary btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Změnit peníze</a> : ""}
+                        <p className="label"></p>
+                    </fieldset>
+
+                    <div className="modal-action">
+                        <form method="dialog">
+
+
+                            <button className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => { prihlaseni() }}>Přihlásit</button>
+                            <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Zavřít</button>
+                        </form>
+                    </div>
+                </div> : ""}
             </div>}
+
         </dialog>
     )
 }

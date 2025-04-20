@@ -33,7 +33,7 @@ function GameAdventurersDisplay(props) {
       <div className="card card-dash bg-secondary w-96">
         <div className="card-body">
           <h2 className="card-title text-primary">{getAdventurerName(adventurer)}</h2>
-          <div className="divider divider-primary"></div>
+          <div className="divider divider-warning"></div>
           <div className='grid grid-cols-2 gap-5'>
             <h3>Životy: {adventurer.zivoty} / {adventurer.atributy.houzevnatost*10}</h3>
             <h3>Peníze: {adventurer.penize}</h3>
@@ -43,12 +43,12 @@ function GameAdventurersDisplay(props) {
           <p>Level: {adventurer.level}</p>
           <p>Zkušenosti: {adventurer.zkusenosti}</p>
           </div>
-          <div className="divider divider-primary"></div>
+          <div className="divider divider-warning"></div>
 
-          <div className="justify-end card-actions">
-            <button className="btn btn-primary" onClick={() => {document.getElementById('gameAdventurerInventoryModal').showModal(); props.setOpenedInventoryAdventurer(props.player1State.adventurer)}}>Inventář</button>
-            <button className="btn btn-primary">Schopnosti</button>
-            <button className="btn btn-primary">Statistiky</button>
+          <div className="grid grid-cols-3 gap-2">
+            <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => {document.getElementById('gameAdventurerInventoryModal').showModal(); props.setOpenedInventoryAdventurer(props.player1State.adventurer)}}>Inventář</button>
+            <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Schopnosti</button>
+            <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Vlastnosti</button>
           </div>
         </div>
       </div>
