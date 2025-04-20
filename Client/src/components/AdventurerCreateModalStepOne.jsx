@@ -57,7 +57,7 @@ function AdventurerCreateModalStepOne(props) {
     const renderClassAbilities = () => {
         return (<div className="w-full mt-10 shadow-sm card card-xl bg-secondary">
             <div className="card-body">
-                <h2 className="text-xl uppercase card-title text-primary">Schopnosti rasy</h2>
+                <h2 className="text-xl uppercase card-title text-primary">Schopnosti třídy</h2>
                 <div className="mt-0 divider divider-warning"></div>
                 <div className='grid grid-cols-3 '>{props.selectedClassState.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
             </div>
