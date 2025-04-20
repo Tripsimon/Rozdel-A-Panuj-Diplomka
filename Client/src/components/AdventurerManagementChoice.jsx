@@ -70,7 +70,7 @@ function AdventurerManagementChoice(props) {
             </table>}
           </div>
           <div className="justify-end card-actions">
-            <a onClick={() => document.getElementById('createAdventurerModal').showModal()} className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Vytvořit nového</a>
+            <a onClick={() => document.getElementById('createAdventurerModal').showModal()} className="mx-5 uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Vytvořit nového dobrodruha</a>
           </div>
         </div>
       </div>

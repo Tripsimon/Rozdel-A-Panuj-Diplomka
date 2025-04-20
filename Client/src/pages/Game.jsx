@@ -257,6 +257,7 @@ function Game() {
                 setPlayer1State({ ...player1State, owner: response.data[0].owner, adventurerID: response.data[0].adventurer })
                 axios.get(axios.defaults.baseURL + '/character/sessionAdventurers', { params: { adventurer1: response.data[0].adventurer, adventurer2: response.data[1].adventurer, adventurer3: response.data[2].adventurer } })
                     .then(response => {
+                        console.log(response)
                         setPlayer1State({ ...player1State, adventurer: response.data[0] })
                         setPlayer2State({ ...player2State, adventurer: response.data[1] })
                         setPlayer3State({ ...player3State, adventurer: response.data[2] })

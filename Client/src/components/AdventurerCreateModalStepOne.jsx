@@ -66,7 +66,7 @@ function AdventurerCreateModalStepOne(props) {
 
     function handleNextStep() {
 
-        if (props.selectedRaceState == false || props.selectedClassState == false || props.adventurerState.name == "" || props.adventurerState.nickname == "" || props.adventurerState.secondName == "") {
+        if (props.selectedRaceState == false || props.selectedClassState == false || props.adventurerState.name == "" || props.adventurerState.secondName == "") {
             setAlertState({
                 showAlert: true,
                 alertTyp: "error",
@@ -104,7 +104,7 @@ function AdventurerCreateModalStepOne(props) {
             <fieldset className="fieldset">
                 <legend className="mb-2 text-lg fieldset-legend text-primary">Přezdívka</legend>
                 <input type="text" value={props.adventurerState.nickname} onChange={(event) => props.setAdventurerState({ ...props.adventurerState, nickname: event.target.value })} className="w-full input input-bordered input-warning text-primary bg-secondary" />
-                <p className="label"></p>
+                <p className="label text-primary">* Nepovinná informace</p>
             </fieldset>
 
             <fieldset className="fieldset">
