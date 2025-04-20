@@ -29,7 +29,7 @@ function AdventurerCreateModalStepOne(props) {
             <div className="card-body">
                 <h2 className="text-xl uppercase card-title text-primary">Schopnosti rasy</h2>
                 <div className="mt-0 divider divider-warning"></div>
-                <div className='grid grid-cols-3'>{props.selectedRaceState.schopnosti.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
+                <div className='grid grid-cols-2'>{props.selectedRaceState.schopnosti.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>
             </div>
         </div>)
     }
