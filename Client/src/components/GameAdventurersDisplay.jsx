@@ -46,7 +46,7 @@ function GameAdventurersDisplay(props) {
           <div className="divider divider-primary"></div>
 
           <div className="justify-end card-actions">
-            <button className="btn btn-primary">Inventář</button>
+            <button className="btn btn-primary" onClick={() => {document.getElementById('gameAdventurerInventoryModal').showModal(); props.setOpenedInventoryAdventurer(props.player1State.adventurer)}}>Inventář</button>
             <button className="btn btn-primary">Schopnosti</button>
             <button className="btn btn-primary">Statistiky</button>
           </div>

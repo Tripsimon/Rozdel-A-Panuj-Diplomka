@@ -63,11 +63,6 @@ function AdventurerCreateStepTwo(props) {
         //mainEquipmentOptions
     }
 
-    const options = [
-        { value: 'prehod', label: 'Přehod kostky' },
-        { value: 'omraceni', label: 'Omračení' },
-    ];
-
 
     function handleNextStep() {
 

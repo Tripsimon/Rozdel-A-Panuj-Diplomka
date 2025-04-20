@@ -6,6 +6,7 @@ const router = express.Router()
 
 //DB Model
 const AdventurerModel = require('../models/AdventurerModel');
+const EquipmentModel = require('../models/EquipmentModel')
 
 /**
  * Kontrola funkce
@@ -111,12 +112,21 @@ router.get('/sessionAdventurers', (req, res) => {
  * Přidá předmět do inventáře dobrodruha
  */
 router.post('/putIntoInventory', async (req, res) => {
+    let item = await EquipmentModel.findOne({ _id: req.body.item })
+    if (!item) {
+        return res.status(404).send('Item not found')
+    }
+
     let adventurer = await AdventurerModel.findOne({ _id: req.body.adventurer })
-    adventurer.inventar.push(req.body.item)
+    if (!adventurer) {
+        return res.status(404).send('Adventurer not found')
+    }
+
+    adventurer.inventar.push(item)
     adventurer.save()
-        .then(res.send("Item Added"))
+        .then(res.status(200).send("Item Added"))
         .catch(error => {
-            res.send('Error')
+            res.status(500).send('Error')
             console.log('Vyskytla se chyba při přidání předmětu do inventáře:', error)
         })
 

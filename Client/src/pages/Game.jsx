@@ -15,6 +15,7 @@ import axios from 'axios'
 import GameLogModal from '../components/GameLogModal';
 import GameActiveEnemiesDisplay from '../components/GameActiveEnemiesDisplay';
 import GameBattleDicefield from '../components/GameBattleDicefield';
+import GameAdventurerInventoryModal from '../components/GameAdventurerInventoryModal';
 
 function Game() {
     const loggedUser = useSelector(reduxReturnUser)
@@ -30,10 +31,9 @@ function Game() {
     const [player2State, setPlayer2State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [player3State, setPlayer3State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [activeMonstersState, setActiveMonstersState] = useState([])
+    const [openedInventoryAdventurer, setOpenedInventoryAdventurer] = useState(null)
 
     const [sessionLogState, setSessionLogState] = useState("")
-
-
     const [gameModeState, setGameModeState] = useState('adventure')
     const [gameAdverureMapState, setGameAdventureMapState] = useState("mapa.jpg")
     const [gameFightLocalityState, setGameFightLocalityState] = useState({
@@ -152,9 +152,6 @@ function Game() {
     })
 
     useEffect(() => {
-
-        socketsJoinRoom()
-
         let urlParams = new URLSearchParams(window.location.search)
         const sid = urlParams.get('sid')
 
@@ -173,18 +170,19 @@ function Game() {
                 if (response.data == "Is Owner") {
                     setUserIdentityState("Owner")
                     resyncPlayers()
+                    console.log("Hráč je Slovotepec")
                     return
                 }
 
                 if (response.data != null) {
                     setUserIdentityState(response.data)
                     resyncPlayers()
+                    console.log("Hráč je Dobrodruh")
                     return
                 }
-
-
-
             }).catch((err) => { console.log("Chyba při získání identity:", err) })
+
+        socketsJoinRoom()
 
 
         webSocket.on('connect', () => {
@@ -254,15 +252,11 @@ function Game() {
         console.log("Proběhne resync hráčů")
         axios.get(axios.defaults.baseURL + '/sessions/sessionPlayers', { params: { sid: sid } })
             .then(response => {
-                setPlayer1State({ ...player1State, owner: response.data[0].owner, adventurerID: response.data[0].adventurer })
-                axios.get(axios.defaults.baseURL + '/character/sessionAdventurers', { params: { adventurer1: response.data[0].adventurer, adventurer2: response.data[1].adventurer, adventurer3: response.data[2].adventurer } })
-                    .then(response => {
-                        console.log(response)
-                        setPlayer1State({ ...player1State, adventurer: response.data[0] })
-                        setPlayer2State({ ...player2State, adventurer: response.data[1] })
-                        setPlayer3State({ ...player3State, adventurer: response.data[2] })
-                        //getLog()
-                    })
+                console.log(response)
+                setPlayer1State(response.data[0])
+                setPlayer2State(response.data[1])
+                setPlayer3State(response.data[2])
+                //getLog()
             })
     }
 
@@ -323,9 +317,10 @@ function Game() {
     return (
         <>
             <GameLogModal sessionLogState={sessionLogState} ></GameLogModal>
+            <GameAdventurerInventoryModal openedInventoryAdventurer={openedInventoryAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerInventoryModal>
             <div className='pb-[5%]'>
-                <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} ></GameAdventurersDisplay>
-                { activeMonstersState.length > 0 ? <GameActiveEnemiesDisplay activeMonstersState={activeMonstersState}></GameActiveEnemiesDisplay>:""}
+                <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} setOpenedInventoryAdventurer={setOpenedInventoryAdventurer} ></GameAdventurersDisplay>
+                {activeMonstersState.length > 0 ? <GameActiveEnemiesDisplay activeMonstersState={activeMonstersState}></GameActiveEnemiesDisplay> : ""}
                 {renderGameMode()}
 
 

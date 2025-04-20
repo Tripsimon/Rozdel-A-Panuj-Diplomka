@@ -11,15 +11,15 @@ const SessionSchema = new Schema({
 
     player1: {
             owner: String,
-            adventurer: String
+            adventurer: { type: mongoose.Schema.Types.ObjectId, ref: 'db_rozdel_a_panuj_adventurers' }
         },
     player2: {
             owner: String,
-            adventurer: String
+            adventurer: { type: mongoose.Schema.Types.ObjectId, ref: 'db_rozdel_a_panuj_adventurers' }
         },
     player3: {
             owner: String,
-            adventurer: String
+            adventurer: { type: mongoose.Schema.Types.ObjectId, ref: 'db_rozdel_a_panuj_adventurers' }
         },
     log: [String]
     

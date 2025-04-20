@@ -159,7 +159,8 @@ router.post("/joinSession", async (req, res) => {
  * Vrátí seznam hráčů v sessioně
  */
 router.get('/sessionPlayers', (req, res) => {
-    SessionModel.findOne({ _id: req.query.sid }).then(queryData => {
+    SessionModel.findOne({ _id: req.query.sid }).populate('player1.adventurer')
+    .then(queryData => {
         res.send([queryData.player1, queryData.player2, queryData.player3])
     }).catch(error => {
         res.send('Error')
