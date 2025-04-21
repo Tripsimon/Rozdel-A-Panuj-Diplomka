@@ -3,8 +3,6 @@ import AbilityCard from './AbilityCard'
 
 function GameAdventurerAbilitiesModal(props) {
 
-    console.log(props.openedAbilitiesAdventurer)
-
     function getAdventurerName(adventurer) {
         if (props.openedAbilitiesAdventurer == null) { return }
         let name = adventurer.krestniJmeno
@@ -16,7 +14,8 @@ function GameAdventurerAbilitiesModal(props) {
     }
 
     const renderAbilities = () => {
-        return (                <div className='grid grid-cols-1 m-10'>{props.openedAbilitiesAdventurer.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>)
+        if(props.openedAbilitiesAdventurer == null){return}
+        return (<div className='grid grid-cols-1 m-10'>{props.openedAbilitiesAdventurer.abilities.map((ability) => <AbilityCard key={ability._id} ability={ability}></AbilityCard>)}</div>)
     }
 
     return (

@@ -48,7 +48,7 @@ function GameAdventurersDisplay(props) {
           <div className="grid grid-cols-3 gap-2">
             <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => {document.getElementById('gameAdventurerInventoryModal').showModal(); props.setOpenedInventoryAdventurer(props.player1State.adventurer)}}>Inventář</button>
             <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => {document.getElementById('gameAdventurerAbilitiesModal').showModal(); props.setOpenedAbilitiesAdventurer(props.player1State.adventurer)}}>Schopnosti</button>
-            <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary">Vlastnosti</button>
+            <button className="uppercase btn bg-secondary btn-outline hover:bg-primary hover:text-secondary hover:border-backdrop text-primary" onClick={() => {document.getElementById('gameAdventurerStatsModal').showModal(); props.setOpenedStatsAdventurer(props.player1State.adventurer)}}>Vlastnosti</button>
           </div>
         </div>
       </div>

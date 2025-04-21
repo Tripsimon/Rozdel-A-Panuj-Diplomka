@@ -17,6 +17,7 @@ import GameActiveEnemiesDisplay from '../components/GameActiveEnemiesDisplay';
 import GameBattleDicefield from '../components/GameBattleDicefield';
 import GameAdventurerInventoryModal from '../components/GameAdventurerInventoryModal';
 import GameAdventurerAbilitiesModal from '../components/GameAdventurerAbilitiesModal';
+import GameAdventurerStatsModal from '../components/GameAdventurerStatsModal';
 
 function Game() {
     const loggedUser = useSelector(reduxReturnUser)
@@ -36,6 +37,7 @@ function Game() {
 
     const [openedInventoryAdventurer, setOpenedInventoryAdventurer] = useState(null)
     const [openedAbilitiesAdventurer, setOpenedAbilitiesAdventurer] = useState(null)
+    const [openedStatsAdventurer, setOpenedStatsAdventurer] = useState(null)
 
     const [sessionLogState, setSessionLogState] = useState("")
     const [gameModeState, setGameModeState] = useState('adventure')
@@ -323,8 +325,9 @@ function Game() {
             <GameLogModal sessionLogState={sessionLogState} ></GameLogModal>
             <GameAdventurerInventoryModal openedInventoryAdventurer={openedInventoryAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerInventoryModal>
             <GameAdventurerAbilitiesModal openedAbilitiesAdventurer={openedAbilitiesAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerAbilitiesModal>
+            <GameAdventurerStatsModal openedStatsAdventurer={openedStatsAdventurer}></GameAdventurerStatsModal>
             <div className='pb-[5%]'>
-                <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} setOpenedInventoryAdventurer={setOpenedInventoryAdventurer} setOpenedAbilitiesAdventurer={setOpenedAbilitiesAdventurer} ></GameAdventurersDisplay>
+                <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} setOpenedInventoryAdventurer={setOpenedInventoryAdventurer} setOpenedAbilitiesAdventurer={setOpenedAbilitiesAdventurer} setOpenedStatsAdventurer={setOpenedStatsAdventurer}></GameAdventurersDisplay>
                 {activeMonstersState.length > 0 ? <GameActiveEnemiesDisplay activeMonstersState={activeMonstersState}></GameActiveEnemiesDisplay> : ""}
                 {renderGameMode()}
 
