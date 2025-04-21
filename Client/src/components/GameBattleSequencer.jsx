@@ -62,7 +62,7 @@ function GameBattleSequencer(props) {
 
         holderarray.forEach(vec =>{
             if (vec.selected) {
-                vec.active = false
+                vec.active = false 
             }
         })
 
@@ -73,7 +73,7 @@ function GameBattleSequencer(props) {
     const renderBattlefield = () => {
         return battlefieldState.map((entry, index) => <li onClick={() => selectEntry(index)} key={index}>
             <hr />
-            <div className={`${entry.typ == "adventurer" ? "bg-green-600" : "bg-red-600"} ${entry.selected ? "border-2 border-primary  " : " "} text-secondary  timeline-start timeline-box`}>{entry.typ == "adventurer" ? entry.krestniJmeno : entry.name}</div>
+            <div className={`${entry.typ == "adventurer" ? "bg-green-600" : "bg-red-600"} ${entry.selected ? "border-2 border-primary  " : " "} text-secondary select-none  timeline-start timeline-box`}>{entry.typ == "adventurer" ? entry.krestniJmeno : entry.name}</div>
             <div className="timeline-middle">
                 <Icon className={`${entry.active ? "text-green-600" : "text-yellow-600"}`} path={mdiCheckCircle} size={1} />
             </div>
