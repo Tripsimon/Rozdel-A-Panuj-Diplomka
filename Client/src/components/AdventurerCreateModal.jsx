@@ -37,6 +37,7 @@ function AdventurerCreateModal() {
         mainEquipment: null,
         armorEquipment: null,
         bonusEquipment: null,
+        abilities: [],
         aligment: null,
         age: null,
         description: "Nezjištěno",
@@ -207,6 +208,8 @@ function AdventurerCreateModal() {
         obsah.newAdventurer.mainEquipment = selectedMainEquipment;
         obsah.newAdventurer.armorEquipment = selectedArmorEquipment;
         obsah.newAdventurer.bonusEquipment = selectedBonusEquipment;
+        obsah.newAdventurer.abilities = obsah.newAdventurer.abilities.concat(selectedRaceState.schopnosti)
+        obsah.newAdventurer.abilities = obsah.newAdventurer.abilities.concat(selectedClassState.abilities)
 
         axios.post(axios.defaults.baseURL + '/character/characterCreation', obsah)
             .then(() => {

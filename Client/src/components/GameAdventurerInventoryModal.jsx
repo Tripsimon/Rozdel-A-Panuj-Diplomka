@@ -80,7 +80,6 @@ function GameAdventurerInventoryModal(props) {
 
         axios.get(axios.defaults.baseURL + '/vybava/allType', { params: { type: 'Armor' } })
             .then(queryResponse => {
-                console.log(queryResponse.data)
                 queryResponse.data.forEach(element => {
                     setArmorOptions([...armorOptions, { label: element.name, value: element._id }])
                 });
@@ -162,7 +161,6 @@ function GameAdventurerInventoryModal(props) {
     }
 
     const addItem = () => {
-        console.log(selectedItem)
         axios.post(axios.defaults.baseURL + '/character/putIntoInventory', { "item": selectedItem, 'adventurer': props.openedInventoryAdventurer._id })
             .then(responseQuery => {
 

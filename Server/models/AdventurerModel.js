@@ -40,6 +40,16 @@ const AdventurerSchema = new Schema({
         weight: Number,
         note: String,
     }],
+    abilities: [{
+        abilityTyp:String,
+        cd:String,
+        descriptionAbility:String,
+        descriptionLore:String,
+        name:String,
+        numberOfUses:Number,
+        owner:String,
+        requiredLevel:Number
+    }],
     penize: Number,
     level: Number,
     zkusenosti: Number,

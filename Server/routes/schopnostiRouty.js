@@ -63,5 +63,21 @@ router.get('/getByOwner', (req,res) =>{
 
 })
 
+/**
+ * Routa pro navrácení schopnosti dobrodruha
+ */
+router.get('/getAdventurerAbilities', (req,res) =>{
+    console.log(req.query)
+    /*
+    AbilityModel.find({majitel: req.query.owner})
+        .then(queryResponse => res.send(queryResponse))
+        .catch(error => {
+            res.send('Error')
+            console.log('Vyskytla se chyba při vrácení dat schopností podle majitele:', error)
+        })
+            */
+
+})
+
 
 module.exports = router

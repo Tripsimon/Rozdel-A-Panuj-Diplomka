@@ -43,6 +43,7 @@ router.post("/characterCreation", (req, res) => {
             znalost: atributesInput.znalost
         },
         inventar: [data.mainEquipment , data.armorEquipment, data.bonusEquipment],
+        abilities: data.abilities,
         penize: 3,
         level: 1,
         zkusenosti: 0

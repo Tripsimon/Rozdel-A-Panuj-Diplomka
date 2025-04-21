@@ -16,6 +16,7 @@ import GameLogModal from '../components/GameLogModal';
 import GameActiveEnemiesDisplay from '../components/GameActiveEnemiesDisplay';
 import GameBattleDicefield from '../components/GameBattleDicefield';
 import GameAdventurerInventoryModal from '../components/GameAdventurerInventoryModal';
+import GameAdventurerAbilitiesModal from '../components/GameAdventurerAbilitiesModal';
 
 function Game() {
     const loggedUser = useSelector(reduxReturnUser)
@@ -31,7 +32,10 @@ function Game() {
     const [player2State, setPlayer2State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [player3State, setPlayer3State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [activeMonstersState, setActiveMonstersState] = useState([])
+
+
     const [openedInventoryAdventurer, setOpenedInventoryAdventurer] = useState(null)
+    const [openedAbilitiesAdventurer, setOpenedAbilitiesAdventurer] = useState(null)
 
     const [sessionLogState, setSessionLogState] = useState("")
     const [gameModeState, setGameModeState] = useState('adventure')
@@ -233,6 +237,7 @@ function Game() {
 
     }, [])
 
+
     function socketsJoinRoom() {
         webSocket.emit('joinRoom', sid, loggedUser.userID)
     }
@@ -252,7 +257,6 @@ function Game() {
         console.log("Proběhne resync hráčů")
         axios.get(axios.defaults.baseURL + '/sessions/sessionPlayers', { params: { sid: sid } })
             .then(response => {
-                console.log(response)
                 setPlayer1State(response.data[0])
                 setPlayer2State(response.data[1])
                 setPlayer3State(response.data[2])
@@ -318,8 +322,9 @@ function Game() {
         <>
             <GameLogModal sessionLogState={sessionLogState} ></GameLogModal>
             <GameAdventurerInventoryModal openedInventoryAdventurer={openedInventoryAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerInventoryModal>
+            <GameAdventurerAbilitiesModal openedAbilitiesAdventurer={openedAbilitiesAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerAbilitiesModal>
             <div className='pb-[5%]'>
-                <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} setOpenedInventoryAdventurer={setOpenedInventoryAdventurer} ></GameAdventurersDisplay>
+                <GameAdventurersDisplay player1State={player1State} player2State={player2State} player3State={player3State} setOpenedInventoryAdventurer={setOpenedInventoryAdventurer} setOpenedAbilitiesAdventurer={setOpenedAbilitiesAdventurer} ></GameAdventurersDisplay>
                 {activeMonstersState.length > 0 ? <GameActiveEnemiesDisplay activeMonstersState={activeMonstersState}></GameActiveEnemiesDisplay> : ""}
                 {renderGameMode()}
 
