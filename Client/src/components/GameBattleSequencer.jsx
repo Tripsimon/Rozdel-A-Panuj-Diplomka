@@ -10,6 +10,9 @@ function GameBattleSequencer(props) {
         prepareBattlefieldRound()
     }, [])
 
+    useEffect(() =>{
+        prepareBattlefieldRound()
+    },[props.activeMonstersState])
     const prepareBattlefieldRound = () => {
 
         var prepareField = []
@@ -68,7 +71,7 @@ function GameBattleSequencer(props) {
     const renderBattlefield = () => {
         return battlefieldState.map((entry, index) => <li onClick={() => selectEntry(index)} key={index}>
             <hr />
-            <div className={`${entry.typ == "adventurer" ? "bg-green-600" : "bg-red-600"} ${entry.selected ? "border-2 border-primary  " : " "} text-secondary select-none  timeline-start timeline-box`}>{entry.typ == "adventurer" ? entry.krestniJmeno : entry.name}</div>
+            <div className={`${entry.typ == "adventurer" ? "bg-green-700" : "bg-red-700"} ${entry.selected ? "border-2 border-primary  " : " "} text-primary uppercase select-none  timeline-start timeline-box`}>{entry.typ == "adventurer" ? entry.krestniJmeno : entry.name}</div>
             <div className="timeline-middle">
                 <Icon className={`${entry.active ? "text-green-600" : "text-yellow-600"}`} path={mdiCheckCircle} size={1} />
             </div>
@@ -89,7 +92,8 @@ function GameBattleSequencer(props) {
     return (
         <div className=" shadow-xl mx-[5%] my-5 bg-secondary h-[90%] card card-compact bg-base-100">
             <div className="card-body ">
-                <h2 className="justify-center card-title text-primary">Bojová vřava</h2>
+                <h2 className="text-2xl  card-title text-primary">Bojová vřava</h2>
+                <div className="divider divider-warning"></div>
                 <ul className="justify-center timeline">
                     {renderBattlefield()}
 

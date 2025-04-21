@@ -23,6 +23,7 @@ function GameHudSlovotepecMonsterModal(props) {
     const addEnemyAsActive = () => {
         var enemyToAdd = {...loadedMonstersState[selectedMonsterState]}
         enemyToAdd.activeLife = enemyToAdd.life
+        enemyToAdd.name = enemyToAdd.name + " - " + (props.activeMonstersState.length+1)
         enemyToAdd.uid = uid()
 
         props.setActiveMonstersState([...props.activeMonstersState, enemyToAdd]);

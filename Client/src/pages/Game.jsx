@@ -19,6 +19,8 @@ import GameAdventurerInventoryModal from '../components/GameAdventurerInventoryM
 import GameAdventurerAbilitiesModal from '../components/GameAdventurerAbilitiesModal';
 import GameAdventurerStatsModal from '../components/GameAdventurerStatsModal';
 
+import bgImage from './../assets/images/landingPage/landingpage2.png'
+
 function Game() {
     const loggedUser = useSelector(reduxReturnUser)
     const navigate = useNavigate();
@@ -285,7 +287,10 @@ function Game() {
     const renderGameMode = () => {
         switch (gameModeState) {
             case 'fight':
-                return (<><GameBattleSequencer adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleSequencer><GameBattleDicefield adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleDicefield><GameBattleLocality gameFightLocalityState={gameFightLocalityState}></GameBattleLocality></>)
+                return (<>
+                <GameBattleSequencer adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleSequencer>
+                <GameBattleDicefield adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleDicefield>
+                <GameBattleLocality adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState} setGameFightLocalityState={setGameFightLocalityState}></GameBattleLocality></>)
 
             case 'adventure':
                 return (<><GameMap gameAdverureMapState={gameAdverureMapState}></GameMap></>)
@@ -321,7 +326,7 @@ function Game() {
     }
 
     return (
-        <>
+        <div style={{backgroundImage: `url(${bgImage})`}} className='bg-cover'>
             <GameLogModal sessionLogState={sessionLogState} ></GameLogModal>
             <GameAdventurerInventoryModal openedInventoryAdventurer={openedInventoryAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerInventoryModal>
             <GameAdventurerAbilitiesModal openedAbilitiesAdventurer={openedAbilitiesAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerAbilitiesModal>
@@ -335,7 +340,7 @@ function Game() {
 
                 {renderHUD()}
             </div>
-        </>
+        </div>
     )
 }
 

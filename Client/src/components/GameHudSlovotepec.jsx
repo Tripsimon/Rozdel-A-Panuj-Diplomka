@@ -9,7 +9,6 @@ function GameHudSlovotepec(props) {
     return (
         <>
             <GameHudSlovotepecMonsterModal activeMonstersState={props.activeMonstersState} setActiveMonstersState={props.setActiveMonstersState}></GameHudSlovotepecMonsterModal>
-            <GameHudSlovotepecLocalityModal></GameHudSlovotepecLocalityModal>
             <GameHudSlovotepecMapModal setGameAdventureMapState={props.setGameAdventureMapState}></GameHudSlovotepecMapModal>
             <div className="fixed bottom-0 flex w-[100%] flex-row-nav justify-around bg-secondary ">
 
@@ -26,10 +25,6 @@ function GameHudSlovotepec(props) {
                 <button onClick={() => document.getElementById('GameHudSlovotepecMapModal').showModal()} >
                     <Icon path={mdiMapLegend} size={1} />
                     <span className="text-primary">Mapy</span>
-                </button>
-                <button onClick={() => document.getElementById('GameHudSlovotepecLocalityModal').showModal()} >
-                    <Icon path={mdiMapLegend} size={1} />
-                    <span className="text-primary">Lokality</span>
                 </button>
                 <button onClick={() => props.swapGameMode()}>
                     <Icon path={mdiSwapHorizontal} size={1} />

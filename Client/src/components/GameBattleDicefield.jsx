@@ -190,10 +190,10 @@ function GameBattleDicefield(props) {
     }
 
     const renderDiceResult = () => {
-        return(
-        <div className=' border-primary bg-secondary rounded-xl'>
-            <p className='text-lg font-bold text-center text-primary' >VEC</p>
-        </div>)
+        return (
+            <div className=' border-primary bg-secondary rounded-xl'>
+                <p className='text-lg font-bold text-center text-primary' >Dobrodruh vyhrává !</p>
+            </div>)
     }
 
     const throwDice = () => {
@@ -234,8 +234,10 @@ function GameBattleDicefield(props) {
                         {diceState != null ?
                             <div className='flex justify-center'>
                                 <img className='w-[200px] h-[250px]' src={diceState}></img>
-                                {renderDiceResult()}
+                    
+
                             </div> : ""}
+                            {renderDiceResult()}
 
                     </div>
                     <div className='justify-center '>
@@ -253,9 +255,19 @@ function GameBattleDicefield(props) {
                     </div>
                 </div>
 
-                <div className='justify-end card-actions'>
-                    <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Tajný hod kostkou</button>
-                    <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Hodit kostkou</button>
+                <div className='grid grid-cols-3'>
+                    <div>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Odebrat život</button>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Přidat život</button>
+                    </div>
+                    <div>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Tajný hod kostkou</button>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Hodit kostkou</button>
+                    </div>
+                    <div>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Odebrat život</button>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Přidat život</button>
+                    </div>
                 </div>
             </div>
         </div>

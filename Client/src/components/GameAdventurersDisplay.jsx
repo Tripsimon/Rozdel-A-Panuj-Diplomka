@@ -27,7 +27,7 @@ function GameAdventurersDisplay(props) {
 
   const renderAdventurerCard = (adventurer) => {
     return (
-      <div className="card card-dash bg-secondary w-96">
+      <div className="mt-10 card card-dash bg-secondary w-96">
         <div className="card-body">
           <h2 className="card-title text-primary">{getAdventurerName(adventurer)}</h2>
           <div className="divider divider-warning"></div>
