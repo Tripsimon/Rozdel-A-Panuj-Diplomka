@@ -1,9 +1,6 @@
 import React from 'react'
 
 function GameAdventurersDisplay(props) {
-
-  console.log(props)
-
   const renderAdventurerCards = () => {
     if (props.player1State.adventurer != null) {
       return renderAdventurerCard(props.player1State.adventurer)

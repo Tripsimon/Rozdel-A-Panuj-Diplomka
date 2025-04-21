@@ -2,9 +2,6 @@ import React from 'react'
 
 function GameAdventurerStatsModal(props) {
 
-    console.log(props)
-
-
     function getAdventurerName(adventurer) {
         if (props.openedStatsAdventurer == null) { return }
         let name = adventurer.krestniJmeno

@@ -24,8 +24,6 @@ function GameBattleSequencer(props) {
             }
         })
 
-        console.log()
-
         props.activeMonstersState.map((monster) => {
             var monsterHolder = {...monster}
             monsterHolder.active = true
@@ -35,9 +33,6 @@ function GameBattleSequencer(props) {
         })
 
         prepareField.sort((a, b) => b.iniciative - a.iniciative);
-
-        console.log(prepareField)
-
         setBattleFieldState(prepareField)
 
     }
