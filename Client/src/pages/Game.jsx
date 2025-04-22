@@ -307,7 +307,7 @@ function Game() {
                 break;
 
             case false:
-                return (<GameHudSlovotepec activeMonstersState={activeMonstersState} setActiveMonstersState={setActiveMonstersState} setGameAdventureMapState={setGameAdventureMapState} swapGameMode={swapGameMode}></GameHudSlovotepec>)
+                return (<GameHudSlovotepec activeMonstersState={activeMonstersState} setActiveMonstersState={setActiveMonstersState} setGameAdventureMapState={setGameAdventureMapState} swapGameMode={swapGameMode} gameModeState={gameModeState}></GameHudSlovotepec>)
                 break;
             default:
                 break;
