@@ -199,11 +199,6 @@ function GameMap(props) {
             </div>
 
 
-            <div className='justify-end card-actions'>
-
-                <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Tajný hod kostkou</button>
-                <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Hodit kostkou</button>
-            </div>
             <Select
                 styles={selectStyles}
                 className='w-fill text-primary'

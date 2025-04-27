@@ -219,11 +219,13 @@ function GameAdventurerInventoryModal(props) {
                             {" Peníze: " + props.openedInventoryAdventurer.penize}
                         </p>
                     </div>
+                    {/*
                     <div className='mt-5 border-2 rounded-lg bg-secondary border-primary'>
                         <p className={'text-lg text-primary' + (props.openedInventoryAdventurer.penize <= 0 ? ' !text-red-500' : "")}>
                             {"Ash'Arii: " + "???"}
                         </p>
                     </div>
+                    */}
                 </div>
 
                 {props.userIdentityState == "Owner" ? <div>

@@ -92,7 +92,7 @@ function GameBattleSequencer(props) {
     return (
         <div className=" shadow-xl mx-[5%] my-5 bg-secondary h-[90%] card card-compact bg-base-100">
             <div className="card-body ">
-                <h2 className="text-2xl  card-title text-primary">Bojová vřava</h2>
+                <h2 className="text-2xl card-title text-primary">Bojová vřava</h2>
                 <div className="divider divider-warning"></div>
                 <ul className="justify-center timeline">
                     {renderBattlefield()}
@@ -100,8 +100,8 @@ function GameBattleSequencer(props) {
                 </ul>
                 <div className="modal-action">
                     <form method="dialog">
-                        <button onClick={() => fatigueSelected()} className="gap-5 btn text-primary"> Vyčerpat</button>
-                        <button onClick={() => prepareBattlefieldRound()} className="btn text-primary">Nové kolo</button>
+                        <button onClick={() => fatigueSelected()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop"> Vyčerpat</button>
+                        <button onClick={() => prepareBattlefieldRound()} className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Nové kolo</button>
                     </form>
                 </div>
             </div>

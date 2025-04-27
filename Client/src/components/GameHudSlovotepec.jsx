@@ -33,12 +33,12 @@ function GameHudSlovotepec(props) {
             <div className="fixed bottom-0 flex w-[100%] flex-row-nav justify-around bg-secondary ">
 
 
-                <button onClick={() => document.getElementById('GameLogModal').showModal()} className="justify-center active">
+                <button onClick={() => document.getElementById('GameLogModal').showModal()} className="justify-center text-center ">
                     <Icon path={mdiPostOutline} size={1} />
-                    <span className="btm-nav-label">Log</span>
+                    <span className="btm-nav-label text-primary">Log</span>
                 </button>
 
-                <button onClick={() => document.getElementById('GameHudSlovotepecMonsterModal').showModal()} >
+                <button onClick={() => document.getElementById('GameHudSlovotepecMonsterModal').showModal()} className="justify-center text-center " >
                     <Icon path={mdiAlertCircleOutline} size={1} />
                     <span className="text-primary">Nepřátelé</span>
                 </button>

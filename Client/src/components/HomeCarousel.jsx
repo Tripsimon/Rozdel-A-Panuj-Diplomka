@@ -27,7 +27,7 @@ function HomeCarousel() {
 
         <Slider {...settings}>
             <div>
-                <h2 className='absolute w-full text-center top-[15vh] text-6xl font-semibold uppercase drop-shadow-[0_1.2px_1.2px_rgba(180,147,6,0.8)] text-secondary underline'>Zažíj dobrodružství !</h2>
+                <h2 className='absolute w-full text-center top-[15vh] text-6xl font-semibold uppercase drop-shadow-[0_1.2px_1.2px_rgba(180,147,6,0.8)] text-secondary underline'>Zažij dobrodružství !</h2>
                 <img className='w-full max-h-[100vh]' src={landingPage1}></img>
             </div>
             <div>

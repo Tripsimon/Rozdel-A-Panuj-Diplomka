@@ -5,6 +5,7 @@ const bp = require('body-parser')
 const mongoose = require('mongoose');
 const path = require('path')
 const axios = require('axios');
+require('dotenv').config();
 const {init} = require('./websocket.js');
 
 
@@ -71,14 +72,9 @@ app.use('/tridy',tridyRouter);
 //Zpřístupnění serverových dat
 app.use(express.static(path.join(__dirname,'/files')))
 
-//Vývojářský režim
-const devMode = true;
-if (devMode) {
-    axios.defaults.baseURL = 'http://localhost:3000'
 
-}else{
-    axios.defaults.baseURL = 'https://api.rozdel-a-panuj.cz'
-}
+console.log(axios.defaults.baseURL)
+
 //Websockets
 init(server);
 
