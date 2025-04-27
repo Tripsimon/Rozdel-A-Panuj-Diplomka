@@ -72,8 +72,8 @@ app.use('/tridy',tridyRouter);
 //Zpřístupnění serverových dat
 app.use(express.static(path.join(__dirname,'/files')))
 
-
-console.log(axios.defaults.baseURL)
+// Nastavení adresy backendu pro potřeby socket.io
+axios.defaults.baseURL = process.env.BACKEND_ADRESS
 
 //Websockets
 init(server);
