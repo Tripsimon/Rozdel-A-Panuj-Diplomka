@@ -15,6 +15,8 @@ function GameBrowser() {
     const navigate = useNavigate();
 
 
+
+
     useEffect(() => {
         findSessions()
         getAdventurers()
@@ -55,8 +57,7 @@ function GameBrowser() {
         axios.post(axios.defaults.baseURL + '/sessions/joinSession', body)
             .then(queryResponse => {
                 if (queryResponse.data == 'Session Joined') {
-                    navigate("/game?sid="+ selectedSessionState)
-                    router.push({ path: '/RaPSession', query: { sid: id } })
+                    navigate("/game?sid=" + selectedSessionState)
                 } else if (queryResponse.data == "Name Taken") {
 
                 } else {
@@ -71,7 +72,7 @@ function GameBrowser() {
             <GameBrowserCreateRoomModal></GameBrowserCreateRoomModal>
             <GameBrowserJoinModal loadedAdventurersState={loadedAdventurersState} joinSession={joinSession} ></GameBrowserJoinModal>
             <div>
-                <div className="card bg-neutral text-neutral-content w-[90%] ml-[5%]">
+                <div className="card bg-secondary mt-10 text-neutral-content w-[90%] ml-[5%]">
                     <div className="items-center text-center card-body">
                         <h1 className="card-title text-primary"> Seznam aktivních her</h1>
                         <div className="overflow-x-auto">

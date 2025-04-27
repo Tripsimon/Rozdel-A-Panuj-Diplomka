@@ -22,7 +22,7 @@ function MapManagement() {
 
   return (
     <div>
-      <div className="card bg-neutral text-neutral-content w-[90%] ml-[5%]">
+      <div className="card bg-secondary mt-10 text-neutral-content w-[90%] ml-[5%]">
         <div className="items-center text-center card-body">
           <h1 className="card-title text-primary"> Seznam vytvořených lokalit</h1>
           <div className="overflow-x-auto">
