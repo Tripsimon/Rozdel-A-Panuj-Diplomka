@@ -142,13 +142,94 @@ fighterClass =  db.classes.insert({
   jmeno: 'Bojovnik',
   popis: 'String',
   pasivniSchopnost: 'String',
-  schopnosti: ['String'],
-  bonusovaVybava: ['String'],
-  hlavniVybava: ['String'],
-  krajniVybava: ['String'],
-  zbrojVýbava: ['String'],
+  bonusEquipment: [
+      {
+          name: 'Stoha provazu',
+          typ: 'Item',
+          description: '20 metrů provazu',
+          abilities: [],
+          weight: 2,
+          __v: 0
+      },
+      {
+          name: 'Pochodeň',
+          typ: 'Item',
+          description: 'Nezapálená pochodeň s křesadlem',
+          abilities: [],
+          weight: 3,
+          __v: 0
+      }
+  ],
+  armorEquipment: [
+      {
+          name: 'Kroužkový kyrys',
+          typ: 'Armor',
+          description: 'Kyrys z kroužků',
+          abilities: [],
+          armor: 30,
+          weight: 25,
+          deletable: true,
+          __v: 0
+      },
+      {
+          name: 'Plátová zbroj',
+          typ: 'Armor',
+          description: 'Kyrys z plátů',
+          abilities: [],
+          armor: 35,
+          weight: 25,
+          deletable: true,
+          __v: 0
+      }
+  ],
   role: 'String',
-  trueZbrane: 'String'
+  trueZbrane: 'String',
+  mainEquipment: [
+      {
+          name: 'Půlruční meč',
+          typ: 'Weapon',
+          description: 'Popis předmětu',
+          abilities: [],
+          pierce: 5,
+          damageBase: 2,
+          damageSeverity: 4,
+          weight: 5,
+          note: null
+      },
+      {
+          name: 'Válečná sekera',
+          typ: 'Weapon',
+          description: 'Popis předmětu',
+          abilities: [],
+          pierce: 5,
+          damageBase: 2,
+          damageSeverity: 4,
+          weight: 5,
+          note: null
+      }
+  ],
+  abilities: [
+      {
+          cd: '',
+          abilityTyp: 'Passive',
+          descriptionAbility: 'Říšský člověk',
+          descriptionLore: 'Říšský člověk',
+          name: 'Pasivka',
+          numberOfUses: 5,
+          owner: 'Říšský člověk',
+          requiredLevel: 0
+      },
+      {
+          cd: '',
+          abilityTyp: 'Active',
+          descriptionAbility: 'Říšský člověk',
+          descriptionLore: 'Říšský člověk',
+          name: 'Pasivka',
+          numberOfUses: 5,
+          owner: 'Říšský člověk',
+          requiredLevel: 0
+      }
+  ]
 })
 fighterClassID = Object.values(fighterClass['insertedIds'])
 
