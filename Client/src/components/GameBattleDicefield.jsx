@@ -10,6 +10,7 @@ import dice6 from './../assets/images/dice/dice6.jpg'
 
 function GameBattleDicefield(props) {
     const [diceState, setDiceState] = useState(null)
+    const [secretDice, setSecretDice] = useState(null)
     var dice = [dice1, dice2, dice3, dice4, dice5, dice6]
 
     const [selectedAdventurer, setSelectedAdventurer] = useState(null)
@@ -201,6 +202,11 @@ function GameBattleDicefield(props) {
         setDiceState(dice[number])
     }
 
+    const throwSecretDice = () => {
+        var number = Math.floor((Math.random() * 6))
+        setSecretDice(number)
+    }
+
 
     return (
         <div>
@@ -237,7 +243,7 @@ function GameBattleDicefield(props) {
                     
 
                             </div> : ""}
-                            {renderDiceResult()}
+                            {/* renderDiceResult() */}
 
                     </div>
                     <div className='justify-center '>
@@ -261,7 +267,7 @@ function GameBattleDicefield(props) {
                         <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Přidat život</button>
                     </div>
                     <div>
-                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Tajný hod kostkou</button>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwSecretDice()}>Tajný hod kostkou {secretDice != null ? (":  " + secretDice) : ""}</button>
                         <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Hodit kostkou</button>
                     </div>
                     <div>
