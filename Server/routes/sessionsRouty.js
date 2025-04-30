@@ -215,13 +215,15 @@ router.get('/sessionDisconnect', async (req, res) => {
  * Routa pro přidání záznamu do logu
  */
 router.post('/postLogEntry', async (req, res) => {
+    console.log(req.body);
+    /*
     let session = await SessionModel.findOne({ _id: req.body.sessionID })
     session.log.push(req.body.logEntry)
     session.save().then(res.send('Log Updated')).catch(error => {
         res.send('Error')
         console.log('Vyskytla se chyba při uprávě logu:', error)
     })
-
+*/
 })
 
 /**

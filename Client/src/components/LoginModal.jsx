@@ -34,9 +34,11 @@ function LoginModal() {
                         break;
 
                     case 'Wrong Password':
-                        alertTitle.value = "špatné přihlašovací udaje",
-                            alertText.value = 'Byly zadány špatné přihlašovací udaje. Prosím, zkuste to znovu'
-                        showAlert.value = true
+                        setAlertState({
+                            showAlert: true,
+                            alertTyp: "error",
+                            alertText: "KOmbinace emailu a hesla není správná. Prosím zkuste operaci znovu."
+                        })
                         break;
 
                     default:

@@ -26,7 +26,7 @@ function Game() {
     const navigate = useNavigate();
 
     let urlParams = new URLSearchParams(window.location.search)
-    const sid = urlParams.get('sid')
+    var sid = urlParams.get('sid')
     const [userIdentityState, setUserIdentityState] = useState('user')
 
     const webSocket = io("http://localhost:3001/");
@@ -161,7 +161,7 @@ function Game() {
 
     useEffect(() => {
         let urlParams = new URLSearchParams(window.location.search)
-        const sid = urlParams.get('sid')
+         sid = urlParams.get('sid')
 
         axios.get(axios.defaults.baseURL + '/sessions/getIdentity', { params: { sid: sid, user: loggedUser.userID } })
             .then(response => {
@@ -227,7 +227,8 @@ function Game() {
 
         //Změna herního modu
         webSocket.on('resyncGamemode', (mode) => {
-            battleModeSwitch.value = mode;
+            console.log(mode)
+            setGameModeState(mode)
             getLog()
         })
 
@@ -247,13 +248,22 @@ function Game() {
     }
 
     /**
- * Resync připojených hráčů a jejich dobrodruhů v dané místnosti
- * 
- */
+    * Resync připojených hráčů a jejich dobrodruhů v dané místnosti
+    * 
+    */
     function socketsResyncPlayers() {
         webSocket.emit('resyncPlayers', sid.value)
         getLog()
         resyncPlayers()
+    }
+
+    /**
+ * Resyncne herní mod
+ */
+    function socketsResyncGamemode(mode) {
+        console.log("Resync herního módu:")
+        webSocket.emit('resyncGamemode', urlParams.get('sid'), mode)
+        getLog()
     }
 
     //Nejak prefaktorovat
@@ -273,10 +283,12 @@ function Game() {
         switch (gameModeState) {
             case 'fight':
                 setGameModeState('adventure')
+                socketsResyncGamemode('adventure')
                 break;
 
             case 'adventure':
                 setGameModeState('fight')
+                socketsResyncGamemode('fight')
                 break;
 
             default:
@@ -288,9 +300,9 @@ function Game() {
         switch (gameModeState) {
             case 'fight':
                 return (<>
-                <GameBattleSequencer adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleSequencer>
-                <GameBattleDicefield adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleDicefield>
-                <GameBattleLocality adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState} setGameFightLocalityState={setGameFightLocalityState}></GameBattleLocality></>)
+                    <GameBattleSequencer adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleSequencer>
+                    <GameBattleDicefield adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleDicefield>
+                    <GameBattleLocality adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState} setGameFightLocalityState={setGameFightLocalityState}></GameBattleLocality></>)
 
             case 'adventure':
                 return (<><GameMap gameAdverureMapState={gameAdverureMapState}></GameMap></>)
@@ -314,6 +326,20 @@ function Game() {
         }
     }
 
+    //LOGOVÁNÍ
+    /**
+     * Zapsání do session logu
+     */
+    function writeToLog(text) {
+        const current = new Date();
+        const date = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
+        const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+        const logged = "[" + date + ' ' + time + "] " + text;
+        axios.post(axios.defaults.baseURL + '/sessions/postLogEntry', { 'sessionID': sid, 'logEntry': logged })
+            .then()
+            .catch()
+    }
+
     /**
     * Získání session logu
     */
@@ -326,7 +352,7 @@ function Game() {
     }
 
     return (
-        <div style={{backgroundImage: `url(${bgImage})`}} className='bg-cover'>
+        <div style={{ backgroundImage: `url(${bgImage})` }} className='bg-cover'>
             <GameLogModal sessionLogState={sessionLogState} ></GameLogModal>
             <GameAdventurerInventoryModal openedInventoryAdventurer={openedInventoryAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerInventoryModal>
             <GameAdventurerAbilitiesModal openedAbilitiesAdventurer={openedAbilitiesAdventurer} userIdentityState={userIdentityState} socketsResyncPlayers={socketsResyncPlayers}></GameAdventurerAbilitiesModal>

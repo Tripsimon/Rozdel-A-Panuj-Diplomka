@@ -33,8 +33,6 @@ router.post("/createLocality", (req,res) =>{
 })
 
 router.get("/getLocalities", (req,res) =>{
-    console.log("Tvorba lokality")
-
     LocalityModel.find()
     .then(payload =>{
         res.send(payload)

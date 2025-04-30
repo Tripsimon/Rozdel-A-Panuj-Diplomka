@@ -207,6 +207,12 @@ function GameBattleDicefield(props) {
         setSecretDice(number)
     }
 
+    const changeAdventurerLife = (amount) =>{
+        if(selectedAdventurer == null){return}
+
+        setSelectedAdventurer({...selectedAdventurer, zivoty: (selectedAdventurer.zivoty + amount)})
+    }
+
 
     return (
         <div>
@@ -263,8 +269,8 @@ function GameBattleDicefield(props) {
 
                 <div className='grid grid-cols-3'>
                     <div>
-                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Odebrat život</button>
-                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwDice()}>Přidat život</button>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => changeAdventurerLife(-1)}>Odebrat život</button>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => changeAdventurerLife(+1)}>Přidat život</button>
                     </div>
                     <div>
                         <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop" onClick={() => throwSecretDice()}>Tajný hod kostkou {secretDice != null ? (":  " + secretDice) : ""}</button>
