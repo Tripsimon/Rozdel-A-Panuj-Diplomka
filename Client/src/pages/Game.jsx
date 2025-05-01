@@ -36,7 +36,7 @@ function Game() {
     const [player3State, setPlayer3State] = useState({ owner: null, adventurer: null, adventurerID: null })
 
     const [gameState, setGameState] = useState({
-        
+        map: "mapa.jpg"
     })
 
     const [activeMonstersState, setActiveMonstersState] = useState([])
@@ -243,6 +243,11 @@ function Game() {
             getLog()
         })
 
+        webSocket.on('resyncGameState', (data) => {
+            setGameState(data)
+            getLog()
+        })
+
 
 
     }, [])
@@ -263,13 +268,22 @@ function Game() {
     }
 
     /**
- * Resyncne herní mod
- */
-    function socketsResyncGamemode(mode) {
+    * Resyncne herní mod
+    */
+    function socketsResyncGamemode() {
         console.log("Resync herního módu:")
         webSocket.emit('resyncGamemode', urlParams.get('sid'), mode)
         getLog()
     }
+
+        /**
+        * Resyncne herní data
+        */
+        function socketsResyncGameState() {
+            console.log("Resync herního stavu:")
+            webSocket.emit('resyncGameState', urlParams.get('sid'), gameState)
+            getLog()
+        }
 
     //Nejak prefaktorovat
     function resyncPlayers() {
@@ -310,7 +324,7 @@ function Game() {
                     <GameBattleLocality adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState} setGameFightLocalityState={setGameFightLocalityState}></GameBattleLocality></>)
 
             case 'adventure':
-                return (<><GameMap gameAdverureMapState={gameAdverureMapState}></GameMap></>)
+                return (<><GameMap gameState={gameState}></GameMap></>)
 
             default:
                 break;
@@ -324,7 +338,7 @@ function Game() {
                 break;
 
             case false:
-                return (<GameHudSlovotepec activeMonstersState={activeMonstersState} setActiveMonstersState={setActiveMonstersState} setGameAdventureMapState={setGameAdventureMapState} swapGameMode={swapGameMode} gameModeState={gameModeState}></GameHudSlovotepec>)
+                return (<GameHudSlovotepec activeMonstersState={activeMonstersState} setActiveMonstersState={setActiveMonstersState} setGameState={setGameState} gameState={gameState} swapGameMode={swapGameMode} gameModeState={gameModeState} socketsResyncGameState={socketsResyncGameState}></GameHudSlovotepec>)
                 break;
             default:
                 break;

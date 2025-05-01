@@ -38,6 +38,13 @@ exports.init = (server) => {
             socket.to(room).emit('resyncBattle', dataBoje)
         })
 
+        // Požadavek na sychnornizaci herního modu
+        socket.on('resyncGameState', (room, gameState) => {
+            socket.to(room).emit('resyncGameState', gameState)
+        })
+
+        
+
         socket.on('unMount', (identity) => {
 
             socket.disconnect()
@@ -60,15 +67,15 @@ exports.init = (server) => {
                         userID: users[socket.id].userID
                     }
                 })
-                .then(queryResponse => {
-                    
-                    if(queryResponse.data == "Session Deleted"){
-                        socket.to(users[socket.id].sessionID).emit('disconnectedUser', "Owner")
-                    }
+                    .then(queryResponse => {
 
-                    delete users[socket.id]
-                })
-                .catch(error => console.log("Chyba při odpojení hráče: " + error))
+                        if (queryResponse.data == "Session Deleted") {
+                            socket.to(users[socket.id].sessionID).emit('disconnectedUser', "Owner")
+                        }
+
+                        delete users[socket.id]
+                    })
+                    .catch(error => console.log("Chyba při odpojení hráče: " + error))
 
             } catch (error) {
                 console.log("Chuba při odeslání požadavku na odpojení hráče")

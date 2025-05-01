@@ -3,7 +3,7 @@ import React from 'react'
 function GameMap(props) {
 
     const generateMapLink = () =>{
-        return "http://localhost:3001/backgrounds/"+props.gameAdverureMapState
+        return "http://localhost:3001/backgrounds/"+props.gameState.map
     }
 
     return (

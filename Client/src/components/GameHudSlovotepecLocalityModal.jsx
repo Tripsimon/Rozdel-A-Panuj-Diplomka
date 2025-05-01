@@ -32,7 +32,7 @@ function GameHudSlovotepecLocalityModal() {
 
                 <div className="modal-action">
                     <form method="dialog">
-                        <button className="btn text-primary">Zavřít</button>
+                        <button className="m-2 uppercase btn btn-outline text-primary hover:bg-primary hover:text-secondary hover:border-backdrop">Zavřít</button>
                     </form>
                 </div>
             </div>

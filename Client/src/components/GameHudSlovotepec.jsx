@@ -28,7 +28,7 @@ function GameHudSlovotepec(props) {
     return (
         <>
             <GameHudSlovotepecMonsterModal activeMonstersState={props.activeMonstersState} setActiveMonstersState={props.setActiveMonstersState}></GameHudSlovotepecMonsterModal>
-            <GameHudSlovotepecMapModal setGameAdventureMapState={props.setGameAdventureMapState}></GameHudSlovotepecMapModal>
+            <GameHudSlovotepecMapModal setGameState={props.setGameState} gameState={props.gameState} socketsResyncGameState={props.socketsResyncGameState}></GameHudSlovotepecMapModal>
             <GameHudSlovotepecLocalityModal></GameHudSlovotepecLocalityModal>
             <div className="fixed bottom-0 flex w-[100%] flex-row-nav justify-around bg-secondary ">
 
