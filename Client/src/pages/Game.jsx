@@ -34,6 +34,11 @@ function Game() {
     const [player1State, setPlayer1State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [player2State, setPlayer2State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [player3State, setPlayer3State] = useState({ owner: null, adventurer: null, adventurerID: null })
+
+    const [gameState, setGameState] = useState({
+        
+    })
+
     const [activeMonstersState, setActiveMonstersState] = useState([])
 
 
