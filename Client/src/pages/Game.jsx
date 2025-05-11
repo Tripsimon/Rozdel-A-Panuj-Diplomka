@@ -163,6 +163,8 @@ function Game() {
     const [sessionLogState, setSessionLogState] = useState("")
     const [gameModeState, setGameModeState] = useState('adventure')
     const [gameAdverureMapState, setGameAdventureMapState] = useState("mapa.jpg")
+    
+    // DEPRECATED
     const [gameFightLocalityState, setGameFightLocalityState] = useState({
         _id: "ObjectId('67eb1ac2b0f9c2966f359e18')",
         name: 'gfdgdfg',
