@@ -1,33 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-
-import AdventurerCreateStepTwo from './AdventurerCreateStepTwo';
-import AdventurerCreateModalStepOne from './AdventurerCreateModalStepOne';
-
 import { reduxReturnUser } from '../store/userSlice';
 import { useSelector } from 'react-redux';
 
-function AdventurerCreateModal() {
-    const navigate = useNavigate();
 
+//Tato část tvorby je složitá, proto je definovaná ve svých komponentách
+//TODOO: Ostatní 2 kroky taky
+import AdventurerCreateStepTwo from './AdventurerCreateStepTwo';
+import AdventurerCreateModalStepOne from './AdventurerCreateModalStepOne';
+
+// Komponenta pro tvorbu nového dobrodruha
+function AdventurerCreateModal() {
+    //Ziskani uzivatele pro navazani dobrodruha
+    const loggedUser = useSelector(reduxReturnUser)
+
+    //Navigace v routeru
+    const navigate = useNavigate();
     const handleNavigation = (destination) => {
         navigate(destination);
     }
-    const loggedUser = useSelector(reduxReturnUser)
 
+    // Krok tvorby (navigace)
     const [stepState, setStepState] = useState(1);
 
+    //Vyber rasy. Potreba ze serveru
     const [racesChoiceState, setRacesChoiceState] = useState([]);
     const [selectedRaceState, setSelectedRaceState] = useState(false)
 
+    // Vyber classy. Potreba ze serveru
     const [loadedClasses, setLoadedClasses] = useState([]);
     const [selectedClassState, setSelectedClassState] = useState(false)
 
+    // Vybrana vybaba -> Jsou i classy
     const [selectedMainEquipment, setSelectedMainEquipment] = useState(null);
     const [selectedArmorEquipment, setSelectedArmorEquipment] = useState(null);
     const [selectedBonusEquipment, setSelectedBonusEquipment] = useState(null)
 
+    // Data dobrodruha
     const [adventurerState, setAdventurerState] = useState({
         name: "",
         secondName: "",
@@ -44,6 +54,7 @@ function AdventurerCreateModal() {
         story: "Nezjištěno",
     })
 
+    // Staty dobrodruha
     const [atributesState, setAtributesState] = useState({
         free: 8,
         sila: 8,
@@ -54,16 +65,14 @@ function AdventurerCreateModal() {
         znalost: 8
     });
 
+    // Pri loadu komponenty potreba nahrat rasy
     useEffect(() => {
         loadRaces();
     }, []);
 
-    const changeStep = (amount) => {
-
-        setStepState(stepState + amount)
-    }
-
-
+    /**
+     * Ziskani ras ze servery
+     */
     const loadRaces = () => {
         axios.get(axios.defaults.baseURL + '/rasy/dump')
             .then(responseQuery => {
@@ -71,14 +80,28 @@ function AdventurerCreateModal() {
             })
     }
 
+    /**
+     * Ovladani navigace
+     * @param {int} amount - o kolik se ma pohnout formular. Zaporna hodnota je navrat
+     */
+    const changeStep = (amount) => {
+        setStepState(stepState + amount)
+    }
+
+    /**
+     * Vybere rasu pro tvorbu dobrodruha
+     * @param {int} index - pozice vybrane rasy v poly dostupnych ras
+     */
     const selectRace = (index) => {
         setSelectedRaceState(racesChoiceState[index])
         loadClasses(racesChoiceState[index].dostupneTridy)
         setAdventurerState({ ...adventurerState, race: racesChoiceState[index].jmeno })
     }
 
-
-
+    /**
+     * Nacteni trid po zvolení rasy
+     * @param {*} classes - Id v poly 
+     */
     const loadClasses = (classes) => {
         axios.get(axios.defaults.baseURL + '/tridy/getMultipleByID', {
             params: {
@@ -90,13 +113,19 @@ function AdventurerCreateModal() {
             })
     }
 
+    /**
+     * Vyber classy
+     * @param {*} index - id v poly
+     */
     const selectClass = (index) => {
         setSelectedClassState(loadedClasses[index])
         setAdventurerState({ ...adventurerState, class: loadedClasses[index].jmeno })
     }
 
-
-
+    /**
+     * Funkce vlastniho vykresleni formu
+     * @returns vrati co se ma vykreslit popropade error
+     */
     function renderForm() {
 
         switch (stepState) {
@@ -117,21 +146,30 @@ function AdventurerCreateModal() {
         }
     }
 
-
-
-
+    /**
+     * Vykreslení prvního kroku
+     * @returns - komponenta kroku
+     */
     function renderFirstStep() {
         return (
             <AdventurerCreateModalStepOne adventurerState={adventurerState} setAdventurerState={setAdventurerState} racesChoiceState={racesChoiceState} selectedRaceState={selectedRaceState} selectRace={selectRace} loadedClasses={loadedClasses} selectedClassState={selectedClassState} selectClass={selectClass} changeStep={changeStep} ></AdventurerCreateModalStepOne>
         )
     }
 
+    /**
+     * Vykreslení druhého kroku
+     * @returns - komponenta kroku
+     */
     function renderSecondStep() {
         return (
             <AdventurerCreateStepTwo atributesState={atributesState} setAtributesState={setAtributesState} selectedClassState={selectedClassState} selectedMainEquipment={selectedMainEquipment} setSelectedMainEquipment={setSelectedMainEquipment} selectedArmorEquipment={selectedArmorEquipment} setSelectedArmorEquipment={setSelectedArmorEquipment} selectedBonusEquipment={selectedBonusEquipment} setSelectedBonusEquipment={setSelectedBonusEquipment} changeStep={changeStep}></AdventurerCreateStepTwo>
         )
     }
 
+    /**
+     * Vykreslení třetího kroku
+     * @returns - komponenta kroku
+     */
     function renderThirdStep() {
         return (
             <div className="w-[90%] max-w-[90%] modal-box">
@@ -171,6 +209,11 @@ function AdventurerCreateModal() {
         )
     }
 
+    /**
+     * Vykreslení posledního kroku
+     * @returns - komponenta kroku
+     */
+    //TODOO - Opravit funkci
     function renderFourthStep() {
         return (
             <div className="modal-box w-[90%] max-w-[90%]">
@@ -197,7 +240,9 @@ function AdventurerCreateModal() {
         )
     }
 
-
+    /**
+     * Odeslani pozadavku
+     */
     const submitForm = () => {
         let obsah = ({
             "newAdventurer": adventurerState,

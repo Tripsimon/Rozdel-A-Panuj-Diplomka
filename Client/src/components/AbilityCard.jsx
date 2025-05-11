@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Komponenta, která zobrazí jednu schopnost. Je jedno jestli schopnost hrdiny nebo nepřítele.
 function AbilityCard(props) {
     return (
         <div className="mx-5 card card-border bg-base-100 w-fill">
