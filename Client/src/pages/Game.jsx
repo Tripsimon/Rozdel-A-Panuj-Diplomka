@@ -35,16 +35,130 @@ function Game() {
     const [player2State, setPlayer2State] = useState({ owner: null, adventurer: null, adventurerID: null })
     const [player3State, setPlayer3State] = useState({ owner: null, adventurer: null, adventurerID: null })
 
+    const [openedInventoryAdventurer, setOpenedInventoryAdventurer] = useState(null)
+    const [openedAbilitiesAdventurer, setOpenedAbilitiesAdventurer] = useState(null)
+    const [openedStatsAdventurer, setOpenedStatsAdventurer] = useState(null)
+
     const [gameState, setGameState] = useState({
-        map: "mapa.jpg"
+        map: "mapa.jpg",
+        locality:{
+                    _id: "ObjectId('67eb1ac2b0f9c2966f359e18')",
+        name: 'gfdgdfg',
+        width: '10',
+        height: '10',
+        map: [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0,
+                0,
+                0,
+                0,
+                0,
+                0],
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        ],
+        owner: '67e579ea55fccebfe36b140b',
+        __v: 0
+        }
+
     })
 
     const [activeMonstersState, setActiveMonstersState] = useState([])
 
-
-    const [openedInventoryAdventurer, setOpenedInventoryAdventurer] = useState(null)
-    const [openedAbilitiesAdventurer, setOpenedAbilitiesAdventurer] = useState(null)
-    const [openedStatsAdventurer, setOpenedStatsAdventurer] = useState(null)
 
     const [sessionLogState, setSessionLogState] = useState("")
     const [gameModeState, setGameModeState] = useState('adventure')
@@ -321,7 +435,7 @@ function Game() {
                 return (<>
                     <GameBattleSequencer adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleSequencer>
                     <GameBattleDicefield adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState}></GameBattleDicefield>
-                    <GameBattleLocality adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState} setGameFightLocalityState={setGameFightLocalityState}></GameBattleLocality></>)
+                    <GameBattleLocality adventurers={[player1State, player2State, player3State]} activeMonstersState={activeMonstersState} setGameFightLocalityState={setGameFightLocalityState} setGameState={setGameState} gameState={gameState}></GameBattleLocality></>)
 
             case 'adventure':
                 return (<><GameMap gameState={gameState}></GameMap></>)

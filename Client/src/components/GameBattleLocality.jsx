@@ -115,8 +115,7 @@ function GameMap(props) {
 
     const handleSquareClick = (i,j) =>{
         if (selectedPlaceEntry == null) { return }
-        var loader = selectedLocality
-
+        var loader = props.gameState.locality
         for(var ii = 0; ii < loader.map.length; ii++){
             for(var jj = 0; jj < loader.map[ii].length; jj++){
                 if(loader.map[ii][jj] == selectedPlaceEntry.symbol){
@@ -125,13 +124,13 @@ function GameMap(props) {
             }
         }
         loader.map[i][j] = selectedPlaceEntry.symbol
-        setSelectedLocality({...loader})
+        props.setGameState({...props.gameState, locality: {...loader}})
     }
 
     const displayBoard = () => {
-        if (selectedLocality == null) { return }
+        if (props.gameState.locality == null) { return }
         const squares = [];
-        selectedLocality.map.forEach((heightItem, indexi) => {
+        props.gameState.locality.map.forEach((heightItem, indexi) => {
             const row = [];
             heightItem.forEach((rowItem, indexj) => {
                 row.push(renderDisplayPixel(rowItem ,indexi,indexj));
@@ -184,8 +183,8 @@ function GameMap(props) {
                 <Select
                     styles={selectStyles}
                     className='text-primary'
-                    defaultValue={selectedLocality}
-                    onChange={(e) => { setSelectedLocality(e.value)}}
+                    defaultValue={props.gameState.selectedLocality}
+                    onChange={(e) => { props.setGameState({...props.gameState, locality: e.value})}}
                     options={loadedLocalitiesState}
                     placeholder={"Výběr lokality"}
                 />
@@ -202,7 +201,6 @@ function GameMap(props) {
             <Select
                 styles={selectStyles}
                 className='w-fill text-primary'
-                defaultValue={selectedLocality}
                 onChange={(e) => { setSelectedPlaceEntry(e.value)}}
                 options={loadedPlaceEntries}
                 placeholder={"Výběr jedince na umístění"}
